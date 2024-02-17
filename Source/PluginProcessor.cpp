@@ -1,9 +1,19 @@
 
+
+//==============================================================================
+//				INCLUDES
+//==============================================================================
+
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
 //==============================================================================
-InstrumentsOfTheOrcehstraAudioProcessor::InstrumentsOfTheOrcehstraAudioProcessor()
+//				AUDIO PROCESSOR
+//==============================================================================
+
+
+OrchestraProcessor::OrchestraProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
 	: AudioProcessor(BusesProperties()
 #if ! JucePlugin_IsMidiEffect
@@ -17,17 +27,22 @@ InstrumentsOfTheOrcehstraAudioProcessor::InstrumentsOfTheOrcehstraAudioProcessor
 {
 }
 
-InstrumentsOfTheOrcehstraAudioProcessor::~InstrumentsOfTheOrcehstraAudioProcessor()
+OrchestraProcessor::~OrchestraProcessor()
 {
 }
 
+
 //==============================================================================
-const String InstrumentsOfTheOrcehstraAudioProcessor::getName() const
+//				JUCE Overrides
+//==============================================================================
+
+const String OrchestraProcessor::getName() const
 {
 	return JucePlugin_Name;
 }
 
-bool InstrumentsOfTheOrcehstraAudioProcessor::acceptsMidi() const
+
+bool OrchestraProcessor::acceptsMidi() const
 {
 #if JucePlugin_WantsMidiInput
 	return true;
@@ -36,7 +51,8 @@ bool InstrumentsOfTheOrcehstraAudioProcessor::acceptsMidi() const
 #endif
 }
 
-bool InstrumentsOfTheOrcehstraAudioProcessor::producesMidi() const
+
+bool OrchestraProcessor::producesMidi() const
 {
 #if JucePlugin_ProducesMidiOutput
 	return true;
@@ -45,7 +61,8 @@ bool InstrumentsOfTheOrcehstraAudioProcessor::producesMidi() const
 #endif
 }
 
-bool InstrumentsOfTheOrcehstraAudioProcessor::isMidiEffect() const
+
+bool OrchestraProcessor::isMidiEffect() const
 {
 #if JucePlugin_IsMidiEffect
 	return true;
@@ -54,50 +71,58 @@ bool InstrumentsOfTheOrcehstraAudioProcessor::isMidiEffect() const
 #endif
 }
 
-double InstrumentsOfTheOrcehstraAudioProcessor::getTailLengthSeconds() const
+
+double OrchestraProcessor::getTailLengthSeconds() const
 {
 	return 0.0;
 }
 
-int InstrumentsOfTheOrcehstraAudioProcessor::getNumPrograms()
+
+int OrchestraProcessor::getNumPrograms()
 {
 	return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
 	// so this should be at least 1, even if you're not really implementing programs.
 }
 
-int InstrumentsOfTheOrcehstraAudioProcessor::getCurrentProgram()
+
+int OrchestraProcessor::getCurrentProgram()
 {
 	return 0;
 }
 
-void InstrumentsOfTheOrcehstraAudioProcessor::setCurrentProgram(int index)
+
+void OrchestraProcessor::setCurrentProgram(int index)
 {
 }
 
-const String InstrumentsOfTheOrcehstraAudioProcessor::getProgramName(int index)
+
+const String OrchestraProcessor::getProgramName(int index)
 {
 	return {};
 }
 
-void InstrumentsOfTheOrcehstraAudioProcessor::changeProgramName(int index, const String& newName)
+
+void OrchestraProcessor::changeProgramName(int index, const String& newName)
 {
 }
 
-//==============================================================================
-void InstrumentsOfTheOrcehstraAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
+
+void OrchestraProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
 	// Use this method as the place to do any pre-playback
 	// initialisation that you need..
 }
 
-void InstrumentsOfTheOrcehstraAudioProcessor::releaseResources()
+
+void OrchestraProcessor::releaseResources()
 {
 	// When playback stops, you can use this as an opportunity to free up any
 	// spare memory, etc.
 }
 
+
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool InstrumentsOfTheOrcehstraAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
+bool OrchestraProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
 #if JucePlugin_IsMidiEffect
 	juce::ignoreUnused(layouts);
@@ -122,7 +147,8 @@ bool InstrumentsOfTheOrcehstraAudioProcessor::isBusesLayoutSupported(const Buses
 }
 #endif
 
-void InstrumentsOfTheOrcehstraAudioProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
+
+void OrchestraProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
 	juce::ScopedNoDenormals noDenormals;
 	auto totalNumInputChannels = getTotalNumInputChannels();
@@ -151,34 +177,36 @@ void InstrumentsOfTheOrcehstraAudioProcessor::processBlock(AudioBuffer<float>& b
 	}
 }
 
-//==============================================================================
-bool InstrumentsOfTheOrcehstraAudioProcessor::hasEditor() const
+
+
+bool OrchestraProcessor::hasEditor() const
 {
 	return true; // (change this to false if you choose to not supply an editor)
 }
 
-juce::AudioProcessorEditor* InstrumentsOfTheOrcehstraAudioProcessor::createEditor()
+
+juce::AudioProcessorEditor* OrchestraProcessor::createEditor()
 {
-	return new InstrumentsOfTheOrcehstraAudioProcessorEditor(*this);
+	return new OrchestraEditor(*this);
 }
 
-//==============================================================================
-void InstrumentsOfTheOrcehstraAudioProcessor::getStateInformation(juce::MemoryBlock& destData)
+
+void OrchestraProcessor::getStateInformation(juce::MemoryBlock& destData)
 {
 	// You should use this method to store your parameters in the memory block.
 	// You could do that either as raw data, or use the XML or ValueTree classes
 	// as intermediaries to make it easy to save and load complex data.
 }
 
-void InstrumentsOfTheOrcehstraAudioProcessor::setStateInformation(const void* data, int sizeInBytes)
+
+void OrchestraProcessor::setStateInformation(const void* data, int sizeInBytes)
 {
 	// You should use this method to restore your parameters from this memory block,
 	// whose contents will have been created by the getStateInformation() call.
 }
 
-//==============================================================================
-// This creates new instances of the plugin..
+
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
-	return new InstrumentsOfTheOrcehstraAudioProcessor();
+	return new OrchestraProcessor();
 }

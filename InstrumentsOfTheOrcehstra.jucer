@@ -12,6 +12,8 @@
       <FILE id="o4q31X" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="wV1UFl" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="eSc6dJ" name="PianoRoll.cpp" compile="1" resource="0" file="Source/PianoRoll.cpp"/>
+      <FILE id="l1yg6C" name="PianoRoll.h" compile="0" resource="0" file="Source/PianoRoll.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

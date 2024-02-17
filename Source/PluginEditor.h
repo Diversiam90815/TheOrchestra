@@ -3,22 +3,41 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "PianoRoll.h"
 
-//==============================================================================
-/**
-*/
-class InstrumentsOfTheOrcehstraAudioProcessorEditor  : public juce::AudioProcessorEditor
+
+class OrchestraEditor : public juce::AudioProcessorEditor
 {
 public:
-    InstrumentsOfTheOrcehstraAudioProcessorEditor (InstrumentsOfTheOrcehstraAudioProcessor&);
-    ~InstrumentsOfTheOrcehstraAudioProcessorEditor() override;
 
-    //==============================================================================
-    void paint (juce::Graphics&) override;
-    void resized() override;
+	//==============================================================================
+	//				CONSTRUCTOR DESTRUCTOR
+	//==============================================================================
+
+	OrchestraEditor(OrchestraProcessor&);
+
+	~OrchestraEditor() override;
+
+
+	//==============================================================================
+	//				PUBLIC METHODS
+	//==============================================================================
+
+	void paint(Graphics&) override;
+
+	void resized() override;
+
+	void showUI();
 
 private:
-    InstrumentsOfTheOrcehstraAudioProcessor& audioProcessor;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InstrumentsOfTheOrcehstraAudioProcessorEditor)
+	//==============================================================================
+	//				PRIVATE OBJECTS
+	//==============================================================================
+
+	OrchestraProcessor& audioProcessor;
+
+	PianoRoll mPianoRollView;
+
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OrchestraEditor)
 };

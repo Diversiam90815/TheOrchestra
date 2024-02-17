@@ -1,52 +1,73 @@
 
+//==============================================================================
+//				INCLUDES
+//==============================================================================
+
 #pragma once
 
 #include <JuceHeader.h>
 
+
 //==============================================================================
-/**
-*/
-class InstrumentsOfTheOrcehstraAudioProcessor  : public AudioProcessor
+//				AUDIO PROCESSOR
+//==============================================================================
+
+class OrchestraProcessor : public AudioProcessor
 {
 public:
-    //==============================================================================
-    InstrumentsOfTheOrcehstraAudioProcessor();
-    ~InstrumentsOfTheOrcehstraAudioProcessor() override;
 
-    //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
-    void releaseResources() override;
+	//==============================================================================
+	//				CONSTRUCTOR DESTRUCTOR
+	//==============================================================================
+	OrchestraProcessor();
 
-   #ifndef JucePlugin_PreferredChannelConfigurations
-    bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
-   #endif
+	~OrchestraProcessor() override;
 
-    void processBlock (AudioBuffer<float>&, MidiBuffer&) override;
 
-    //==============================================================================
-    AudioProcessorEditor* createEditor() override;
-    bool hasEditor() const override;
+	//==============================================================================
+	//				PUBLIC METHODS
+	//==============================================================================
 
-    //==============================================================================
-    const String getName() const override;
+	void prepareToPlay(double sampleRate, int samplesPerBlock) override;
 
-    bool acceptsMidi() const override;
-    bool producesMidi() const override;
-    bool isMidiEffect() const override;
-    double getTailLengthSeconds() const override;
+	void releaseResources() override;
 
-    //==============================================================================
-    int getNumPrograms() override;
-    int getCurrentProgram() override;
-    void setCurrentProgram (int index) override;
-    const String getProgramName (int index) override;
-    void changeProgramName (int index, const String& newName) override;
+#ifndef JucePlugin_PreferredChannelConfigurations
+	bool isBusesLayoutSupported(const BusesLayout& layouts) const override;
+#endif
 
-    //==============================================================================
-    void getStateInformation (MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+	void processBlock(AudioBuffer<float>&, MidiBuffer&) override;
+
+	AudioProcessorEditor* createEditor() override;
+
+	bool hasEditor() const override;
+
+	const String getName() const override;
+
+	bool acceptsMidi() const override;
+
+	bool producesMidi() const override;
+
+	bool isMidiEffect() const override;
+
+	double getTailLengthSeconds() const override;
+
+	int getNumPrograms() override;
+
+	int getCurrentProgram() override;
+
+	void setCurrentProgram(int index) override;
+
+	const String getProgramName(int index) override;
+
+	void changeProgramName(int index, const String& newName) override;
+
+	void getStateInformation(MemoryBlock& destData) override;
+
+	void setStateInformation(const void* data, int sizeInBytes) override;
+
 
 private:
-    //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (InstrumentsOfTheOrcehstraAudioProcessor)
+	
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OrchestraProcessor)
 };

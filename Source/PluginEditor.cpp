@@ -2,27 +2,35 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-//==============================================================================
-InstrumentsOfTheOrcehstraAudioProcessorEditor::InstrumentsOfTheOrcehstraAudioProcessorEditor (InstrumentsOfTheOrcehstraAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+
+OrchestraEditor::OrchestraEditor (OrchestraProcessor& proc)
+    : AudioProcessorEditor (&proc), audioProcessor (proc), mPianoRollView()
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    showUI();
 }
 
-InstrumentsOfTheOrcehstraAudioProcessorEditor::~InstrumentsOfTheOrcehstraAudioProcessorEditor()
+
+OrchestraEditor::~OrchestraEditor()
 {
 }
 
-//==============================================================================
-void InstrumentsOfTheOrcehstraAudioProcessorEditor::paint (Graphics& g)
+
+void OrchestraEditor::showUI()
+{
+    addAndMakeVisible(mPianoRollView);
+
+    setSize(700, 500);
+}
+
+
+void OrchestraEditor::paint (Graphics& g)
 {
     g.fillAll (getLookAndFeel().findColour (ResizableWindow::backgroundColourId));
 }
 
-void InstrumentsOfTheOrcehstraAudioProcessorEditor::resized()
+
+void OrchestraEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    mPianoRollView.setBoundsRelative(0.0f, 0.7f, 1.0f, 0.2f);
+
 }
