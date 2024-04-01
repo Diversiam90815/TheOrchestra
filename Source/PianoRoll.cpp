@@ -10,6 +10,7 @@
 
 #include "PianoRoll.h"
 
+
 PianoRoll::PianoRoll()
 {
     mPianoState.addListener(this);
@@ -22,7 +23,7 @@ PianoRoll::PianoRoll()
 
 PianoRoll::~PianoRoll()
 {
-    mPianoState.removeListener(this);
+    //mPianoState.removeListener(this);
 }
 
 

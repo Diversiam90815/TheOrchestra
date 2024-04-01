@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-    PianoRoll.h
-    Created: 17 Feb 2024 2:40:46pm
-    Author:  jerry
+	PianoRoll.h
+	Created: 17 Feb 2024 2:40:46pm
+	Author:  jerry
 
   ==============================================================================
 */
@@ -17,23 +17,20 @@ class PianoRoll : public Component, private MidiKeyboardState::Listener
 {
 public:
 
-    PianoRoll();
-    ~PianoRoll();
+	PianoRoll();
+	~PianoRoll();
 
 private:
 
-    void showPianoRoll();
+	void showPianoRoll();
 
-    void resized() override;
+	void resized() override;
 
-    void handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
+	void handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
 
-    void handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
-
-
-    std::unique_ptr<MidiKeyboardComponent> mPianoRoll;
-    MidiKeyboardState mPianoState;
+	void handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
 
 
-
+	std::unique_ptr<MidiKeyboardComponent> mPianoRoll;
+	MidiKeyboardState mPianoState;
 };

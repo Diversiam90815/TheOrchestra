@@ -14,6 +14,11 @@
       <FILE id="wV1UFl" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <FILE id="eSc6dJ" name="PianoRoll.cpp" compile="1" resource="0" file="Source/PianoRoll.cpp"/>
       <FILE id="l1yg6C" name="PianoRoll.h" compile="0" resource="0" file="Source/PianoRoll.h"/>
+      <FILE id="Hoz6O6" name="InstrumentInfo.cpp" compile="1" resource="0"
+            file="Source/InstrumentInfo.cpp"/>
+      <FILE id="VjsTy5" name="InstrumentInfo.h" compile="0" resource="0"
+            file="Source/InstrumentInfo.h"/>
+      <FILE id="GD9Naq" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
