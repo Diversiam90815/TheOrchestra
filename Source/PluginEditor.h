@@ -4,7 +4,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "PianoRoll.h"
-
+#include "InstrumentInfo.h"
 
 class OrchestraEditor : public juce::AudioProcessorEditor
 {
@@ -38,6 +38,10 @@ private:
 	OrchestraProcessor& audioProcessor;
 
 	PianoRoll mPianoRollView;
+
+	InstrumentInfoView mInstrumentInfoView;
+
+	MenuBarComponent mMenuBar;
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OrchestraEditor)
 };

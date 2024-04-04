@@ -18,8 +18,12 @@ OrchestraEditor::~OrchestraEditor()
 void OrchestraEditor::showUI()
 {
     addAndMakeVisible(mPianoRollView);
+    addAndMakeVisible(mInstrumentInfoView);
 
-    setSize(700, 500);
+    mMenuBar.setModel(&mInstrumentInfoView);
+    addAndMakeVisible(mMenuBar);
+
+    setSize(800, 600);
 }
 
 
@@ -31,6 +35,8 @@ void OrchestraEditor::paint (Graphics& g)
 
 void OrchestraEditor::resized()
 {
-    mPianoRollView.setBoundsRelative(0.0f, 0.7f, 1.0f, 0.2f);
+    mPianoRollView.setBoundsRelative(0.0f, 0.8f, 1.0f, 0.2f);
+    mInstrumentInfoView.setBoundsRelative(0.01f, 0.08f, 0.98f, 0.5f);
+    mMenuBar.setBounds(getLocalBounds().removeFromTop(juce::LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight()));
 
 }

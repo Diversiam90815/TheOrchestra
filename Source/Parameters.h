@@ -15,40 +15,39 @@
 
 //Families
 
-constexpr auto Strings = "Strings";
-constexpr auto Brass = "Brass";
-constexpr auto Woodwinds = "Woodwinds";
-constexpr auto Percussion = "Percussion";
-
+constexpr auto StringsName = "Strings";
+constexpr auto BrassName = "Brass";
+constexpr auto WoodwindsName = "Woodwinds";
+constexpr auto PercussionName = "Percussion";
 
 
 //Instruments
 
-constexpr auto Violin = "Violin";
-constexpr auto Viola = "Viola";
-constexpr auto Violoncello = "Violoncello";
-constexpr auto Contrabass = "Contrabass";
+constexpr auto ViolinName = "Violin";
+constexpr auto ViolaName = "Viola";
+constexpr auto VioloncelloName = "Violoncello";
+constexpr auto ContrabassName = "Contrabass";
 
-constexpr auto FrenchHorn = "French Horn";
-constexpr auto Trumpet = "Trumpet";
-constexpr auto TenorTrombone = "Tenor Trombone";
-constexpr auto BassTrombone = "Bass Trombone";
-constexpr auto Cimbasso = "Cimbasso";
-constexpr auto Tuba = "Tuba";
+constexpr auto FrenchHornName = "French Horn";
+constexpr auto TrumpetName = "Trumpet";
+constexpr auto TenorTromboneName = "Tenor Trombone";
+constexpr auto BassTromboneName = "Bass Trombone";
+constexpr auto CimbassoName = "Cimbasso";
+constexpr auto TubaName = "Tuba";
 
-constexpr auto Piccolo = "Piccolo";
-constexpr auto Flute = "Flute";
-constexpr auto Oboe = "Oboe";
-constexpr auto CorAnglais = "Cor Anglais";
-constexpr auto Clarinet = "Clarinet";
-constexpr auto BassClarinet = "Bass Clarinet";
-constexpr auto Bassoon = "Bassoon";
-constexpr auto Contrabasson = "Contrabasson";
+constexpr auto PiccoloName = "Piccolo";
+constexpr auto FluteName = "Flute";
+constexpr auto OboeName = "Oboe";
+constexpr auto CorAnglaisName = "Cor Anglais";
+constexpr auto ClarinetName = "Clarinet";
+constexpr auto BassClarinetName = "Bass Clarinet";
+constexpr auto BassoonName = "Bassoon";
+constexpr auto ContrabassonName = "Contrabasson";
 
-constexpr auto Harp = "Harp";
-constexpr auto Celeste = "Celeste";
-constexpr auto Timpani = "Timpani";
-constexpr auto Marimba = "Marimba";
+constexpr auto HarpName = "Harp";
+constexpr auto CelesteName = "Celeste";
+constexpr auto TimpaniName = "Timpani";
+constexpr auto MarimbaName = "Marimba";
 
 
 //Values 

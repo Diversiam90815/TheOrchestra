@@ -23,7 +23,9 @@ PianoRoll::PianoRoll()
 
 PianoRoll::~PianoRoll()
 {
-    //mPianoState.removeListener(this);
+    mPianoRoll->removeAllChangeListeners();
+    mPianoState.removeListener(this);
+    mPianoRoll.reset();
 }
 
 

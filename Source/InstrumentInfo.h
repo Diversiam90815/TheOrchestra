@@ -18,7 +18,7 @@
 
 enum Family
 {
-    Default = 0,    //Displays default info at startup
+    Default = 1,    //Displays default info at startup
     Brass,
     Strings,
     Woodwinds,
@@ -27,7 +27,7 @@ enum Family
 
 enum Strings
 {
-    Violin = 0,
+    Violin = 1,
     Viola,
     Violoncello,
     Contrabass
@@ -35,7 +35,7 @@ enum Strings
 
 enum Woodwinds
 {
-    Piccolo = 0,
+    Piccolo = 1,
     Flute,
     Oboe,
     CorAnglais,
@@ -47,7 +47,7 @@ enum Woodwinds
 
 enum Percussion
 {
-    Harp = 0,
+    Harp = 1,
     Celeste,
     Timpani,
     Marimba
@@ -55,7 +55,7 @@ enum Percussion
 
 enum Brass
 {
-    FrenchHorn = 0,
+    FrenchHorn = 1,
     Trumpet,
     TenorTrombone,
     BassTrombone,
@@ -64,7 +64,7 @@ enum Brass
 };
 
 
-class InstrumentInfoView
+class InstrumentInfoView : public Component, public MenuBarModel
 {
 public:
     InstrumentInfoView();
@@ -82,12 +82,19 @@ public:
 
     void showWoodwindInstrument(int instrument);
 
+    void resized() override;
+
+    StringArray getMenuBarNames() override;
+    PopupMenu getMenuForIndex(int topLevelMenuIndex, const String& menuName) override;
+    void menuItemSelected(int menuItemID, int topLevelMenuIndex) override;
+
 private:
 
     int mCurrentSelectedInstrument = defaultInstrument;        //Default value out of reach of different enums
 
     int mCurrentFamily = Family::Default;
 
+    MenuBarComponent menuBar;
 
     TextEditor mLabel;
     TextEditor mCommonTechniques;
