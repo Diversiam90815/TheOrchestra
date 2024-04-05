@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="GUCZ7X" name="InstrumentsOfTheOrchestra" projectType="audioplug"
               jucerFormatVersion="1" companyName="Diversiam" companyWebsite="diversiam.com"
-              displaySplashScreen="1" pluginFormats="buildStandalone" pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginIsSynth,pluginWantsMidiIn">
+              displaySplashScreen="1" pluginFormats="buildStandalone" pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="W4Nub4" name="InstrumentsOfTheOrchestra">
     <GROUP id="{1723F9DE-87C3-45C4-61C3-F1C66BF60E76}" name="Source">
       <FILE id="aSF3sL" name="PluginProcessor.cpp" compile="1" resource="0"
@@ -19,6 +19,8 @@
       <FILE id="VjsTy5" name="InstrumentInfo.h" compile="0" resource="0"
             file="Source/InstrumentInfo.h"/>
       <FILE id="GD9Naq" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
+      <FILE id="JTXs0Q" name="InstrumentData.h" compile="0" resource="0"
+            file="Source/InstrumentData.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
@@ -54,7 +56,7 @@
         <MODULEPATH id="juce_gui_basics" path="../../JUCE/JUCE/modules"/>
         <MODULEPATH id="juce_graphics" path="../../JUCE/JUCE/modules"/>
         <MODULEPATH id="juce_audio_formats" path="../../JUCE/JUCE/modules"/>
-        <MODULEPATH id="juce_audio_plugin_client" path="../../JUCE/JUCE/modules"/>
+        <MODULEPATH id="juce_audio_plugin_client" path="..\..\JUCE\modules"/>
         <MODULEPATH id="juce_audio_utils" path="../../JUCE/JUCE/modules"/>
       </MODULEPATHS>
     </VS2022>
