@@ -26,7 +26,7 @@ constexpr auto PercussionName = "Percussion";
 constexpr auto ViolinName = "Violin";
 constexpr auto ViolaName = "Viola";
 constexpr auto VioloncelloName = "Violoncello";
-constexpr auto ContrabassName = "Contrabass";
+constexpr auto DoubleBassName = "Double Bass";
 
 constexpr auto FrenchHornName = "French Horn";
 constexpr auto TrumpetName = "Trumpet";

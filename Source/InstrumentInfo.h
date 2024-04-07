@@ -13,6 +13,7 @@
 #include <JuceHeader.h>
 
 #include "Parameters.h"
+#include "InstrumentData.h"
 
 
 
@@ -30,7 +31,7 @@ enum Strings
     Violin = 1,
     Viola,
     Violoncello,
-    Contrabass
+    DoubleBass
 };
 
 enum Woodwinds
@@ -83,6 +84,10 @@ public:
     void showWoodwindInstrument(int instrument);
 
     void resized() override;
+
+    void showTextFromStringArray(TextEditor destinationEditor, StringArray textToShow);
+
+    void setupTextEditor(TextEditor& editorToSetup);
 
     StringArray getMenuBarNames() override;
     PopupMenu getMenuForIndex(int topLevelMenuIndex, const String& menuName) override;

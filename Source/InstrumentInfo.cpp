@@ -13,8 +13,6 @@
 
 InstrumentInfoView::InstrumentInfoView()
 {
-    //menuBar.setModel(this);
-    //addAndMakeVisible(menuBar);
 
     displayTextBoxes();
 }
@@ -28,12 +26,12 @@ InstrumentInfoView::~InstrumentInfoView()
 
 void InstrumentInfoView::displayTextBoxes()
 {
-    addAndMakeVisible(mLabel);
-    addAndMakeVisible(mCommonTechniques);
-    addAndMakeVisible(mRoles);
-    addAndMakeVisible(mQualities);
-    addAndMakeVisible(mTransposition);
-    
+    setupTextEditor(mLabel);
+    setupTextEditor(mCommonTechniques);
+    setupTextEditor(mRoles);
+    setupTextEditor(mQualities);
+    setupTextEditor(mTransposition);
+
     mLabel.setTextToShowWhenEmpty("Instrument",Colours::beige);
     mCommonTechniques.setTextToShowWhenEmpty("Techniques", Colours::beige);
     mRoles.setTextToShowWhenEmpty("Roles within the Orchestra", Colours::beige);
@@ -63,9 +61,6 @@ void InstrumentInfoView::resized()
     // Second row of TextEditors
     mQualities.setBoundsRelative(0.0f, secondRowYStart, 0.5f, textEditorHeight);
     mTransposition.setBoundsRelative(0.5f, secondRowYStart, 0.5f, textEditorHeight);
-
-    //menuBar.setBounds(getLocalBounds().removeFromTop(juce::LookAndFeel::getDefaultLookAndFeel().getDefaultMenuBarHeight()));
-
 }
 
 
@@ -83,7 +78,7 @@ PopupMenu InstrumentInfoView::getMenuForIndex(int topLevelMenuIndex, const Strin
         menu.addItem(Strings::Violin, ViolinName);
         menu.addItem(Strings::Viola, ViolaName);
         menu.addItem(Strings::Violoncello, VioloncelloName);
-        menu.addItem(Strings::Contrabass, ContrabassName);
+        menu.addItem(Strings::DoubleBass, DoubleBassName);
     }
     else if (topLevelMenuIndex == 1) // Woodwinds
     {
@@ -188,7 +183,7 @@ void InstrumentInfoView::showStringsInstrument(int instrument)
         break;
     }
 
-    case (Strings::Contrabass):
+    case (Strings::DoubleBass):
     {
         break;
     }
@@ -319,4 +314,24 @@ void InstrumentInfoView::showWoodwindInstrument(int instrument)
     default: break;
 
     }
+}
+
+void InstrumentInfoView::showTextFromStringArray(TextEditor destinationEditor, StringArray textToShow)
+{
+    for (auto& info : textToShow)
+    {
+        destinationEditor.moveCaretToEnd();
+        destinationEditor.insertTextAtCaret(info + newLine);
+    }
+}
+
+void InstrumentInfoView::setupTextEditor(TextEditor& editorToSetup)
+{
+    addAndMakeVisible(&editorToSetup);
+    editorToSetup.setMultiLine(true);
+    editorToSetup.setReturnKeyStartsNewLine(true);
+    editorToSetup.setReadOnly(true);
+    editorToSetup.setScrollbarsShown(true);
+    editorToSetup.setCaretVisible(false);
+    editorToSetup.setPopupMenuEnabled(true);
 }
