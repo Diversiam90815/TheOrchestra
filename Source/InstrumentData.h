@@ -11,6 +11,10 @@
 #pragma once
 #include <JuceHeader.h>
 
+//=================================================================================================
+//                      STRINGS
+//=================================================================================================
+
 // Violin
 constexpr auto violinRange = "G3 - A7";
 constexpr auto violinTransposition = "-";
@@ -33,12 +37,6 @@ const StringArray violinFamousWorks = {
     "Tchaikovsky - Violin Concerto in D major, Op. 35",
     "Mendelssohn - Violin Concerto in E minor, Op. 64"
 };
-const StringArray violinPlayingTechniques = {
-    "Vibrato: Varying pitch slightly for warmth",
-    "Pizzicato: Plucking the strings",
-    "Spiccato: Bouncing the bow for light, short notes"
-};
-
 
 // Viola
 constexpr auto violaRange = "C3 - E6";
@@ -61,12 +59,6 @@ const StringArray violaFamousWorks =
     "Walton - Viola Concerto",
     "Bartok - Viola Concerto",
     "Hindemith - Der Schwanendreher"
-};
-const StringArray violaPlayingTechniques = 
-{
-    "Tremolo: Rapid back-and-forth bowing",
-    "Sul tasto: Playing over the fingerboard for a softer sound",
-    "Col legno: Tapping the strings with the wood of the bow"
 };
 
 // Violoncello (Cello)
@@ -94,12 +86,6 @@ const StringArray celloFamousWorks =
     "Elgar - Cello Concerto in E minor, Op. 85",
     "Haydn - Cello Concerto No. 1 in C major"
 };
-const StringArray celloPlayingTechniques = 
-{
-    "Sul ponticello: Playing near the bridge for a tense sound",
-    "Sul tasto: Playing over the fingerboard for a flute-like tone",
-    "Con sordino: Using a mute to soften the sound"
-};
 
 // Double Bass
 constexpr auto doubleBassRange = "E1 - C4";
@@ -122,13 +108,24 @@ const StringArray doubleBassFamousWorks =
     "Bottesini - Double Bass Concerto No. 2 in B minor",
     "Dittersdorf - Double Bass Concerto No. 2 in E major"
 };
-const StringArray doubleBassPlayingTechniques = 
+
+const StringArray stringsPlayingTechniques =
 {
     "Pizzicato: Plucking the strings with fingers",
-    "Slap bass: A technique used in jazz, slapping the strings against the fingerboard",
-    "Arco: Using the bow to produce sound"
+    "Arco: Using the bow to produce sound",
+    "Sul ponticello: Playing near the bridge for a tense sound",
+    "Sul tasto: Playing over the fingerboard for a flute-like tone",
+    "Con sordino: Using a mute to soften the sound",
+    "Tremolo: Rapid back-and-forth bowing",
+    "Col legno: Tapping the strings with the wood of the bow",
+    "Vibrato: Varying pitch slightly for warmth",
+    "Spiccato: Bouncing the bow for light, short notes"
 };
 
+
+//=================================================================================================
+//                      BRASS
+//=================================================================================================
 
 // French Horn
 constexpr auto frenchHornRange = "F2 - C6";
@@ -152,13 +149,6 @@ const StringArray frenchHornFamousWorks =
     "Strauss - Horn Concerto No. 1 in E flat major, Op. 11",
     "Schumann - Konzertstueck for Four Horns and Orchestra"
 };
-const StringArray frenchHornPlayingTechniques = 
-{
-    "Stopped Horn: Hand in the bell to alter pitch/timbre",
-    "Rip: Quick, glissando-like rise to a higher note",
-    "Bell Up: Raising the bell for a louder, more projected sound"
-};
-
 
 // Trumpet
 constexpr auto trumpetRange = "F#3 - D6";
@@ -181,13 +171,6 @@ const StringArray trumpetFamousWorks =
     "Hummel - Trumpet Concerto in E major",
     "Dmitri Shostakovich - Concerto No. 1 for Piano, Trumpet, and String Orchestra"
 };
-const StringArray trumpetPlayingTechniques = 
-{
-    "Mute: Inserting a mute into the bell to alter the sound",
-    "Sforzando: A sudden forceful emphasis",
-    "Rip: A rapid ascending glissando"
-};
-
 
 // Tenor Trombone
 constexpr auto tenorTromboneRange = "E2 - Bb4";
@@ -211,13 +194,6 @@ const StringArray tenorTromboneFamousWorks =
     "David - Concertino in E flat major, Op. 4",
     "Groendahl - Trombone Concerto"
 };
-const StringArray tenorTrombonePlayingTechniques = 
-{
-    "Legato slide: Smooth transition between notes",
-    "Mute use: Employing different mutes to alter the timbre",
-    "Glissando: Slide between notes for a smooth sound"
-};
-
 
 // Bass Trombone
 constexpr auto bassTromboneRange = "Bb1 - Bb4";
@@ -240,13 +216,6 @@ const StringArray bassTromboneFamousWorks =
     "Ewazen - Concerto for Bass Trombone",
     "Schnyder - SubZERO Bass Trombone Concerto"
 };
-const StringArray bassTrombonePlayingTechniques = 
-{
-    "Pedal tones: Playing the very low notes of the instrument's range",
-    "Blatt: A rapid articulation technique",
-    "Multiphonics: Singing and playing at the same time to create chords"
-};
-
 
 // Cimbasso
 constexpr auto cimbassoRange = "F1 - F4";
@@ -268,13 +237,6 @@ const StringArray cimbassoFamousWorks =
     "Puccini - Turandot",
     "Contemporary film scores and symphonic works that require a unique brass tone"
 };
-const StringArray cimbassoPlayingTechniques = 
-{
-    "Valve technique: For rapid passage work",
-    "Mute use: To alter the sound for different effects",
-    "Blending: Mixing with the trombone section for a cohesive sound"
-};
-
 
 // Tuba
 constexpr auto tubaRange = "D1 - F4";
@@ -296,14 +258,23 @@ const StringArray tubaFamousWorks =
     "John Williams - Concerto for Tuba and Orchestra",
     "Hindemith - Sonata for Bass Tuba and Piano"
 };
-const StringArray tubaPlayingTechniques = 
+
+const StringArray brassPlayingTechniques =
 {
-    "Circular breathing: For continuous play without taking a breath",
-    "Multiphonics: Producing multiple notes at once",
-    "Flutter tonguing: Rolling the 'R' for a trembling effect"
+    "Flutter tonguing: Rolling the 'R' for a trembling effect",
+    "Pedal tones: Playing the very low notes of the instrument's range",
+    "Mute: Inserting a mute into the bell to alter the sound",
+    "Sforzando: A sudden forceful emphasis",
+    "Legato slide: Smooth transition between notes (Trombone)",
+    "Stopped Horn: Hand in the bell to alter pitch/timbre",
+    "Rip: Quick, glissando-like rise to a higher note",
+    "Bell Up: Raising the bell for a louder, more projected sound (Horns)"
 };
 
 
+//=================================================================================================
+//                      WOODWINDS
+//=================================================================================================
 
 // Piccolo
 constexpr auto piccoloRange = "D4 - C8";
@@ -327,13 +298,6 @@ const StringArray piccoloFamousWorks =
     "Tchaikovsky - Symphony No. 4 (2nd movement)",
     "Rimsky-Korsakov - Scheherazade"
 };
-const StringArray piccoloPlayingTechniques = 
-{
-    "Flutter tonguing: Producing a fluttering sound by rolling the 'R'",
-    "Double tonguing: Articulation technique for fast passages",
-    "High register control: Mastery of the instrument's uppermost notes"
-};
-
 
 // Flute
 constexpr auto fluteRange = "C4 - D7";
@@ -357,13 +321,6 @@ const StringArray fluteFamousWorks =
     "Debussy - Syrinx for solo flute",
     "Quantz - Flute Concertos"
 };
-const StringArray flutePlayingTechniques = 
-{
-    "Double Tonguing: Articulation for rapid notes",
-    "Flutter Tonguing: Rolling 'R' sound for a fluttery effect",
-    "Glissando: Sliding between pitches"
-};
-
 
 // Oboe
 constexpr auto oboeRange = "Bb3 - A6";
@@ -387,13 +344,6 @@ const StringArray oboeFamousWorks =
     "Mozart - Oboe Concerto in C major, K. 314",
     "Vaughan Williams - Concerto for Oboe and Strings"
 };
-const StringArray oboePlayingTechniques = 
-{
-    "Circular breathing: Technique to produce a continuous tone without interruption",
-    "Half-holing: Technique for playing notes that are not fully covered by the finger pads",
-    "Multiphonics: Producing more than one note simultaneously"
-};
-
 
 // Cor Anglais (English Horn)
 constexpr auto corAnglaisRange = "B3 - G6";
@@ -415,13 +365,6 @@ const StringArray corAnglaisFamousWorks =
     "Rossini - William Tell Overture (3rd part, Ranz des Vaches)",
     "Berlioz - Roman Carnival Overture"
 };
-const StringArray corAnglaisPlayingTechniques = 
-{
-    "Circular breathing: For sustained notes without breaks",
-    "Half-hole technique: For smooth transitions in the upper register",
-    "Vibrato: Modulating pitch slightly for a warmer sound"
-};
-
 
 // Clarinet
 constexpr auto clarinetRange = "E3 - C7";
@@ -446,13 +389,6 @@ const StringArray clarinetFamousWorks =
     "Weber - Clarinet Concerto No. 2 in E-flat major, Op. 74",
     "Copland - Clarinet Concerto"
 };
-const StringArray clarinetPlayingTechniques = 
-{
-    "Legato: Smooth and connected style of play",
-    "Staccato: Short, detached notes",
-    "Slur: Smoothly connecting two or more notes without rearticulating"
-};
-
 
 // Bass Clarinet
 constexpr auto bassClarinetRange = "D3 - G6";
@@ -475,13 +411,6 @@ const StringArray bassClarinetFamousWorks =
     "Wagner - Lohengrin (Act III Prelude)",
     "Holst - The Planets"
 };
-const StringArray bassClarinetPlayingTechniques = 
-{
-    "Extended techniques: Including multiphonics and flutter tonguing",
-    "Glissando: Smoothly sliding from one pitch to another",
-    "Cross-fingering: Achieving alternate fingerings for microtonal effects"
-};
-
 
 // Bassoon
 constexpr auto bassoonRange = "Bb1 - Eb5";
@@ -505,13 +434,6 @@ const StringArray bassoonFamousWorks =
     "Vivaldi - Bassoon Concertos",
     "Weber - Bassoon Concerto in F major, Op. 75"
 };
-const StringArray bassoonPlayingTechniques = 
-{
-    "Flutter tonguing: Rolling the tongue to create a trembling sound",
-    "Glissando: Sliding from one note to another",
-    "Staccato: Playing notes sharply and detached"
-};
-
 
 // Contrabassoon
 constexpr auto contraBassoonRange = "Bb0 - Bb4";
@@ -532,13 +454,23 @@ const StringArray contraBassoonFamousWorks =
     "Stravinsky - The Rite of Spring",
     "Prokofiev - Symphony No. 5, Op. 100"
 };
-const StringArray contraBassoonPlayingTechniques = 
+
+const StringArray woodwindsPlayingTechniques =
 {
-    "Extended techniques like multiphonics and flutter tonguing for contemporary pieces",
-    "Reinforcing bass lines, often doubling them an octave lower",
-    "Using the extreme low register for special effects in orchestral textures"
+    "Flutter tonguing: Rolling the tongue to create a trembling sound",
+    "Glissando: Sliding from one note to another",
+    "Staccato: Playing notes sharply and detached",
+    "Cross-fingering: Achieving alternate fingerings for microtonal effects",
+    "Legato: Smooth and connected style of play",
+    "Slur: Smoothly connecting two or more notes without rearticulating",
+    "Vibrato: Modulating pitch slightly for a warmer sound",
+    "Double tonguing: Articulation technique for fast passages"
 };
 
+
+//=================================================================================================
+//                      PERCUSSION
+//=================================================================================================
 
 // Timpani
 constexpr auto timpaniRange = "D2 - C4";
@@ -567,7 +499,6 @@ const StringArray timpaniPlayingTechniques =
     "Muffling: Dampening the drum head to stop the sound"
 };
 
-
 // Harp
 constexpr auto harpRange = "C1 - G7";
 constexpr auto harpTransposition = "-";
@@ -582,7 +513,6 @@ const StringArray harpRoles =
     "Sometimes used in pairs for fuller sound",
     "Chords and arpeggios lend a unique texture",
     "Pedal adjustments allow for chromaticism and modulation",
-    "Special techniques like pres de la table and bisbigliando add color",
     "Glissandi create ethereal soundscapes"
 };
 const StringArray harpFamousWorks = 
@@ -597,7 +527,6 @@ const StringArray harpPlayingTechniques =
     "Bisbigliando: A whispering effect achieved by repeating notes or chords",
     "Glissando: Running the fingers across the strings for a sweeping sound"
 };
-
 
 // Celesta
 constexpr auto celesteRange = "C4 - C8";
@@ -627,7 +556,6 @@ const StringArray celestaPlayingTechniques =
     "Pedaling: To sustain or dampen the sound",
     "Layering: Often used in combination with other instruments to add texture"
 };
-
 
 // Marimba
 constexpr auto marimbaRange = "C2 - C7";
