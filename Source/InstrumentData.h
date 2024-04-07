@@ -69,8 +69,6 @@ const StringArray violaPlayingTechniques =
     "Col legno: Tapping the strings with the wood of the bow"
 };
 
-
-
 // Violoncello (Cello)
 constexpr auto celloRange = "C2 - C6";
 constexpr auto celloTransposition = "-";
@@ -92,7 +90,7 @@ const StringArray celloRoles =
 };
 const StringArray celloFamousWorks = 
 {
-    "Dvořák - Cello Concerto in B minor, Op. 104",
+    "Dvorak - Cello Concerto in B minor, Op. 104",
     "Elgar - Cello Concerto in E minor, Op. 85",
     "Haydn - Cello Concerto No. 1 in C major"
 };
@@ -103,18 +101,17 @@ const StringArray celloPlayingTechniques =
     "Con sordino: Using a mute to soften the sound"
 };
 
-
-// Contrabass
-constexpr auto contrabassRange = "E1 - C4";
-constexpr auto contrabassTransposition = "Sounds one octave lower than written";
-const StringArray contrabassQualities = 
+// Double Bass
+constexpr auto doubleBassRange = "E1 - C4";
+constexpr auto doubleBassassTransposition = "Sounds one octave lower than written";
+const StringArray doubleBassQualities = 
 {
     "E1: Weighty, dark, and powerful with a sonorous fundamental bass",
     "A1: Clear and precise with a sonorous timbre",
     "D2: Fuller, more powerful, and darker, sharing the cello's range",
     "G2: Similarly full and powerful, darker than the cello"
 };
-const StringArray contrabassRoles = 
+const StringArray doubleBassRoles = 
 {
     "Provides foundational bass",
     "Often doubling the cello, especially in mid 18th-century music"
@@ -153,7 +150,7 @@ const StringArray frenchHornFamousWorks =
 {
     "Mozart - Horn Concerto No. 4 in E flat major, K. 495",
     "Strauss - Horn Concerto No. 1 in E flat major, Op. 11",
-    "Schumann - Konzertstück for Four Horns and Orchestra"
+    "Schumann - Konzertstueck for Four Horns and Orchestra"
 };
 const StringArray frenchHornPlayingTechniques = 
 {
@@ -212,7 +209,7 @@ const StringArray tenorTromboneFamousWorks =
 {
     "Rimsky-Korsakov - Trombone Concerto in B-flat major",
     "David - Concertino in E flat major, Op. 4",
-    "Grøndahl - Trombone Concerto"
+    "Groendahl - Trombone Concerto"
 };
 const StringArray tenorTrombonePlayingTechniques = 
 {
@@ -414,7 +411,7 @@ const StringArray corAnglaisRoles =
 };
 const StringArray corAnglaisFamousWorks = 
 {
-    "Dvořák - Symphony No. 9 'From the New World' (2nd movement)",
+    "Dvorak - Symphony No. 9 'From the New World' (2nd movement)",
     "Rossini - William Tell Overture (3rd part, Ranz des Vaches)",
     "Berlioz - Roman Carnival Overture"
 };
@@ -590,7 +587,7 @@ const StringArray harpRoles =
 };
 const StringArray harpFamousWorks = 
 {
-    "Debussy - Danses sacrée et profane",
+    "Debussy - Danses sacree et profane",
     "Ravel - Introduction and Allegro for Harp, Flute, Clarinet and String Quartet",
     "Tchaikovsky - Swan Lake"
 };
@@ -621,7 +618,7 @@ const StringArray celesteRoles =
 const StringArray celestaFamousWorks = 
 {
     "Tchaikovsky - The Dance of the Sugar Plum Fairy from The Nutcracker",
-    "Bartók - Music for Strings, Percussion and Celesta",
+    "Bartok - Music for Strings, Percussion and Celesta",
     "Harry Potter Theme (Hedwig's Theme) by John Williams"
 };
 const StringArray celestaPlayingTechniques = 
@@ -650,7 +647,7 @@ const StringArray marimbaRoles =
 const StringArray marimbaFamousWorks = 
 {
     "Keiko Abe - Prism Rhapsody for Marimba and Orchestra",
-    "Emmanuel Séjourné - Concerto for Marimba and Strings",
+    "Emmanuel Sejourne - Concerto for Marimba and Strings",
     "Ney Rosauro - Concerto for Marimba and Orchestra No. 1"
 };
 const StringArray marimbaPlayingTechniques = 
