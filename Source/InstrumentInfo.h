@@ -85,7 +85,9 @@ public:
 
     void resized() override;
 
-    void showTextFromStringArray(TextEditor destinationEditor, StringArray textToShow);
+    void showText(TextEditor &destinationEditor, StringArray textToShow);
+
+    void showText(TextEditor& destinationEditor, String textToShow);
 
     void setupTextEditor(TextEditor& editorToSetup);
 
@@ -102,8 +104,10 @@ private:
     MenuBarComponent menuBar;
 
     TextEditor mLabel;
-    TextEditor mCommonTechniques;
+    TextEditor mRange;
     TextEditor mRoles;
     TextEditor mQualities;
     TextEditor mTransposition;
+    TextEditor mPlayingTechniques;
+    TextEditor mFamousWorks;
 };

@@ -27,41 +27,52 @@ InstrumentInfoView::~InstrumentInfoView()
 void InstrumentInfoView::displayTextBoxes()
 {
     setupTextEditor(mLabel);
-    setupTextEditor(mCommonTechniques);
+    setupTextEditor(mRange);
     setupTextEditor(mRoles);
     setupTextEditor(mQualities);
     setupTextEditor(mTransposition);
+    setupTextEditor(mPlayingTechniques);
+    setupTextEditor(mFamousWorks);
 
     mLabel.setTextToShowWhenEmpty("Instrument",Colours::beige);
-    mCommonTechniques.setTextToShowWhenEmpty("Techniques", Colours::beige);
+    mRange.setTextToShowWhenEmpty("Range", Colours::beige);
     mRoles.setTextToShowWhenEmpty("Roles within the Orchestra", Colours::beige);
     mQualities.setTextToShowWhenEmpty("Qualities", Colours::beige);
     mTransposition.setTextToShowWhenEmpty("Transposition", Colours::beige);
+    mFamousWorks.setTextToShowWhenEmpty("Famous Works", Colours::beige);
+    mPlayingTechniques.setTextToShowWhenEmpty("Playing Techniques", Colours::beige);
 }
-
 
 void InstrumentInfoView::resized()
 {
     // Assuming mLabel takes up about 10% of the height for the title.
     float titleLabelHeight = 0.1f;
 
-    // Calculate the height for the TextEditors, considering they need to be bigger and fill the rest of the space.
-    float textEditorHeight = (1.0f - titleLabelHeight) / 2; // Divided by 2 rows.
+    // Adjust the height for the TextEditors, now divided by 3 rows.
+    float textEditorHeight = (1.0f - titleLabelHeight) / 3; // Now for 3 rows.
 
     // Set bounds for mLabel centered horizontally at the top.
     mLabel.setBoundsRelative(0.25f, 0.0f, 0.5f, titleLabelHeight);
 
     // First row of TextEditors
-    mCommonTechniques.setBoundsRelative(0.0f, titleLabelHeight, 0.5f, textEditorHeight);
+    mRange.setBoundsRelative(0.0f, titleLabelHeight, 0.5f, textEditorHeight);
     mRoles.setBoundsRelative(0.5f, titleLabelHeight, 0.5f, textEditorHeight);
 
-    // Calculate the starting Y position for the second row, considering the height of the first row.
+    // Calculate the starting Y position for the second row
     float secondRowYStart = titleLabelHeight + textEditorHeight;
 
     // Second row of TextEditors
     mQualities.setBoundsRelative(0.0f, secondRowYStart, 0.5f, textEditorHeight);
     mTransposition.setBoundsRelative(0.5f, secondRowYStart, 0.5f, textEditorHeight);
+
+    // Calculate the starting Y position for the third row
+    float thirdRowYStart = secondRowYStart + textEditorHeight;
+
+    // Third row of TextEditors
+    mPlayingTechniques.setBoundsRelative(0.0f, thirdRowYStart, 0.5f, textEditorHeight);
+    mFamousWorks.setBoundsRelative(0.5f, thirdRowYStart, 0.5f, textEditorHeight);
 }
+
 
 
 StringArray InstrumentInfoView::getMenuBarNames()
@@ -164,17 +175,28 @@ void InstrumentInfoView::displayInstrument(int family, int instrument)
 
 void InstrumentInfoView::showStringsInstrument(int instrument)
 {
+    showText(mPlayingTechniques, stringsPlayingTechniques);
+
     switch (instrument)
     {
     
     case (Strings::Violin):
     {
+        showText(mRange, violinRange);
+        showText(mQualities, violinQualities);
+        showText(mRoles, violinRoles);
+        showText(mFamousWorks, violinFamousWorks);
+        showText(mTransposition, violinTransposition);
         break;
     }
 
     case (Strings::Viola):
     {
-        std::cout << "ViolaPicked" << std::endl;
+        showText(mRange, violaRange);
+        showText(mQualities, violaQualities);
+        showText(mRoles, violaRoles);
+        showText(mFamousWorks, violaFamousWorks);
+        showText(mTransposition, violaTransposition);
         break;
     }
 
@@ -316,14 +338,25 @@ void InstrumentInfoView::showWoodwindInstrument(int instrument)
     }
 }
 
-void InstrumentInfoView::showTextFromStringArray(TextEditor destinationEditor, StringArray textToShow)
+void InstrumentInfoView::showText(TextEditor &destinationEditor, StringArray textToShow)
 {
+    destinationEditor.clear();
+
     for (auto& info : textToShow)
     {
         destinationEditor.moveCaretToEnd();
         destinationEditor.insertTextAtCaret(info + newLine);
     }
 }
+
+
+void InstrumentInfoView::showText(TextEditor& destinationEditor, String textToShow)
+{
+    destinationEditor.clear();
+    destinationEditor.moveCaretToEnd();
+    destinationEditor.insertTextAtCaret(textToShow);
+}
+
 
 void InstrumentInfoView::setupTextEditor(TextEditor& editorToSetup)
 {
