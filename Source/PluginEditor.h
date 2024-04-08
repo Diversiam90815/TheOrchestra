@@ -4,7 +4,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "PianoRoll.h"
-#include "InstrumentInfo.h"
+#include "InstrumentInfoView.h"
 
 class OrchestraEditor : public juce::AudioProcessorEditor
 {

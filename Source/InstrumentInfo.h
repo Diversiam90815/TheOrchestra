@@ -64,50 +64,22 @@ enum Brass
     Tuba
 };
 
-
-class InstrumentInfoView : public Component, public MenuBarModel
+class InstrumentInfo 
 {
 public:
-    InstrumentInfoView();
-    ~InstrumentInfoView();
-
-    void displayTextBoxes();
-
-    void displayInstrument(int family, int instrument);
-
-    void showStringsInstrument(int instrument);
-
-    void showBrassInstrument(int instrument);
-
-    void showPercussionInstrument(int instrument);
-
-    void showWoodwindInstrument(int instrument);
-
-    void resized() override;
-
-    void showText(TextEditor &destinationEditor, StringArray textToShow);
-
-    void showText(TextEditor& destinationEditor, String textToShow);
-
-    void setupTextEditor(TextEditor& editorToSetup);
-
-    StringArray getMenuBarNames() override;
-    PopupMenu getMenuForIndex(int topLevelMenuIndex, const String& menuName) override;
-    void menuItemSelected(int menuItemID, int topLevelMenuIndex) override;
-
+    InstrumentInfo();
+    InstrumentInfo(const juce::String& name, const juce::String& range, const juce::StringArray& qualities, const juce::StringArray& roles, const juce::StringArray& famousWorks, const juce::String& transposition);
+    ~InstrumentInfo();
+    
 private:
+    juce::String name; // Optional, for identifying the instrument
+    juce::String range;
+    juce::StringArray qualities;
+    juce::StringArray roles;
+    juce::StringArray famousWorks;
+    juce::String transposition; // Assuming transposition doesn't need to be a StringArray
 
-    int mCurrentSelectedInstrument = defaultInstrument;        //Default value out of reach of different enums
-
-    int mCurrentFamily = Family::Default;
-
-    MenuBarComponent menuBar;
-
-    TextEditor mLabel;
-    TextEditor mRange;
-    TextEditor mRoles;
-    TextEditor mQualities;
-    TextEditor mTransposition;
-    TextEditor mPlayingTechniques;
-    TextEditor mFamousWorks;
+    friend class InstrumentInfoModel;
+    friend class InstrumentInfoView;
 };
+

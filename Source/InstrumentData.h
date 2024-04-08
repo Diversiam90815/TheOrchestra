@@ -1,4 +1,4 @@
-﻿/*
+/*
   ==============================================================================
 
     InstrumentData.h
@@ -89,7 +89,7 @@ const StringArray celloFamousWorks =
 
 // Double Bass
 constexpr auto doubleBassRange = "E1 - C4";
-constexpr auto doubleBassassTransposition = "Sounds one octave lower than written";
+constexpr auto doubleBassTransposition = "Sounds one octave lower than written";
 const StringArray doubleBassQualities = 
 {
     "E1: Weighty, dark, and powerful with a sonorous fundamental bass",
@@ -436,19 +436,19 @@ const StringArray bassoonFamousWorks =
 };
 
 // Contrabassoon
-constexpr auto contraBassoonRange = "Bb0 - Bb4";
-constexpr auto contraBassoonTransposition = "Sounds one octave lower than written";
-const StringArray contraBassoonQualities = 
+constexpr auto contrabassoonRange = "Bb0 - Bb4";
+constexpr auto contrabassoonTransposition = "Sounds one octave lower than written";
+const StringArray contrabassoonQualities = 
 {
     "Similar characteristics as the Bassoon but slower and more stubborn in the lows"
 };
-const StringArray contraBassoonRoles = 
+const StringArray contrabassoonRoles = 
 {
     "Doubles with contrabasses and bassoons/celli at octave",
     "In its higher register, it's paler and weaker than the bassoon",
     "Requires periodic rests due to its size and breath demands"
 };
-const StringArray contraBassoonFamousWorks = 
+const StringArray contrabassoonFamousWorks = 
 {
     "Strauss - Eine Alpensinfonie, Op. 64",
     "Stravinsky - The Rite of Spring",

@@ -21,6 +21,14 @@
       <FILE id="GD9Naq" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
       <FILE id="JTXs0Q" name="InstrumentData.h" compile="0" resource="0"
             file="Source/InstrumentData.h"/>
+      <FILE id="lIZyYy" name="InstrumentInfoModel.cpp" compile="1" resource="0"
+            file="Source/InstrumentInfoModel.cpp"/>
+      <FILE id="DCI8lC" name="InstrumentInfoModel.h" compile="0" resource="0"
+            file="Source/InstrumentInfoModel.h"/>
+      <FILE id="EapOll" name="InstrumentInfoView.cpp" compile="1" resource="0"
+            file="Source/InstrumentInfoView.cpp"/>
+      <FILE id="uKfr6k" name="InstrumentInfoView.h" compile="0" resource="0"
+            file="Source/InstrumentInfoView.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
