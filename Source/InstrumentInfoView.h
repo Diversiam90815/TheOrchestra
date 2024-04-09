@@ -21,6 +21,8 @@ public:
 
     void displayTextBoxes();
 
+    void displayLabels();
+
     void resized() override;
 
     void showInstrumentInfo(int key);
@@ -30,6 +32,8 @@ public:
     void showText(TextEditor& destinationEditor, String textToShow);
 
     void setupTextEditor(TextEditor& editorToSetup);
+
+    void setupLabel(Label& labelToSetup, const String& title);
 
     StringArray getMenuBarNames() override;
     PopupMenu getMenuForIndex(int topLevelMenuIndex, const String& menuName) override;
@@ -45,7 +49,14 @@ private:
 
     InstrumentInfoModel mInstrumentModel;
 
-    TextEditor mLabel;
+    Label mInstrument;
+    Label mRangeTitle;
+    Label mRolesTitle; 
+    Label mQualitiesTitle;
+    Label mTranspositionTitle;
+    Label mPlayingTechniquesTitle;
+    Label mFamousWorksTitle;
+
     TextEditor mRange;
     TextEditor mRoles;
     TextEditor mQualities;

@@ -14,6 +14,7 @@
 InstrumentInfoView::InstrumentInfoView()
 {
     displayTextBoxes();
+    displayLabels();
 }
 
 
@@ -25,7 +26,6 @@ InstrumentInfoView::~InstrumentInfoView()
 
 void InstrumentInfoView::displayTextBoxes()
 {
-    setupTextEditor(mLabel);
     setupTextEditor(mRange);
     setupTextEditor(mRoles);
     setupTextEditor(mQualities);
@@ -33,7 +33,6 @@ void InstrumentInfoView::displayTextBoxes()
     setupTextEditor(mPlayingTechniques);
     setupTextEditor(mFamousWorks);
 
-    mLabel.setTextToShowWhenEmpty("Instrument", Colours::beige);
     mRange.setTextToShowWhenEmpty("Range", Colours::beige);
     mRoles.setTextToShowWhenEmpty("Roles within the Orchestra", Colours::beige);
     mQualities.setTextToShowWhenEmpty("Qualities", Colours::beige);
@@ -42,32 +41,61 @@ void InstrumentInfoView::displayTextBoxes()
     mPlayingTechniques.setTextToShowWhenEmpty("Playing Techniques", Colours::beige);
 }
 
+
+void InstrumentInfoView::displayLabels()
+{
+    setupLabel(mInstrument, "Instrument");
+    setupLabel(mRangeTitle, "Ranges");
+    setupLabel(mQualitiesTitle, "Qualities");
+    setupLabel(mFamousWorksTitle, "Famous Works");
+    setupLabel(mPlayingTechniquesTitle, "Playing Techniques");
+    setupLabel(mRolesTitle, "Roles");
+    setupLabel(mTranspositionTitle, "Transposition");
+}
+
+
 void InstrumentInfoView::resized()
 {
-    // Assuming mLabel takes up about 10% of the height for the title.
+    // Assuming mLabel takes up about 10% of the height for the title, as before.
     float titleLabelHeight = 0.1f;
 
-    // Adjust the height for the TextEditors, now divided by 3 rows.
-    float textEditorHeight = (1.0f - titleLabelHeight) / 3; // Now for 3 rows.
+    // Adjusting for the addition of title labels. Assuming each title label takes up a small percentage of the height.
+    // You can adjust the titleHeightPercentage as needed.
+    float titleHeightPercentage = 0.05f; // Example height for title labels
+
+    // Adjust the height for the TextEditors, now divided by 3 rows, subtracting the space needed for titles.
+    float textEditorHeight = (1.0f - titleLabelHeight - (titleHeightPercentage * 6)) / 3; // Now for 3 rows, 6 titles.
 
     // Set bounds for mLabel centered horizontally at the top.
-    mLabel.setBoundsRelative(0.25f, 0.0f, 0.5f, titleLabelHeight);
+    mInstrument.setBoundsRelative(0.25f, 0.0f, 0.5f, titleLabelHeight);
 
-    // First row of TextEditors
-    mRange.setBoundsRelative(0.0f, titleLabelHeight, 0.5f, textEditorHeight);
-    mRoles.setBoundsRelative(0.5f, titleLabelHeight, 0.5f, textEditorHeight);
+    // Calculate Y positions where the titles will start.
+    float firstRowTitlesY = titleLabelHeight;
+    float firstRowYStart = firstRowTitlesY + titleHeightPercentage;
 
-    // Calculate the starting Y position for the second row
-    float secondRowYStart = titleLabelHeight + textEditorHeight;
+    // First row of Titles and TextEditors
+    mRangeTitle.setBoundsRelative(0.0f, firstRowTitlesY, 0.5f, titleHeightPercentage);
+    mRolesTitle.setBoundsRelative(0.5f, firstRowTitlesY, 0.5f, titleHeightPercentage);
+    mRange.setBoundsRelative(0.0f, firstRowYStart, 0.5f, textEditorHeight);
+    mRoles.setBoundsRelative(0.5f, firstRowYStart, 0.5f, textEditorHeight);
 
-    // Second row of TextEditors
+    // Calculate the starting Y position for the second row titles and TextEditors
+    float secondRowTitlesY = firstRowYStart + textEditorHeight;
+    float secondRowYStart = secondRowTitlesY + titleHeightPercentage;
+
+    // Second row of Titles and TextEditors
+    mQualitiesTitle.setBoundsRelative(0.0f, secondRowTitlesY, 0.5f, titleHeightPercentage);
+    mTranspositionTitle.setBoundsRelative(0.5f, secondRowTitlesY, 0.5f, titleHeightPercentage);
     mQualities.setBoundsRelative(0.0f, secondRowYStart, 0.5f, textEditorHeight);
     mTransposition.setBoundsRelative(0.5f, secondRowYStart, 0.5f, textEditorHeight);
 
-    // Calculate the starting Y position for the third row
-    float thirdRowYStart = secondRowYStart + textEditorHeight;
+    // Calculate the starting Y position for the third row titles and TextEditors
+    float thirdRowTitlesY = secondRowYStart + textEditorHeight;
+    float thirdRowYStart = thirdRowTitlesY + titleHeightPercentage;
 
-    // Third row of TextEditors
+    // Third row of Titles and TextEditors
+    mPlayingTechniquesTitle.setBoundsRelative(0.0f, thirdRowTitlesY, 0.5f, titleHeightPercentage);
+    mFamousWorksTitle.setBoundsRelative(0.5f, thirdRowTitlesY, 0.5f, titleHeightPercentage);
     mPlayingTechniques.setBoundsRelative(0.0f, thirdRowYStart, 0.5f, textEditorHeight);
     mFamousWorks.setBoundsRelative(0.5f, thirdRowYStart, 0.5f, textEditorHeight);
 }
@@ -132,8 +160,8 @@ void InstrumentInfoView::menuItemSelected(int menuItemID, int topLevelMenuIndex)
 void InstrumentInfoView::showInstrumentInfo(int key)
 {    
     auto info = mInstrumentModel.getInstrument(key);
+    mInstrument.setText(info.mName,dontSendNotification);
 
-    showText(mLabel, info.mName);
     showText(mRange, info.mRange);
     showText(mQualities, info.mQualities);
     showText(mRoles, info.mRoles);
@@ -173,4 +201,12 @@ void InstrumentInfoView::setupTextEditor(TextEditor& editorToSetup)
     editorToSetup.setScrollbarsShown(true);
     editorToSetup.setCaretVisible(false);
     editorToSetup.setPopupMenuEnabled(true);
+}
+
+void InstrumentInfoView::setupLabel(Label& labelToSetup, const String& title)
+{
+    addAndMakeVisible(&labelToSetup);
+    labelToSetup.setText(title, dontSendNotification);
+    labelToSetup.setFont(Font(16.0f, Font::bold));
+    labelToSetup.setJustificationType(Justification::centred);
 }

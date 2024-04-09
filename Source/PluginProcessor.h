@@ -8,6 +8,13 @@
 #include <JuceHeader.h>
 
 
+/*
+Free Orchestra samples:
+https://www.delamar.de/loops-samples/free-orchestra-samples-kostenlos-download-orchester-9341/
+
+*/
+
+
 //==============================================================================
 //				AUDIO PROCESSOR
 //==============================================================================
