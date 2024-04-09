@@ -13,7 +13,6 @@
 
 InstrumentInfoView::InstrumentInfoView()
 {
-
     displayTextBoxes();
 }
 
@@ -77,21 +76,15 @@ void InstrumentInfoView::resized()
 
 StringArray InstrumentInfoView::getMenuBarNames()
 {
-    return { "Strings", "Woodwinds", "Brass", "Percussion" };
+    return {"Woodwinds", "Brass", "Strings", "Percussion" };
 }
 
 
 PopupMenu InstrumentInfoView::getMenuForIndex(int topLevelMenuIndex, const String& menuName)
 {
     PopupMenu menu;
-    if (topLevelMenuIndex == 0) // Strings
-    {
-        menu.addItem(Strings::Violin, ViolinName);
-        menu.addItem(Strings::Viola, ViolaName);
-        menu.addItem(Strings::Violoncello, VioloncelloName);
-        menu.addItem(Strings::DoubleBass, DoubleBassName);
-    }
-    else if (topLevelMenuIndex == 1) // Woodwinds
+
+    if (topLevelMenuIndex == 0) // Woodwinds
     {
         menu.addItem(Woodwinds::Piccolo, PiccoloName);
         menu.addItem(Woodwinds::Flute, FluteName);
@@ -102,7 +95,7 @@ PopupMenu InstrumentInfoView::getMenuForIndex(int topLevelMenuIndex, const Strin
         menu.addItem(Woodwinds::Basson, BassoonName);
         menu.addItem(Woodwinds::Contrabassoon, ContrabassonName);
     }
-    else if (topLevelMenuIndex == 2) //Brass
+    else if (topLevelMenuIndex == 1) //Brass
     {
         menu.addItem(Brass::FrenchHorn, FrenchHornName);
         menu.addItem(Brass::Trumpet, TrumpetName);
@@ -110,6 +103,13 @@ PopupMenu InstrumentInfoView::getMenuForIndex(int topLevelMenuIndex, const Strin
         menu.addItem(Brass::BassTrombone, BassTromboneName);
         menu.addItem(Brass::Cimbasso, CimbassoName);
         menu.addItem(Brass::Tuba, TubaName);
+    }
+    else if (topLevelMenuIndex == 2) // Strings
+    {
+        menu.addItem(Strings::Violin, ViolinName);
+        menu.addItem(Strings::Viola, ViolaName);
+        menu.addItem(Strings::Violoncello, VioloncelloName);
+        menu.addItem(Strings::DoubleBass, DoubleBassName);
     }
     else if (topLevelMenuIndex == 3) //Percussion
     {
@@ -125,66 +125,21 @@ PopupMenu InstrumentInfoView::getMenuForIndex(int topLevelMenuIndex, const Strin
 
 void InstrumentInfoView::menuItemSelected(int menuItemID, int topLevelMenuIndex)
 {
-    if (topLevelMenuIndex == 0) //Strings family selected
-    {
-        showStringsInstrument(menuItemID);
-    }
-    if (topLevelMenuIndex == 1) //Woodwind family selected
-    {
-        showWoodwindInstrument(menuItemID);
-    }
-    if (topLevelMenuIndex == 2) //Brass family selected
-    {
-        showBrassInstrument(menuItemID);
-    }
-    if (topLevelMenuIndex == 3) //Percussion family selected
-    {
-        showPercussionInstrument(menuItemID);
-    }
+    int key = (topLevelMenuIndex + 1) * 100 + menuItemID;
+    showInstrumentInfo(key);
 }
 
+void InstrumentInfoView::showInstrumentInfo(int key)
+{    
+    auto info = mInstrumentModel.getInstrument(key);
 
-void InstrumentInfoView::displayInstrument(int family, int instrument)
-{
-    switch (family)
-    {
-    case (Family::Default):
-    {
-        mCurrentFamily = Family::Default;
-        mCurrentSelectedInstrument = defaultInstrument;
-        break;
-    }
-
-    case (Family::Strings):
-    {
-        mCurrentFamily = Family::Strings;
-        //showStringsInstrument(instrument);
-        break;
-    }
-
-    case (Family::Brass):
-    {
-        mCurrentFamily = Family::Brass;
-        //showBrassInstrument(instrument);
-        break;
-    }
-
-    case (Family::Woodwinds):
-    {
-        mCurrentFamily = Family::Woodwinds;
-        //showWoodwindInstrument(instrument);
-        break;
-    }
-
-    case (Family::Percussion):
-    {
-        mCurrentFamily = Family::Percussion;
-        //showPercussionInstrument(instrument);
-        break;
-    }
-
-    default: break;
-    }
+    showText(mLabel, info.mName);
+    showText(mRange, info.mRange);
+    showText(mQualities, info.mQualities);
+    showText(mRoles, info.mRoles);
+    showText(mFamousWorks, info.mFamousWorks);
+    showText(mTransposition, info.mTransposition);
+    showText(mPlayingTechniques, info.mPlayingTechniques);
 }
 
 
@@ -205,6 +160,7 @@ void InstrumentInfoView::showText(TextEditor& destinationEditor, String textToSh
     destinationEditor.clear();
     destinationEditor.moveCaretToEnd();
     destinationEditor.insertTextAtCaret(textToShow);
+    destinationEditor.moveCaretToTop(false);
 }
 
 
@@ -217,42 +173,4 @@ void InstrumentInfoView::setupTextEditor(TextEditor& editorToSetup)
     editorToSetup.setScrollbarsShown(true);
     editorToSetup.setCaretVisible(false);
     editorToSetup.setPopupMenuEnabled(true);
-}
-
-
-void InstrumentInfoView::showInstrument(InstrumentInfo info)
-{
-    showText(mLabel, info.name);
-    showText(mRange, info.range);
-    showText(mQualities, info.qualities);
-    showText(mRoles, info.roles);
-    showText(mFamousWorks, info.famousWorks);
-    showText(mTransposition, info.transposition);
-}
-
-void InstrumentInfoView::showStringsInstrument(int instrument)
-{
-    showText(mPlayingTechniques, stringsPlayingTechniques); // Assuming this is general info relevant to all
-    auto info = mInstrumentModel.getInstrument(Family::Strings, instrument);
-    showInstrument(info);
-}
-
-void InstrumentInfoView::showBrassInstrument(int instrument)
-{
-    showText(mPlayingTechniques, brassPlayingTechniques); // Assuming this is general info relevant to all
-    auto info = mInstrumentModel.getInstrument(Family::Brass, instrument);
-    showInstrument(info);
-}
-
-void InstrumentInfoView::showWoodwindInstrument(int instrument)
-{
-    showText(mPlayingTechniques, woodwindsPlayingTechniques); // Assuming this is general info relevant to all
-    auto info = mInstrumentModel.getInstrument(Family::Woodwinds, instrument);
-    showInstrument(info);
-}
-
-void InstrumentInfoView::showPercussionInstrument(int instrument)
-{
-    auto info = mInstrumentModel.getInstrument(Family::Percussion, instrument);
-    showInstrument(info);
 }

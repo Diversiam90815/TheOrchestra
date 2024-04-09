@@ -27,7 +27,9 @@ public:
 
     void addInstrument(Family family, int instrumentId, const InstrumentInfo& info);
 
-    InstrumentInfo getInstrument(Family family, int instrumentId);
+    InstrumentInfo getInstrument(int key);
+
+    int getInstrumentKey(int family, int instrument);
 
 private:
     std::map<int, InstrumentInfo> instruments;

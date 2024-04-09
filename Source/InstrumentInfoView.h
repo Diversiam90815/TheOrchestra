@@ -21,19 +21,9 @@ public:
 
     void displayTextBoxes();
 
-    void displayInstrument(int family, int instrument);
-
-    void showStringsInstrument(int instrument);
-
-    void showBrassInstrument(int instrument);
-
-    void showPercussionInstrument(int instrument);
-
-    void showWoodwindInstrument(int instrument);
-
     void resized() override;
 
-    void showInstrument(InstrumentInfo info);
+    void showInstrumentInfo(int key);
 
     void showText(TextEditor& destinationEditor, StringArray textToShow);
 
@@ -49,7 +39,7 @@ private:
 
     int mCurrentSelectedInstrument = defaultInstrument;        //Default value out of reach of different enums
 
-    int mCurrentFamily = Family::Default;
+    int mCurrentFamily;
 
     MenuBarComponent menuBar;
 

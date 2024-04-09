@@ -10,13 +10,13 @@
 
 #include "InstrumentInfo.h"
 
-InstrumentInfo::InstrumentInfo(const juce::String& name, const juce::String& range, const juce::StringArray& qualities, const juce::StringArray& roles, const juce::StringArray& famousWorks, const juce::String& transposition)
-    : name(name), range(range), qualities(qualities), roles(roles), famousWorks(famousWorks), transposition(transposition)
-{
-}
-
 InstrumentInfo::InstrumentInfo()
 {}
+
+InstrumentInfo::InstrumentInfo(const String& name, const String& range, const StringArray& qualities, const StringArray& roles, const StringArray& famousWorks, const String& transposition, const StringArray& playingTechniques)
+    : mName(name), mRange(range), mQualities(qualities), mRoles(roles), mFamousWorks(famousWorks), mTransposition(transposition), mPlayingTechniques(playingTechniques)
+{
+}
 
 InstrumentInfo::~InstrumentInfo()
 {

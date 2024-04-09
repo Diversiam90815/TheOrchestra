@@ -16,13 +16,11 @@
 #include "InstrumentData.h"
 
 
-
 enum Family
 {
-    Default = 1,    //Displays default info at startup
+    Woodwinds = 1,
     Brass,
     Strings,
-    Woodwinds,
     Percussion
 };
 
@@ -68,16 +66,17 @@ class InstrumentInfo
 {
 public:
     InstrumentInfo();
-    InstrumentInfo(const juce::String& name, const juce::String& range, const juce::StringArray& qualities, const juce::StringArray& roles, const juce::StringArray& famousWorks, const juce::String& transposition);
+    InstrumentInfo(const String& name, const String& range, const StringArray& qualities, const StringArray& roles, const StringArray& famousWorks, const String& transposition, const StringArray& playingTechniques);
     ~InstrumentInfo();
     
 private:
-    juce::String name; // Optional, for identifying the instrument
-    juce::String range;
-    juce::StringArray qualities;
-    juce::StringArray roles;
-    juce::StringArray famousWorks;
-    juce::String transposition; // Assuming transposition doesn't need to be a StringArray
+    String mName;
+    String mRange;
+    StringArray mQualities;
+    StringArray mRoles;
+    StringArray mFamousWorks;
+    String mTransposition;
+    StringArray mPlayingTechniques;
 
     friend class InstrumentInfoModel;
     friend class InstrumentInfoView;
