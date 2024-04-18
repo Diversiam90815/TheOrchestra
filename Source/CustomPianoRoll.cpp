@@ -99,16 +99,16 @@ void CustomPianoRoll::drawBlackNote(int midiNoteNumber, Graphics& g, Rectangle<f
 Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
 {
     // Ensure there is a color for each range
-    if (mQualityRanges.size() > mQualityColours.size()) 
+    if (mMidiRanges.size() > mQualityColours.size()) 
     {
         jassertfalse;  // More ranges than colors provided
         return Colours::transparentWhite; // Default color if something goes wrong
     }
 
     // Check which range the midiNoteNumber falls into
-    for (size_t i = 0; i < mQualityRanges.size(); ++i)
+    for (size_t i = 0; i < mMidiRanges.size(); ++i)
     {
-        const auto& range = mQualityRanges[i];
+        const auto& range = mMidiRanges[i];
         if (midiNoteNumber >= range.first && midiNoteNumber <= range.second)
         {
             return mQualityColours[i]; // Return the corresponding color
@@ -141,16 +141,16 @@ int CustomPianoRoll::turnNotenameIntoMidinumber(String notename)
     else
         return -1;
 
-    int midiNumber = 12 * (octave + 1) + noteValue;
+    int midiNumber = 12 * (octave + 2) + noteValue;
 
     return midiNumber;
 }
 
 
-void CustomPianoRoll::setMidiRanges(const StringArray& qualities) 
+bool CustomPianoRoll::setMidiRanges(const StringArray& qualities) 
 {
     mRangesSet = false;
-    mQualityRanges.clear();
+    mMidiRanges.clear();
 
     for (const auto& quality : qualities)
     {
@@ -172,9 +172,34 @@ void CustomPianoRoll::setMidiRanges(const StringArray& qualities)
                 int endMidi = turnNotenameIntoMidinumber(endNote);
 
                 // Store the range as a pair of MIDI numbers
-                mQualityRanges.push_back(std::make_pair(startMidi, endMidi));
+                mMidiRanges.push_back(std::make_pair(startMidi, endMidi));
             }
         }
     }
-    mRangesSet = true;
+
+    bool result = !mMidiRanges.empty();
+    mRangesSet = result;
+    return result;
+}
+
+bool CustomPianoRoll::setMidiRanges(const String& range)
+{
+    // Find the dash separating the start and end notes
+    int dashPos = range.indexOf("-");
+    if (dashPos != -1)
+    {
+        String startNote = range.substring(0, dashPos).trim();
+        String endNote = range.substring(dashPos + 1).trim();
+
+        // Convert start and end notes to MIDI numbers
+        int startMidi = turnNotenameIntoMidinumber(startNote);
+        int endMidi = turnNotenameIntoMidinumber(endNote);
+
+        // Store the range as a pair of MIDI numbers
+        mMidiRanges.push_back(std::make_pair(startMidi, endMidi));
+    }
+    
+    bool result = !mMidiRanges.empty();
+    mRangesSet = result;
+    return result;
 }

@@ -170,7 +170,11 @@ void InstrumentInfoView::showInstrumentInfo(int key)
     showText(mTransposition, info.mTransposition);
     showText(mPlayingTechniques, info.mPlayingTechniques);
 
-    mCustomPianoRoll.setMidiRanges(info.mQualities);
+    bool result = mCustomPianoRoll.setMidiRanges(info.mQualities);
+    if (!result)
+    {
+        mCustomPianoRoll.setMidiRanges(info.mRange);
+    }
     mCustomPianoRoll.repaint();
 }
 

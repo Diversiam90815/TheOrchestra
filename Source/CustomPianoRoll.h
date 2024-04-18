@@ -25,13 +25,14 @@ public:
 
     int turnNotenameIntoMidinumber(String notename);
 
-    void setMidiRanges(const StringArray& qualities);
+    bool setMidiRanges(const StringArray& qualities);
 
+    bool setMidiRanges(const String& ranges);
 
 private:
     Colour getNoteColour(int midiNoteNumber);
 
-    std::vector<std::pair<int, int>> mQualityRanges;
+    std::vector<std::pair<int, int>> mMidiRanges;
 
     std::vector<Colour> mQualityColours = 
     {
