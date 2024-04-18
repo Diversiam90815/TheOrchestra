@@ -29,6 +29,10 @@
             file="Source/InstrumentInfoView.cpp"/>
       <FILE id="uKfr6k" name="InstrumentInfoView.h" compile="0" resource="0"
             file="Source/InstrumentInfoView.h"/>
+      <FILE id="ycXrZO" name="CustomPianoRoll.cpp" compile="1" resource="0"
+            file="Source/CustomPianoRoll.cpp"/>
+      <FILE id="gAohAu" name="CustomPianoRoll.h" compile="0" resource="0"
+            file="Source/CustomPianoRoll.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

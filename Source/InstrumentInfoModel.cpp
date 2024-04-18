@@ -25,9 +25,7 @@ InstrumentInfoModel::~InstrumentInfoModel()
 
 void InstrumentInfoModel::addInstrument(Family family, int instrumentId, const InstrumentInfo& info)
 {
-    // Combine family and instrumentId into a single integer key.
-    // This assumes that you won't have more than, say, 100 instruments per family.
-    int key = family * 100 + instrumentId;
+    int key = getInstrumentKey(family, instrumentId);
     instruments[key] = info;
 }
 

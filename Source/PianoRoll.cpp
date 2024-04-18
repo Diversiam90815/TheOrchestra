@@ -15,7 +15,7 @@ PianoRoll::PianoRoll()
 {
     mPianoState.addListener(this);
 
-    mPianoRoll = std::make_unique<MidiKeyboardComponent>(mPianoState, MidiKeyboardComponent::horizontalKeyboard);
+    mPianoRoll = std::make_unique<CustomMidiKeyboardComponent>(mPianoState, MidiKeyboardComponent::horizontalKeyboard);
 
     showPianoRoll();
 }

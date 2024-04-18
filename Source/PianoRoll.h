@@ -11,7 +11,7 @@
 #pragma once
 
 #include "JuceHeader.h"
-
+#include "CustomPianoRoll.h"
 
 class PianoRoll : public Component, private MidiKeyboardState::Listener
 {
@@ -31,6 +31,6 @@ private:
 	void handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
 
 
-	std::unique_ptr<MidiKeyboardComponent> mPianoRoll;
+	std::unique_ptr<CustomMidiKeyboardComponent> mPianoRoll;
 	MidiKeyboardState mPianoState;
 };
