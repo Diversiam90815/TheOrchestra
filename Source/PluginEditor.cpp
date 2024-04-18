@@ -4,7 +4,7 @@
 
 
 OrchestraEditor::OrchestraEditor (OrchestraProcessor& proc)
-    : AudioProcessorEditor (&proc), audioProcessor (proc), mPianoRollView()
+    : AudioProcessorEditor (&proc), audioProcessor (proc), mPianoRollView(), mInstrumentInfoView(*mPianoRollView.mPianoRoll.get())
 {
     showUI();
 }

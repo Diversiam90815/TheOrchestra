@@ -134,8 +134,8 @@ const StringArray frenchHornQualities =
 {
     "F2 - G3: Dark and a bit unfocused, with a mysterious depth",
     "A3 - C4: Deep and solid, the core of the horn's range",
-    "C4 - G5: Bright and heroic, capable of stirring emotions",
-    "G5 - C6: Brilliant and loud, cutting through the orchestra with clarity"
+    "D4 - G5: Bright and heroic, capable of stirring emotions",
+    "A5 - C6: Brilliant and loud, cutting through the orchestra with clarity"
 };
 const StringArray frenchHornRoles = 
 {
@@ -351,7 +351,7 @@ constexpr auto corAnglaisTransposition = "Sounds a perfect 5th lower than writte
 const StringArray corAnglaisQualities = {
     "B3 - G4: Deep, rich, and intense",
     "A4 - A5: Mellow, reedy, sonorous",
-    "A6 - G6: Thin, pinched"
+    "B5 - G6: Thin, pinched"
 };
 const StringArray corAnglaisRoles = 
 {

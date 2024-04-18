@@ -20,6 +20,7 @@ public:
 	PianoRoll();
 	~PianoRoll();
 
+	std::unique_ptr<CustomPianoRoll> mPianoRoll;
 private:
 
 	void showPianoRoll();
@@ -30,10 +31,5 @@ private:
 
 	void handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity) override;
 
-	int turnNotenameIntoMidinumber(String& notename);
-
-	std::vector<std::pair<int, int>> getMidiRanges(const StringArray& qualities);
-
-	std::unique_ptr<CustomMidiKeyboardComponent> mPianoRoll;
 	MidiKeyboardState mPianoState;
 };

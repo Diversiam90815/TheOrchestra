@@ -11,7 +11,7 @@
 #include "InstrumentInfoView.h"
 
 
-InstrumentInfoView::InstrumentInfoView()
+InstrumentInfoView::InstrumentInfoView(CustomPianoRoll& piano) : mCustomPianoRoll(piano)
 {
     displayTextBoxes();
     displayLabels();
@@ -157,6 +157,7 @@ void InstrumentInfoView::menuItemSelected(int menuItemID, int topLevelMenuIndex)
     showInstrumentInfo(key);
 }
 
+
 void InstrumentInfoView::showInstrumentInfo(int key)
 {    
     auto info = mInstrumentModel.getInstrument(key);
@@ -168,6 +169,9 @@ void InstrumentInfoView::showInstrumentInfo(int key)
     showText(mFamousWorks, info.mFamousWorks);
     showText(mTransposition, info.mTransposition);
     showText(mPlayingTechniques, info.mPlayingTechniques);
+
+    mCustomPianoRoll.setMidiRanges(info.mQualities);
+    mCustomPianoRoll.repaint();
 }
 
 

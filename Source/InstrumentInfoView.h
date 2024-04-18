@@ -11,12 +11,13 @@
 #pragma once
 #include <JuceHeader.h>
 #include "InstrumentInfoModel.h"
+#include "CustomPianoRoll.h"
 
 
 class InstrumentInfoView : public Component, public MenuBarModel
 {
 public:
-    InstrumentInfoView();
+    InstrumentInfoView(CustomPianoRoll& piano);
     ~InstrumentInfoView();
 
     void displayTextBoxes();
@@ -63,4 +64,6 @@ private:
     TextEditor mTransposition;
     TextEditor mPlayingTechniques;
     TextEditor mFamousWorks;
+
+    CustomPianoRoll& mCustomPianoRoll;
 };
