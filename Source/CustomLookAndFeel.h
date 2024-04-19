@@ -12,14 +12,21 @@
 
 #include <JuceHeader.h>
 
-class CustomLookAndFeel : public juce::LookAndFeel_V4 
+class CustomLookAndFeel : public LookAndFeel_V4 
 {
 public:
     CustomLookAndFeel();
     ~CustomLookAndFeel();
 
-private:
-    void drawLabel(juce::Graphics& g, juce::Label& label) override;
+    Font getEditorFont();
 
-    void drawTextEditorOutline(juce::Graphics& g, int width, int height, juce::TextEditor& textEditor) override;
+private:
+    void init();
+
+    void drawLabel(Graphics& g, Label& label) override;
+
+    void drawTextEditorOutline(Graphics& g, int width, int height, TextEditor& textEditor) override;
+
+    Font textEditorFont;
+    Font labelFont;
 };

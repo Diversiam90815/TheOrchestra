@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Parameters.h"
 
 
 class CustomPianoRoll : public MidiKeyboardComponent {
@@ -34,13 +35,13 @@ private:
 
     std::vector<std::pair<int, int>> mMidiRanges;
 
-    std::vector<Colour> mQualityColours = 
-    {
-        Colours::lightblue,   // For the first range
-        Colours::lightgreen,  // For the second range
-        Colours::lightcoral,  // For the third range
-        Colours::gold         // Additional ranges, etc.
-    };
+    //std::vector<Colour> mQualityColours = 
+    //{
+    //    Colours::lightblue,   // For the first range
+    //    Colours::lightgreen,  // For the second range
+    //    Colours::lightcoral,  // For the third range
+    //    Colours::gold         // Additional ranges, etc.
+    //};
 
     Atomic<bool> mRangesSet = false;
 };

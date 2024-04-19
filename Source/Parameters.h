@@ -52,3 +52,11 @@ constexpr auto MarimbaName = "Marimba";
 
 //Values 
 constexpr int defaultInstrument = 100;
+
+std::vector<Colour> mQualityColours =
+{
+    Colours::lightblue,   // For the first range
+    Colours::lightgreen,  // For the second range
+    Colours::lightcoral,  // For the third range
+    Colours::gold         // Additional ranges, etc.
+};

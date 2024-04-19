@@ -18,9 +18,9 @@ OrchestraProcessor::OrchestraProcessor()
 	: AudioProcessor(BusesProperties()
 #if ! JucePlugin_IsMidiEffect
 #if ! JucePlugin_IsSynth
-		.withInput("Input", juce::AudioChannelSet::stereo(), true)
+		.withInput("Input", AudioChannelSet::stereo(), true)
 #endif
-		.withOutput("Output", juce::AudioChannelSet::stereo(), true)
+		.withOutput("Output", AudioChannelSet::stereo(), true)
 #endif
 	)
 #endif
@@ -125,15 +125,15 @@ void OrchestraProcessor::releaseResources()
 bool OrchestraProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
 {
 #if JucePlugin_IsMidiEffect
-	juce::ignoreUnused(layouts);
+	ignoreUnused(layouts);
 	return true;
 #else
 	// This is the place where you check if the layout is supported.
 	// In this template code we only support mono or stereo.
 	// Some plugin hosts, such as certain GarageBand versions, will only
 	// load plugins that support stereo bus layouts.
-	if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono()
-		&& layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
+	if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono()
+		&& layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
 		return false;
 
 	// This checks if the input layout matches the output layout
@@ -150,7 +150,7 @@ bool OrchestraProcessor::isBusesLayoutSupported(const BusesLayout& layouts) cons
 
 void OrchestraProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
 {
-	juce::ScopedNoDenormals noDenormals;
+	ScopedNoDenormals noDenormals;
 	auto totalNumInputChannels = getTotalNumInputChannels();
 	auto totalNumOutputChannels = getTotalNumOutputChannels();
 

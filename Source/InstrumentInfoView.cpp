@@ -176,12 +176,20 @@ void InstrumentInfoView::showInstrumentInfo(int key)
 void InstrumentInfoView::showText(TextEditor& destinationEditor, StringArray textToShow)
 {
     destinationEditor.clear();
+    size_t stringArraySize = textToShow.size();
 
-    for (auto& info : textToShow)
+    //for (auto& info : textToShow)
+    for(int i = 1; i <= stringArraySize; ++i)
     {
         destinationEditor.moveCaretToEnd();
-        destinationEditor.insertTextAtCaret(info + newLine);
+        destinationEditor.insertTextAtCaret(textToShow[i]);
+
+        if (i < stringArraySize)
+        {
+            destinationEditor.insertTextAtCaret(newLine);
+        }
     }
+    destinationEditor.moveCaretToTop(false);
 }
 
 
@@ -203,7 +211,11 @@ void InstrumentInfoView::setupTextEditor(TextEditor& editorToSetup)
     editorToSetup.setScrollbarsShown(true);
     editorToSetup.setCaretVisible(false);
     editorToSetup.setPopupMenuEnabled(true);
+    editorToSetup.setLineSpacing(1.2f);
+    editorToSetup.setIndents(8, 8);
+    editorToSetup.setFont(mCustomLookAndFeel.getEditorFont());
 }
+
 
 void InstrumentInfoView::setupLabel(Label& labelToSetup, const String& title)
 {
