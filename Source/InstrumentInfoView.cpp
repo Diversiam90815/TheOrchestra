@@ -13,6 +13,7 @@
 
 InstrumentInfoView::InstrumentInfoView(CustomPianoRoll& piano) : mCustomPianoRoll(piano)
 {
+    setLookAndFeel(&mCustomLookAndFeel);
     displayTextBoxes();
     displayLabels();
 }
@@ -20,7 +21,7 @@ InstrumentInfoView::InstrumentInfoView(CustomPianoRoll& piano) : mCustomPianoRol
 
 InstrumentInfoView::~InstrumentInfoView()
 {
-
+    setLookAndFeel(nullptr);
 }
 
 

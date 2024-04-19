@@ -33,6 +33,10 @@
             file="Source/CustomPianoRoll.cpp"/>
       <FILE id="gAohAu" name="CustomPianoRoll.h" compile="0" resource="0"
             file="Source/CustomPianoRoll.h"/>
+      <FILE id="cHbISt" name="CustomLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/CustomLookAndFeel.cpp"/>
+      <FILE id="qQCcfP" name="CustomLookAndFeel.h" compile="0" resource="0"
+            file="Source/CustomLookAndFeel.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

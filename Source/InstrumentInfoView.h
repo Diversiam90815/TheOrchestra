@@ -12,6 +12,7 @@
 #include <JuceHeader.h>
 #include "InstrumentInfoModel.h"
 #include "CustomPianoRoll.h"
+#include "CustomLookAndFeel.h"
 
 
 class InstrumentInfoView : public Component, public MenuBarModel
@@ -66,4 +67,6 @@ private:
     TextEditor mFamousWorks;
 
     CustomPianoRoll& mCustomPianoRoll;
+
+    CustomLookAndFeel mCustomLookAndFeel;
 };
