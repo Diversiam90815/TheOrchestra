@@ -33,13 +33,6 @@ void InstrumentInfoView::displayTextBoxes()
     setupTextEditor(mTransposition);
     setupTextEditor(mPlayingTechniques);
     setupTextEditor(mFamousWorks);
-
-    mRange.setTextToShowWhenEmpty("Range", Colours::beige);
-    mRoles.setTextToShowWhenEmpty("Roles within the Orchestra", Colours::beige);
-    mQualities.setTextToShowWhenEmpty("Qualities", Colours::beige);
-    mTransposition.setTextToShowWhenEmpty("Transposition", Colours::beige);
-    mFamousWorks.setTextToShowWhenEmpty("Famous Works", Colours::beige);
-    mPlayingTechniques.setTextToShowWhenEmpty("Playing Techniques", Colours::beige);
 }
 
 
