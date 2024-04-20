@@ -38,7 +38,9 @@ public:
     void setupLabel(Label& labelToSetup, const String& title);
 
     StringArray getMenuBarNames() override;
+
     PopupMenu getMenuForIndex(int topLevelMenuIndex, const String& menuName) override;
+
     void menuItemSelected(int menuItemID, int topLevelMenuIndex) override;
 
 private:

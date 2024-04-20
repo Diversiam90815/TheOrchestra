@@ -25,7 +25,7 @@ void OrchestraEditor::showUI()
     mMenuBar.setModel(&mInstrumentInfoView);
     addAndMakeVisible(mMenuBar);
 
-    setSize(900, 700);
+    setSize(1000, 800);
 }
 
 

@@ -145,7 +145,7 @@ void InstrumentInfoView::menuItemSelected(int menuItemID, int topLevelMenuIndex)
 
 
 void InstrumentInfoView::showInstrumentInfo(int key)
-{    
+{
     auto info = mInstrumentModel.getInstrument(key);
     mInstrument.setText(info.mName,dontSendNotification);
 
