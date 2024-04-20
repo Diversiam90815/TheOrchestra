@@ -53,14 +53,14 @@ private:
 
     Label mInstrument;
     Label mRangeTitle;
-    Label mRolesTitle; 
+    Label mUsefulInformationTitle; 
     Label mQualitiesTitle;
     Label mTranspositionTitle;
     Label mPlayingTechniquesTitle;
     Label mFamousWorksTitle;
 
     TextEditor mRange;
-    TextEditor mRoles;
+    TextEditor mUsefulInformation;
     TextEditor mQualities;
     TextEditor mTransposition;
     TextEditor mPlayingTechniques;

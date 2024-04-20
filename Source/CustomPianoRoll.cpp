@@ -19,6 +19,8 @@ CustomPianoRoll::CustomPianoRoll(MidiKeyboardState& state, Orientation orientati
 void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, Graphics& g, Rectangle<float> area,
     bool isDown, bool isOver, Colour lineColour, Colour textColour)
 {
+    mCurrentKeyType = key::whiteKey;
+
     if (!mRangesSet.get())
     {
         auto c = Colours::transparentWhite;
@@ -88,21 +90,91 @@ void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, Graphics& g, Rectangle<f
 
 
 void CustomPianoRoll::drawBlackNote(int midiNoteNumber, Graphics& g, Rectangle<float> area,
-    bool isDown, bool isOver, Colour noteFillColour) 
+    bool isDown, bool isOver, Colour noteFillColour)
 {
-    // Call the base class method to retain the default drawing of black notes
-    MidiKeyboardComponent::drawBlackNote(midiNoteNumber, g, area, isDown,
-        isOver, noteFillColour);
+    mCurrentKeyType = key::blackKey;
+
+    Colour baseColour = Colours::black;
+    Colour noteOverlayColour = getNoteColour(midiNoteNumber).withAlpha(0.4f);
+
+    if (mRangesSet.get())
+    {
+        if (isDown) 
+        {
+            baseColour = baseColour.overlaidWith(noteOverlayColour.brighter(0.5f)); // Less brightening when down
+        }
+        else if (isOver) 
+        {
+            baseColour = baseColour.overlaidWith(noteOverlayColour.brighter(0.4f)); // Very subtle brightening when over
+        }
+        else 
+        {
+            baseColour = baseColour.overlaidWith(noteOverlayColour); // Normal state
+        }
+    }
+    else
+    {
+        if (isDown) 
+        {
+            baseColour = baseColour.overlaidWith(findColour(keyDownOverlayColourId));
+        }
+        if (isOver) 
+        {
+            baseColour = baseColour.overlaidWith(findColour(mouseOverKeyOverlayColourId));
+        }
+    }
+
+    // Set the color and fill the key area
+    g.setColour(baseColour);
+    g.fillRect(area);
+
+    // Drawing border for key down state
+    if (isDown)
+    {
+        g.setColour(noteFillColour);
+        g.drawRect(area, 1.0f); // Specify thickness if needed
+    }
+    else
+    {
+        // Optionally draw a subtle highlight at the top for additional feedback
+        g.setColour(baseColour);
+        float sideIndent = 1.0f / 8.0f;
+        float topIndent = 7.0f / 8.0f;
+        float w = area.getWidth();
+        float h = area.getHeight();
+
+        switch (getOrientation())
+        {
+        case horizontalKeyboard:
+            g.fillRect(area.reduced(w * sideIndent, 0).removeFromTop(h * topIndent));
+            break;
+        case verticalKeyboardFacingLeft:
+            g.fillRect(area.reduced(0, h * sideIndent).removeFromRight(w * topIndent));
+            break;
+        case verticalKeyboardFacingRight:
+            g.fillRect(area.reduced(0, h * sideIndent).removeFromLeft(w * topIndent));
+            break;
+        default:
+            break;
+        }
+    }
 }
 
 
 Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
 {
     // Ensure there is a color for each range
-    if (mMidiRanges.size() > mQualityColours.size()) 
+    if (mMidiRanges.size() > qualityColours.size()) 
     {
         jassertfalse;  // More ranges than colors provided
-        return Colours::transparentWhite; // Default color if something goes wrong
+        if(mCurrentKeyType.get() == key::whiteKey)
+        {
+            return Colours::transparentWhite;
+        }
+        if (mCurrentKeyType.get() == key::blackKey)
+        {
+            return Colours::black;
+        }
     }
 
     // Check which range the midiNoteNumber falls into
@@ -111,12 +183,19 @@ Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
         const auto& range = mMidiRanges[i];
         if (midiNoteNumber >= range.first && midiNoteNumber <= range.second)
         {
-            return mQualityColours[i]; // Return the corresponding color
+            return qualityColours[i]; // Return the corresponding color
         }
     }
 
     // If no range matches, return a default color
-    return Colours::transparentWhite;
+    if (mCurrentKeyType.get() == key::whiteKey)
+    {
+        return Colours::transparentWhite;
+    }
+    if (mCurrentKeyType.get() == key::blackKey)
+    {
+        return Colours::black;
+    }
 }
 
 
@@ -181,6 +260,7 @@ bool CustomPianoRoll::setMidiRanges(const StringArray& qualities)
     mRangesSet = result;
     return result;
 }
+
 
 bool CustomPianoRoll::setMidiRanges(const String& range)
 {

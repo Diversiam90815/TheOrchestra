@@ -504,9 +504,9 @@ constexpr auto harpRange = "C1 - G7";
 constexpr auto harpTransposition = "-";
 const StringArray harpQualities = 
 {
-    "C1 - B3: Deep and sonorous",
-    "C4 - C6: Rich, warm",
-    "C#6 - G7: Bright, clear, with limited dynamic range"
+    "B1 - B3: Deep and sonorous",
+    "C3 - C5: Rich, warm",
+    "C#5 - G7: Bright, clear, with limited dynamic range"
 };
 const StringArray harpRoles = 
 {

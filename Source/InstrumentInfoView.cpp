@@ -28,7 +28,7 @@ InstrumentInfoView::~InstrumentInfoView()
 void InstrumentInfoView::displayTextBoxes()
 {
     setupTextEditor(mRange);
-    setupTextEditor(mRoles);
+    setupTextEditor(mUsefulInformation);
     setupTextEditor(mQualities);
     setupTextEditor(mTransposition);
     setupTextEditor(mPlayingTechniques);
@@ -43,7 +43,7 @@ void InstrumentInfoView::displayLabels()
     setupLabel(mQualitiesTitle, "Qualities");
     setupLabel(mFamousWorksTitle, "Famous Works");
     setupLabel(mPlayingTechniquesTitle, "Playing Techniques");
-    setupLabel(mRolesTitle, "Roles");
+    setupLabel(mUsefulInformationTitle, "Useful Information");
     setupLabel(mTranspositionTitle, "Transposition");
 }
 
@@ -53,39 +53,31 @@ void InstrumentInfoView::resized()
     // Assuming mLabel takes up about 10% of the height for the title, as before.
     float titleLabelHeight = 0.1f;
 
-    // Adjusting for the addition of title labels. Assuming each title label takes up a small percentage of the height.
-    // You can adjust the titleHeightPercentage as needed.
     float titleHeightPercentage = 0.05f; // Example height for title labels
-
-    // Adjust the height for the TextEditors, now divided by 3 rows, subtracting the space needed for titles.
     float textEditorHeight = (1.0f - titleLabelHeight - (titleHeightPercentage * 6)) / 3; // Now for 3 rows, 6 titles.
+
+    //Y positions for the TextEditor rows and title labels
+    float firstRowTitlesY = titleLabelHeight;
+    float firstRowYStart = firstRowTitlesY + titleHeightPercentage;
+    float secondRowTitlesY = firstRowYStart + textEditorHeight;
+    float secondRowYStart = secondRowTitlesY + titleHeightPercentage;
+    float thirdRowTitlesY = secondRowYStart + textEditorHeight;
+    float thirdRowYStart = thirdRowTitlesY + titleHeightPercentage;
 
     // Set bounds for mLabel centered horizontally at the top.
     mInstrument.setBoundsRelative(0.25f, 0.0f, 0.5f, titleLabelHeight);
 
-    // Calculate Y positions where the titles will start.
-    float firstRowTitlesY = titleLabelHeight;
-    float firstRowYStart = firstRowTitlesY + titleHeightPercentage;
-
     // First row of Titles and TextEditors
     mRangeTitle.setBoundsRelative(0.0f, firstRowTitlesY, 0.5f, titleHeightPercentage);
-    mRolesTitle.setBoundsRelative(0.5f, firstRowTitlesY, 0.5f, titleHeightPercentage);
+    mQualitiesTitle.setBoundsRelative(0.5f, firstRowTitlesY, 0.5f, titleHeightPercentage);
     mRange.setBoundsRelative(0.0f, firstRowYStart, 0.5f, textEditorHeight);
-    mRoles.setBoundsRelative(0.5f, firstRowYStart, 0.5f, textEditorHeight);
-
-    // Calculate the starting Y position for the second row titles and TextEditors
-    float secondRowTitlesY = firstRowYStart + textEditorHeight;
-    float secondRowYStart = secondRowTitlesY + titleHeightPercentage;
+    mQualities.setBoundsRelative(0.5f, firstRowYStart, 0.5f, textEditorHeight);
 
     // Second row of Titles and TextEditors
-    mQualitiesTitle.setBoundsRelative(0.0f, secondRowTitlesY, 0.5f, titleHeightPercentage);
+    mUsefulInformationTitle.setBoundsRelative(0.0f, secondRowTitlesY, 0.5f, titleHeightPercentage);
     mTranspositionTitle.setBoundsRelative(0.5f, secondRowTitlesY, 0.5f, titleHeightPercentage);
-    mQualities.setBoundsRelative(0.0f, secondRowYStart, 0.5f, textEditorHeight);
+    mUsefulInformation.setBoundsRelative(0.0f, secondRowYStart, 0.5f, textEditorHeight);
     mTransposition.setBoundsRelative(0.5f, secondRowYStart, 0.5f, textEditorHeight);
-
-    // Calculate the starting Y position for the third row titles and TextEditors
-    float thirdRowTitlesY = secondRowYStart + textEditorHeight;
-    float thirdRowYStart = thirdRowTitlesY + titleHeightPercentage;
 
     // Third row of Titles and TextEditors
     mPlayingTechniquesTitle.setBoundsRelative(0.0f, thirdRowTitlesY, 0.5f, titleHeightPercentage);
@@ -159,7 +151,7 @@ void InstrumentInfoView::showInstrumentInfo(int key)
 
     showText(mRange, info.mRange);
     showText(mQualities, info.mQualities);
-    showText(mRoles, info.mRoles);
+    showText(mUsefulInformation, info.mUsefulInformation);
     showText(mFamousWorks, info.mFamousWorks);
     showText(mTransposition, info.mTransposition);
     showText(mPlayingTechniques, info.mPlayingTechniques);
@@ -178,11 +170,11 @@ void InstrumentInfoView::showText(TextEditor& destinationEditor, StringArray tex
     destinationEditor.clear();
     size_t stringArraySize = textToShow.size();
 
-    //for (auto& info : textToShow)
     for(int i = 1; i <= stringArraySize; ++i)
     {
+        String info = textToShow[i - 1];
         destinationEditor.moveCaretToEnd();
-        destinationEditor.insertTextAtCaret(textToShow[i]);
+        destinationEditor.insertTextAtCaret(info);
 
         if (i < stringArraySize)
         {
@@ -212,7 +204,7 @@ void InstrumentInfoView::setupTextEditor(TextEditor& editorToSetup)
     editorToSetup.setCaretVisible(false);
     editorToSetup.setPopupMenuEnabled(true);
     editorToSetup.setLineSpacing(1.2f);
-    editorToSetup.setIndents(8, 8);
+    editorToSetup.setIndents(12, 12);
     editorToSetup.setFont(mCustomLookAndFeel.getEditorFont());
 }
 

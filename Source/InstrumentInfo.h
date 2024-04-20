@@ -73,7 +73,7 @@ private:
     String mName;
     String mRange;
     StringArray mQualities;
-    StringArray mRoles;
+    StringArray mUsefulInformation;
     StringArray mFamousWorks;
     String mTransposition;
     StringArray mPlayingTechniques;

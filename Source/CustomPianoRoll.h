@@ -13,6 +13,13 @@
 #include <JuceHeader.h>
 #include "Parameters.h"
 
+enum key
+{
+    default = 0,
+    blackKey,
+    whiteKey
+};
+
 
 class CustomPianoRoll : public MidiKeyboardComponent {
 public:
@@ -35,13 +42,15 @@ private:
 
     std::vector<std::pair<int, int>> mMidiRanges;
 
-    //std::vector<Colour> mQualityColours = 
-    //{
-    //    Colours::lightblue,   // For the first range
-    //    Colours::lightgreen,  // For the second range
-    //    Colours::lightcoral,  // For the third range
-    //    Colours::gold         // Additional ranges, etc.
-    //};
-
     Atomic<bool> mRangesSet = false;
+
+    Atomic<int> mCurrentKeyType = key::default;
+
+    std::vector<Colour> qualityColours =
+    {
+        Colours::lightblue.darker(),   // For the first range
+        Colours::lightgreen,  // For the second range
+        Colours::lightcoral,  // For the third range
+        Colours::gold         // Additional ranges, etc.
+    };
 };
