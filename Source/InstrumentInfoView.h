@@ -21,19 +21,13 @@ public:
     InstrumentInfoView(CustomPianoRoll& piano);
     ~InstrumentInfoView();
 
-    void displayTextBoxes();
-
     void displayLabels();
 
     void resized() override;
 
     void showInstrumentInfo(int key);
 
-    void showText(TextEditor& destinationEditor, StringArray textToShow);
-
-    void showText(TextEditor& destinationEditor, String textToShow);
-
-    void setupTextEditor(TextEditor& editorToSetup);
+    void displayText(Label& label, String text);
 
     void setupLabel(Label& labelToSetup, const String& title);
 
@@ -42,6 +36,11 @@ public:
     PopupMenu getMenuForIndex(int topLevelMenuIndex, const String& menuName) override;
 
     void menuItemSelected(int menuItemID, int topLevelMenuIndex) override;
+
+
+    void clearLabels(std::vector<std::unique_ptr<Label>>& labels);
+
+    void displayLabelsForCategory(const StringArray& texts, std::vector<std::unique_ptr<Label>>& labelsContainer);
 
 private:
 
@@ -61,12 +60,15 @@ private:
     Label mPlayingTechniquesTitle;
     Label mFamousWorksTitle;
 
-    TextEditor mRange;
-    TextEditor mUsefulInformation;
-    TextEditor mQualities;
-    TextEditor mTransposition;
-    TextEditor mPlayingTechniques;
-    TextEditor mFamousWorks;
+    std::vector<std::unique_ptr<Label>> mQualityLabels;
+    std::vector<std::unique_ptr<Label>> mPlayingTechniqueLabels;
+    std::vector<std::unique_ptr<Label>> mFamousWorksLabels;
+    std::vector<std::unique_ptr<Label>> mUsefulInformationLabels;
+
+    Label mRange;
+
+    Label mTransposition;
+
 
     CustomPianoRoll& mCustomPianoRoll;
 

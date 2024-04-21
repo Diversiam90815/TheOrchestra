@@ -14,7 +14,6 @@
 InstrumentInfoView::InstrumentInfoView(CustomPianoRoll& piano) : mCustomPianoRoll(piano)
 {
     setLookAndFeel(&mCustomLookAndFeel);
-    displayTextBoxes();
     displayLabels();
 }
 
@@ -22,17 +21,6 @@ InstrumentInfoView::InstrumentInfoView(CustomPianoRoll& piano) : mCustomPianoRol
 InstrumentInfoView::~InstrumentInfoView()
 {
     setLookAndFeel(nullptr);
-}
-
-
-void InstrumentInfoView::displayTextBoxes()
-{
-    setupTextEditor(mRange);
-    setupTextEditor(mUsefulInformation);
-    setupTextEditor(mQualities);
-    setupTextEditor(mTransposition);
-    setupTextEditor(mPlayingTechniques);
-    setupTextEditor(mFamousWorks);
 }
 
 
@@ -50,42 +38,65 @@ void InstrumentInfoView::displayLabels()
 
 void InstrumentInfoView::resized()
 {
-    // Assuming mLabel takes up about 10% of the height for the title, as before.
-    float titleLabelHeight = 0.1f;
+    float titleLabelHeight = 0.1f; // Main title at the top
+    float titleHeightPercentage = 0.05f; // Height for each title label
+    float availableHeight = 1.0f - titleLabelHeight - (titleHeightPercentage * 6);
+    float infoHeight = availableHeight / 3;
 
-    float titleHeightPercentage = 0.05f; // Example height for title labels
-    float textEditorHeight = (1.0f - titleLabelHeight - (titleHeightPercentage * 6)) / 3; // Now for 3 rows, 6 titles.
-
-    //Y positions for the TextEditor rows and title labels
-    float firstRowTitlesY = titleLabelHeight;
-    float firstRowYStart = firstRowTitlesY + titleHeightPercentage;
-    float secondRowTitlesY = firstRowYStart + textEditorHeight;
-    float secondRowYStart = secondRowTitlesY + titleHeightPercentage;
-    float thirdRowTitlesY = secondRowYStart + textEditorHeight;
-    float thirdRowYStart = thirdRowTitlesY + titleHeightPercentage;
-
-    // Set bounds for mLabel centered horizontally at the top.
+    // Set bounds for the main instrument label
     mInstrument.setBoundsRelative(0.25f, 0.0f, 0.5f, titleLabelHeight);
 
     // First row of Titles and TextEditors
+    float firstRowTitlesY = titleLabelHeight;
+    float firstRowYStart = firstRowTitlesY + titleHeightPercentage;
+
     mRangeTitle.setBoundsRelative(0.0f, firstRowTitlesY, 0.5f, titleHeightPercentage);
     mQualitiesTitle.setBoundsRelative(0.5f, firstRowTitlesY, 0.5f, titleHeightPercentage);
-    mRange.setBoundsRelative(0.0f, firstRowYStart, 0.5f, textEditorHeight);
-    mQualities.setBoundsRelative(0.5f, firstRowYStart, 0.5f, textEditorHeight);
+    mRange.setBoundsRelative(0.0f, firstRowYStart, 0.5f, infoHeight);
+
+    // Dynamically setting bounds for mQualities labels
+    float labelHeight = infoHeight / mQualityLabels.size();
+    for (size_t i = 0; i < mQualityLabels.size(); ++i) 
+    {
+        mQualityLabels[i]->setBoundsRelative(0.5f, firstRowYStart + labelHeight * i, 0.5f, labelHeight);
+    }
 
     // Second row of Titles and TextEditors
+    float secondRowTitlesY = firstRowYStart + infoHeight;
+    float secondRowYStart = secondRowTitlesY + titleHeightPercentage;
+
     mUsefulInformationTitle.setBoundsRelative(0.0f, secondRowTitlesY, 0.5f, titleHeightPercentage);
     mTranspositionTitle.setBoundsRelative(0.5f, secondRowTitlesY, 0.5f, titleHeightPercentage);
-    mUsefulInformation.setBoundsRelative(0.0f, secondRowYStart, 0.5f, textEditorHeight);
-    mTransposition.setBoundsRelative(0.5f, secondRowYStart, 0.5f, textEditorHeight);
+
+    // Dynamically setting bounds for mUsefulInformation labels
+    labelHeight = infoHeight / mUsefulInformationLabels.size();
+    for (size_t i = 0; i < mUsefulInformationLabels.size(); ++i) 
+    {
+        mUsefulInformationLabels[i]->setBoundsRelative(0.0f, secondRowYStart + labelHeight * i, 0.5f, labelHeight);
+    }
+    mTransposition.setBoundsRelative(0.5f, secondRowYStart, 0.5f, infoHeight);
 
     // Third row of Titles and TextEditors
+    float thirdRowTitlesY = secondRowYStart + infoHeight;
+    float thirdRowYStart = thirdRowTitlesY + titleHeightPercentage;
+
     mPlayingTechniquesTitle.setBoundsRelative(0.0f, thirdRowTitlesY, 0.5f, titleHeightPercentage);
     mFamousWorksTitle.setBoundsRelative(0.5f, thirdRowTitlesY, 0.5f, titleHeightPercentage);
-    mPlayingTechniques.setBoundsRelative(0.0f, thirdRowYStart, 0.5f, textEditorHeight);
-    mFamousWorks.setBoundsRelative(0.5f, thirdRowYStart, 0.5f, textEditorHeight);
-}
 
+    // Dynamically setting bounds for mPlayingTechniques labels
+    labelHeight = infoHeight / mPlayingTechniqueLabels.size();
+    for (size_t i = 0; i < mPlayingTechniqueLabels.size(); ++i) 
+    {
+        mPlayingTechniqueLabels[i]->setBoundsRelative(0.0f, thirdRowYStart + labelHeight * i, 0.5f, labelHeight);
+    }
+
+    // Dynamically setting bounds for mFamousWorks labels
+    labelHeight = infoHeight / mFamousWorksLabels.size();
+    for (size_t i = 0; i < mFamousWorksLabels.size(); ++i) 
+    {
+        mFamousWorksLabels[i]->setBoundsRelative(0.5f, thirdRowYStart + labelHeight * i, 0.5f, labelHeight);
+    }
+}
 
 
 StringArray InstrumentInfoView::getMenuBarNames()
@@ -149,12 +160,12 @@ void InstrumentInfoView::showInstrumentInfo(int key)
     auto info = mInstrumentModel.getInstrument(key);
     mInstrument.setText(info.mName,dontSendNotification);
 
-    showText(mRange, info.mRange);
-    showText(mQualities, info.mQualities);
-    showText(mUsefulInformation, info.mUsefulInformation);
-    showText(mFamousWorks, info.mFamousWorks);
-    showText(mTransposition, info.mTransposition);
-    showText(mPlayingTechniques, info.mPlayingTechniques);
+    displayText(mRange, info.mRange);
+    displayText(mTransposition, info.mTransposition);
+    displayLabelsForCategory(info.mQualities, mQualityLabels);
+    displayLabelsForCategory(info.mUsefulInformation, mUsefulInformationLabels);
+    displayLabelsForCategory(info.mFamousWorks, mFamousWorksLabels);
+    displayLabelsForCategory(info.mPlayingTechniques, mPlayingTechniqueLabels);
 
     bool result = mCustomPianoRoll.setMidiRanges(info.mQualities);
     if (!result)
@@ -162,57 +173,44 @@ void InstrumentInfoView::showInstrumentInfo(int key)
         mCustomPianoRoll.setMidiRanges(info.mRange);
     }
     mCustomPianoRoll.repaint();
+    resized();
 }
 
 
-void InstrumentInfoView::showText(TextEditor& destinationEditor, StringArray textToShow)
+void InstrumentInfoView::clearLabels(std::vector<std::unique_ptr<Label>>& labels)
 {
-    destinationEditor.clear();
-    size_t stringArraySize = textToShow.size();
-
-    for(int i = 1; i <= stringArraySize; ++i)
+    for (auto& label : labels)
     {
-        String info = textToShow[i - 1];
-        destinationEditor.moveCaretToEnd();
-        destinationEditor.insertTextAtCaret(info);
-
-        if (i < stringArraySize)
-        {
-            destinationEditor.insertTextAtCaret(newLine);
-        }
+        removeChildComponent(label.get());
     }
-    destinationEditor.moveCaretToTop(false);
+    labels.clear();
 }
 
 
-void InstrumentInfoView::showText(TextEditor& destinationEditor, String textToShow)
+void InstrumentInfoView::displayLabelsForCategory(const StringArray& texts, std::vector<std::unique_ptr<Label>>& labelsContainer)
 {
-    destinationEditor.clear();
-    destinationEditor.moveCaretToEnd();
-    destinationEditor.insertTextAtCaret(textToShow);
-    destinationEditor.moveCaretToTop(false);
+    clearLabels(labelsContainer);
+    for (const auto& text : texts)
+    {
+        auto label = std::make_unique<Label>();
+        label->setText(text, dontSendNotification);
+        label->setJustificationType(Justification::centredLeft);
+        addAndMakeVisible(label.get());
+        labelsContainer.push_back(std::move(label));
+    }
 }
 
 
-void InstrumentInfoView::setupTextEditor(TextEditor& editorToSetup)
+void InstrumentInfoView::displayText(Label& label, String text)
 {
-    addAndMakeVisible(&editorToSetup);
-    editorToSetup.setMultiLine(true);
-    editorToSetup.setReturnKeyStartsNewLine(true);
-    editorToSetup.setReadOnly(true);
-    editorToSetup.setScrollbarsShown(true);
-    editorToSetup.setCaretVisible(false);
-    editorToSetup.setPopupMenuEnabled(true);
-    editorToSetup.setLineSpacing(1.2f);
-    editorToSetup.setIndents(12, 12);
-    editorToSetup.setFont(mCustomLookAndFeel.getEditorFont());
+    addAndMakeVisible(label);
+    label.setText(text, dontSendNotification);
 }
 
 
 void InstrumentInfoView::setupLabel(Label& labelToSetup, const String& title)
 {
     addAndMakeVisible(&labelToSetup);
+    labelToSetup.setName("Title");
     labelToSetup.setText(title, dontSendNotification);
-    labelToSetup.setFont(Font(16.0f, Font::bold));
-    labelToSetup.setJustificationType(Justification::centred);
 }

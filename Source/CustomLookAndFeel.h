@@ -27,7 +27,6 @@ private:
 
     void drawTextEditorOutline(Graphics& g, int width, int height, TextEditor& textEditor) override;
 
-
     void drawMenuBarBackground(Graphics& g, int width, int height, bool isMouseOverBar, MenuBarComponent& menuBar) override;
 
     void drawPopupMenuItem(Graphics& g, const Rectangle<int>& area, const bool isSeparator, const bool isActive,
@@ -37,7 +36,7 @@ private:
     Font getPopupMenuFont();
 
 
-    Font textEditorFont;
-    Font labelFont;
+    Font infoFont;
+    Font titleFont;
     Font popupmenuFont;
 };

@@ -39,12 +39,12 @@ void CustomLookAndFeel::init()
     setColour(PopupMenu::textColourId, Colours::lightgrey);
 
     // Configure fonts
-    textEditorFont.setTypefaceName("Lato");
-    textEditorFont.setHeight(16);
+    infoFont.setTypefaceName("Lato");
+    infoFont.setHeight(16);
 
-    labelFont.setTypefaceName("Lato");
-    labelFont.setBold(true);
-    labelFont.setHeight(20);
+    titleFont.setTypefaceName("Lato");
+    titleFont.setBold(true);
+    titleFont.setHeight(20);
 
     popupmenuFont.setTypefaceName("Lato");
     popupmenuFont.setHeight(16);
@@ -53,24 +53,36 @@ void CustomLookAndFeel::init()
 
 void CustomLookAndFeel::drawLabel(Graphics& g, Label& label)
 {
-    g.fillAll(label.findColour(Label::backgroundColourId));
-    g.setColour(label.findColour(Label::textColourId));
-    g.setFont(labelFont);
-    g.drawText(label.getText(), label.getLocalBounds(), Justification::centred, true);
+    String labelName = label.getName();
+    
+    if(labelName.contains("Title"))
+    {
+        g.fillAll(label.findColour(Label::backgroundColourId));
+        g.setColour(label.findColour(Label::textColourId));
+        g.setFont(titleFont);
+        g.drawText(label.getText(), label.getLocalBounds(), Justification::centred, true);
+    }
+    else
+    {
+        g.fillAll(label.findColour(Label::backgroundColourId));
+        g.setColour((Colours::white));
+        g.setFont(infoFont);
+        g.drawText(label.getText(), label.getLocalBounds(), Justification::centredLeft, false);
+    }
 }
 
 
 void CustomLookAndFeel::drawTextEditorOutline(Graphics& g, int width, int height, TextEditor& textEditor)
 {
     g.setColour(textEditor.findColour(TextEditor::outlineColourId));
-    g.setFont(textEditorFont);
+    g.setFont(infoFont);
     g.drawRect(0, 0, width, height, 1); // Thin outline with a thickness of 1 pixel
 }
 
 
 Font CustomLookAndFeel::getEditorFont()
 {
-    return textEditorFont;
+    return infoFont;
 }
 
 
