@@ -12,6 +12,18 @@
 
 #include <JuceHeader.h>
 
+enum labelType
+{
+    title = 1,
+    range,
+    qualities,
+    playingtechnique,
+    usefulinformation,
+    famousworks,
+    transposition
+};
+
+
 class CustomLookAndFeel : public LookAndFeel_V4 
 {
 public:

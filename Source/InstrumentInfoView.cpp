@@ -26,22 +26,22 @@ InstrumentInfoView::~InstrumentInfoView()
 
 void InstrumentInfoView::displayLabels()
 {
-    setupLabel(mInstrument, "Instrument");
-    setupLabel(mRangeTitle, "Ranges");
-    setupLabel(mQualitiesTitle, "Qualities");
-    setupLabel(mFamousWorksTitle, "Famous Works");
-    setupLabel(mPlayingTechniquesTitle, "Playing Techniques");
-    setupLabel(mUsefulInformationTitle, "Useful Information");
-    setupLabel(mTranspositionTitle, "Transposition");
+    setupHeading(mInstrument, "Instrument");
+    setupHeading(mRangeTitle, "Ranges");
+    setupHeading(mQualitiesTitle, "Qualities");
+    setupHeading(mFamousWorksTitle, "Famous Works");
+    setupHeading(mPlayingTechniquesTitle, "Playing Techniques");
+    setupHeading(mUsefulInformationTitle, "Useful Information");
+    setupHeading(mTranspositionTitle, "Transposition");
 }
-
 
 void InstrumentInfoView::resized()
 {
     float titleLabelHeight = 0.1f; // Main title at the top
     float titleHeightPercentage = 0.05f; // Height for each title label
-    float availableHeight = 1.0f - titleLabelHeight - (titleHeightPercentage * 6);
-    float infoHeight = availableHeight / 3;
+    float spacingBetweenRows = 0.1f; // Additional spacing between rows to avoid cramping
+    float availableHeight = 1.0f - titleLabelHeight - (titleHeightPercentage * 6) - (spacingBetweenRows * 2); // Adjust for spacing
+    float textEditorHeight = availableHeight / 3; // Dividing remaining space by 3 rows
 
     // Set bounds for the main instrument label
     mInstrument.setBoundsRelative(0.25f, 0.0f, 0.5f, titleLabelHeight);
@@ -52,49 +52,50 @@ void InstrumentInfoView::resized()
 
     mRangeTitle.setBoundsRelative(0.0f, firstRowTitlesY, 0.5f, titleHeightPercentage);
     mQualitiesTitle.setBoundsRelative(0.5f, firstRowTitlesY, 0.5f, titleHeightPercentage);
-    mRange.setBoundsRelative(0.0f, firstRowYStart, 0.5f, infoHeight);
+    mRange.setBoundsRelative(0.0f, firstRowYStart, 0.5f, textEditorHeight);
 
     // Dynamically setting bounds for mQualities labels
-    float labelHeight = infoHeight / mQualityLabels.size();
-    for (size_t i = 0; i < mQualityLabels.size(); ++i) 
-    {
-        mQualityLabels[i]->setBoundsRelative(0.5f, firstRowYStart + labelHeight * i, 0.5f, labelHeight);
+    float labelHeight = textEditorHeight / mQualityLabels.size();
+    float labelYStart = firstRowYStart;
+    for (size_t i = 0; i < mQualityLabels.size(); ++i) {
+        mQualityLabels[i]->setBoundsRelative(0.5f, labelYStart, 0.5f, labelHeight);
+        labelYStart += labelHeight; // Move the starting Y position for the next label
     }
 
     // Second row of Titles and TextEditors
-    float secondRowTitlesY = firstRowYStart + infoHeight;
+    float secondRowTitlesY = firstRowYStart + textEditorHeight + spacingBetweenRows;
     float secondRowYStart = secondRowTitlesY + titleHeightPercentage;
 
     mUsefulInformationTitle.setBoundsRelative(0.0f, secondRowTitlesY, 0.5f, titleHeightPercentage);
     mTranspositionTitle.setBoundsRelative(0.5f, secondRowTitlesY, 0.5f, titleHeightPercentage);
 
     // Dynamically setting bounds for mUsefulInformation labels
-    labelHeight = infoHeight / mUsefulInformationLabels.size();
-    for (size_t i = 0; i < mUsefulInformationLabels.size(); ++i) 
-    {
-        mUsefulInformationLabels[i]->setBoundsRelative(0.0f, secondRowYStart + labelHeight * i, 0.5f, labelHeight);
+    labelYStart = secondRowYStart;
+    for (size_t i = 0; i < mUsefulInformationLabels.size(); ++i) {
+        mUsefulInformationLabels[i]->setBoundsRelative(0.0f, labelYStart, 0.5f, labelHeight);
+        labelYStart += labelHeight;
     }
-    mTransposition.setBoundsRelative(0.5f, secondRowYStart, 0.5f, infoHeight);
+    mTransposition.setBoundsRelative(0.5f, secondRowYStart, 0.5f, textEditorHeight);
 
     // Third row of Titles and TextEditors
-    float thirdRowTitlesY = secondRowYStart + infoHeight;
+    float thirdRowTitlesY = secondRowYStart + textEditorHeight + spacingBetweenRows;
     float thirdRowYStart = thirdRowTitlesY + titleHeightPercentage;
 
     mPlayingTechniquesTitle.setBoundsRelative(0.0f, thirdRowTitlesY, 0.5f, titleHeightPercentage);
     mFamousWorksTitle.setBoundsRelative(0.5f, thirdRowTitlesY, 0.5f, titleHeightPercentage);
 
     // Dynamically setting bounds for mPlayingTechniques labels
-    labelHeight = infoHeight / mPlayingTechniqueLabels.size();
-    for (size_t i = 0; i < mPlayingTechniqueLabels.size(); ++i) 
-    {
-        mPlayingTechniqueLabels[i]->setBoundsRelative(0.0f, thirdRowYStart + labelHeight * i, 0.5f, labelHeight);
+    labelYStart = thirdRowYStart;
+    for (size_t i = 0; i < mPlayingTechniqueLabels.size(); ++i) {
+        mPlayingTechniqueLabels[i]->setBoundsRelative(0.0f, labelYStart, 0.5f, labelHeight);
+        labelYStart += labelHeight;
     }
 
     // Dynamically setting bounds for mFamousWorks labels
-    labelHeight = infoHeight / mFamousWorksLabels.size();
-    for (size_t i = 0; i < mFamousWorksLabels.size(); ++i) 
-    {
-        mFamousWorksLabels[i]->setBoundsRelative(0.5f, thirdRowYStart + labelHeight * i, 0.5f, labelHeight);
+    labelYStart = thirdRowYStart;
+    for (size_t i = 0; i < mFamousWorksLabels.size(); ++i) {
+        mFamousWorksLabels[i]->setBoundsRelative(0.5f, labelYStart, 0.5f, labelHeight);
+        labelYStart += labelHeight;
     }
 }
 
@@ -162,10 +163,10 @@ void InstrumentInfoView::showInstrumentInfo(int key)
 
     displayText(mRange, info.mRange);
     displayText(mTransposition, info.mTransposition);
-    displayLabelsForCategory(info.mQualities, mQualityLabels);
-    displayLabelsForCategory(info.mUsefulInformation, mUsefulInformationLabels);
-    displayLabelsForCategory(info.mFamousWorks, mFamousWorksLabels);
-    displayLabelsForCategory(info.mPlayingTechniques, mPlayingTechniqueLabels);
+    displayLabelsForCategory(info.mQualities, mQualityLabels, labelType::qualities);
+    displayLabelsForCategory(info.mUsefulInformation, mUsefulInformationLabels, labelType::usefulinformation);
+    displayLabelsForCategory(info.mFamousWorks, mFamousWorksLabels, labelType::famousworks);
+    displayLabelsForCategory(info.mPlayingTechniques, mPlayingTechniqueLabels, labelType::playingtechnique);
 
     bool result = mCustomPianoRoll.setMidiRanges(info.mQualities);
     if (!result)
@@ -187,12 +188,15 @@ void InstrumentInfoView::clearLabels(std::vector<std::unique_ptr<Label>>& labels
 }
 
 
-void InstrumentInfoView::displayLabelsForCategory(const StringArray& texts, std::vector<std::unique_ptr<Label>>& labelsContainer)
+void InstrumentInfoView::displayLabelsForCategory(const StringArray& texts, std::vector<std::unique_ptr<Label>>& labelsContainer, const int category)
 {
     clearLabels(labelsContainer);
+    String cat = String(category);
+    
     for (const auto& text : texts)
     {
         auto label = std::make_unique<Label>();
+        label->setName(cat);
         label->setText(text, dontSendNotification);
         label->setJustificationType(Justification::centredLeft);
         addAndMakeVisible(label.get());
@@ -208,9 +212,11 @@ void InstrumentInfoView::displayText(Label& label, String text)
 }
 
 
-void InstrumentInfoView::setupLabel(Label& labelToSetup, const String& title)
+void InstrumentInfoView::setupHeading(Label& labelToSetup, const String& title)
 {
-    addAndMakeVisible(&labelToSetup);
-    labelToSetup.setName("Title");
+    String category = String(labelType::title);
+    labelToSetup.setName(category);
+
     labelToSetup.setText(title, dontSendNotification);
+    addAndMakeVisible(&labelToSetup);
 }

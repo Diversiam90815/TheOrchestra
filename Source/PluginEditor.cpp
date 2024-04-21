@@ -37,7 +37,7 @@ void OrchestraEditor::paint (Graphics& g)
 
 void OrchestraEditor::resized()
 {
-    mPianoRollView.setBoundsRelative(0.0f, 0.85f, 1.0f, 0.15f);
+    mPianoRollView.setBoundsRelative(0.0f, 0.9f, 1.0f, 0.1f);
     mInstrumentInfoView.setBoundsRelative(0.01f, 0.05f, 0.98f, 0.8f);
     mMenuBar.setBounds(getLocalBounds().removeFromTop(mCustomLookAndFeel.getDefaultMenuBarHeight()));
 }

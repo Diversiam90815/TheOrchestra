@@ -21,6 +21,8 @@ public:
     InstrumentInfoView(CustomPianoRoll& piano);
     ~InstrumentInfoView();
 
+private:
+
     void displayLabels();
 
     void resized() override;
@@ -29,7 +31,7 @@ public:
 
     void displayText(Label& label, String text);
 
-    void setupLabel(Label& labelToSetup, const String& title);
+    void setupHeading(Label& labelToSetup, const String& title);
 
     StringArray getMenuBarNames() override;
 
@@ -37,12 +39,10 @@ public:
 
     void menuItemSelected(int menuItemID, int topLevelMenuIndex) override;
 
-
     void clearLabels(std::vector<std::unique_ptr<Label>>& labels);
 
-    void displayLabelsForCategory(const StringArray& texts, std::vector<std::unique_ptr<Label>>& labelsContainer);
+    void displayLabelsForCategory(const StringArray& texts, std::vector<std::unique_ptr<Label>>& labelsContainer, const int category);
 
-private:
 
     int mCurrentSelectedInstrument = defaultInstrument;        //Default value out of reach of different enums
 
