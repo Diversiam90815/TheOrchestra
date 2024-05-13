@@ -40,6 +40,8 @@ void CustomLookAndFeel::init()
 	// Configure fonts
 	infoFont.setTypefaceName("Lato");
 	infoFont.setHeight(16);
+	infoFont
+		.setBold(false);
 
 	titleFont.setTypefaceName("Lato");
 	titleFont.setBold(true);

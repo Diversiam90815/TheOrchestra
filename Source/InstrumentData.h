@@ -213,7 +213,7 @@ const StringArray woodwindsPlayingTechniques = {"Flutter tonguing: Rolling the t
 // Timpani
 constexpr auto	  timpaniRange				 = "D2 - C4";
 constexpr auto	  timpaniTransposition		 = "-";
-const StringArray timpaniQualities			 = {"Can vary from dull to thunderous, deep, heavy, velvety, to dry, depending on mallet and technique used"};
+const StringArray timpaniQualities			 = {"Can vary from dull to thunderous, deep, heavy, velvety, to dry", "Depending on mallet and technique used "};
 const StringArray timpaniRoles				 = {"Unison with bass instruments creates a homogenous blend", "Blends nicely with trumpets and horns, adding depth and resonance",
 												"Rolls combined with string tremolo chords produce a tremendous effect", "Works well with pizzicato strings and harps for rhythmic elements"};
 const StringArray timpaniFamousWorks		 = {"Beethoven - Symphony No. 9", "Tchaikovsky - 1812 Overture", "Mahler - Symphony No. 1"};
