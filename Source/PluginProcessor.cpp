@@ -16,13 +16,13 @@
 OrchestraProcessor::OrchestraProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
 	: AudioProcessor(BusesProperties()
-#if ! JucePlugin_IsMidiEffect
-#if ! JucePlugin_IsSynth
-		.withInput("Input", AudioChannelSet::stereo(), true)
+#if !JucePlugin_IsMidiEffect
+#if !JucePlugin_IsSynth
+						 .withInput("Input", AudioChannelSet::stereo(), true)
 #endif
-		.withOutput("Output", AudioChannelSet::stereo(), true)
+						 .withOutput("Output", AudioChannelSet::stereo(), true)
 #endif
-	)
+	  )
 #endif
 {
 }
@@ -80,8 +80,8 @@ double OrchestraProcessor::getTailLengthSeconds() const
 
 int OrchestraProcessor::getNumPrograms()
 {
-	return 1;   // NB: some hosts don't cope very well if you tell them there are 0 programs,
-	// so this should be at least 1, even if you're not really implementing programs.
+	return 1; // NB: some hosts don't cope very well if you tell them there are 0 programs,
+			  // so this should be at least 1, even if you're not really implementing programs.
 }
 
 
@@ -102,7 +102,7 @@ const String OrchestraProcessor::getProgramName(int index)
 }
 
 
-void OrchestraProcessor::changeProgramName(int index, const String& newName)
+void OrchestraProcessor::changeProgramName(int index, const String &newName)
 {
 }
 
@@ -122,7 +122,7 @@ void OrchestraProcessor::releaseResources()
 
 
 #ifndef JucePlugin_PreferredChannelConfigurations
-bool OrchestraProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
+bool OrchestraProcessor::isBusesLayoutSupported(const BusesLayout &layouts) const
 {
 #if JucePlugin_IsMidiEffect
 	ignoreUnused(layouts);
@@ -132,12 +132,11 @@ bool OrchestraProcessor::isBusesLayoutSupported(const BusesLayout& layouts) cons
 	// In this template code we only support mono or stereo.
 	// Some plugin hosts, such as certain GarageBand versions, will only
 	// load plugins that support stereo bus layouts.
-	if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono()
-		&& layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
+	if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono() && layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
 		return false;
 
-	// This checks if the input layout matches the output layout
-#if ! JucePlugin_IsSynth
+		// This checks if the input layout matches the output layout
+#if !JucePlugin_IsSynth
 	if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
 		return false;
 #endif
@@ -148,11 +147,11 @@ bool OrchestraProcessor::isBusesLayoutSupported(const BusesLayout& layouts) cons
 #endif
 
 
-void OrchestraProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& midiMessages)
+void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &midiMessages)
 {
 	ScopedNoDenormals noDenormals;
-	auto totalNumInputChannels = getTotalNumInputChannels();
-	auto totalNumOutputChannels = getTotalNumOutputChannels();
+	auto			  totalNumInputChannels	 = getTotalNumInputChannels();
+	auto			  totalNumOutputChannels = getTotalNumOutputChannels();
 
 	// In case we have more outputs than inputs, this code clears any output
 	// channels that didn't contain input data, (because these aren't
@@ -171,7 +170,7 @@ void OrchestraProcessor::processBlock(AudioBuffer<float>& buffer, MidiBuffer& mi
 	// interleaved by keeping the same state.
 	for (int channel = 0; channel < totalNumInputChannels; ++channel)
 	{
-		auto* channelData = buffer.getWritePointer(channel);
+		auto *channelData = buffer.getWritePointer(channel);
 
 		// ..do something to the data...
 	}
@@ -185,13 +184,13 @@ bool OrchestraProcessor::hasEditor() const
 }
 
 
-juce::AudioProcessorEditor* OrchestraProcessor::createEditor()
+juce::AudioProcessorEditor *OrchestraProcessor::createEditor()
 {
 	return new OrchestraEditor(*this);
 }
 
 
-void OrchestraProcessor::getStateInformation(juce::MemoryBlock& destData)
+void OrchestraProcessor::getStateInformation(juce::MemoryBlock &destData)
 {
 	// You should use this method to store your parameters in the memory block.
 	// You could do that either as raw data, or use the XML or ValueTree classes
@@ -199,14 +198,14 @@ void OrchestraProcessor::getStateInformation(juce::MemoryBlock& destData)
 }
 
 
-void OrchestraProcessor::setStateInformation(const void* data, int sizeInBytes)
+void OrchestraProcessor::setStateInformation(const void *data, int sizeInBytes)
 {
 	// You should use this method to restore your parameters from this memory block,
 	// whose contents will have been created by the getStateInformation() call.
 }
 
 
-AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+AudioProcessor *JUCE_CALLTYPE createPluginFilter()
 {
 	return new OrchestraProcessor();
 }

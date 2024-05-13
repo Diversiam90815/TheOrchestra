@@ -9,12 +9,11 @@
 class OrchestraEditor : public juce::AudioProcessorEditor
 {
 public:
-
 	//==============================================================================
 	//				CONSTRUCTOR DESTRUCTOR
 	//==============================================================================
 
-	OrchestraEditor(OrchestraProcessor&);
+	OrchestraEditor(OrchestraProcessor &);
 
 	~OrchestraEditor() override;
 
@@ -23,27 +22,26 @@ public:
 	//				PUBLIC METHODS
 	//==============================================================================
 
-	void paint(Graphics&) override;
+	void paint(Graphics &) override;
 
 	void resized() override;
 
 	void showUI();
 
 private:
-
 	//==============================================================================
 	//				PRIVATE OBJECTS
 	//==============================================================================
 
-	OrchestraProcessor& audioProcessor;
+	OrchestraProcessor &audioProcessor;
 
-	PianoRoll mPianoRollView;
+	PianoRoll			mPianoRollView;
 
-	InstrumentInfoView mInstrumentInfoView;
+	InstrumentInfoView	mInstrumentInfoView;
 
-	MenuBarComponent mMenuBar;
+	MenuBarComponent	mMenuBar;
 
-	CustomLookAndFeel mCustomLookAndFeel;
+	CustomLookAndFeel	mCustomLookAndFeel;
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OrchestraEditor)
 };

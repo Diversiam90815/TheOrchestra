@@ -1,0 +1,139 @@
+# Documentation on 
+# https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+
+Standard: c++17
+Language: Cpp
+BasedOnStyle: Microsoft
+
+IndentWidth: 4
+UseTab: Always 
+
+ColumnLimit: 180
+
+# Insert a newline at end of file if missing.
+# CL NOTE Not compatible with clang VS 2019
+# InsertNewlineAtEOF: true
+
+#===============================================================================
+# ALIGNMENT
+#===============================================================================
+
+# Function parameters
+AlignAfterOpenBracket: Align
+BinPackParameters: false
+
+# Align array column and right justify the columns e.g.:
+#
+# struct test demo[] =
+# {
+#     {56,    23, "hello"},
+#     {-1, 93463, "world"},
+#     { 7,     5,    "!!"}
+# };
+# CL NOTE Not compatible with clang VS 2019
+# AlignArrayOfStructures: Right 
+
+# int a            = 1;
+# int somelongname = 2;
+# double c         = 3;
+# 
+# int d            = 3;
+# /* A comment. */
+# double e         = 4;
+AlignConsecutiveAssignments: AcrossEmptyLinesAndComments
+
+# int aaaa : 1;
+# int b    : 12;
+# int ccc  : 8;
+AlignConsecutiveBitFields: AcrossEmptyLinesAndComments
+
+# int         aaaa = 12;
+# float       b = 23;
+# std::string ccc;
+AlignConsecutiveDeclarations: AcrossEmptyLinesAndComments
+
+# #define LONGER_NAME      0x007f
+# #define EVEN_LONGER_NAME (2)
+# #define foo(x)           (x * x)
+AlignConsecutiveMacros: AcrossEmptyLinesAndComments
+
+# #define A   \
+#   int aaaa; \
+#   int b;    \
+#   int dddddddddd;
+AlignEscapedNewlines: Left 
+
+# int aaa = bbbbbbbbbbbbbbb
+#         + ccccccccccccccc;
+AlignOperands: AlignAfterOperator 
+
+# int abc;  // comment
+# int abcd; // comment
+AlignTrailingComments: 
+  Kind: Always
+  OverEmptyLines: 2
+
+#===============================================================================
+# OTHER OPTIONS
+#===============================================================================
+
+# indent of public, protected, private
+# FMB NOTE: -4 --> move to same column as the class keyword
+AccessModifierOffset: -4
+
+# enum { A, B } myEnum;
+AllowShortEnumsOnASingleLine: true
+
+# switch (a) 
+# {         
+# case 1: x = 1; break;
+# case 2: return;      
+# }                    
+# CL has a concern
+AllowShortCaseLabelsOnASingleLine: true
+
+# FMB NOTE: AlignConsecutiveShortCaseStatements (Clang format 17) not available in VS2019/2022
+# AlignConsecutiveShortCaseStatements:
+#  Enabled: true
+#  AcrossEmptyLines: true
+#  AcrossComments: true
+#  AlignCaseColons: true
+
+# void f() { bar(); }
+# CL has a concern
+# AllowShortFunctionsOnASingleLine: All
+
+AlwaysBreakTemplateDeclarations: Yes 
+
+# Allman: Always break before curly braces
+BreakBeforeBraces: Allman
+
+# Add empty line only when access modifier starts a new logical block. Logical block is a group of one or more member fields or functions.
+# 
+# struct foo {
+# private:
+#   int i;
+# 
+# protected:
+#   int j;
+#   /* comment */
+# public:
+#   foo() {}
+# 
+# private:
+# protected:
+# };
+EmptyLineBeforeAccessModifier: LogicalBlock
+
+# adds missing namespace end comments for namespaces
+# } // namespace a
+FixNamespaceComments: true
+
+# The maximum number of consecutive empty lines to keep.
+MaxEmptyLinesToKeep: 3
+
+# Specifies the use of empty lines to separate definition blocks, including classes, structs, enums, and functions.
+# CL NOTE Not compatible with clang VS 2019
+# SeparateDefinitionBlocks: True
+
+SortIncludes: Never 

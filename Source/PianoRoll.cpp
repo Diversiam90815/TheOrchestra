@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-    PianoRoll.cpp
-    Created: 17 Feb 2024 2:40:46pm
-    Author:  jerry
+	PianoRoll.cpp
+	Created: 17 Feb 2024 2:40:46pm
+	Author:  jerry
 
   ==============================================================================
 */
@@ -13,43 +13,40 @@
 
 PianoRoll::PianoRoll()
 {
-    mPianoState.addListener(this);
+	mPianoState.addListener(this);
 
-    mPianoRoll = std::make_unique<CustomPianoRoll>(mPianoState, MidiKeyboardComponent::horizontalKeyboard);
+	mPianoRoll = std::make_unique<CustomPianoRoll>(mPianoState, MidiKeyboardComponent::horizontalKeyboard);
 
-    showPianoRoll();
+	showPianoRoll();
 }
 
 
 PianoRoll::~PianoRoll()
 {
-    mPianoRoll->removeAllChangeListeners();
-    mPianoState.removeListener(this);
-    mPianoRoll.reset();
+	mPianoRoll->removeAllChangeListeners();
+	mPianoState.removeListener(this);
+	mPianoRoll.reset();
 }
 
 
 void PianoRoll::resized()
 {
-    mPianoRoll->setBoundsRelative(0.0f, 0.0f, 1.0f, 1.0f);
+	mPianoRoll->setBoundsRelative(0.0f, 0.0f, 1.0f, 1.0f);
 }
 
 
 void PianoRoll::showPianoRoll()
 {
-    mPianoRoll->setName("Piano Roll");
-    addAndMakeVisible(mPianoRoll.get());
+	mPianoRoll->setName("Piano Roll");
+	addAndMakeVisible(mPianoRoll.get());
 }
 
 
-void PianoRoll::handleNoteOn(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity)
+void PianoRoll::handleNoteOn(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity)
 {
-
 }
 
 
-void PianoRoll::handleNoteOff(MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity)
+void PianoRoll::handleNoteOff(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity)
 {
-
 }
-

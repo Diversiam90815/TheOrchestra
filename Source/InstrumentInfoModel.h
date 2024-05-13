@@ -1,9 +1,9 @@
 /*
   ==============================================================================
 
-    InstrumentInfoModel.h
-    Created: 8 Apr 2024 6:23:51pm
-    Author:  Jens.Langenberg
+	InstrumentInfoModel.h
+	Created: 8 Apr 2024 6:23:51pm
+	Author:  Jens.Langenberg
 
   ==============================================================================
 */
@@ -17,21 +17,20 @@
 class InstrumentInfoModel
 {
 public:
-    InstrumentInfoModel();
-    ~InstrumentInfoModel();
+	InstrumentInfoModel();
+	~InstrumentInfoModel();
 
-    void addStringInstruments();
-    void addWoodwindInstruments();
-    void addBrassInstruments();
-    void addPercussionInstruments();
+	void		   addStringInstruments();
+	void		   addWoodwindInstruments();
+	void		   addBrassInstruments();
+	void		   addPercussionInstruments();
 
-    void addInstrument(Family family, int instrumentId, const InstrumentInfo& info);
+	void		   addInstrument(Family family, int instrumentId, const InstrumentInfo &info);
 
-    InstrumentInfo getInstrument(int key);
+	InstrumentInfo getInstrument(int key);
 
-    int getInstrumentKey(int family, int instrument);
+	int			   getInstrumentKey(int family, int instrument);
 
 private:
-    std::map<int, InstrumentInfo> instruments;
-
+	std::map<int, InstrumentInfo> instruments;
 };
