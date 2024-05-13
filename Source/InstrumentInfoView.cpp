@@ -37,69 +37,72 @@ void InstrumentInfoView::displayLabels()
 
 void InstrumentInfoView::resized()
 {
-	float titleLabelHeight		= 0.1f;																				// Main title at the top
-	float titleHeightPercentage = 0.05f;																			// Height for each title label
-	float spacingBetweenRows	= 0.1f;																				// Additional spacing between rows to avoid cramping
-	float availableHeight		= 1.0f - titleLabelHeight - (titleHeightPercentage * 6) - (spacingBetweenRows * 2); // Adjust for spacing
-	float textEditorHeight		= availableHeight / 3;																// Dividing remaining space by 3 rows
+	float titleLabelHeight		 = 0.1f;																			 // Main title at the top
+	float titleHeightPercentage	 = 0.05f;																			 // Height for each title label
+	float spacingBetweenRows	 = 0.05f;																			 // Additional spacing between rows to avoid cramping
+	float availableHeight		 = 1.0f - titleLabelHeight - (titleHeightPercentage * 6) - (spacingBetweenRows * 2); // Adjust for spacing
+	float textEditorHeight		 = availableHeight / 3;																 // Dividing remaining space by 3 rows
+	float minimumInfoLabelHeight = textEditorHeight / 5;
 
-	// Set bounds for the main instrument label
 	mInstrument.setBoundsRelative(0.25f, 0.0f, 0.5f, titleLabelHeight);
 
-	// First row of Titles and TextEditors
-	float firstRowTitlesY = titleLabelHeight;
-	float firstRowYStart  = firstRowTitlesY + titleHeightPercentage;
+	// Defining 3 rows
+	float firstRowTitlesY  = titleLabelHeight;
+	float firstRowYStart   = firstRowTitlesY + titleHeightPercentage;
 
-	mRangeTitle.setBoundsRelative(0.0f, firstRowTitlesY, 0.5f, titleHeightPercentage);
-	mQualitiesTitle.setBoundsRelative(0.5f, firstRowTitlesY, 0.5f, titleHeightPercentage);
-	mRange.setBoundsRelative(0.0f, firstRowYStart, 0.5f, textEditorHeight);
-
-	// Dynamically setting bounds for mQualities labels
-	float labelHeight = textEditorHeight / mQualityLabels.size();
-	float labelYStart = firstRowYStart;
-	for (size_t i = 0; i < mQualityLabels.size(); ++i)
-	{
-		mQualityLabels[i]->setBoundsRelative(0.5f, labelYStart, 0.5f, labelHeight);
-		labelYStart += labelHeight; // Move the starting Y position for the next label
-	}
-
-	// Second row of Titles and TextEditors
 	float secondRowTitlesY = firstRowYStart + textEditorHeight + spacingBetweenRows;
 	float secondRowYStart  = secondRowTitlesY + titleHeightPercentage;
 
+	float thirdRowTitlesY  = secondRowYStart + textEditorHeight + spacingBetweenRows;
+	float thirdRowYStart   = thirdRowTitlesY + titleHeightPercentage;
+
+	// Titles
+	mRangeTitle.setBoundsRelative(0.0f, firstRowTitlesY, 0.5f, titleHeightPercentage);
+	mQualitiesTitle.setBoundsRelative(0.5f, firstRowTitlesY, 0.5f, titleHeightPercentage);
+	mRange.setBoundsRelative(0.0f, firstRowYStart, 0.5f, textEditorHeight);
 	mUsefulInformationTitle.setBoundsRelative(0.0f, secondRowTitlesY, 0.5f, titleHeightPercentage);
 	mTranspositionTitle.setBoundsRelative(0.5f, secondRowTitlesY, 0.5f, titleHeightPercentage);
-
-	// Dynamically setting bounds for mUsefulInformation labels
-	labelYStart = secondRowYStart;
-	for (size_t i = 0; i < mUsefulInformationLabels.size(); ++i)
-	{
-		mUsefulInformationLabels[i]->setBoundsRelative(0.0f, labelYStart, 0.5f, labelHeight);
-		labelYStart += labelHeight;
-	}
 	mTransposition.setBoundsRelative(0.5f, secondRowYStart, 0.5f, textEditorHeight);
-
-	// Third row of Titles and TextEditors
-	float thirdRowTitlesY = secondRowYStart + textEditorHeight + spacingBetweenRows;
-	float thirdRowYStart  = thirdRowTitlesY + titleHeightPercentage;
-
 	mPlayingTechniquesTitle.setBoundsRelative(0.0f, thirdRowTitlesY, 0.5f, titleHeightPercentage);
 	mFamousWorksTitle.setBoundsRelative(0.5f, thirdRowTitlesY, 0.5f, titleHeightPercentage);
 
-	// Dynamically setting bounds for mPlayingTechniques labels
-	labelYStart = thirdRowYStart;
-	for (size_t i = 0; i < mPlayingTechniqueLabels.size(); ++i)
+
+	// Dynamically setting labels for
+
+	// mQualities
+	float labelHeightQuality = std::min(textEditorHeight / mQualityLabels.size(), minimumInfoLabelHeight);
+	float labelYStart		 = firstRowYStart;
+	for (size_t i = 0; i < mQualityLabels.size(); ++i)
 	{
-		mPlayingTechniqueLabels[i]->setBoundsRelative(0.0f, labelYStart, 0.5f, labelHeight);
-		labelYStart += labelHeight;
+		mQualityLabels[i]->setBoundsRelative(0.5f, labelYStart, 0.5f, labelHeightQuality);
+		labelYStart += labelHeightQuality;
 	}
 
-	// Dynamically setting bounds for mFamousWorks labels
-	labelYStart = thirdRowYStart;
+	// mUsefulInformation
+	labelYStart						   = secondRowYStart;
+	float labelHeightUsefulInformation = std::min(textEditorHeight / mUsefulInformationLabels.size(), minimumInfoLabelHeight);
+	for (size_t i = 0; i < mUsefulInformationLabels.size(); ++i)
+	{
+		mUsefulInformationLabels[i]->setBoundsRelative(0.0f, labelYStart, 0.5f, labelHeightUsefulInformation);
+		labelYStart += labelHeightUsefulInformation;
+	}
+
+	// mPlayingTechniques
+	float labelHeightPlayingTech = std::min(textEditorHeight / mPlayingTechniqueLabels.size(), minimumInfoLabelHeight);
+	labelYStart					 = thirdRowYStart;
+	for (size_t i = 0; i < mPlayingTechniqueLabels.size(); ++i)
+	{
+		mPlayingTechniqueLabels[i]->setBoundsRelative(0.0f, labelYStart, 0.5f, labelHeightPlayingTech);
+		labelYStart += labelHeightPlayingTech;
+	}
+
+	// mFamousWorks
+	labelYStart					 = thirdRowYStart;
+	float labelHeightFamousWorks = std::min(textEditorHeight / mFamousWorksLabels.size(), minimumInfoLabelHeight);
 	for (size_t i = 0; i < mFamousWorksLabels.size(); ++i)
 	{
-		mFamousWorksLabels[i]->setBoundsRelative(0.5f, labelYStart, 0.5f, labelHeight);
-		labelYStart += labelHeight;
+		mFamousWorksLabels[i]->setBoundsRelative(0.5f, labelYStart, 0.5f, labelHeightFamousWorks);
+		labelYStart += labelHeightFamousWorks;
 	}
 }
 
@@ -203,6 +206,8 @@ void InstrumentInfoView::displayLabelsForCategory(const StringArray &texts, std:
 		label->setName(cat);
 		label->setText(text, dontSendNotification);
 		label->setJustificationType(Justification::centredLeft);
+		label->setMinimumHorizontalScale(0.0f);
+
 		addAndMakeVisible(label.get());
 		labelsContainer.push_back(std::move(label));
 	}
@@ -218,7 +223,8 @@ void InstrumentInfoView::displayText(Label &label, String text)
 
 void InstrumentInfoView::setupHeading(Label &labelToSetup, const String &title)
 {
-	String category = String(labelType::title);
+	setLookAndFeel(&mCustomLookAndFeel);
+	String category = String("Title");
 	labelToSetup.setName(category);
 
 	labelToSetup.setText(title, dontSendNotification);
