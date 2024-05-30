@@ -29,8 +29,13 @@ public:
 
 	InstrumentInfo getInstrument(int key);
 
-	int			   getInstrumentKey(int family, int instrument);
+	static int	   getInstrumentKey(int family, int instrument);
+	static int	   getInstrumentKey(String &family, String &instrument);
+
 
 private:
-	std::map<int, InstrumentInfo> instruments;
+	std::map<int, InstrumentInfo>	instruments;
+
+	static std::map<String, Family> familyMap;
+	static std::map<String, int>	instrumentMap;
 };

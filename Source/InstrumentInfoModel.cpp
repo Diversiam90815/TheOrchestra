@@ -10,6 +10,7 @@
 
 #include "InstrumentInfoModel.h"
 
+
 InstrumentInfoModel::InstrumentInfoModel()
 {
 	addWoodwindInstruments();
@@ -23,7 +24,36 @@ InstrumentInfoModel::~InstrumentInfoModel()
 }
 
 
-void InstrumentInfoModel::addInstrument(Family family, int instrumentId, const InstrumentInfo &info)
+std::map<String, Family> InstrumentInfoModel::familyMap = {
+	{StringsName, Family::Strings}, {WoodwindsName, Family::Woodwinds}, {BrassName, Family::Brass}, {PercussionName, Family::Percussion}};
+
+
+std::map<String, int> InstrumentInfoModel::instrumentMap = {{ViolinName, Strings::Violin},
+															{ViolaName, Strings::Viola},
+															{VioloncelloName, Strings::Violoncello},
+															{DoubleBassName, Strings::DoubleBass},
+															{FrenchHornName, Brass::FrenchHorn},
+															{TenorTromboneName, Brass::TenorTrombone},
+															{BassTromboneName, Brass::BassTrombone},
+															{TrumpetName, Brass::Trumpet},
+															{TubaName, Brass::Tuba},
+															{FluteName, Woodwinds::Flute},
+															{ClarinetName, Woodwinds::Clarinet},
+															{OboeName, Woodwinds::Oboe},
+															{BassClarinetName, Woodwinds::BassClarinet},
+															{PiccoloName, Woodwinds::Piccolo},
+															{CorAnglaisName, Woodwinds::CorAnglais},
+															{BassoonName, Woodwinds::Bassoon},
+															{ContrabassonName, Woodwinds::Contrabassoon},
+															{TimpaniName, Percussion::Timpani},
+															{CelesteName, Percussion::Celeste},
+															{MarimbaName, Percussion::Marimba},
+															{HarpName, Percussion::Harp},
+															{MarimbaName, Percussion::Marimba}};
+
+
+
+void				  InstrumentInfoModel::addInstrument(Family family, int instrumentId, const InstrumentInfo &info)
 {
 	int key			 = getInstrumentKey(family, instrumentId);
 	instruments[key] = info;
@@ -42,6 +72,21 @@ int InstrumentInfoModel::getInstrumentKey(int family, int instrument)
 {
 	int key = family * 100 + instrument;
 	return key;
+}
+
+
+int InstrumentInfoModel::getInstrumentKey(String& family, String& instrument)
+{
+	int familyKey = 0;
+	int instrumentKey = 0;
+
+	familyKey = familyMap.at(family);
+	instrumentKey	  = instrumentMap.at(instrument);
+
+	if (familyKey == 0 && instrumentKey == 0)
+		return 0;
+
+	return getInstrumentKey(familyKey,instrumentKey);
 }
 
 
@@ -99,7 +144,7 @@ void InstrumentInfoModel::addWoodwindInstruments()
 	addInstrument(Family::Woodwinds, Woodwinds::CorAnglais, coranglais);
 	addInstrument(Family::Woodwinds, Woodwinds::Clarinet, clarinet);
 	addInstrument(Family::Woodwinds, Woodwinds::BassClarinet, bassClarinet);
-	addInstrument(Family::Woodwinds, Woodwinds::Basson, bassoon);
+	addInstrument(Family::Woodwinds, Woodwinds::Bassoon, bassoon);
 	addInstrument(Family::Woodwinds, Woodwinds::Contrabassoon, contrabassoon);
 }
 

@@ -40,7 +40,7 @@ enum Woodwinds
 	CorAnglais,
 	Clarinet,
 	BassClarinet,
-	Basson,
+	Bassoon,
 	Contrabassoon
 };
 
