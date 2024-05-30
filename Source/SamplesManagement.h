@@ -50,11 +50,12 @@ public:
 private:
 	void								  parseSampleFiles();
 	
-	void								  addSample(const File &file);
+	void								  addSample(const File &file, const int &key);
 
 	File								  getInstrumentSamplesPath(const int &instrumentKey);
 
+	int									  getIndexOfDynamics(const String& dynamicsString);
 
 	File								  mSamplesFolder;
-	std::map<String, std::vector<Sample>> mInstrumentSamples;
+	std::map<int, std::vector<Sample>> mInstrumentSamples;
 };

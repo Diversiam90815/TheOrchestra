@@ -36,9 +36,9 @@ File SamplesManagement::getInstrumentSamplesPath(const int &instrumentKey)
 		for (const auto &instrument : section.findChildFiles(File::findDirectories, false))
 		{
 			String instrumentName = instrument.getFileName();
-			
+
 			int	   currentKey	  = InstrumentInfoModel::getInstrumentKey(sectionName, instrumentName);
-			if ( currentKey == instrumentKey)
+			if (currentKey == instrumentKey)
 			{
 				return instrument;
 			}
@@ -54,16 +54,20 @@ void SamplesManagement::parseSampleFiles()
 	{
 		for (const auto &instrument : section.findChildFiles(File::findDirectories, false))
 		{
+			String sectionStr = section.getFileName();
+			String instrumentStr = instrumentStr = instrument.getFileName();
+			int	   key							 = InstrumentInfoModel::getInstrumentKey(sectionStr,instrumentStr);
+
 			for (const auto &file : instrument.findChildFiles(File::findFiles, false))
 			{
-				addSample(file);
+				addSample(file, key);
 			}
 		}
 	}
 }
 
 
-void SamplesManagement::addSample(const File &file)
+void SamplesManagement::addSample(const File &file, const int &key)
 {
 	String		filename = file.getFileNameWithoutExtension();
 	StringArray parts	 = StringArray::fromTokens(filename, "_", "");
@@ -71,12 +75,18 @@ void SamplesManagement::addSample(const File &file)
 	if (parts.size() < 3)
 		return; // Invalid file name format
 
-	String							   note		  = parts[0];
-	String							   roundRobin = parts[1];
-	String							   dynamic	  = parts[2];
+	String note									  = parts[0];
+	String roundRobinString						  = parts[1];
+	String dynamicString						  = parts[2];
 
-	// Extract the instrument name from the folder structure
+	int	   roundRobin							  = 0;
+	roundRobin									  = stoi(roundRobinString.toStdString());
+
+	int								   dynamic	  = getIndexOfDynamics(dynamicString);
+
+
 	String							   instrument = file.getParentDirectory().getFileName();
+
 
 	// Load audio data
 	std::unique_ptr<AudioSampleBuffer> buffer	  = std::make_unique<AudioSampleBuffer>();
@@ -92,13 +102,33 @@ void SamplesManagement::addSample(const File &file)
 	}
 
 	Sample sampleInfo(file, note, roundRobin, dynamic, std::move(buffer));
-	mInstrumentSamples[instrument].emplace_back(sampleInfo);
+	mInstrumentSamples[key].emplace_back(sampleInfo);
+}
+
+
+int SamplesManagement::getIndexOfDynamics(const String &dynamicString)
+{
+	int dynamic = 0;
+	if (dynamicString == "p")
+	{
+		dynamic = dynamics::piano;
+	}
+
+	else if (dynamicString == "mf")
+	{
+		dynamic = dynamics::mezzoForte;
+	}
+
+	else if (dynamicString == "f");
+	{
+		dynamic = dynamics::fortissimo;
+	}
 }
 
 
 std::vector<Sample> SamplesManagement::getSamplesForInstrument(const int &instrumentKey) const
 {
-	auto it = mInstrumentSamples.find(instrument);
+	auto it = mInstrumentSamples.find(instrumentKey);
 	if (it != mInstrumentSamples.end())
 	{
 		return it->second;
