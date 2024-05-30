@@ -37,6 +37,10 @@
             file="Source/CustomLookAndFeel.cpp"/>
       <FILE id="qQCcfP" name="CustomLookAndFeel.h" compile="0" resource="0"
             file="Source/CustomLookAndFeel.h"/>
+      <FILE id="l1K1P5" name="SamplesManagement.cpp" compile="1" resource="0"
+            file="Source/SamplesManagement.cpp"/>
+      <FILE id="ZW3UKa" name="SamplesManagement.h" compile="0" resource="0"
+            file="Source/SamplesManagement.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
