@@ -125,7 +125,7 @@ PopupMenu InstrumentInfoView::getMenuForIndex(int topLevelMenuIndex, const Strin
 		menu.addItem(Woodwinds::CorAnglais, CorAnglaisName);
 		menu.addItem(Woodwinds::Clarinet, ClarinetName);
 		menu.addItem(Woodwinds::BassClarinet, BassClarinetName);
-		menu.addItem(Woodwinds::Basson, BassoonName);
+		menu.addItem(Woodwinds::Bassoon, BassoonName);
 		menu.addItem(Woodwinds::Contrabassoon, ContrabassonName);
 	}
 	else if (topLevelMenuIndex == 1) // Brass
