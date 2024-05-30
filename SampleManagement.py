@@ -17,12 +17,14 @@ valid_articulations = ['normal', 'long']
 
 # Function to process files
 def process_files(samples_dir):
-    for instrument in os.listdir(samples_dir):
-        instrument_path = os.path.join(samples_dir, instrument)
-        if os.path.isdir(instrument_path):
-            for sample in os.listdir(instrument_path):
-                sample_path = os.path.join(instrument_path, sample)
-                process_file(sample_path)
+    for section in os.listdir(samples_dir):
+        section_dir = os.path.join(samples_dir, section)
+        for instrument in os.listdir(section_dir):
+            instrument_path = os.path.join(section_dir, instrument)
+            if os.path.isdir(instrument_path):
+                for sample in os.listdir(instrument_path):
+                    sample_path = os.path.join(instrument_path, sample)
+                    process_file(sample_path)
 
 
 # Function to process each file
