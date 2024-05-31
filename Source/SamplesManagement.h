@@ -14,11 +14,16 @@
 
 enum dynamics
 {
-	piano = 1,
+	pianissimo = 1,
+	piano,
+	mezzoPiano,
 	mezzoForte,
+	forte,
 	fortissimo
 };
 
+std::map<String, dynamics> dynamicMap = {{"pp", dynamics::pianissimo}, {"p", dynamics::piano}, {"mp", dynamics::mezzoPiano},
+										 {"mf", dynamics::mezzoForte}, {"f", dynamics::forte}, {"ff", dynamics::fortissimo}};
 
 struct Sample
 {
@@ -48,14 +53,14 @@ public:
 
 
 private:
-	void								  parseSampleFiles();
-	
-	void								  addSample(const File &file, const int &key);
+	void							   parseSampleFiles();
 
-	File								  getInstrumentSamplesPath(const int &instrumentKey);
+	void							   addSample(const File &file, const int &key);
 
-	int									  getIndexOfDynamics(const String& dynamicsString);
+	File							   getInstrumentSamplesPath(const int &instrumentKey);
 
-	File								  mSamplesFolder;
+	int								   getIndexOfDynamics(const String &dynamicsString);
+
+	File							   mSamplesFolder;
 	std::map<int, std::vector<Sample>> mInstrumentSamples;
 };

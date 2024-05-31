@@ -109,20 +109,8 @@ void SamplesManagement::addSample(const File &file, const int &key)
 int SamplesManagement::getIndexOfDynamics(const String &dynamicString)
 {
 	int dynamic = 0;
-	if (dynamicString == "p")
-	{
-		dynamic = dynamics::piano;
-	}
-
-	else if (dynamicString == "mf")
-	{
-		dynamic = dynamics::mezzoForte;
-	}
-
-	else if (dynamicString == "f");
-	{
-		dynamic = dynamics::fortissimo;
-	}
+	dynamic		= dynamicMap.at(dynamicString);
+	return dynamic;
 }
 
 

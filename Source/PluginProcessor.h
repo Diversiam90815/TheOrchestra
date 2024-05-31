@@ -6,13 +6,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-
-
-/*
-Free Orchestra samples:
-https://www.delamar.de/loops-samples/free-orchestra-samples-kostenlos-download-orchester-9341/
-
-*/
+#include "Sampler.h"
 
 
 //==============================================================================
@@ -29,9 +23,12 @@ public:
 
 	~OrchestraProcessor() override;
 
+	void init();
 
+
+private:
 	//==============================================================================
-	//				PUBLIC METHODS
+	//				PRIVATE METHODS - JUCE OVERRIDES
 	//==============================================================================
 
 	void prepareToPlay(double sampleRate, int samplesPerBlock) override;
@@ -73,6 +70,13 @@ public:
 	void				  setStateInformation(const void *data, int sizeInBytes) override;
 
 
-private:
+
+	//==============================================================================
+	//				PRIVATE OBJECTS
+	//==============================================================================
+
+	Sampler				  mSampler;
+
+
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OrchestraProcessor)
 };
