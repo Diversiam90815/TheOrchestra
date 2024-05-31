@@ -41,6 +41,8 @@
             file="Source/SamplesManagement.cpp"/>
       <FILE id="ZW3UKa" name="SamplesManagement.h" compile="0" resource="0"
             file="Source/SamplesManagement.h"/>
+      <FILE id="D0GDHW" name="Sampler.cpp" compile="1" resource="0" file="Source/Sampler.cpp"/>
+      <FILE id="twJGkC" name="Sampler.h" compile="0" resource="0" file="Source/Sampler.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
