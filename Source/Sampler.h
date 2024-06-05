@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "SamplesManagement.h"
+#include "CustomPianoRoll.h"
 
 
 class Sampler
@@ -20,10 +21,16 @@ public:
 	Sampler();
 	~Sampler();
 
-	void init();
+	void									   init();
+
+	std::vector<std::unique_ptr<SamplerSound>> getSoundsFromInstrument(const int key);
 
 private:
-	std::vector<std::unique_ptr<Sample>> getSamplesForNote(const int key, const String &note);
+	Synthesiser							 mSampler;
 
-	std::unique_ptr<SamplesManagement> mSamplesManager;
+	std::unique_ptr<juce::SamplerSound>	 createSoundFromSample(const std::unique_ptr<Sample> &sample);
+
+	std::vector<std::unique_ptr<Sample>> filterSamplesFromNote(const int key, const String &note = "");
+
+	std::unique_ptr<SamplesManagement>	 mSamplesManager;
 };

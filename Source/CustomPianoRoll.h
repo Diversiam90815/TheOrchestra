@@ -26,15 +26,15 @@ class CustomPianoRoll : public MidiKeyboardComponent
 public:
 	CustomPianoRoll(MidiKeyboardState &state, Orientation orientation);
 
-	void drawWhiteNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour lineColour, Colour textColour) override;
+	void	   drawWhiteNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour lineColour, Colour textColour) override;
 
-	void drawBlackNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour noteFillColour) override;
+	void	   drawBlackNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour noteFillColour) override;
 
-	int	 turnNotenameIntoMidinumber(String notename);
+	static int turnNotenameIntoMidinumber(String notename);
 
-	bool setMidiRanges(const StringArray &qualities);
+	bool	   setMidiRanges(const StringArray &qualities);
 
-	bool setMidiRanges(const String &ranges);
+	bool	   setMidiRanges(const String &ranges);
 
 private:
 	Colour							 getNoteColour(int midiNoteNumber);
