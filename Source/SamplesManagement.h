@@ -27,12 +27,12 @@ std::map<String, dynamics> dynamicMap = {{"pp", dynamics::pianissimo}, {"p", dyn
 
 struct Sample
 {
-	Sample(const File &file, const String &note, const int &roundRobin, const int &dynamic, std::unique_ptr<AudioSampleBuffer> buffer)
-		: file(file), note(note), roundRobin(roundRobin), dynamic(dynamic), buffer(std::move(buffer))
+	Sample(const String &instrument, const String &note, const int &roundRobin, const int &dynamic, std::unique_ptr<AudioSampleBuffer> buffer)
+		: instrument(instrument), note(note), roundRobin(roundRobin), dynamic(dynamic), buffer(std::move(buffer))
 	{
 	}
 
-	File							   file;
+	String							   instrument;
 	String							   note;
 	int								   roundRobin;
 	int								   dynamic;
@@ -62,5 +62,6 @@ private:
 	int								   getIndexOfDynamics(const String &dynamicsString);
 
 	File							   mSamplesFolder;
+	AudioFormatManager				   mFormatManager;
 	std::map<int, std::vector<Sample>> mInstrumentSamples;
 };
