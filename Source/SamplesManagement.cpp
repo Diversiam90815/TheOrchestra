@@ -24,6 +24,8 @@ void SamplesManagement::init()
 	{
 		parseSampleFiles();
 	}
+
+	mFormatManager.registerBasicFormats();
 }
 
 
@@ -54,9 +56,9 @@ void SamplesManagement::parseSampleFiles()
 	{
 		for (const auto &instrument : section.findChildFiles(File::findDirectories, false))
 		{
-			String sectionStr = section.getFileName();
-			String instrumentStr = instrumentStr = instrument.getFileName();
-			int	   key							 = InstrumentInfoModel::getInstrumentKey(sectionStr,instrumentStr);
+			String sectionStr	 = section.getFileName();
+			String instrumentStr = instrument.getFileName();
+			int	   key			 = InstrumentInfoModel::getInstrumentKey(sectionStr, instrumentStr);
 
 			for (const auto &file : instrument.findChildFiles(File::findFiles, false))
 			{
@@ -85,15 +87,13 @@ void SamplesManagement::addSample(const File &file, const int &key)
 	int								   dynamic	  = getIndexOfDynamics(dynamicString);
 
 
-	String							   instrument = file.getParentDirectory().getFileName();
+	String							   instrumentName = file.getParentDirectory().getFileName();
 
 
 	// Load audio data
 	std::unique_ptr<AudioSampleBuffer> buffer	  = std::make_unique<AudioSampleBuffer>();
-	AudioFormatManager				   formatManager;
-	formatManager.registerBasicFormats();
 
-	std::unique_ptr<AudioFormatReader> reader(formatManager.createReaderFor(file));
+	std::unique_ptr<AudioFormatReader> reader(mFormatManager.createReaderFor(file));
 
 	if (reader != nullptr)
 	{
@@ -101,7 +101,7 @@ void SamplesManagement::addSample(const File &file, const int &key)
 		reader->read(buffer.get(), 0, (int)reader->lengthInSamples, 0, true, true);
 	}
 
-	Sample sampleInfo(file, note, roundRobin, dynamic, std::move(buffer));
+	Sample sampleInfo(instrumentName, note, roundRobin, dynamic, std::move(buffer));
 	mInstrumentSamples[key].emplace_back(sampleInfo);
 }
 
