@@ -13,7 +13,9 @@
 #include <JuceHeader.h>
 
 
-// Families
+//==============================================================================
+//                          FAMILIES
+//==============================================================================
 
 constexpr auto StringsName		 = "Strings";
 constexpr auto BrassName		 = "Brass";
@@ -21,7 +23,9 @@ constexpr auto WoodwindsName	 = "Woodwinds";
 constexpr auto PercussionName	 = "Percussion";
 
 
-// Instruments
+//==============================================================================
+//                          INSTRUMENTS
+//==============================================================================
 
 constexpr auto ViolinName		 = "Violin";
 constexpr auto ViolaName		 = "Viola";
@@ -50,5 +54,8 @@ constexpr auto TimpaniName		 = "Timpani";
 constexpr auto MarimbaName		 = "Marimba";
 
 
-// Values
+//==============================================================================
+//                          VALUES
+//==============================================================================
+
 constexpr int  defaultInstrument = 100;
