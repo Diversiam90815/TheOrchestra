@@ -16,6 +16,7 @@
 #include "InstrumentData.h"
 
 
+// Enum for the orchestra families: Woodwinds, Brass, Strings and Percussion
 enum Family
 {
 	Woodwinds = 1,
@@ -24,6 +25,7 @@ enum Family
 	Percussion
 };
 
+// Enum for the Strings family
 enum Strings
 {
 	Violin = 1,
@@ -32,6 +34,7 @@ enum Strings
 	DoubleBass
 };
 
+// Enum for the Woodwind family
 enum Woodwinds
 {
 	Piccolo = 1,
@@ -44,6 +47,7 @@ enum Woodwinds
 	Contrabassoon
 };
 
+// Enum for the Percussion family
 enum Percussion
 {
 	Harp = 1,
@@ -52,6 +56,7 @@ enum Percussion
 	Marimba
 };
 
+// Enum for the Brass family
 enum Brass
 {
 	FrenchHorn = 1,
@@ -62,6 +67,10 @@ enum Brass
 	Tuba
 };
 
+
+/*
+ @brief             Class defining an instrument and it's information (info can be found in InstrumentData.h)
+*/
 class InstrumentInfo
 {
 public:
@@ -75,14 +84,15 @@ public:
 				   const StringArray &playingTechniques);
 	~InstrumentInfo();
 
+    
 private:
-	String		mName;
-	String		mRange;
-	StringArray mQualities;
-	StringArray mUsefulInformation;
-	StringArray mFamousWorks;
-	String		mTransposition;
-	StringArray mPlayingTechniques;
+	String		mName;                          //Name of the instrument
+	String		mRange;                         //Range of notes (lowest to highest playable note)
+	StringArray mQualities;                     //Sound characteristics of each section within the range
+	StringArray mUsefulInformation;             //Any useful information of the instrument
+	StringArray mFamousWorks;                   //Famous works presenting the qualitiy of the instrument
+	String		mTransposition;                 //Information about the transposition of the instrument, if it applies
+	StringArray mPlayingTechniques;             //Different playing techniques featured within the instrument's family
 
 	friend class InstrumentInfoModel;
 	friend class InstrumentInfoView;

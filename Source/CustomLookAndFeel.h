@@ -12,6 +12,8 @@
 
 #include <JuceHeader.h>
 
+
+// Enum to differentiate each label use
 enum labelType
 {
 	title = 1,
@@ -33,6 +35,7 @@ public:
 	Font getEditorFont();
 
 private:
+    
 	void init();
 
 	void drawLabel(Graphics &g, Label &label) override;
@@ -53,10 +56,10 @@ private:
 						   const Drawable		*icon,
 						   const Colour			*textColour) override;
 
-	Font getPopupMenuFont();
+	Font getPopupMenuFont() override;
 
 
-	Font infoFont;
-	Font titleFont;
-	Font popupmenuFont;
+	Font infoFont;                  // Font used for the information texts displayed
+	Font titleFont;                 // Font used for the titles
+	Font popupmenuFont;             // Font used for the pop up menu
 };
