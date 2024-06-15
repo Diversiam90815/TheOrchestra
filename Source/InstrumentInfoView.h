@@ -18,21 +18,20 @@
 class InstrumentInfoView : public Component, public MenuBarModel
 {
 public:
-    //==============================================================================
-    //                          CONSTRUCTOR - DESTRUCTOR
-    //==============================================================================
-    
-	InstrumentInfoView(CustomPianoRoll &piano);
-	
-    ~InstrumentInfoView();
+	//==============================================================================
+	//                          CONSTRUCTOR - DESTRUCTOR
+	//==============================================================================
 
-    
+	InstrumentInfoView(CustomPianoRoll &piano);
+
+	~InstrumentInfoView();
+
+
 private:
-    
-    //==============================================================================
-    //                          PRIVATE METHODS
-    //==============================================================================
-    
+	//==============================================================================
+	//                          PRIVATE METHODS
+	//==============================================================================
+
 	void								displayLabels();
 
 	void								resized() override;
@@ -52,38 +51,38 @@ private:
 	void								clearLabels(std::vector<std::unique_ptr<Label>> &labels);
 
 	void								displayLabelsForCategory(const StringArray &texts, std::vector<std::unique_ptr<Label>> &labelsContainer, const int category);
-    
-    
-    //==============================================================================
-    //                          PRIVATE OBJECTS
-    //==============================================================================
-    
+
+
+	//==============================================================================
+	//                          PRIVATE OBJECTS
+	//==============================================================================
+
 	int									mCurrentSelectedInstrument = defaultInstrument; // Default value out of reach of different enums
 
-	int									mCurrentFamily;
+	int									mCurrentFamily;									// integer describing the current selected instrument family from the Family enum
 
-	MenuBarComponent					menuBar;
+	MenuBarComponent					menuBar;										// Menubar instance
 
-	InstrumentInfoModel					mInstrumentModel;
+	InstrumentInfoModel					mInstrumentModel;								// Model for our view
 
-	Label								mInstrument;
-	Label								mRangeTitle;
-	Label								mUsefulInformationTitle;
-	Label								mQualitiesTitle;
-	Label								mTranspositionTitle;
-	Label								mPlayingTechniquesTitle;
-	Label								mFamousWorksTitle;
+	Label								mInstrument;									// Label for the Instrument's name
+	Label								mRangeTitle;									// Title for the ranges
+	Label								mUsefulInformationTitle;						// Title for the Useful information
+	Label								mQualitiesTitle;								// Title for the Qualities
+	Label								mTranspositionTitle;							// Title for the Transposition
+	Label								mPlayingTechniquesTitle;						// Title for the Playing Techniques
+	Label								mFamousWorksTitle;								// Title for the Famous Works
 
-	std::vector<std::unique_ptr<Label>> mQualityLabels;
-	std::vector<std::unique_ptr<Label>> mPlayingTechniqueLabels;
-	std::vector<std::unique_ptr<Label>> mFamousWorksLabels;
-	std::vector<std::unique_ptr<Label>> mUsefulInformationLabels;
+	Label								mRange;											// Label used to display the selected instrument's ranges
+	Label								mTransposition;									// Label used to display the selected instrument's transposition
 
-	Label								mRange;
+	std::vector<std::unique_ptr<Label>> mQualityLabels;									// Vector of labels displaying the qualities
+	std::vector<std::unique_ptr<Label>> mPlayingTechniqueLabels;						// Vector of labels displaying the playing techniques
+	std::vector<std::unique_ptr<Label>> mFamousWorksLabels;								// Vector of labels displaying famous works
+	std::vector<std::unique_ptr<Label>> mUsefulInformationLabels;						// Vector of labels displaying useful information
 
-	Label								mTransposition;
 
-	CustomPianoRoll					   &mCustomPianoRoll;
+	CustomPianoRoll					   &mCustomPianoRoll;								// Our customized Piano Roll
 
-	CustomLookAndFeel					mCustomLookAndFeel;
+	CustomLookAndFeel					mCustomLookAndFeel;								// Customized Look&Feel
 };
