@@ -21,7 +21,9 @@ public:
 
 	std::unique_ptr<CustomPianoRoll> mPianoRoll;
 
+
 private:
+
 	void			  showPianoRoll();
 
 	void			  resized() override;

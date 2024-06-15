@@ -32,11 +32,12 @@ public:
 	CustomLookAndFeel();
 	~CustomLookAndFeel();
 
-	Font getEditorFont();
 
 private:
     
 	void init();
+
+	Font getEditorFont();
 
 	void drawLabel(Graphics &g, Label &label) override;
 
