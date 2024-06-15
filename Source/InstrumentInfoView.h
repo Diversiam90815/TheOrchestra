@@ -18,10 +18,21 @@
 class InstrumentInfoView : public Component, public MenuBarModel
 {
 public:
+    //==============================================================================
+    //                          CONSTRUCTOR - DESTRUCTOR
+    //==============================================================================
+    
 	InstrumentInfoView(CustomPianoRoll &piano);
-	~InstrumentInfoView();
+	
+    ~InstrumentInfoView();
 
+    
 private:
+    
+    //==============================================================================
+    //                          PRIVATE METHODS
+    //==============================================================================
+    
 	void								displayLabels();
 
 	void								resized() override;
@@ -41,8 +52,12 @@ private:
 	void								clearLabels(std::vector<std::unique_ptr<Label>> &labels);
 
 	void								displayLabelsForCategory(const StringArray &texts, std::vector<std::unique_ptr<Label>> &labelsContainer, const int category);
-
-
+    
+    
+    //==============================================================================
+    //                          PRIVATE OBJECTS
+    //==============================================================================
+    
 	int									mCurrentSelectedInstrument = defaultInstrument; // Default value out of reach of different enums
 
 	int									mCurrentFamily;
@@ -67,7 +82,6 @@ private:
 	Label								mRange;
 
 	Label								mTransposition;
-
 
 	CustomPianoRoll					   &mCustomPianoRoll;
 
