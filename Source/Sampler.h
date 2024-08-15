@@ -21,16 +21,21 @@ public:
 	Sampler();
 	~Sampler();
 
-	void									   init();
+	void init();
 
-	std::vector<std::unique_ptr<SamplerSound>> getSoundsFromInstrument(const int key);
+	void addSoundsFromInstrumentToSampler(const int key);
 
 private:
-	Synthesiser							 mSampler;
+	Synthesiser						   mSampler;
 
-	juce::SamplerSound	 createSoundFromSample(const Sample &sample);
+	AudioFormatManager				   mFormatManager; // AudioFormatManager registering the audio formats
 
-	std::vector<Sample> filterSamplesFromNote(const int key, const String &note = "");
+	SamplerSound					   createSoundFromSample(const Sample &sample);
 
-	std::unique_ptr<SamplesManagement>	 mSamplesManager;
+	std::vector<Sample>				   filterSamplesFromNote(const int key, const String &note = "");
+
+	std::unique_ptr<SamplesManagement> mSamplesManager;
+
+
+	friend class OrchestraProcessor;
 };
