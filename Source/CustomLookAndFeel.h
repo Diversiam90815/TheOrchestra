@@ -32,7 +32,6 @@ public:
 	CustomLookAndFeel();
 	~CustomLookAndFeel();
 
-
 private:
     
 	void init();

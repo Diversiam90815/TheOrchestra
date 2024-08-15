@@ -117,7 +117,5 @@ private:
 
 	File							   mSamplesFolder;	   // Folder of the samples folder ( /Assets/Samples)
 
-	//AudioFormatManager				   mFormatManager;	   // AudioFormatManager registering the audio formats
-
 	std::map<int, std::vector<Sample>> mInstrumentSamples; // Map of the instrument (identified by their key) and their assigned 'Sample'
 };
