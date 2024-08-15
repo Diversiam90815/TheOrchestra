@@ -33,8 +33,14 @@ void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, Graphics &g, Rectangle<f
 	else
 	{
 		Colour noteColour = getNoteColour(midiNoteNumber);
-		g.setColour(isDown ? noteColour.brighter() : noteColour);
-		g.setColour(isOver ? noteColour.brighter() : noteColour);
+
+		if (isDown)
+			noteColour = noteColour.interpolatedWith(findColour(keyDownOverlayColourId), 0.8f);
+
+		if (isOver)
+			noteColour = noteColour.brighter(0.1f);
+
+		g.setColour(noteColour);
 	}
 
 	g.fillRect(area);
