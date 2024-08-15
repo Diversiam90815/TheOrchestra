@@ -24,8 +24,6 @@ void SamplesManagement::init()
 	{
 		parseSampleFiles();
 	}
-
-	mFormatManager.registerBasicFormats();
 }
 
 
@@ -77,42 +75,21 @@ void SamplesManagement::addSample(const File &file, const int &key)
 	if (parts.size() < 3)
 		return; // Invalid file name format
 
-	String note									  = parts[0];
-	String roundRobinString						  = parts[1];
-	String dynamicString						  = parts[2];
+	String note				= parts[0];
+	String roundRobinString = parts[1];
+	String dynamicString	= parts[2];
 
-	int	   roundRobin							  = 0;
-	roundRobin									  = stoi(roundRobinString.toStdString());
+	int	   roundRobin		= 0;
+	roundRobin				= stoi(roundRobinString.toStdString());
 
-	int								   dynamic	  = getIndexOfDynamics(dynamicString);
+	int	   dynamic			= getIndexOfDynamics(dynamicString);
+
+	String instrumentName	= file.getParentDirectory().getFileName();
 
 
-	String							   instrumentName = file.getParentDirectory().getFileName();
+	Sample sampleInfo(instrumentName, note, roundRobin, dynamic, file);
 
-
-	//// Load audio data
-	//std::unique_ptr<AudioSampleBuffer> buffer	  = std::make_unique<AudioSampleBuffer>();
-
-	//std::unique_ptr<AudioFormatReader> reader(mFormatManager.createReaderFor(file));
-
-	//if (reader != nullptr)
-	//{
-	//	buffer->setSize(reader->numChannels, (int)reader->lengthInSamples);
-	//	reader->read(buffer.get(), 0, (int)reader->lengthInSamples, 0, true, true);
-	//}
-
-	//Sample sampleInfo(instrumentName, note, roundRobin, dynamic, std::move(buffer));
-	//mInstrumentSamples[key].emplace_back(sampleInfo);
-
-	
-    // Create an AudioFormatReader
-	std::unique_ptr<AudioFormatReader> reader(mFormatManager.createReaderFor(file));
-
-	if (reader != nullptr)
-	{
-		Sample sampleInfo(instrumentName, note, roundRobin, dynamic, std::move(reader));
-		mInstrumentSamples[key].emplace_back(std::move(sampleInfo));
-	}
+	mInstrumentSamples[key].emplace_back(sampleInfo);
 }
 
 

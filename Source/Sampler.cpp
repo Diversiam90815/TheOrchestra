@@ -25,6 +25,8 @@ void Sampler::init()
 {
 	mSamplesManager = std::make_unique<SamplesManagement>();
 	mSamplesManager->init();
+
+	mFormatManager.registerBasicFormats();
 }
 
 
@@ -48,39 +50,42 @@ std::vector<Sample> Sampler::filterSamplesFromNote(const int key, const String &
 SamplerSound Sampler::createSoundFromSample(const Sample &sample)
 {
 	int		   midiNote = CustomPianoRoll::turnNotenameIntoMidinumber(sample.note);
-	Range<int> pitchRange;
+
+	BigInteger midiNoteRange;
 
 	if (sample.note.contains("B") || sample.note.contains("E"))
 	{
-		pitchRange = Range<int>(midiNote, midiNote);
+		midiNoteRange.setRange(midiNote, midiNote, true);
 	}
 	else
 	{
-		pitchRange = Range<int>(midiNote, midiNote + 1);
+		midiNoteRange.setRange(midiNote, midiNote + 1, true);
 	}
 
-	return SamplerSound(sample.instrument,	 // name
-										  *sample.reader.get(), // audio data
-										  pitchRange,			 // MIDI note range
-										  midiNote,				 // root note
-										  0.1,					 // attack time in seconds
-										  0.1,					 // release time in seconds
-										  10.0					 // maximum sample length in seconds
+	auto			  &sampleFile	= sample.file;
+	AudioFormatReader *formatReader = mFormatManager.createReaderFor(sample.file);
+
+	return SamplerSound(sample.instrument, // name
+						*formatReader,
+						midiNoteRange,	   // MIDI note range
+						midiNote,		   // root note
+						0.1,			   // attack time in seconds
+						0.1,			   // release time in seconds
+						10.0			   // maximum sample length in seconds
 	);
 }
 
 
-std::vector<std::unique_ptr<SamplerSound>> Sampler::getSoundsFromInstrument(const int key)
+void Sampler::addSoundsFromInstrumentToSampler(const int key)
 {
-	std::vector<std::unique_ptr<SamplerSound>> sounds;
+	std::vector<SamplerSound> sounds;
+	mSampler.clearSounds();
 
-	auto									   samples = filterSamplesFromNote(key);
+	auto					  samples = filterSamplesFromNote(key);
 
 	for (auto &sample : samples)
 	{
-		auto sound = createSoundFromSample(sample);
-		sounds.push_back(sound);
+		auto &sound = createSoundFromSample(sample);
+		mSampler.addSound(sound);
 	}
-
-	return sounds;
 }
