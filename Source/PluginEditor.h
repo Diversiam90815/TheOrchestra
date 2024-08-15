@@ -6,7 +6,7 @@
 #include "PianoRoll.h"
 #include "InstrumentInfoView.h"
 
-class OrchestraEditor : public juce::AudioProcessorEditor
+class OrchestraEditor : public AudioProcessorEditor
 {
 public:
 	//==============================================================================

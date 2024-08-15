@@ -25,16 +25,23 @@ public:
 
 	void addSoundsFromInstrumentToSampler(const int key);
 
-private:
-	Synthesiser						   mSampler;
+	bool getSamplesAreReady();
+	void setSamplesAreReady(bool value);
 
-	AudioFormatManager				   mFormatManager; // AudioFormatManager registering the audio formats
+private:
 
 	SamplerSound					   createSoundFromSample(const Sample &sample);
 
 	std::vector<Sample>				   filterSamplesFromNote(const int key, const String &note = "");
 
+
+	Synthesiser						   mSampler;
+
+	AudioFormatManager				   mFormatManager; // AudioFormatManager registering the audio formats
+
 	std::unique_ptr<SamplesManagement> mSamplesManager;
+
+	std::atomic<bool>				   mSamplesAreReady = false;
 
 
 	friend class OrchestraProcessor;
