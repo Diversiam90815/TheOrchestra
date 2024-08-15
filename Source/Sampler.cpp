@@ -79,6 +79,8 @@ SamplerSound Sampler::createSoundFromSample(const Sample &sample)
 void Sampler::addSoundsFromInstrumentToSampler(const int key)
 {
 	std::vector<SamplerSound> sounds;
+	setSamplesAreReady(false);
+
 	mSampler.clearSounds();
 
 	auto					  samples = filterSamplesFromNote(key);
@@ -88,4 +90,23 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key)
 		auto &sound = createSoundFromSample(sample);
 		mSampler.addSound(sound);
 	}
+	if (mSampler.getNumSounds() >= 1)
+	{
+		setSamplesAreReady(true);
+	}
+}
+
+
+void Sampler::setSamplesAreReady(bool value)
+{
+	if (mSamplesAreReady != value)
+	{
+		mSamplesAreReady = value;
+	}
+}
+
+
+bool Sampler::getSamplesAreReady()
+{
+	return mSamplesAreReady;
 }
