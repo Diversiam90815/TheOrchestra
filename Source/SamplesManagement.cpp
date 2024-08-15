@@ -90,19 +90,29 @@ void SamplesManagement::addSample(const File &file, const int &key)
 	String							   instrumentName = file.getParentDirectory().getFileName();
 
 
-	// Load audio data
-	std::unique_ptr<AudioSampleBuffer> buffer	  = std::make_unique<AudioSampleBuffer>();
+	//// Load audio data
+	//std::unique_ptr<AudioSampleBuffer> buffer	  = std::make_unique<AudioSampleBuffer>();
 
+	//std::unique_ptr<AudioFormatReader> reader(mFormatManager.createReaderFor(file));
+
+	//if (reader != nullptr)
+	//{
+	//	buffer->setSize(reader->numChannels, (int)reader->lengthInSamples);
+	//	reader->read(buffer.get(), 0, (int)reader->lengthInSamples, 0, true, true);
+	//}
+
+	//Sample sampleInfo(instrumentName, note, roundRobin, dynamic, std::move(buffer));
+	//mInstrumentSamples[key].emplace_back(sampleInfo);
+
+	
+    // Create an AudioFormatReader
 	std::unique_ptr<AudioFormatReader> reader(mFormatManager.createReaderFor(file));
 
 	if (reader != nullptr)
 	{
-		buffer->setSize(reader->numChannels, (int)reader->lengthInSamples);
-		reader->read(buffer.get(), 0, (int)reader->lengthInSamples, 0, true, true);
+		Sample sampleInfo(instrumentName, note, roundRobin, dynamic, std::move(reader));
+		mInstrumentSamples[key].emplace_back(std::move(sampleInfo));
 	}
-
-	Sample sampleInfo(instrumentName, note, roundRobin, dynamic, std::move(buffer));
-	mInstrumentSamples[key].emplace_back(sampleInfo);
 }
 
 

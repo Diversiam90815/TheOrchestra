@@ -35,16 +35,35 @@ std::map<String, dynamics> dynamicMap = {{"pp", dynamics::pianissimo}, {"p", dyn
 */
 struct Sample
 {
-	Sample(const String &instrument, const String &note, const int &roundRobin, const int &dynamic, std::unique_ptr<AudioSampleBuffer> buffer)
-		: instrument(instrument), note(note), roundRobin(roundRobin), dynamic(dynamic), buffer(std::move(buffer))
+	Sample(const String &instrument, const String &note, const int &roundRobin, const int &dynamic, std::unique_ptr<AudioFormatReader> reader)
+		: instrument(instrument), note(note), roundRobin(roundRobin), dynamic(dynamic), reader(std::move(reader))
 	{
 	}
+
+	Sample(Sample &&other) noexcept
+		: instrument(std::move(other.instrument)), note(std::move(other.note)), roundRobin(other.roundRobin), dynamic(other.dynamic), reader(std::move(other.reader))
+	{
+	}
+
+	Sample &operator=(Sample &&other) noexcept
+	{
+		if (this != &other)
+		{
+			instrument = std::move(other.instrument);
+			note	   = std::move(other.note);
+			roundRobin = other.roundRobin;
+			dynamic	   = other.dynamic;
+			reader	   = std::move(other.reader);
+		}
+		return *this;
+	}
+
 
 	String							   instrument;
 	String							   note;
 	int								   roundRobin;
 	int								   dynamic;
-	std::unique_ptr<AudioSampleBuffer> buffer;
+	std::shared_ptr<AudioFormatReader> reader;
 };
 
 

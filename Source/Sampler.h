@@ -28,9 +28,9 @@ public:
 private:
 	Synthesiser							 mSampler;
 
-	std::unique_ptr<juce::SamplerSound>	 createSoundFromSample(const std::unique_ptr<Sample> &sample);
+	juce::SamplerSound	 createSoundFromSample(const Sample &sample);
 
-	std::vector<std::unique_ptr<Sample>> filterSamplesFromNote(const int key, const String &note = "");
+	std::vector<Sample> filterSamplesFromNote(const int key, const String &note = "");
 
 	std::unique_ptr<SamplesManagement>	 mSamplesManager;
 };

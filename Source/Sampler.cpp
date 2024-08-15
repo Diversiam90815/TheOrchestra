@@ -28,33 +28,29 @@ void Sampler::init()
 }
 
 
-std::vector<std::unique_ptr<Sample>> Sampler::filterSamplesFromNote(const int key, const String &note)
+std::vector<Sample> Sampler::filterSamplesFromNote(const int key, const String &note)
 {
-	auto								 allSamplesForInstrument = mSamplesManager->getSamplesForInstrument(key);
-	std::vector<std::unique_ptr<Sample>> filteredSamples;
+	auto				allSamplesForInstrument = mSamplesManager->getSamplesForInstrument(key);
+	std::vector<Sample> filteredSamples;
 
 	for (auto &sampleFromNote : allSamplesForInstrument)
 	{
 		if (note.isNotEmpty() && sampleFromNote.note != note)
 			continue;
 
-		auto sample = std::make_unique<Sample>(sampleFromNote);
-		filteredSamples.push_back(sample);
+		filteredSamples.push_back(sampleFromNote);
 	}
 
-	if (filteredSamples.size() > 0)
-	{
-		return filteredSamples;
-	}
+	return filteredSamples;
 }
 
 
-std::unique_ptr<SamplerSound> Sampler::createSoundFromSample(const std::unique_ptr<Sample> &sample)
+SamplerSound Sampler::createSoundFromSample(const Sample &sample)
 {
-	int		   midiNote = CustomPianoRoll::turnNotenameIntoMidinumber(sample->note);
+	int		   midiNote = CustomPianoRoll::turnNotenameIntoMidinumber(sample.note);
 	Range<int> pitchRange;
 
-	if (sample->note.contains("B") || sample->note.contains("E"))
+	if (sample.note.contains("B") || sample.note.contains("E"))
 	{
 		pitchRange = Range<int>(midiNote, midiNote);
 	}
@@ -63,13 +59,13 @@ std::unique_ptr<SamplerSound> Sampler::createSoundFromSample(const std::unique_p
 		pitchRange = Range<int>(midiNote, midiNote + 1);
 	}
 
-	return std::make_unique<SamplerSound>(sample->instrument, // name
-										  *sample->buffer,	  // audio data
-										  pitchRange,		  // MIDI note range
-										  midiNote,			  // root note
-										  0.1,				  // attack time in seconds
-										  0.1,				  // release time in seconds
-										  10.0				  // maximum sample length in seconds
+	return SamplerSound(sample.instrument,	 // name
+										  *sample.reader.get(), // audio data
+										  pitchRange,			 // MIDI note range
+										  midiNote,				 // root note
+										  0.1,					 // attack time in seconds
+										  0.1,					 // release time in seconds
+										  10.0					 // maximum sample length in seconds
 	);
 }
 
@@ -78,9 +74,9 @@ std::vector<std::unique_ptr<SamplerSound>> Sampler::getSoundsFromInstrument(cons
 {
 	std::vector<std::unique_ptr<SamplerSound>> sounds;
 
-	auto samples = filterSamplesFromNote(key);
-	
-	for (auto& sample : samples)
+	auto									   samples = filterSamplesFromNote(key);
+
+	for (auto &sample : samples)
 	{
 		auto sound = createSoundFromSample(sample);
 		sounds.push_back(sound);
