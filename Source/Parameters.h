@@ -46,7 +46,7 @@ constexpr auto CorAnglaisName	 = "Cor Anglais";
 constexpr auto ClarinetName		 = "Clarinet";
 constexpr auto BassClarinetName	 = "Bass Clarinet";
 constexpr auto BassoonName		 = "Bassoon";
-constexpr auto ContrabassonName	 = "Contrabasson";
+constexpr auto ContrabassoonName = "Contrabassoon";
 
 constexpr auto HarpName			 = "Harp";
 constexpr auto CelesteName		 = "Celeste";

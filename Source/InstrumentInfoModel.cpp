@@ -44,7 +44,7 @@ std::map<String, int> InstrumentInfoModel::instrumentMap = {{ViolinName, Strings
 															{PiccoloName, Woodwinds::Piccolo},
 															{CorAnglaisName, Woodwinds::CorAnglais},
 															{BassoonName, Woodwinds::Bassoon},
-															{ContrabassonName, Woodwinds::Contrabassoon},
+															{ContrabassoonName, Woodwinds::Contrabassoon},
 															{TimpaniName, Percussion::Timpani},
 															{CelesteName, Percussion::Celeste},
 															{MarimbaName, Percussion::Marimba},
@@ -135,7 +135,7 @@ void InstrumentInfoModel::addWoodwindInstruments()
 	auto bassClarinet  = InstrumentInfo(BassClarinetName, bassClarinetRange, bassClarinetQualities, bassClarinetRoles, bassClarinetFamousWorks, bassClarinetTransposition,
 										woodwindsPlayingTechniques);
 	auto bassoon	   = InstrumentInfo(BassoonName, bassoonRange, bassoonQualities, bassoonRoles, bassoonFamousWorks, bassoonTransposition, woodwindsPlayingTechniques);
-	auto contrabassoon = InstrumentInfo(ContrabassonName, contrabassoonRange, contrabassoonQualities, contrabassoonRoles, contrabassoonFamousWorks, contrabassoonTransposition,
+	auto contrabassoon = InstrumentInfo(ContrabassoonName, contrabassoonRange, contrabassoonQualities, contrabassoonRoles, contrabassoonFamousWorks, contrabassoonTransposition,
 										woodwindsPlayingTechniques);
 
 	addInstrument(Family::Woodwinds, Woodwinds::Piccolo, piccolo);
