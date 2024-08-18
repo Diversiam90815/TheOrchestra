@@ -83,7 +83,7 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key)
 
 	mSampler.clearSounds();
 
-	auto					  samples = filterSamplesFromNote(key);
+	auto samples = filterSamplesFromNote(key);
 
 	for (auto &sample : samples)
 	{

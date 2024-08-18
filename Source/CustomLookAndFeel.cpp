@@ -38,16 +38,16 @@ void CustomLookAndFeel::init()
 	setColour(PopupMenu::textColourId, Colours::lightgrey);
 
 	// Configure fonts
-	infoFont.setTypefaceName("Lato");
+	//infoFont.setTypefaceName("Lato");
 	infoFont.setHeight(16);
 	infoFont
 		.setBold(false);
 
-	titleFont.setTypefaceName("Lato");
+	//titleFont.setTypefaceName("Lato");
 	titleFont.setBold(true);
 	titleFont.setHeight(20);
 
-	popupmenuFont.setTypefaceName("Lato");
+	//popupmenuFont.setTypefaceName("Lato");
 	popupmenuFont.setHeight(16);
 }
 

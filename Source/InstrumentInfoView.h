@@ -13,6 +13,7 @@
 #include "InstrumentInfoModel.h"
 #include "CustomPianoRoll.h"
 #include "CustomLookAndFeel.h"
+#include "Sampler.h"
 
 
 class InstrumentInfoView : public Component, public MenuBarModel
@@ -22,7 +23,7 @@ public:
 	//                          CONSTRUCTOR - DESTRUCTOR
 	//==============================================================================
 
-	InstrumentInfoView(CustomPianoRoll &piano);
+	InstrumentInfoView(CustomPianoRoll &piano, Sampler &sampler);
 
 	~InstrumentInfoView();
 
@@ -65,24 +66,26 @@ private:
 
 	InstrumentInfoModel					mInstrumentModel;								// Model for our view
 
-	Label								mInstrument;									// Label for the Instrument's name
-	Label								mRangeTitle;									// Title for the ranges
-	Label								mUsefulInformationTitle;						// Title for the Useful information
-	Label								mQualitiesTitle;								// Title for the Qualities
-	Label								mTranspositionTitle;							// Title for the Transposition
-	Label								mPlayingTechniquesTitle;						// Title for the Playing Techniques
-	Label								mFamousWorksTitle;								// Title for the Famous Works
+	Sampler							   &mOrchestraSampler;
 
-	Label								mRange;											// Label used to display the selected instrument's ranges
-	Label								mTransposition;									// Label used to display the selected instrument's transposition
+	Label								mInstrument;			  // Label for the Instrument's name
+	Label								mRangeTitle;			  // Title for the ranges
+	Label								mUsefulInformationTitle;  // Title for the Useful information
+	Label								mQualitiesTitle;		  // Title for the Qualities
+	Label								mTranspositionTitle;	  // Title for the Transposition
+	Label								mPlayingTechniquesTitle;  // Title for the Playing Techniques
+	Label								mFamousWorksTitle;		  // Title for the Famous Works
 
-	std::vector<std::unique_ptr<Label>> mQualityLabels;									// Vector of labels displaying the qualities
-	std::vector<std::unique_ptr<Label>> mPlayingTechniqueLabels;						// Vector of labels displaying the playing techniques
-	std::vector<std::unique_ptr<Label>> mFamousWorksLabels;								// Vector of labels displaying famous works
-	std::vector<std::unique_ptr<Label>> mUsefulInformationLabels;						// Vector of labels displaying useful information
+	Label								mRange;					  // Label used to display the selected instrument's ranges
+	Label								mTransposition;			  // Label used to display the selected instrument's transposition
+
+	std::vector<std::unique_ptr<Label>> mQualityLabels;			  // Vector of labels displaying the qualities
+	std::vector<std::unique_ptr<Label>> mPlayingTechniqueLabels;  // Vector of labels displaying the playing techniques
+	std::vector<std::unique_ptr<Label>> mFamousWorksLabels;		  // Vector of labels displaying famous works
+	std::vector<std::unique_ptr<Label>> mUsefulInformationLabels; // Vector of labels displaying useful information
 
 
-	CustomPianoRoll					   &mCustomPianoRoll;								// Our customized Piano Roll
+	CustomPianoRoll					   &mCustomPianoRoll;		  // Our customized Piano Roll
 
-	CustomLookAndFeel					mCustomLookAndFeel;								// Customized Look&Feel
+	CustomLookAndFeel					mCustomLookAndFeel;		  // Customized Look&Feel
 };

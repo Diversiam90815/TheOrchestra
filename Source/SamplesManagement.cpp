@@ -20,7 +20,7 @@ SamplesManagement::SamplesManagement()
 
 void SamplesManagement::init()
 {
-	if (mSamplesFolder.exists() && mSamplesFolder.isDirectory())
+	if (mSamplesFolder.exists() && mSamplesFolder.isDirectory())		// this seems to cause the error! 
 	{
 		parseSampleFiles();
 	}
@@ -103,7 +103,7 @@ int SamplesManagement::getIndexOfDynamics(const String &dynamicString)
 
 std::vector<Sample> SamplesManagement::getSamplesForInstrument(const int &instrumentKey) const
 {
-	auto it = mInstrumentSamples.find(instrumentKey);
+	auto it = mInstrumentSamples.find(instrumentKey);		// Error: Instrument Samples won't get filled! 
 	if (it != mInstrumentSamples.end())
 	{
 		return it->second;
