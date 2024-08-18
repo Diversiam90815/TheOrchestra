@@ -11,7 +11,7 @@
 #include "InstrumentInfoView.h"
 
 
-InstrumentInfoView::InstrumentInfoView(CustomPianoRoll &piano) : mCustomPianoRoll(piano)
+InstrumentInfoView::InstrumentInfoView(CustomPianoRoll &piano, Sampler &sampler) : mCustomPianoRoll(piano), mOrchestraSampler(sampler)
 {
 	setLookAndFeel(&mCustomLookAndFeel);
 	displayLabels();
@@ -160,6 +160,7 @@ void InstrumentInfoView::menuItemSelected(int menuItemID, int topLevelMenuIndex)
 {
 	int key = (topLevelMenuIndex + 1) * 100 + menuItemID;
 	showInstrumentInfo(key);
+	mOrchestraSampler.addSoundsFromInstrumentToSampler(key);
 }
 
 
@@ -182,6 +183,8 @@ void InstrumentInfoView::showInstrumentInfo(int key)
 	}
 	mCustomPianoRoll.repaint();
 	resized();
+
+	
 }
 
 

@@ -4,7 +4,7 @@
 
 
 OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc)
-	: AudioProcessorEditor(&proc), audioProcessor(proc), mPianoRollView(), mInstrumentInfoView(*mPianoRollView.mPianoRoll.get())
+	: AudioProcessorEditor(&proc), audioProcessor(proc), mPianoRollView(), mInstrumentInfoView(*mPianoRollView.mPianoRoll.get(), audioProcessor.mOrchestraSampler)
 {
 	showUI();
 	setLookAndFeel(&mCustomLookAndFeel);
@@ -19,13 +19,14 @@ OrchestraEditor::~OrchestraEditor()
 
 void OrchestraEditor::showUI()
 {
-	addAndMakeVisible(mPianoRollView);
 	addAndMakeVisible(mInstrumentInfoView);
+	addAndMakeVisible(mPianoRollView);
 
 	mMenuBar.setModel(&mInstrumentInfoView);
 	addAndMakeVisible(mMenuBar);
 
-	setSize(1200, 1000);
+	//setSize(1200, 1000);
+	setSize(500,400);
 }
 
 

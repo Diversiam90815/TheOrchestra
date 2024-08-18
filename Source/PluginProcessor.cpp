@@ -25,6 +25,7 @@ OrchestraProcessor::OrchestraProcessor()
 	  )
 #endif
 {
+	init();
 }
 
 OrchestraProcessor::~OrchestraProcessor()
@@ -35,7 +36,7 @@ OrchestraProcessor::~OrchestraProcessor()
 void OrchestraProcessor::init()
 {
 	mOrchestraSampler.init();
-	//mOrchestraSampler.mSampler.getSound()
+	// mOrchestraSampler.mSampler.getSound()
 }
 
 
@@ -52,31 +53,19 @@ const String OrchestraProcessor::getName() const
 
 bool OrchestraProcessor::acceptsMidi() const
 {
-#if JucePlugin_WantsMidiInput
 	return true;
-#else
-	return false;
-#endif
 }
 
 
 bool OrchestraProcessor::producesMidi() const
 {
-#if JucePlugin_ProducesMidiOutput
-	return true;
-#else
 	return false;
-#endif
 }
 
 
 bool OrchestraProcessor::isMidiEffect() const
 {
-#if JucePlugin_IsMidiEffect
-	return true;
-#else
 	return false;
-#endif
 }
 
 
@@ -88,8 +77,7 @@ double OrchestraProcessor::getTailLengthSeconds() const
 
 int OrchestraProcessor::getNumPrograms()
 {
-	return 1; // NB: some hosts don't cope very well if you tell them there are 0 programs,
-			  // so this should be at least 1, even if you're not really implementing programs.
+	return 1;
 }
 
 
@@ -123,33 +111,16 @@ void OrchestraProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 
 void OrchestraProcessor::releaseResources()
 {
-	// When playback stops, you can use this as an opportunity to free up any
-	// spare memory, etc.
 }
 
 
 #ifndef JucePlugin_PreferredChannelConfigurations
 bool OrchestraProcessor::isBusesLayoutSupported(const BusesLayout &layouts) const
 {
-#if JucePlugin_IsMidiEffect
-	ignoreUnused(layouts);
-	return true;
-#else
-	// This is the place where you check if the layout is supported.
-	// In this template code we only support mono or stereo.
-	// Some plugin hosts, such as certain GarageBand versions, will only
-	// load plugins that support stereo bus layouts.
 	if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono() && layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
 		return false;
 
-		// This checks if the input layout matches the output layout
-#if !JucePlugin_IsSynth
-	if (layouts.getMainOutputChannelSet() != layouts.getMainInputChannelSet())
-		return false;
-#endif
-
 	return true;
-#endif
 }
 #endif
 
@@ -173,7 +144,7 @@ void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &mi
 
 bool OrchestraProcessor::hasEditor() const
 {
-	return true; // (change this to false if you choose to not supply an editor)
+	return true;
 }
 
 
@@ -185,16 +156,11 @@ AudioProcessorEditor *OrchestraProcessor::createEditor()
 
 void OrchestraProcessor::getStateInformation(MemoryBlock &destData)
 {
-	// You should use this method to store your parameters in the memory block.
-	// You could do that either as raw data, or use the XML or ValueTree classes
-	// as intermediaries to make it easy to save and load complex data.
 }
 
 
 void OrchestraProcessor::setStateInformation(const void *data, int sizeInBytes)
 {
-	// You should use this method to restore your parameters from this memory block,
-	// whose contents will have been created by the getStateInformation() call.
 }
 
 
