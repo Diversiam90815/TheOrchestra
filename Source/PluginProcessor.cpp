@@ -117,8 +117,7 @@ void OrchestraProcessor::changeProgramName(int index, const String &newName)
 
 void OrchestraProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-	// Use this method as the place to do any pre-playback
-	// initialisation that you need..
+	mOrchestraSampler.mSampler.setCurrentPlaybackSampleRate(sampleRate);
 }
 
 
@@ -164,13 +163,10 @@ void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &mi
 	for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
 		buffer.clear(i, 0, buffer.getNumSamples());
 
+	if (!mOrchestraSampler.getSamplesAreReady())
+		return;
 
-	for (int channel = 0; channel < totalNumInputChannels; ++channel)
-	{
-		auto *channelData = buffer.getWritePointer(channel);
-
-		// ..do something to the data...
-	}
+	mOrchestraSampler.mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
 
