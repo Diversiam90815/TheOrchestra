@@ -14,7 +14,8 @@
 
 SamplesManagement::SamplesManagement()
 {
-	mSamplesFolder = File::getCurrentWorkingDirectory().getChildFile("Assets/Samples");
+	mSamplesFolder = File("C://Users//Jens.Langenberg//Documents//GIT-Repository//TheInstrumentsOfTheOrchestra//Assets//Samples");
+	
 }
 
 
