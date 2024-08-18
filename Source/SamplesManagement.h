@@ -24,10 +24,10 @@ enum dynamics
 	fortissimo
 };
 
-
-// Mapping each Dynamic from enum to the short abbrevations used in notation
-std::map<String, dynamics> dynamicMap = {{"pp", dynamics::pianissimo}, {"p", dynamics::piano}, {"mp", dynamics::mezzoPiano},
-										 {"mf", dynamics::mezzoForte}, {"f", dynamics::forte}, {"ff", dynamics::fortissimo}};
+//
+//// Mapping each Dynamic from enum to the short abbrevations used in notation
+// std::map<String, dynamics> dynamicMap = {{"pp", dynamics::pianissimo}, {"p", dynamics::piano}, {"mp", dynamics::mezzoPiano},
+//										 {"mf", dynamics::mezzoForte}, {"f", dynamics::forte}, {"ff", dynamics::fortissimo}};
 
 
 /*
@@ -118,4 +118,14 @@ private:
 	File							   mSamplesFolder;	   // Folder of the samples folder ( /Assets/Samples)
 
 	std::map<int, std::vector<Sample>> mInstrumentSamples; // Map of the instrument (identified by their key) and their assigned 'Sample'
+
+
+	std::map<String, dynamics>		   dynamicMap = {
+													{"pp", dynamics::pianissimo}, 
+													{"p", dynamics::piano}, 
+													{"mp", dynamics::mezzoPiano},
+													{"mf", dynamics::mezzoForte}, 
+													{"f", dynamics::forte}, 
+													{"ff", dynamics::fortissimo}
+													}; // Mapping each Dynamic from enum to the short abbrevations used in notation
 };
