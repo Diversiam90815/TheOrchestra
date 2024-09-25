@@ -27,6 +27,13 @@ void Sampler::init()
 	mSamplesManager->init();
 
 	mFormatManager.registerBasicFormats();
+	
+	// Add voices to the synthesiser
+	const int numVoices = 64;				   // Adjust based on your needs
+	for (int i = 0; i < numVoices; ++i)
+	{
+		mSampler.addVoice(new SamplerVoice()); // Use the default SamplerVoice or your custom voice class
+	}
 }
 
 
@@ -47,7 +54,7 @@ std::vector<Sample> Sampler::filterSamplesFromNote(const int key, const String &
 }
 
 
-SamplerSound Sampler::createSoundFromSample(const Sample &sample)
+SamplerSound *Sampler::createSoundFromSample(const Sample &sample)
 {
 	int		   midiNote = CustomPianoRoll::turnNotenameIntoMidinumber(sample.note);
 
@@ -62,17 +69,21 @@ SamplerSound Sampler::createSoundFromSample(const Sample &sample)
 		midiNoteRange.setRange(midiNote, midiNote + 1, true);
 	}
 
-	auto			  &sampleFile	= sample.file;
-	AudioFormatReader *formatReader = mFormatManager.createReaderFor(sample.file);
+	std::unique_ptr<AudioFormatReader> formatReader(mFormatManager.createReaderFor(sample.file));
 
-	return SamplerSound(sample.instrument, // name
-						*formatReader,
-						midiNoteRange,	   // MIDI note range
-						midiNote,		   // root note
-						0.1,			   // attack time in seconds
-						0.1,			   // release time in seconds
-						10.0			   // maximum sample length in seconds
-	);
+	if (formatReader != nullptr)
+	{
+		SamplerSound *newsound = new SamplerSound(sample.instrument, // name
+												  *formatReader,
+												  midiNoteRange,	 // MIDI note range
+												  midiNote,			 // root note
+												  0.1,				 // attack time in seconds
+												  0.3,				 // release time in seconds
+												  100.0				 // maximum sample length in seconds
+		);
+		return newsound;
+	}
+	return nullptr;
 }
 
 
@@ -87,8 +98,11 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key)
 
 	for (auto &sample : samples)
 	{
-		auto &sound = createSoundFromSample(sample);
-		mSampler.addSound(sound);
+		SamplerSound *sound = createSoundFromSample(sample);
+		if (sound != nullptr)
+		{
+			mSampler.addSound(sound);
+		}
 	}
 	if (mSampler.getNumSounds() >= 1)
 	{

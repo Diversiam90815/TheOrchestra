@@ -14,8 +14,7 @@
 
 SamplesManagement::SamplesManagement()
 {
-	mSamplesFolder = File("C://Users//Jens.Langenberg//Documents//GIT-Repository//TheInstrumentsOfTheOrchestra//Assets//Samples");
-	
+	mSamplesFolder = File("F:/Projects/InstrumentsOfTheOrchestra/Assets/Samples");	
 }
 
 
