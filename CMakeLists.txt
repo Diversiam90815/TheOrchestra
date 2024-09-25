@@ -10,7 +10,8 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 set (SOURCE_FILES_DIR ${PROJECT_SOURCE_DIR}/Source/)
 set (SUBMODULES_DIR ${PROJECT_SOURCE_DIR}/submodules/)
-
+set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/Assets)
+set(ASSETS_DEST_DIR "$<TARGET_FILE_DIR:InstrumentsOfTheOrchestra>/Assets")
 
 # Project info
 #configure_file(Project.h.in Project.h)
@@ -65,12 +66,13 @@ juce_add_plugin(InstrumentsOfTheOrchestra
     COMPANY_NAME "DiversiamProduction"
     PLUGIN_MANUFACTURER_CODE 3160
     PLUGIN_CODE IOTO
-    FORMATS VST3 Standalone
+    FORMATS Standalone
     PRODUCT_NAME "Instruments Of The Orchestra"
 )
 
 # Generate the JuceHeader.h
 juce_generate_juce_header(InstrumentsOfTheOrchestra)
+
 
 
 set(ALL_FILES
@@ -137,4 +139,11 @@ target_compile_options(${PROJECT_NAME} PRIVATE
         /WX-        # Don't treat warnings as errors
         ${DEFAULT_CXX_DEBUG_INFORMATION_FORMAT};
         ${DEFAULT_CXX_EXCEPTION_HANDLING}
+)
+
+add_custom_command(TARGET InstrumentsOfTheOrchestra POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${ASSETS_DIR}"
+        "${ASSETS_DEST_DIR}"
+    COMMENT "Copying Assets directory to output directory"
 )

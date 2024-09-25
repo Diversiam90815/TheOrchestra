@@ -14,13 +14,13 @@
 
 SamplesManagement::SamplesManagement()
 {
-	mSamplesFolder = File("F:/Projects/InstrumentsOfTheOrchestra/Assets/Samples");	
+	mSamplesFolder = File("F:/Projects/InstrumentsOfTheOrchestra/Assets/Samples");			// This needs to be adjusted relatively!
 }
 
 
 void SamplesManagement::init()
 {
-	if (mSamplesFolder.exists() && mSamplesFolder.isDirectory())		// this seems to cause the error! 
+	if (mSamplesFolder.exists() && mSamplesFolder.isDirectory())
 	{
 		parseSampleFiles();
 	}
