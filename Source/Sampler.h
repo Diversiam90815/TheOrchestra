@@ -30,7 +30,7 @@ public:
 
 private:
 
-	SamplerSound					   createSoundFromSample(const Sample &sample);
+	SamplerSound*					   createSoundFromSample(const Sample &sample);
 
 	std::vector<Sample>				   filterSamplesFromNote(const int key, const String &note = "");
 
