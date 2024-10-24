@@ -36,7 +36,6 @@ OrchestraProcessor::~OrchestraProcessor()
 void OrchestraProcessor::init()
 {
 	mOrchestraSampler.init();
-	// mOrchestraSampler.mSampler.getSound()
 }
 
 
