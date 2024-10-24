@@ -1,12 +1,12 @@
 /*
   ==============================================================================
 
-	InstrumentData.h
-	Created: 5 Apr 2024 6:49:24pm
-	Author:  Jens.Langenberg
+	Module			InstrumentData
+	Description		Data for each instrument
 
   ==============================================================================
 */
+
 
 #pragma once
 #include <JuceHeader.h>

@@ -1,3 +1,11 @@
+/*
+  ==============================================================================
+
+	Module			PluginEditor
+	Description		User Interface
+
+  ==============================================================================
+*/
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"

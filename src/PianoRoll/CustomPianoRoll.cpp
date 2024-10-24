@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-	CustomPianoRoll.cpp
-	Created: 18 Apr 2024 3:58:09pm
-	Author:  Jens.Langenberg
+	Module			CustomPianoRoll
+	Description		Creating our own custom piano roll, which displays the instrument's individual ranges
 
   ==============================================================================
 */

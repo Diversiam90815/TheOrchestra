@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-	SamplesManagement.h
-	Created: 30 May 2024 12:55:35pm
-	Author:  Jens.Langenberg
+	Module			SamplesManagerment
+	Description		Managing the samples
 
   ==============================================================================
 */

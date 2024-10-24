@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-	Parameters.h
-	Created: 1 Apr 2024 4:57:13pm
-	Author:  jerry
+	Module			Parameters
+	Description		Storing (mostly compile time) constants
 
   ==============================================================================
 */
