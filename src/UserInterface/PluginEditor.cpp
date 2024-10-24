@@ -26,7 +26,6 @@ void OrchestraEditor::showUI()
 	addAndMakeVisible(mMenuBar);
 
 	setSize(1200, 1000);
-	//setSize(500,400);
 }
 
 

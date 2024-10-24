@@ -1,97 +1,154 @@
+###########################################
+#   The Orchestra
+#       by Jens W. Langenberg
+###########################################
+
 cmake_minimum_required(VERSION 3.25)
 
-project(InstrumentsOfTheOrchestra VERSION 1.0 LANGUAGES CXX)
-
-set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
-
-# Allow folders in Visual Studio solution
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+project(TheOrchestra VERSION 1.0 LANGUAGES CXX)
 
 
-set (SOURCE_FILES_DIR ${PROJECT_SOURCE_DIR}/Source/)
-set (SUBMODULES_DIR ${PROJECT_SOURCE_DIR}/submodules/)
-set(ASSETS_DIR ${PROJECT_SOURCE_DIR}/Assets)
-set(ASSETS_DEST_DIR "$<TARGET_FILE_DIR:InstrumentsOfTheOrchestra>/Assets")
 
-# Project info
-#configure_file(Project.h.in Project.h)
+###########################################
+#   PROJECT SETTINGS
+###########################################
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-set(Header_Files
-        ${SOURCE_FILES_DIR}/CustomLookAndFeel.h
-        ${SOURCE_FILES_DIR}/CustomPianoRoll.h
-        ${SOURCE_FILES_DIR}/InstrumentData.h
-        ${SOURCE_FILES_DIR}/InstrumentInfo.h
-        ${SOURCE_FILES_DIR}/InstrumentInfoModel.h
-        ${SOURCE_FILES_DIR}/InstrumentInfoView.h
-        ${SOURCE_FILES_DIR}/Parameters.h
-        ${SOURCE_FILES_DIR}/PianoRoll.h
-        ${SOURCE_FILES_DIR}/PluginEditor.h
-        ${SOURCE_FILES_DIR}/PluginProcessor.h
-        ${SOURCE_FILES_DIR}/Sampler.h
-        ${SOURCE_FILES_DIR}/SamplesManagement.h
+
+
+###########################################
+#   DIRECTORIES
+###########################################
+
+set (CMAKE_INSTALL_PREFIX   ${PROJECT_BINARY_DIR})
+
+set (SOURCE_FILES_DIR       ${PROJECT_SOURCE_DIR}/src)
+set (SUBMODULES_DIR         ${PROJECT_SOURCE_DIR}/submodules)
+set (ASSETS_DIR             ${PROJECT_SOURCE_DIR}/Assets)
+set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Assets")
+
+set (INSTRUMENT_DIR         ${SOURCE_FILES_DIR}/InstrumentInfo )
+set (PROCESSOR_DIR          ${SOURCE_FILES_DIR}/AudioProcessor )
+set (UI_DIR                 ${SOURCE_FILES_DIR}/UserInterface )
+set (PIANOROLL_DIR          ${SOURCE_FILES_DIR}/PianoRoll )
+set (SAMPLER_DIR            ${SOURCE_FILES_DIR}/Sampler )
+set (MISC_DIR               ${SOURCE_FILES_DIR}/Misc )
+
+
+
+###########################################
+#   PROJECT FILES
+###########################################
+
+set(INSTRUMENT_FILES
+    ${INSTRUMENT_DIR}/InstrumentData.h
+    ${INSTRUMENT_DIR}/InstrumentInfo.h          ${INSTRUMENT_DIR}/InstrumentInfo.cpp
+    ${INSTRUMENT_DIR}/InstrumentInfoModel.h     ${INSTRUMENT_DIR}/InstrumentInfoModel.cpp
+    ${INSTRUMENT_DIR}/InstrumentInfoView.h      ${INSTRUMENT_DIR}/InstrumentInfoView.cpp
 )
 
-set(Source_Files
-        ${SOURCE_FILES_DIR}/CustomLookAndFeel.cpp
-        ${SOURCE_FILES_DIR}/CustomPianoRoll.cpp
-
-        ${SOURCE_FILES_DIR}/InstrumentInfo.cpp
-        ${SOURCE_FILES_DIR}/InstrumentInfoModel.cpp
-        ${SOURCE_FILES_DIR}/InstrumentInfoView.cpp
-
-        ${SOURCE_FILES_DIR}/PianoRoll.cpp
-        ${SOURCE_FILES_DIR}/PluginEditor.cpp
-        ${SOURCE_FILES_DIR}/PluginProcessor.cpp
-        ${SOURCE_FILES_DIR}/Sampler.cpp
-        ${SOURCE_FILES_DIR}/SamplesManagement.cpp
+set(SAMPLER_FILES
+    ${SAMPLER_DIR}/Sampler.h                ${SAMPLER_DIR}/Sampler.cpp
+    ${SAMPLER_DIR}/SamplesManagement.h      ${SAMPLER_DIR}/SamplesManagement.cpp
 )
 
-source_group("Source Files" FILES ${Source_Files})
+set(PROCESSOR_FILES
+    ${PROCESSOR_DIR}/PluginProcessor.h    ${PROCESSOR_DIR}/PluginProcessor.cpp
+)
+
+set(UI_FILES
+    ${UI_DIR}/PluginEditor.h        ${UI_DIR}/PluginEditor.cpp
+    ${UI_DIR}/CustomLookAndFeel.h   ${UI_DIR}/CustomLookAndFeel.cpp
+)
+
+set(PIANOROLL_FILES
+    ${PIANOROLL_DIR}/PianoRoll.h            ${PIANOROLL_DIR}/PianoRoll.cpp
+    ${PIANOROLL_DIR}/CustomPianoRoll.h      ${PIANOROLL_DIR}/CustomPianoRoll.cpp
+)
+
+set(MISC_FILES
+    ${MISC_DIR}/Parameters.h
+)
 
 
-#-----------------------------------------------------------------------------------------
-# Juce API
-#-----------------------------------------------------------------------------------------
+set(ALL_PROJECT_FILES
+    ${INSTRUMENT_FILES}
+    ${SAMPLER_FILES}
+    ${PROCESSOR_FILES}
+    ${UI_FILES}
+    ${PIANOROLL_FILES}
+    ${MISC_FILES}
+)
+
+
+
+###########################################
+#   SOURCE GROUPS
+###########################################
+
+source_group("Instruments"      FILES ${INSTRUMENT_FILES})
+source_group("Sampler"          FILES ${SAMPLER_FILES})
+source_group("Processor"        FILES ${PROCESSOR_FILES})
+source_group("Piano Roll"       FILES ${PIANOROLL_FILES})
+source_group("User Interface"   FILES ${UI_FILES})
+source_group("Misc"             FILES ${MISC_FILES})
+
+
+
+###########################################
+#   SUBMODULES
+###########################################
+
+
+#   Juce API
 
 add_subdirectory(submodules/JUCE)
 
-# Add the plugin target
-juce_add_plugin(InstrumentsOfTheOrchestra
+juce_add_plugin(${PROJECT_NAME}
     COMPANY_NAME "DiversiamProduction"
     PLUGIN_MANUFACTURER_CODE 3160
     PLUGIN_CODE IOTO
     FORMATS Standalone
-    PRODUCT_NAME "Instruments Of The Orchestra"
+    PRODUCT_NAME ${PROJECT_NAME}
 )
 
-# Generate the JuceHeader.h
-juce_generate_juce_header(InstrumentsOfTheOrchestra)
+juce_generate_juce_header(${PROJECT_NAME})
+
+
+target_sources(${PROJECT_NAME} PRIVATE ${ALL_PROJECT_FILES} )
 
 
 
-set(ALL_FILES
-    ${Header_Files}
-    ${Source_Files}
-)
-
-target_sources(${PROJECT_NAME} PRIVATE  
-        ${ALL_FILES} 
-)
-
+###########################################
+#   TARGET INCLUDE DIRECTORIES
+###########################################
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         ${PROJECT_BINARY_DIR}
+        ${ALL_PROJECT_FILES}
 )
 
+
+
+###########################################
+#   TARGET PROPERTIES
+###########################################
+
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    OUTPUT_NAME "Instruments Of The Orchestra"
+    OUTPUT_NAME ${PROJECT_NAME}
 )
+
+
+
+###########################################
+#   TARGET COMPILE DEFINITIONS
+###########################################
 
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC
@@ -105,27 +162,21 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
         JUCE_ASIO=0
         JUCE_USE_ANDROID_OBOE=1
         JUCE_USE_OBOE_STABILIZED_CALLBACK=1
+
         -DENV_DEVELOPMENT
         _CRT_SECURE_NO_WARNINGS
+
+        "$<$<CONFIG:Debug>:"
+                "_DEBUG"
+        ">"
+        "$<$<CONFIG:Release>:"
+                "NDEBUG"
+        ">"
 )
 
 
-# Suppress specific compiler warnings
-target_compile_options(InstrumentsOfTheOrchestra PRIVATE
-    /wd4146  # Suppress warning C4146
-    /wd4996  # Suppress warning C4996
-)
-
-
-set (PROJECT_LIBS juce::juce_audio_utils
-                  juce::juce_audio_plugin_client
-                  juce::juce_core
-)
-
-target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_LIBS} )
-
-
-target_compile_options(${PROJECT_NAME} PRIVATE
+target_compile_options(${PROJECT_NAME} 
+    PRIVATE
         $<$<CONFIG:Release>:
                 /Oi;
                 /Gy
@@ -137,11 +188,32 @@ target_compile_options(${PROJECT_NAME} PRIVATE
         /sdl
         /MP
         /WX-        # Don't treat warnings as errors
+        /wd4146     # Suppress warning C4146
+        /wd4996     # Suppress warning C4996
         ${DEFAULT_CXX_DEBUG_INFORMATION_FORMAT};
         ${DEFAULT_CXX_EXCEPTION_HANDLING}
 )
 
-add_custom_command(TARGET InstrumentsOfTheOrchestra POST_BUILD
+
+
+###########################################
+#   TARGET LINK LIBRARIES
+###########################################
+
+set (PROJECT_LIBS juce::juce_audio_utils
+                  juce::juce_audio_plugin_client
+                  juce::juce_core
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_LIBS} )
+
+
+
+###########################################
+#   POST BUILD COMMAND
+###########################################
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${ASSETS_DIR}"
         "${ASSETS_DEST_DIR}"
