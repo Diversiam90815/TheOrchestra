@@ -1,12 +1,12 @@
 /*
   ==============================================================================
 
-	InstrumentInfoModel.h
-	Created: 8 Apr 2024 6:23:51pm
-	Author:  Jens.Langenberg
+	Module			InstrumentInfoModel
+	Description		Managing instrument data for the whole orchestra
 
   ==============================================================================
 */
+
 
 #pragma once
 #include <JuceHeader.h>

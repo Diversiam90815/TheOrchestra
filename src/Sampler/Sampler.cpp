@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-	Sampler.cpp
-	Created: 31 May 2024 12:43:50pm
-	Author:  Jens.Langenberg
+	Module			Sampler
+	Description		Sampling the instrument and making them ready for playback
 
   ==============================================================================
 */
