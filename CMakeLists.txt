@@ -41,6 +41,15 @@ set (SAMPLER_DIR            ${SOURCE_FILES_DIR}/Sampler )
 set (MISC_DIR               ${SOURCE_FILES_DIR}/Misc )
 
 
+set(ALL_PROJECT_DIRS
+    ${INSTRUMENT_DIR}
+    ${PROCESSOR_DIR}
+    ${UI_DIR}
+    ${PIANOROLL_DIR}
+    ${SAMPLER_DIR}
+    ${MISC_DIR}
+)
+
 
 ###########################################
 #   PROJECT FILES
@@ -131,7 +140,7 @@ target_sources(${PROJECT_NAME} PRIVATE ${ALL_PROJECT_FILES} )
 
 target_include_directories(${PROJECT_NAME} PUBLIC
         ${PROJECT_BINARY_DIR}
-        ${ALL_PROJECT_FILES}
+        ${ALL_PROJECT_DIRS}
 )
 
 

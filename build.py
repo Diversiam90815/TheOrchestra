@@ -81,6 +81,7 @@ class BuildRunner(object):
         self._execute_command(packages_install_cmd, "Install Conan packages")
         
         prepare_cmd = f'cmake -G {PLATFORM_GENERATOR} -B build -DCMAKE_TOOLCHAIN_FILE=build/build/generators/conan_toolchain.cmake'
+        prepare_cmd = f'cmake -G {PLATFORM_GENERATOR} -B build'
         self._execute_command(prepare_cmd, "Select build generator")
         
         del autoCWD
