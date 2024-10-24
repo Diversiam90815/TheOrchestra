@@ -10,10 +10,12 @@
 #include "SamplesManagement.h"
 #include "InstrumentInfoModel.h"
 
+#include <filesystem>
 
 SamplesManagement::SamplesManagement()
 {
-	mSamplesFolder = File("F:/Projects/InstrumentsOfTheOrchestra/Assets/Samples");			// This needs to be adjusted relatively!
+	std::string sampleFolder = mFileManager.getSamplesFolder();
+	mSamplesFolder			 = File(sampleFolder);
 }
 
 
