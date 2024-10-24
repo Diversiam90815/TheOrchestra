@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-	PianoRoll.h
-	Created: 17 Feb 2024 2:40:46pm
-	Author:  jerry
+	Module			PianoRoll
+	Description		Creating and managing piano roll and midi input
 
   ==============================================================================
 */

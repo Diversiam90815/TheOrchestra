@@ -1,12 +1,12 @@
 /*
   ==============================================================================
 
-	InstrumentInfo.cpp
-	Created: 1 Apr 2024 3:50:07pm
-	Author:  jerry
+	Module			InstrumentInfo
+	Description		Class storing information about each instrument
 
   ==============================================================================
 */
+
 
 #include "InstrumentInfo.h"
 

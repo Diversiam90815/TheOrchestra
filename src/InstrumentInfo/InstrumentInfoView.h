@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-	InstrumentInfoView.h
-	Created: 8 Apr 2024 6:24:22pm
-	Author:  Jens.Langenberg
+	Module			InstrumentInfoModel
+	Description		Displaying the instrument's information
 
   ==============================================================================
 */

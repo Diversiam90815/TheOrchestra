@@ -1,9 +1,8 @@
 /*
   ==============================================================================
 
-	CustomLookAndFeel.cpp
-	Created: 19 Apr 2024 9:12:16am
-	Author:  Jens.Langenberg
+	Module			CustomLookAndFeel
+	Description		Customizing the LookNFeel class used by the Editor
 
   ==============================================================================
 */
