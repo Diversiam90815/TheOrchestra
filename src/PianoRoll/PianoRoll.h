@@ -27,7 +27,7 @@ private:
 
 	void			  resized() override;
 
-	void			  setMidiInput(int index);
+	void			  setMidiInput();
 
 	void			  handleIncomingMidiMessage(MidiInput *source, const MidiMessage &message) override;
 
