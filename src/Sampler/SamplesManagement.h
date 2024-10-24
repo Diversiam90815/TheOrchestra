@@ -11,6 +11,8 @@
 
 #include <JuceHeader.h>
 
+#include "FileManager.h"
+
 
 // Enum for the different Dynamics
 enum dynamics
@@ -118,13 +120,9 @@ private:
 
 	std::map<int, std::vector<Sample>> mInstrumentSamples; // Map of the instrument (identified by their key) and their assigned 'Sample'
 
+	FileManager						   mFileManager;
 
 	std::map<String, dynamics>		   dynamicMap = {
-													{"pp", dynamics::pianissimo}, 
-													{"p", dynamics::piano}, 
-													{"mp", dynamics::mezzoPiano},
-													{"mf", dynamics::mezzoForte}, 
-													{"f", dynamics::forte}, 
-													{"ff", dynamics::fortissimo}
-													}; // Mapping each Dynamic from enum to the short abbrevations used in notation
+		{"pp", dynamics::pianissimo}, {"p", dynamics::piano}, {"mp", dynamics::mezzoPiano},
+		{"mf", dynamics::mezzoForte}, {"f", dynamics::forte}, {"ff", dynamics::fortissimo}}; // Mapping each Dynamic from enum to the short abbrevations used in notation
 };

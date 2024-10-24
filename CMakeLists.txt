@@ -20,6 +20,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
 
 
 ###########################################
@@ -39,6 +40,7 @@ set (UI_DIR                 ${SOURCE_FILES_DIR}/UserInterface )
 set (PIANOROLL_DIR          ${SOURCE_FILES_DIR}/PianoRoll )
 set (SAMPLER_DIR            ${SOURCE_FILES_DIR}/Sampler )
 set (MISC_DIR               ${SOURCE_FILES_DIR}/Misc )
+set (FILE_MANAGER_DIR       ${SOURCE_FILES_DIR}/FileManager)
 
 
 set(ALL_PROJECT_DIRS
@@ -48,6 +50,7 @@ set(ALL_PROJECT_DIRS
     ${PIANOROLL_DIR}
     ${SAMPLER_DIR}
     ${MISC_DIR}
+    ${FILE_MANAGER_DIR}
 )
 
 
@@ -85,6 +88,9 @@ set(MISC_FILES
     ${MISC_DIR}/Parameters.h
 )
 
+set(FILE_MANAGER_FILES
+    ${FILE_MANAGER_DIR}/FileManager.h    ${FILE_MANAGER_DIR}/FileManager.cpp
+)
 
 set(ALL_PROJECT_FILES
     ${INSTRUMENT_FILES}
@@ -93,6 +99,7 @@ set(ALL_PROJECT_FILES
     ${UI_FILES}
     ${PIANOROLL_FILES}
     ${MISC_FILES}
+    ${FILE_MANAGER_FILES}
 )
 
 
@@ -107,6 +114,7 @@ source_group("Processor"        FILES ${PROCESSOR_FILES})
 source_group("Piano Roll"       FILES ${PIANOROLL_FILES})
 source_group("User Interface"   FILES ${UI_FILES})
 source_group("Misc"             FILES ${MISC_FILES})
+source_group("File Manager"     FILES ${FILE_MANAGER_FILES})
 
 
 
