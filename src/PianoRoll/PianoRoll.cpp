@@ -17,8 +17,8 @@ PianoRoll::PianoRoll()
 	mPianoRoll = std::make_unique<CustomPianoRoll>(mPianoState, MidiKeyboardComponent::horizontalKeyboard);
 
 	showPianoRoll();
-	setMidiInput(7);
-	
+	setMidiInput();
+
 	mDeviceManager.initialise(2, 2, nullptr, true, "", &mAudioSetup);
 }
 
@@ -51,18 +51,19 @@ void PianoRoll::handleIncomingMidiMessage(MidiInput *source, const MidiMessage &
 }
 
 
-void PianoRoll::setMidiInput(int index)
+void PianoRoll::setMidiInput()
 {
 	auto list = juce::MidiInput::getAvailableDevices();
 
-	auto newInput = list[index];
-
-	if (!mDeviceManager.isMidiInputDeviceEnabled(newInput.identifier))
+	for (const auto &midiInput : list)
 	{
-		mDeviceManager.setMidiInputDeviceEnabled(newInput.identifier, true);
-	}
+		if (!mDeviceManager.isMidiInputDeviceEnabled(midiInput.identifier))
+		{
+			mDeviceManager.setMidiInputDeviceEnabled(midiInput.identifier, true);
+		}
 
-	mDeviceManager.addMidiInputDeviceCallback(newInput.identifier, this);
+		mDeviceManager.addMidiInputDeviceCallback(midiInput.identifier, this);
+	}
 }
 
 

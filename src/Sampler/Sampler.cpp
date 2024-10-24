@@ -26,7 +26,7 @@ void Sampler::init()
 	mSamplesManager->init();
 
 	mFormatManager.registerBasicFormats();
-	
+
 	// Add voices to the synthesiser
 	const int numVoices = 64;				   // Adjust based on your needs
 	for (int i = 0; i < numVoices; ++i)

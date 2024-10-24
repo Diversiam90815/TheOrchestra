@@ -104,7 +104,7 @@ int SamplesManagement::getIndexOfDynamics(const String &dynamicString)
 
 std::vector<Sample> SamplesManagement::getSamplesForInstrument(const int &instrumentKey) const
 {
-	auto it = mInstrumentSamples.find(instrumentKey);		// Error: Instrument Samples won't get filled! 
+	auto it = mInstrumentSamples.find(instrumentKey);
 	if (it != mInstrumentSamples.end())
 	{
 		return it->second;
