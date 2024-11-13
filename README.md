@@ -1,13 +1,12 @@
-# Orchestral Instruments Guide
+# The Orchestra
 
-Welcome to the Orchestral Instruments Guide! This app is designed to help you explore and understand the diverse sounds and capabilities of orchestral instruments. Whether you're a newcomer to orchestration or an entry-level composer, this app provides a comprehensive overview of different instruments, their qualities, ranges, historical context, and examples of compositions where they are featured. Additionally, it includes basic sampling functionalities using a MIDI keyboard to enhance your learning experience.
-
-This project is built with the [JUCE](https://github.com/juce-framework/JUCE) framework, a widely-used C++ library for developing cross-platform audio applications.
+Welcome to the **The Orchestra** - a guide for orchestral instruments! 
+This app is designed to help you explore and understand the diverse sounds and capabilities of orchestral instruments. Whether you're a newcomer to orchestration or an entry-level composer, this app provides a comprehensive overview of different instruments, their qualities, ranges, historical context, and examples of compositions where they are featured. Additionally, it includes basic sampling functionalities using a MIDI keyboard to enhance your learning experience.
 
 ## Features
 
 - **Instrument Information**: Detailed descriptions of various orchestral instruments, including their history, technical details, and roles in the orchestra.
-- **MIDI Sampling**: Use a MIDI keyboard to listen to and experiment with the sounds of different instruments.
+- **MIDI Sampling**: Use a MIDI keyboard to listen to and experiment with the sounds of different instruments. *(in development)*
 - **Composition Examples**: Examples of compositions featuring different instruments to illustrate their typical use cases and highlight their versatility.
 - **User-Friendly Interface**: An intuitive interface designed to make learning about orchestration engaging and accessible.
 - **Continuous Updates**: New features and instruments are regularly added to keep the app up-to-date and comprehensive.
@@ -26,10 +25,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For any questions or suggestions, please open an issue.
 
-## Screenshots
-
-![Screenshot 1](path/to/screenshot1.png)
-![Screenshot 2](path/to/screenshot2.png)
 
 ## Roadmap
 - **Add More Instruments and Sound Samples**: Expand the library to include a wider range of orchestral instruments, and provide high-quality sound samples for each.
