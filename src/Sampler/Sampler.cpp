@@ -17,6 +17,8 @@ Sampler::Sampler()
 
 Sampler::~Sampler()
 {
+	mSampler.clearSounds();
+	mSampler.clearVoices();
 }
 
 

@@ -160,7 +160,7 @@ void InstrumentInfoView::menuItemSelected(int menuItemID, int topLevelMenuIndex)
 {
 	int key = (topLevelMenuIndex + 1) * 100 + menuItemID;
 	showInstrumentInfo(key);
-	mOrchestraSampler.addSoundsFromInstrumentToSampler(key);
+	//mOrchestraSampler.addSoundsFromInstrumentToSampler(key);
 }
 
 
