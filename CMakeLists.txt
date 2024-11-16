@@ -41,7 +41,7 @@ set (PIANOROLL_DIR          ${SOURCE_FILES_DIR}/PianoRoll )
 set (SAMPLER_DIR            ${SOURCE_FILES_DIR}/Sampler )
 set (MISC_DIR               ${SOURCE_FILES_DIR}/Misc )
 set (FILE_MANAGER_DIR       ${SOURCE_FILES_DIR}/FileManager)
-
+set(APP_DIR                 ${SOURCE_FILES_DIR}/App)
 
 set(ALL_PROJECT_DIRS
     ${INSTRUMENT_DIR}
@@ -51,6 +51,7 @@ set(ALL_PROJECT_DIRS
     ${SAMPLER_DIR}
     ${MISC_DIR}
     ${FILE_MANAGER_DIR}
+    ${APP_DIR}
 )
 
 
@@ -92,6 +93,10 @@ set(FILE_MANAGER_FILES
     ${FILE_MANAGER_DIR}/FileManager.h    ${FILE_MANAGER_DIR}/FileManager.cpp
 )
 
+set(APP_FILES
+    ${APP_DIR}/Main.cpp
+)
+
 set(ALL_PROJECT_FILES
     ${INSTRUMENT_FILES}
     ${SAMPLER_FILES}
@@ -100,6 +105,7 @@ set(ALL_PROJECT_FILES
     ${PIANOROLL_FILES}
     ${MISC_FILES}
     ${FILE_MANAGER_FILES}
+    ${APP_FILES}
 )
 
 
@@ -115,6 +121,7 @@ source_group("Piano Roll"       FILES ${PIANOROLL_FILES})
 source_group("User Interface"   FILES ${UI_FILES})
 source_group("Misc"             FILES ${MISC_FILES})
 source_group("File Manager"     FILES ${FILE_MANAGER_FILES})
+source_group("App"              FILES ${APP_FILES})
 
 
 
@@ -179,6 +186,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
         JUCE_ASIO=0
         JUCE_USE_ANDROID_OBOE=1
         JUCE_USE_OBOE_STABILIZED_CALLBACK=1
+        JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=1
 
         -DENV_DEVELOPMENT
         _CRT_SECURE_NO_WARNINGS
