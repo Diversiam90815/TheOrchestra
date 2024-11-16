@@ -74,11 +74,7 @@ class BuildRunner(object):
 
     def _build_prepare(self):
         projectfolderVS =  os.path.join(self.args.path_project)
-        buildFolder = os.path.join(projectfolderVS, "build")
         autoCWD = AutoCWD(projectfolderVS)
-        
-        packages_install_cmd = r"conan install packages --build missing -g CMakeToolchain -g CMakeDeps -of " + buildFolder + " --settings=build_type=" + BuildRunner.TARGET_CONFIG
-        self._execute_command(packages_install_cmd, "Install Conan packages")
         
         prepare_cmd = f'cmake -G {PLATFORM_GENERATOR} -B build -DCMAKE_TOOLCHAIN_FILE=build/build/generators/conan_toolchain.cmake'
         prepare_cmd = f'cmake -G {PLATFORM_GENERATOR} -B build'
