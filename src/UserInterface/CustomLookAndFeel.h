@@ -33,33 +33,34 @@ public:
 	~CustomLookAndFeel();
 
 private:
-    
-	void init();
+	void   init();
 
-	Font getEditorFont();
+	Font   getEditorFont();
 
-	void drawLabel(Graphics &g, Label &label) override;
+	void   drawLabel(Graphics &g, Label &label) override;
 
-	void drawTextEditorOutline(Graphics &g, int width, int height, TextEditor &textEditor) override;
+	void   drawTextEditorOutline(Graphics &g, int width, int height, TextEditor &textEditor) override;
 
-	void drawMenuBarBackground(Graphics &g, int width, int height, bool isMouseOverBar, MenuBarComponent &menuBar) override;
+	void   drawMenuBarBackground(Graphics &g, int width, int height, bool isMouseOverBar, MenuBarComponent &menuBar) override;
 
-	void drawPopupMenuItem(Graphics				&g,
-						   const Rectangle<int> &area,
-						   const bool			 isSeparator,
-						   const bool			 isActive,
-						   const bool			 isHighlighted,
-						   const bool			 isTicked,
-						   const bool			 hasSubMenu,
-						   const String			&text,
-						   const String			&shortcutKeyText,
-						   const Drawable		*icon,
-						   const Colour			*textColour) override;
+	void   drawPopupMenuItem(Graphics			  &g,
+							 const Rectangle<int> &area,
+							 const bool			   isSeparator,
+							 const bool			   isActive,
+							 const bool			   isHighlighted,
+							 const bool			   isTicked,
+							 const bool			   hasSubMenu,
+							 const String		  &text,
+							 const String		  &shortcutKeyText,
+							 const Drawable		  *icon,
+							 const Colour		  *textColour) override;
 
-	Font getPopupMenuFont() override;
+	Font   getPopupMenuFont() override;
 
+	Font   headerFont = Font("Instrument Serif", 24.0f, Font::plain);
+	Colour fontColor  = Colour(0xEEE9DA);
 
-	Font infoFont;                  // Font used for the information texts displayed
-	Font titleFont;                 // Font used for the titles
-	Font popupmenuFont;             // Font used for the pop up menu
+	Font   infoFont;	  // Font used for the information texts displayed
+	Font   titleFont;	  // Font used for the titles
+	Font   popupmenuFont; // Font used for the pop up menu
 };
