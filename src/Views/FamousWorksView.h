@@ -18,8 +18,12 @@ public:
 	~FamousWorksView();
 
 	void init();
+	void deinit();
+
 
 private:
-	const int width	 = 211;
-	const int height = 226;
+	CustomLookAndFeel mCustomLookAndFeel;
+
+	const int		  mWidth  = 211;
+	const int		  mHeight = 226;
 };

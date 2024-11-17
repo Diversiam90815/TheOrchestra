@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-	Module			InstrumentInfoModel
+	Module			InstrumentController
 	Description		Displaying the instrument's information
 
   ==============================================================================

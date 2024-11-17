@@ -20,7 +20,11 @@ public:
 
 	void init();
 
+	void deinit();
+
 private:
-	const int width	 = 272;
-	const int height = 204;
+	CustomLookAndFeel mCustomLookAndFeel;
+
+	const int		  mWidth  = 272;
+	const int		  mHeight = 204;
 };
