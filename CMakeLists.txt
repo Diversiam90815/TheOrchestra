@@ -36,17 +36,19 @@ set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Assets")
 
 set (INSTRUMENT_DIR         ${SOURCE_FILES_DIR}/InstrumentInfo )
 set (PROCESSOR_DIR          ${SOURCE_FILES_DIR}/AudioProcessor )
-set (UI_DIR                 ${SOURCE_FILES_DIR}/UserInterface )
+set (VIEW_DIR               ${SOURCE_FILES_DIR}/Views )
+set (VIEW_MODEL_DIR          ${SOURCE_FILES_DIR}/ViewModels )
 set (PIANOROLL_DIR          ${SOURCE_FILES_DIR}/PianoRoll )
 set (SAMPLER_DIR            ${SOURCE_FILES_DIR}/Sampler )
 set (MISC_DIR               ${SOURCE_FILES_DIR}/Misc )
 set (FILE_MANAGER_DIR       ${SOURCE_FILES_DIR}/FileManager)
-set(APP_DIR                 ${SOURCE_FILES_DIR}/App)
+set (APP_DIR                ${SOURCE_FILES_DIR}/App)
 
 set(ALL_PROJECT_DIRS
     ${INSTRUMENT_DIR}
     ${PROCESSOR_DIR}
-    ${UI_DIR}
+    ${VIEW_DIR}
+    ${VIEW_MODEL_DIR}
     ${PIANOROLL_DIR}
     ${SAMPLER_DIR}
     ${MISC_DIR}
@@ -61,8 +63,8 @@ set(ALL_PROJECT_DIRS
 
 set(INSTRUMENT_FILES
     ${INSTRUMENT_DIR}/InstrumentData.h
-    ${INSTRUMENT_DIR}/InstrumentInfo.h          ${INSTRUMENT_DIR}/InstrumentInfo.cpp
-    ${INSTRUMENT_DIR}/InstrumentInfoModel.h     ${INSTRUMENT_DIR}/InstrumentInfoModel.cpp
+    ${INSTRUMENT_DIR}/InstrumentInfo.h
+    ${INSTRUMENT_DIR}/InstrumentController.h    ${INSTRUMENT_DIR}/InstrumentController.cpp
     ${INSTRUMENT_DIR}/InstrumentInfoView.h      ${INSTRUMENT_DIR}/InstrumentInfoView.cpp
 )
 
@@ -75,14 +77,18 @@ set(PROCESSOR_FILES
     ${PROCESSOR_DIR}/PluginProcessor.h    ${PROCESSOR_DIR}/PluginProcessor.cpp
 )
 
-set(UI_FILES
-    ${UI_DIR}/PluginEditor.h            ${UI_DIR}/PluginEditor.cpp
-    ${UI_DIR}/CustomLookAndFeel.h       ${UI_DIR}/CustomLookAndFeel.cpp
-    ${UI_DIR}/FamousWorksView.h         ${UI_DIR}/FamousWorksView.cpp
-    ${UI_DIR}/InformationView.h         ${UI_DIR}/InformationView.cpp
-    ${UI_DIR}/InstrumentRangesView.h    ${UI_DIR}/InstrumentRangesView.cpp
-    ${UI_DIR}/QualitiesView.h           ${UI_DIR}/QualitiesView.cpp
-    ${UI_DIR}/TechniquesView.h          ${UI_DIR}/TechniquesView.cpp
+set(VIEW_FILES
+    ${VIEW_DIR}/PluginEditor.h            ${VIEW_DIR}/PluginEditor.cpp
+    ${VIEW_DIR}/CustomLookAndFeel.h       ${VIEW_DIR}/CustomLookAndFeel.cpp
+    ${VIEW_DIR}/FamousWorksView.h         ${VIEW_DIR}/FamousWorksView.cpp
+    ${VIEW_DIR}/InformationView.h         ${VIEW_DIR}/InformationView.cpp
+    ${VIEW_DIR}/InstrumentRangesView.h    ${VIEW_DIR}/InstrumentRangesView.cpp
+    ${VIEW_DIR}/QualitiesView.h           ${VIEW_DIR}/QualitiesView.cpp
+    ${VIEW_DIR}/TechniquesView.h          ${VIEW_DIR}/TechniquesView.cpp
+)
+
+set(VIEW_MODEL_FILES
+    ${VIEW_MODEL_DIR}/ViewModel.h    ${VIEW_MODEL_DIR}/ViewModel.cpp
 )
 
 set(PIANOROLL_FILES
@@ -92,6 +98,7 @@ set(PIANOROLL_FILES
 
 set(MISC_FILES
     ${MISC_DIR}/Parameters.h
+    ${MISC_DIR}/Helper.h
 )
 
 set(FILE_MANAGER_FILES
@@ -106,7 +113,8 @@ set(ALL_PROJECT_FILES
     ${INSTRUMENT_FILES}
     ${SAMPLER_FILES}
     ${PROCESSOR_FILES}
-    ${UI_FILES}
+    ${VIEW_FILES}
+    ${VIEW_MODEL_FILES}
     ${PIANOROLL_FILES}
     ${MISC_FILES}
     ${FILE_MANAGER_FILES}
@@ -123,7 +131,8 @@ source_group("Instruments"      FILES ${INSTRUMENT_FILES})
 source_group("Sampler"          FILES ${SAMPLER_FILES})
 source_group("Processor"        FILES ${PROCESSOR_FILES})
 source_group("Piano Roll"       FILES ${PIANOROLL_FILES})
-source_group("User Interface"   FILES ${UI_FILES})
+source_group("Views"            FILES ${VIEW_FILES})
+source_group("ViewModels"       FILES ${VIEW_MODEL_FILES})  
 source_group("Misc"             FILES ${MISC_FILES})
 source_group("File Manager"     FILES ${FILE_MANAGER_FILES})
 source_group("App"              FILES ${APP_FILES})

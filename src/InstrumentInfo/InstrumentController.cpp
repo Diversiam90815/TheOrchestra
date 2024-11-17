@@ -1,17 +1,18 @@
 /*
   ==============================================================================
 
-	Module			InstrumentInfoModel
+	Module			InstrumentController
 	Description		Managing instrument data for the whole orchestra
 
   ==============================================================================
 */
 
 
-#include "InstrumentInfoModel.h"
+#include "InstrumentController.h"
+#include <cassert>
 
 
-InstrumentInfoModel::InstrumentInfoModel()
+InstrumentController::InstrumentController()
 {
 	addWoodwindInstruments();
 	addBrassInstruments();
@@ -19,78 +20,32 @@ InstrumentInfoModel::InstrumentInfoModel()
 	addStringInstruments();
 }
 
-InstrumentInfoModel::~InstrumentInfoModel()
+
+InstrumentController::~InstrumentController()
 {
 }
 
 
-std::map<String, Family> InstrumentInfoModel::familyMap = {
-	{StringsName, Family::Strings}, {WoodwindsName, Family::Woodwinds}, {BrassName, Family::Brass}, {PercussionName, Family::Percussion}};
-
-
-std::map<String, int> InstrumentInfoModel::instrumentMap = {{ViolinName, Strings::Violin},
-															{ViolaName, Strings::Viola},
-															{VioloncelloName, Strings::Violoncello},
-															{DoubleBassName, Strings::DoubleBass},
-															{FrenchHornName, Brass::FrenchHorn},
-															{TenorTromboneName, Brass::TenorTrombone},
-															{BassTromboneName, Brass::BassTrombone},
-															{TrumpetName, Brass::Trumpet},
-															{TubaName, Brass::Tuba},
-															{FluteName, Woodwinds::Flute},
-															{ClarinetName, Woodwinds::Clarinet},
-															{OboeName, Woodwinds::Oboe},
-															{BassClarinetName, Woodwinds::BassClarinet},
-															{PiccoloName, Woodwinds::Piccolo},
-															{CorAnglaisName, Woodwinds::CorAnglais},
-															{BassoonName, Woodwinds::Bassoon},
-															{ContrabassoonName, Woodwinds::Contrabassoon},
-															{TimpaniName, Percussion::Timpani},
-															{CelesteName, Percussion::Celeste},
-															{MarimbaName, Percussion::Marimba},
-															{HarpName, Percussion::Harp},
-															{MarimbaName, Percussion::Marimba}};
-
-
-
-void				  InstrumentInfoModel::addInstrument(Family family, int instrumentId, const InstrumentInfo &info)
+void				  InstrumentController::addInstrument(Family family, int instrumentId, const InstrumentInfo &info)
 {
 	int key			 = getInstrumentKey(family, instrumentId);
 	instruments[key] = info;
 }
 
 
-InstrumentInfo InstrumentInfoModel::getInstrument(int key)
+InstrumentInfo InstrumentController::getInstrument(int key)
 {
 	auto it = instruments.find(key);
+	assert(it != instruments.end());
+
 	if (it != instruments.end())
 		return it->second;
+
+	return InstrumentInfo();
 }
 
 
-int InstrumentInfoModel::getInstrumentKey(int family, int instrument)
-{
-	int key = family * 100 + instrument;
-	return key;
-}
-
-
-int InstrumentInfoModel::getInstrumentKey(String& family, String& instrument)
-{
-	int familyKey = 0;
-	int instrumentKey = 0;
-
-	familyKey = familyMap.at(family);
-	instrumentKey	  = instrumentMap.at(instrument);
-
-	if (familyKey == 0 && instrumentKey == 0)
-		return 0;
-
-	return getInstrumentKey(familyKey,instrumentKey);
-}
-
-
-void InstrumentInfoModel::addBrassInstruments()
+void InstrumentController::addBrassInstruments()
 {
 	auto frenchHorn = InstrumentInfo(FrenchHornName, frenchHornRange, frenchHornQualities, frenchHornRoles, frenchHornFamousWorks, frenchHornTransposition, brassPlayingTechniques);
 	auto trumpet	= InstrumentInfo(TrumpetName, trumpetRange, trumpetQualities, trumpetRoles, trumpetFamousWorks, trumpetTransposition, brassPlayingTechniques);
@@ -110,7 +65,7 @@ void InstrumentInfoModel::addBrassInstruments()
 }
 
 
-void InstrumentInfoModel::addStringInstruments()
+void InstrumentController::addStringInstruments()
 {
 	auto violin = InstrumentInfo(ViolinName, violinRange, violinQualities, violinRoles, violinFamousWorks, violinTransposition, stringsPlayingTechniques);
 	auto viola	= InstrumentInfo(ViolaName, violaRange, violaQualities, violaRoles, violaFamousWorks, violaTransposition, stringsPlayingTechniques);
@@ -124,7 +79,7 @@ void InstrumentInfoModel::addStringInstruments()
 }
 
 
-void InstrumentInfoModel::addWoodwindInstruments()
+void InstrumentController::addWoodwindInstruments()
 {
 	auto piccolo = InstrumentInfo(PiccoloName, piccoloRange, piccoloQualities, piccoloRoles, piccoloFamousWorks, piccoloTransposition, woodwindsPlayingTechniques);
 	auto flute	 = InstrumentInfo(FluteName, fluteRange, fluteQualities, fluteRoles, fluteFamousWorks, fluteTransposition, woodwindsPlayingTechniques);
@@ -149,7 +104,7 @@ void InstrumentInfoModel::addWoodwindInstruments()
 }
 
 
-void InstrumentInfoModel::addPercussionInstruments()
+void InstrumentController::addPercussionInstruments()
 {
 	auto timpani = InstrumentInfo(TimpaniName, timpaniRange, timpaniQualities, timpaniRoles, timpaniFamousWorks, timpaniTransposition, timpaniPlayingTechniques);
 	auto celeste = InstrumentInfo(CelesteName, celesteRange, celesteQualities, celesteRoles, celestaFamousWorks, celesteTransposition, celestaPlayingTechniques);

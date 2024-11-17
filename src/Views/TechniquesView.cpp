@@ -22,4 +22,12 @@ TechniquesView::~TechniquesView()
 
 void TechniquesView::init()
 {
+	setLookAndFeel(&mCustomLookAndFeel);
+	setSize(mWidth, mHeight);
+}
+
+
+void TechniquesView::deinit()
+{
+	setLookAndFeel(nullptr);
 }

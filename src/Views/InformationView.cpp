@@ -7,19 +7,27 @@
   ==============================================================================
 */
 
-#include "FamousWorksView.h"
+#include "InformationView.h"
 
 
-FamousWorksView::FamousWorksView()
+InformationView::InformationView()
 {
 }
 
 
-FamousWorksView::~FamousWorksView()
+InformationView::~InformationView()
 {
 }
 
 
-void FamousWorksView::init()
+void InformationView::init()
 {
+	setLookAndFeel(&mCustomLookAndFeel);
+	setSize(mWidth, mHeight);
+}
+
+
+void InformationView::deinit()
+{
+	setLookAndFeel(nullptr);
 }

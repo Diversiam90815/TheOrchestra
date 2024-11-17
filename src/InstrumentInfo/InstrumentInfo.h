@@ -14,74 +14,27 @@
 #include "Parameters.h"
 #include "InstrumentData.h"
 
-
-// Enum for the orchestra families: Woodwinds, Brass, Strings and Percussion
-enum Family
-{
-	Woodwinds = 1,
-	Brass,
-	Strings,
-	Percussion
-};
-
-// Enum for the Strings family
-enum Strings
-{
-	Violin = 1,
-	Viola,
-	Violoncello,
-	DoubleBass
-};
-
-// Enum for the Woodwind family
-enum Woodwinds
-{
-	Piccolo = 1,
-	Flute,
-	Oboe,
-	CorAnglais,
-	Clarinet,
-	BassClarinet,
-	Bassoon,
-	Contrabassoon
-};
-
-// Enum for the Percussion family
-enum Percussion
-{
-	Harp = 1,
-	Celeste,
-	Timpani,
-	Marimba
-};
-
-// Enum for the Brass family
-enum Brass
-{
-	FrenchHorn = 1,
-	Trumpet,
-	TenorTrombone,
-	BassTrombone,
-	Cimbasso,
-	Tuba
-};
-
-
 /*
- @brief             Class defining an instrument and it's information (info can be found in InstrumentData.h)
+ @brief             Struct defining an instrument and it's information (info can be found in InstrumentData.h)
 */
-class InstrumentInfo
+struct InstrumentInfo
 {
 public:
-	InstrumentInfo();
+	InstrumentInfo() = default;
+
 	InstrumentInfo(const String		 &name,
-				   const String		 &range,
-				   const StringArray &qualities,
-				   const StringArray &roles,
-				   const StringArray &famousWorks,
-				   const String		 &transposition,
-				   const StringArray &playingTechniques);
-	~InstrumentInfo();
+								   const String		 &range,
+								   const StringArray &qualities,
+								   const StringArray &roles,
+								   const StringArray &famousWorks,
+								   const String		 &transposition,
+								   const StringArray &playingTechniques)
+		: mName(name), mRange(range), mQualities(qualities), mUsefulInformation(roles), mFamousWorks(famousWorks), mTransposition(transposition),
+		  mPlayingTechniques(playingTechniques)
+	{
+	}
+
+	~InstrumentInfo() = default;
 
     
 private:
@@ -93,6 +46,6 @@ private:
 	String		mTransposition;                 //Information about the transposition of the instrument, if it applies
 	StringArray mPlayingTechniques;             //Different playing techniques featured within the instrument's family
 
-	friend class InstrumentInfoModel;
+	friend class InstrumentController;
 	friend class InstrumentInfoView;
 };

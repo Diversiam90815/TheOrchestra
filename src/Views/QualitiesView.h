@@ -19,8 +19,12 @@ public:
 	~QualitiesView();
 
 	void init();
+	void deinit();
+
 
 private:
-	const int width	 = 269;
-	const int height = 305;
+	CustomLookAndFeel mCustomLookAndFeel;
+
+	const int		  mWidth  = 269;
+	const int		  mHeight = 305;
 };

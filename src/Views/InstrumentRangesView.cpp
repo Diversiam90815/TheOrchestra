@@ -22,4 +22,17 @@ InstrumentRangesView::~InstrumentRangesView()
 
 void InstrumentRangesView::init()
 {
+	setLookAndFeel(&mCustomLookAndFeel);
+	setSize(mWidth, mHeight);
+}
+
+
+void InstrumentRangesView::deinit()
+{
+	setLookAndFeel(nullptr);
+}
+
+
+void InstrumentRangesView::setInstrument(InstrumentInfo &info)
+{
 }

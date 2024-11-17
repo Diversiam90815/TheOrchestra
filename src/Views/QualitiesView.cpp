@@ -22,4 +22,12 @@ QualitiesView::~QualitiesView()
 
 void QualitiesView::init()
 {
+	setLookAndFeel(&mCustomLookAndFeel);
+	setSize(mWidth, mHeight);
+}
+
+
+void QualitiesView::deinit()
+{
+	setLookAndFeel(nullptr);
 }
