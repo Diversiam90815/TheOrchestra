@@ -19,8 +19,12 @@ public:
 	~InformationView();
 
 	void init();
+	void deinit();
+
 
 private:
-	const int width	 = 377;
-	const int height = 170;
+	CustomLookAndFeel mCustomLookAndFeel;
+
+	const int		  mWidth  = 377;
+	const int		  mHeight = 170;
 };

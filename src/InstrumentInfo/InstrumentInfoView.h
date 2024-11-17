@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-	Module			InstrumentInfoModel
+	Module			InstrumentController
 	Description		Displaying the instrument's information
 
   ==============================================================================
@@ -9,7 +9,7 @@
 
 #pragma once
 #include <JuceHeader.h>
-#include "InstrumentInfoModel.h"
+#include "InstrumentController.h"
 #include "CustomPianoRoll.h"
 #include "CustomLookAndFeel.h"
 #include "Sampler.h"
@@ -63,7 +63,7 @@ private:
 
 	MenuBarComponent					menuBar;										// Menubar instance
 
-	InstrumentInfoModel					mInstrumentModel;								// Model for our view
+	InstrumentController					mInstrumentModel;								// Model for our view
 
 	Sampler							   &mOrchestraSampler;
 
