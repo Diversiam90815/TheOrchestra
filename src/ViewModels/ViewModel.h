@@ -30,7 +30,7 @@ public:
 	void setInstrument(int instrumentKey);
 
 private:
-	InstrumentController	 mInstrumentController;
+	InstrumentController mInstrumentController;
 
 	InstrumentRangesView mRangesView;
 	QualitiesView		 mQualitiesView;

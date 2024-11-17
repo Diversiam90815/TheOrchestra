@@ -12,8 +12,6 @@
 #include <JuceHeader.h>
 #include "CustomLookAndFeel.h"
 
-#include "InstrumentInfo.h"
-
 
 class InstrumentRangesView : public Component
 {
@@ -22,9 +20,8 @@ public:
 	~InstrumentRangesView();
 
 	void init();
-	void deinit();
 
-	void setInstrument(InstrumentInfo& info);
+	void deinit();
 
 private:
 	Label			  mRangesTitle;
@@ -39,8 +36,20 @@ private:
 
 	CustomLookAndFeel mCustomLookAndFeel;
 
-	const int		  mWidth  = 269;
-	const int		  mHeight = 328;
+	const int		  mWidth			   = 269;
+	const int		  mHeight			   = 328;
+
+	const int		  mLowerNoteImageX	   = 38;
+	const int		  mLowerNoteImageY	   = 55;
+
+	const int		  mHigherNoteImageX	   = 146;
+	const int		  mHigherNoteImageY	   = 55;
+
+	const int		  mTranspositionImageX = 91;
+	const int		  mTranspositionImageY = 206;
+
+	const int		  mImageBoxWidth	   = 87;
+	const int		  mImageBoxHeight	   = 64;
 
 
 	friend class InstrumentRangesViewModel;
