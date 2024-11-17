@@ -76,8 +76,13 @@ set(PROCESSOR_FILES
 )
 
 set(UI_FILES
-    ${UI_DIR}/PluginEditor.h        ${UI_DIR}/PluginEditor.cpp
-    ${UI_DIR}/CustomLookAndFeel.h   ${UI_DIR}/CustomLookAndFeel.cpp
+    ${UI_DIR}/PluginEditor.h            ${UI_DIR}/PluginEditor.cpp
+    ${UI_DIR}/CustomLookAndFeel.h       ${UI_DIR}/CustomLookAndFeel.cpp
+    ${UI_DIR}/FamousWorksView.h         ${UI_DIR}/FamousWorksView.cpp
+    ${UI_DIR}/InformationView.h         ${UI_DIR}/InformationView.cpp
+    ${UI_DIR}/InstrumentRangesView.h    ${UI_DIR}/InstrumentRangesView.cpp
+    ${UI_DIR}/QualitiesView.h           ${UI_DIR}/QualitiesView.cpp
+    ${UI_DIR}/TechniquesView.h          ${UI_DIR}/TechniquesView.cpp
 )
 
 set(PIANOROLL_FILES
