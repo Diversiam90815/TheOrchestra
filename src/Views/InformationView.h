@@ -25,6 +25,27 @@ public:
 private:
 	CustomLookAndFeel mCustomLookAndFeel;
 
-	const int		  mWidth  = 377;
-	const int		  mHeight = 170;
+	Label			  mTitle;
+
+	Label			  mFirstInformation;
+	Label			  mSecondInformation;
+	Label			  mThirdInformation;
+	Label			  mFourthInformation;
+
+	const int		  mTitleX		= 172;
+	const int		  mTitleY		= 33;
+	const int		  mTitleWidth	= 172;
+	const int		  mTitleHeight	= 33;
+
+	const int		  mInfoWidth	= 151;
+	const int		  mInfoHeight	= 48;
+
+	const int		  mFirstRowY	= 50;
+	const int		  mSecondRowY	= 104;
+
+	const int		  mFirstColumX	= 8;
+	const int		  mSecondColumx = 199;
+
+	const int		  mWidth		= 377;
+	const int		  mHeight		= 170;
 };
