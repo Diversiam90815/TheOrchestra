@@ -26,14 +26,22 @@ void InformationView::init()
 	setSize(mWidth, mHeight);
 
 	// Set the title
+	addAndMakeVisible(mTitle);
 	mTitle.setName("InformationTitle");
 	mTitle.setText("Useful Information", dontSendNotification);
 	mTitle.setBounds(mTitleX, mTitleY, mTitleWidth, mTitleHeight);
 
 	// Set the information label's positions
+	addAndMakeVisible(&mFirstInformation);
 	mFirstInformation.setBounds(mFirstColumX, mFirstRowY, mInfoWidth, mInfoHeight);
+
+	addAndMakeVisible(&mSecondInformation);
 	mSecondInformation.setBounds(mSecondColumx, mFirstRowY, mInfoWidth, mInfoHeight);
+
+	addAndMakeVisible(&mThirdInformation);
 	mThirdInformation.setBounds(mFirstColumX, mSecondRowY, mInfoWidth, mInfoHeight);
+
+	addAndMakeVisible(&mFourthInformation);
 	mFourthInformation.setBounds(mSecondColumx, mSecondRowY, mInfoWidth, mInfoHeight);
 }
 
