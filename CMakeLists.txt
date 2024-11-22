@@ -37,7 +37,7 @@ set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Assets")
 set (INSTRUMENT_DIR         ${SOURCE_FILES_DIR}/InstrumentInfo )
 set (PROCESSOR_DIR          ${SOURCE_FILES_DIR}/AudioProcessor )
 set (VIEW_DIR               ${SOURCE_FILES_DIR}/Views )
-set (VIEW_MODEL_DIR          ${SOURCE_FILES_DIR}/ViewModels )
+set (VIEW_MODEL_DIR         ${SOURCE_FILES_DIR}/ViewModels )
 set (PIANOROLL_DIR          ${SOURCE_FILES_DIR}/PianoRoll )
 set (SAMPLER_DIR            ${SOURCE_FILES_DIR}/Sampler )
 set (MISC_DIR               ${SOURCE_FILES_DIR}/Misc )
@@ -80,6 +80,7 @@ set(PROCESSOR_FILES
 set(VIEW_FILES
     ${VIEW_DIR}/PluginEditor.h            ${VIEW_DIR}/PluginEditor.cpp
     ${VIEW_DIR}/CustomLookAndFeel.h       ${VIEW_DIR}/CustomLookAndFeel.cpp
+    ${VIEW_DIR}/InstrumentView.h          ${VIEW_DIR}/InstrumentView.cpp
     ${VIEW_DIR}/FamousWorksView.h         ${VIEW_DIR}/FamousWorksView.cpp
     ${VIEW_DIR}/InformationView.h         ${VIEW_DIR}/InformationView.cpp
     ${VIEW_DIR}/InstrumentRangesView.h    ${VIEW_DIR}/InstrumentRangesView.cpp
