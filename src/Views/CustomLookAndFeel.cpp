@@ -88,12 +88,8 @@ Font CustomLookAndFeel::getEditorFont()
 
 void CustomLookAndFeel::drawMenuBarBackground(Graphics &g, int width, int height, bool isMouseOverBar, MenuBarComponent &menuBar)
 {
-	// Simple solid color background
-	g.fillAll(Colours::black);
+	g.fillAll(menuBarBackground);
 
-	// Optionally add a subtle gradient
-	ColourGradient gradient(Colours::darkgrey, 0, 0, Colours::black, 0, (float)height, false);
-	g.setGradientFill(gradient);
 	g.fillRect(0, 0, width, height);
 }
 

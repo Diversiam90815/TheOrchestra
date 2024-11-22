@@ -57,10 +57,18 @@ private:
 
 	Font   getPopupMenuFont() override;
 
-	Font   headerFont = Font("Instrument Serif", 24.0f, Font::plain);
-	Colour fontColor  = Colour(0xEEE9DA);
 
-	Font   infoFont;	  // Font used for the information texts displayed
-	Font   titleFont;	  // Font used for the titles
-	Font   popupmenuFont; // Font used for the pop up menu
+	Font   headerFont		 = Font("Instrument Serif", 24.0f, Font::plain);
+
+	Colour fontColor		 = Colour::fromRGB(238, 233, 218);
+	Colour whiteFontColour	 = Colour::fromRGB(255, 255, 255);
+
+	Colour menuBarBackground = Colour::fromRGB(44, 44, 44);	  // Menubar background colour
+	Colour background		 = Colour::fromRGB(16, 14, 21);	  // Colour used for the background of the app window
+	Colour buttonColor		 = Colour::fromRGB(158, 104, 61); // Colour used for the buttons in "Playing Techniques"
+	Colour boxesBackground	 = background.brighter(0.02f);	  // Colours used for the background of the different UI elements
+
+	Font   infoFont;										  // Font used for the information texts displayed
+	Font   titleFont;										  // Font used for the titles
+	Font   popupmenuFont;									  // Font used for the pop up menu
 };
