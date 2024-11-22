@@ -15,6 +15,7 @@
 #include "TechniquesView.h"
 #include "InformationView.h"
 #include "FamousWorksView.h"
+#include "InstrumentView.h"
 
 
 class ViewModel
@@ -30,11 +31,6 @@ public:
 	void setInstrument(int instrumentKey);
 
 private:
-	InstrumentController mInstrumentController;
+	//InstrumentController mInstrumentController;
 
-	InstrumentRangesView mRangesView;
-	QualitiesView		 mQualitiesView;
-	TechniquesView		 mTechniquesView;
-	InformationView		 mInfoView;
-	FamousWorksView		 mFamousWorksView;
 };
