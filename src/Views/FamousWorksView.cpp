@@ -24,6 +24,15 @@ void FamousWorksView::init()
 {
 	setLookAndFeel(&mCustomLookAndFeel);
 	setSize(mWidth, mHeight);
+
+	// Set the title
+	mTitle.setName("FamousWorksTitle");
+	mTitle.setText("Famous Works", dontSendNotification);
+	mTitle.setBounds(mTitleX, mTitleY, mTitleWidth, mTitleHeight);
+
+	mFirstWork.setBounds(mWorkX, mFirstWorkY, mWorkWidth, mWorkHeight);
+	mSecondWork.setBounds(mWorkX, mSecondWorkY, mWorkWidth, mWorkHeight);
+	mThirdWork.setBounds(mWorkX, mThirdWorkY, mWorkWidth, mWorkHeight);
 }
 
 
