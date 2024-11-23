@@ -42,12 +42,20 @@ void CustomLookAndFeel::init()
 	setColour(PopupMenu::highlightedBackgroundColourId, menuBarBackground);
 	setColour(PopupMenu::highlightedTextColourId, whiteFontColour);
 	setColour(PopupMenu::textColourId, fontColor);
+
+	setFont();
 }
 
 
 void CustomLookAndFeel::setFont()
 {
-	auto fontData = Binary
+	// Load the custom typeface from BinaryData
+	instrumentTypeface = Typeface::createSystemTypefaceFor(BinaryData::InstrumentSerifRegular_ttf, BinaryData::InstrumentSerifRegular_ttfSize);
+
+	headerFont		   = Font(instrumentTypeface).withHeight(24.0f);
+	noteNameFonts	   = Font(instrumentTypeface).withHeight(24.0f);
+	menuFont		   = Font(instrumentTypeface).withHeight(24.0f);
+	infoTextFont	   = Font(instrumentTypeface).withHeight(14.0f);
 }
 
 

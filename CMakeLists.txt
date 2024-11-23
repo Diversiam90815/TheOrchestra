@@ -171,7 +171,7 @@ target_sources(${PROJECT_NAME} PRIVATE ${ALL_PROJECT_FILES} )
 ###########################################
 
 juce_add_binary_data(FontBinaryData
-    SOURCES ${ASSETS_DIR}/Font/Instrument-Serif/Instrument-Serif.ttf
+    SOURCES ${ASSETS_DIR}/Font/Instrument-Serif/InstrumentSerif-Regular.ttf
 )
 
 
