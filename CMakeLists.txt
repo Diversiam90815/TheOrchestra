@@ -80,6 +80,7 @@ set(PROCESSOR_FILES
 set(VIEW_FILES
     ${VIEW_DIR}/PluginEditor.h            ${VIEW_DIR}/PluginEditor.cpp
     ${VIEW_DIR}/CustomLookAndFeel.h       ${VIEW_DIR}/CustomLookAndFeel.cpp
+    ${VIEW_DIR}/CustomComponent.h         ${VIEW_DIR}/CustomComponent.cpp
     ${VIEW_DIR}/InstrumentView.h          ${VIEW_DIR}/InstrumentView.cpp
     ${VIEW_DIR}/FamousWorksView.h         ${VIEW_DIR}/FamousWorksView.cpp
     ${VIEW_DIR}/InformationView.h         ${VIEW_DIR}/InformationView.cpp
@@ -254,9 +255,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_LIBS} )
 #   POST BUILD COMMAND
 ###########################################
 
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${ASSETS_DIR}"
-        "${ASSETS_DEST_DIR}"
-    COMMENT "Copying Assets directory to output directory"
-)
+# add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#     COMMAND ${CMAKE_COMMAND} -E copy_directory
+#         "${ASSETS_DIR}"
+#         "${ASSETS_DEST_DIR}"
+#     COMMENT "Copying Assets directory to output directory"
+# )

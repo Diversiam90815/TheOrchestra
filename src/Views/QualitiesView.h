@@ -8,11 +8,10 @@
 */
 
 #pragma once
-#include <JuceHeader.h>
-#include "CustomLookAndFeel.h"
+#include "CustomComponent.h"
 
 
-class QualitiesView : public Component
+class QualitiesView : public CustomComponent
 {
 public:
 	QualitiesView();
@@ -21,9 +20,8 @@ public:
 	void init();
 	void deinit();
 
-
 private:
-	CustomLookAndFeel mCustomLookAndFeel;
+	//CustomLookAndFeel mCustomLookNFeel;
 
 
 	Label			  mTitle;

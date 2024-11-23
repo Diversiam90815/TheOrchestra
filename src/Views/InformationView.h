@@ -8,11 +8,10 @@
 */
 
 #pragma once
-#include <JuceHeader.h>
-#include "CustomLookAndFeel.h"
+#include "CustomComponent.h"
 
 
-class InformationView : public Component
+class InformationView : public CustomComponent
 {
 public:
 	InformationView();
@@ -23,7 +22,7 @@ public:
 
 
 private:
-	CustomLookAndFeel mCustomLookAndFeel;
+	//CustomLookAndFeel mCustomLookAndFeel;
 
 	Label			  mTitle;
 
@@ -32,8 +31,8 @@ private:
 	Label			  mThirdInformation;
 	Label			  mFourthInformation;
 
-	const int		  mTitleX		= 172;
-	const int		  mTitleY		= 33;
+	const int		  mTitleX		= 102;
+	const int		  mTitleY		= 7;
 	const int		  mTitleWidth	= 172;
 	const int		  mTitleHeight	= 33;
 

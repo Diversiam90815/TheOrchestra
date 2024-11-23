@@ -22,7 +22,7 @@ QualitiesView::~QualitiesView()
 
 void QualitiesView::init()
 {
-	setLookAndFeel(&mCustomLookAndFeel);
+	//setLookAndFeel(&mCustomLookNFeel);
 	setSize(mWidth, mHeight);
 
 	// Set the title
@@ -66,5 +66,5 @@ void QualitiesView::init()
 
 void QualitiesView::deinit()
 {
-	setLookAndFeel(nullptr);
+	//setLookAndFeel(nullptr);
 }

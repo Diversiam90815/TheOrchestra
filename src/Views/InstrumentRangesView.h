@@ -9,11 +9,10 @@
 
 #pragma once
 
-#include <JuceHeader.h>
-#include "CustomLookAndFeel.h"
+#include "CustomComponent.h"
 
 
-class InstrumentRangesView : public Component
+class InstrumentRangesView : public CustomComponent
 {
 public:
 	InstrumentRangesView();
@@ -35,7 +34,7 @@ private:
 	DrawableImage	  mHigherRangeNoteImage;
 	DrawableImage	  mTranspositionNoteImage;
 
-	CustomLookAndFeel mCustomLookAndFeel;
+	//CustomLookAndFeel mCustomLookAndFeel;
 
 	const int		  mWidth					= 269;
 	const int		  mHeight					= 328;
@@ -74,5 +73,5 @@ private:
 	const int		  mImageBoxHeight			= 64;
 
 
-	friend class InstrumentRangesViewModel;
+	//friend class InstrumentRangesViewModel;
 };

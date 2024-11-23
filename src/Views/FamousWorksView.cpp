@@ -22,7 +22,7 @@ FamousWorksView::~FamousWorksView()
 
 void FamousWorksView::init()
 {
-	setLookAndFeel(&mCustomLookAndFeel);
+	//setLookAndFeel(&mCustomLookAndFeel);
 	setSize(mWidth, mHeight);
 
 	// Set the title
@@ -42,5 +42,5 @@ void FamousWorksView::init()
 
 void FamousWorksView::deinit()
 {
-	setLookAndFeel(nullptr);
+	//setLookAndFeel(nullptr);
 }
