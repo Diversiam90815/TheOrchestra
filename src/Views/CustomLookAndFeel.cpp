@@ -45,6 +45,12 @@ void CustomLookAndFeel::init()
 }
 
 
+void CustomLookAndFeel::setFont()
+{
+	auto fontData = Binary
+}
+
+
 void CustomLookAndFeel::drawLabel(Graphics &g, Label &label)
 {
 	String labelName = label.getName();
