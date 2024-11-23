@@ -22,7 +22,7 @@ InstrumentRangesView::~InstrumentRangesView()
 
 void InstrumentRangesView::init()
 {
-	setLookAndFeel(&mCustomLookAndFeel);
+	//setLookAndFeel(&mCustomLookAndFeel);
 	setSize(mWidth, mHeight);
 
 	// Set the Ranges title
@@ -61,5 +61,5 @@ void InstrumentRangesView::init()
 
 void InstrumentRangesView::deinit()
 {
-	setLookAndFeel(nullptr);
+	//setLookAndFeel(nullptr);
 }
