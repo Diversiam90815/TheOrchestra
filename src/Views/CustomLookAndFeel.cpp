@@ -20,34 +20,49 @@ CustomLookAndFeel::~CustomLookAndFeel()
 }
 
 
+Colour CustomLookAndFeel::getBoxBackgroundColour() const
+{
+	return boxesBackground;
+}
+
+
+float CustomLookAndFeel::getCornerRadius() const
+{
+	return mCornerRadius;
+}
+
+
 void CustomLookAndFeel::init()
 {
 	// Set default font
-	setDefaultSansSerifTypefaceName("Lato"); // A modern, readable font that works well for UI
+	// setDefaultSansSerifTypefaceName("Lato"); // A modern, readable font that works well for UI
 
 	// Set different colours
-	setColour(ResizableWindow::backgroundColourId, Colour(0xFF2A2F36)); // Deep blue-gray
-	setColour(TextEditor::backgroundColourId, Colour(0xFF1E1E1E));		// Dark charcoal
-	setColour(TextEditor::textColourId, Colour(0xFFF0F0F0));			// Off-white for high contrast readability
-	setColour(TextEditor::outlineColourId, Colour(0xFF404040));			// Slightly lighter grey for outlines
-	setColour(Label::textColourId, Colour(0xFF4CAF50));					// A refreshing green that stands out yet is soft
+	setColour(ResizableWindow::backgroundColourId, background);
+
+	// setColour(TextEditor::backgroundColourId, Colour(0xFF1E1E1E));
+	// setColour(TextEditor::textColourId, Colour(0xFFF0F0F0));
+	// setColour(TextEditor::outlineColourId, Colour(0xFF404040));
+
+	setColour(Label::textColourId, fontColor);
+
 	setColour(PopupMenu::backgroundColourId, Colours::black);
-	setColour(PopupMenu::highlightedBackgroundColourId, Colours::black.brighter(0.5f));
-	setColour(PopupMenu::highlightedTextColourId, Colours::white);
-	setColour(PopupMenu::textColourId, Colours::lightgrey);
+	setColour(PopupMenu::highlightedBackgroundColourId, menuBarBackground);
+	setColour(PopupMenu::highlightedTextColourId, whiteFontColour);
+	setColour(PopupMenu::textColourId, fontColor);
 
-	// Configure fonts
-	//infoFont.setTypefaceName("Lato");
-	infoFont.setHeight(16);
-	infoFont
-		.setBold(false);
+	//// Configure fonts
+	////infoFont.setTypefaceName("Lato");
+	// infoFont.setHeight(16);
+	// infoFont
+	//	.setBold(false);
 
-	//titleFont.setTypefaceName("Lato");
-	titleFont.setBold(true);
-	titleFont.setHeight(20);
+	////titleFont.setTypefaceName("Lato");
+	// titleFont.setBold(true);
+	// titleFont.setHeight(20);
 
-	//popupmenuFont.setTypefaceName("Lato");
-	popupmenuFont.setHeight(16);
+	////popupmenuFont.setTypefaceName("Lato");
+	// popupmenuFont.setHeight(16);
 }
 
 
@@ -55,34 +70,20 @@ void CustomLookAndFeel::drawLabel(Graphics &g, Label &label)
 {
 	String labelName = label.getName();
 
-	if (labelName.contains("Title"))
+	if (labelName.contains("Title") || labelName.contains("NoteName"))
 	{
 		g.fillAll(label.findColour(Label::backgroundColourId));
 		g.setColour(label.findColour(Label::textColourId));
-		g.setFont(titleFont);
+		g.setFont(headerFont);
 		g.drawText(label.getText(), label.getLocalBounds(), Justification::centred, true);
 	}
 	else
 	{
 		g.fillAll(label.findColour(Label::backgroundColourId));
-		g.setColour((Colours::white));
-		g.setFont(infoFont);
+		g.setColour(label.findColour(Label::textColourId));
+		g.setFont(infoTextFont);
 		g.drawText(label.getText(), label.getLocalBounds(), Justification::centredLeft, false);
 	}
-}
-
-
-void CustomLookAndFeel::drawTextEditorOutline(Graphics &g, int width, int height, TextEditor &textEditor)
-{
-	g.setColour(textEditor.findColour(TextEditor::outlineColourId));
-	g.setFont(infoFont);
-	g.drawRect(0, 0, width, height, 1); // Thin outline with a thickness of 1 pixel
-}
-
-
-Font CustomLookAndFeel::getEditorFont()
-{
-	return infoFont;
 }
 
 
@@ -120,10 +121,4 @@ void CustomLookAndFeel::drawPopupMenuItem(Graphics			   &g,
 	g.setColour(isHighlighted ? findColour(PopupMenu::highlightedTextColourId) : findColour(PopupMenu::textColourId));
 	g.setFont(getPopupMenuFont());
 	g.drawText(text, area.reduced(10, 0), Justification::centred, true);
-}
-
-
-Font CustomLookAndFeel::getPopupMenuFont()
-{
-	return popupmenuFont;
 }

@@ -3,22 +3,22 @@
 #include "PluginEditor.h"
 
 
-class Application : public juce::JUCEApplication
+class Application : public JUCEApplication
 {
 public:
 	Application() = default;
 
-	const juce::String getApplicationName() override
+	const String getApplicationName() override
 	{
 		return JucePlugin_Name;
 	}
 
-	const juce::String getApplicationVersion() override
+	const String getApplicationVersion() override
 	{
 		return String(JucePlugin_Version);
 	}
 
-	void initialise(const juce::String &) override
+	void initialise(const String &) override
 	{
 		mainWindow.reset(new MainWindow(getApplicationName(), *this));
 	}
@@ -30,18 +30,17 @@ public:
 
 
 private:
-	class MainWindow : public juce::DocumentWindow
+	class MainWindow : public DocumentWindow
 	{
 	public:
 		MainWindow(const juce::String &name, JUCEApplication &app)
-			: DocumentWindow(name, juce::Desktop::getInstance().getDefaultLookAndFeel().findColour(ResizableWindow::backgroundColourId), juce::DocumentWindow::allButtons), app(app)
+			: DocumentWindow(name, Desktop::getInstance().getDefaultLookAndFeel().findColour(ResizableWindow::backgroundColourId), DocumentWindow::allButtons), app(app)
 		{
 			// Create an instance of your AudioProcessor
 			processor.reset(new OrchestraProcessor());
 
 			// Create an instance of your editor directly
 			editor.reset(new OrchestraEditor(*processor));
-
 
 			setUsingNativeTitleBar(true);
 			setContentOwned(editor.get(), true);
@@ -54,8 +53,8 @@ private:
 
 		void closeButtonPressed() override
 		{
-			processor.release();
-			editor.release();
+			editor.reset();
+			processor.reset();
 			app.systemRequestedQuit();
 		}
 

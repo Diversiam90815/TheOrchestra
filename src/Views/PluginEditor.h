@@ -13,6 +13,7 @@
 #include "PianoRoll.h"
 #include "InstrumentInfoView.h"
 
+#include "CustomMenuBar.h"
 #include "InstrumentRangesView.h"
 #include "QualitiesView.h"
 #include "TechniquesView.h"
@@ -42,6 +43,8 @@ private:
 
 	// InstrumentInfoView	mInstrumentInfoView;
 
+	CustomMenuBar		 mCustomMenuBarModel;
+
 	MenuBarComponent	 mMenuBar;
 
 	CustomLookAndFeel	 mCustomLookAndFeel;
@@ -65,7 +68,7 @@ private:
 	const int			 mTechniquesViewX  = 650;
 	const int			 mTechniquesViewY  = 145;
 
-	const int			 mInfoViewX		   = 377;
+	const int			 mInfoViewX		   = 654;
 	const int			 mInfoViewY		   = 389;
 
 	const int			 mFamousWorksViewX = 962;

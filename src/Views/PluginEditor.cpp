@@ -31,7 +31,7 @@ void OrchestraEditor::showUI()
 	// addAndMakeVisible(mInstrumentInfoView);
 	addAndMakeVisible(mPianoRollView);
 
-	// mMenuBar.setModel(&mInstrumentInfoView);
+	mMenuBar.setModel(&mCustomMenuBarModel);
 	addAndMakeVisible(mMenuBar);
 
 

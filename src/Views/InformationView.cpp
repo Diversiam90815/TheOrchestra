@@ -22,7 +22,7 @@ InformationView::~InformationView()
 
 void InformationView::init()
 {
-	setLookAndFeel(&mCustomLookAndFeel);
+	//setLookAndFeel(&mCustomLookAndFeel);
 	setSize(mWidth, mHeight);
 
 	// Set the title
@@ -30,6 +30,7 @@ void InformationView::init()
 	mTitle.setName("InformationTitle");
 	mTitle.setText("Useful Information", dontSendNotification);
 	mTitle.setBounds(mTitleX, mTitleY, mTitleWidth, mTitleHeight);
+	mTitle.setJustificationType(Justification::centred);
 
 	// Set the information label's positions
 	addAndMakeVisible(&mFirstInformation);
@@ -48,5 +49,5 @@ void InformationView::init()
 
 void InformationView::deinit()
 {
-	setLookAndFeel(nullptr);
+	//setLookAndFeel(nullptr);
 }

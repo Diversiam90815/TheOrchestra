@@ -22,9 +22,9 @@ TechniquesView::~TechniquesView()
 
 void TechniquesView::init()
 {
-	setLookAndFeel(&mCustomLookAndFeel);
+	//setLookAndFeel(&mCustomLookNFeel);
 	setSize(mWidth, mHeight);
-
+	
 	// Set the title
 	addAndMakeVisible(&mTitle);
 	mTitle.setName("TechniqueTitle");
@@ -49,13 +49,13 @@ void TechniquesView::init()
 
 	// Set third row of buttons
 	addAndMakeVisible(&mTech7);
-	mTech7.setBounds(mLastRowFirstColumnX, mThirdColumnX, mButtonWidth, mButtonHeight);
+	mTech7.setBounds(mLastRowFirstColumnX, mThirdRowY, mButtonWidth, mButtonHeight);
 	addAndMakeVisible(&mTech8);
-	mTech8.setBounds(mLastRowSecondColumnX, mThirdColumnX, mButtonWidth, mButtonHeight);
+	mTech8.setBounds(mLastRowSecondColumnX, mThirdRowY, mButtonWidth, mButtonHeight);
 }
 
 
 void TechniquesView::deinit()
 {
-	setLookAndFeel(nullptr);
+	//setLookAndFeel(nullptr);
 }
