@@ -41,8 +41,6 @@ private:
 
 	PianoRoll			 mPianoRollView;
 
-	// InstrumentInfoView	mInstrumentInfoView;
-
 	CustomMenuBar		 mCustomMenuBarModel;
 
 	MenuBarComponent	 mMenuBar;

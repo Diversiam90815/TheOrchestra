@@ -28,7 +28,6 @@ OrchestraEditor::~OrchestraEditor()
 
 void OrchestraEditor::showUI()
 {
-	// addAndMakeVisible(mInstrumentInfoView);
 	addAndMakeVisible(mPianoRollView);
 
 	mMenuBar.setModel(&mCustomMenuBarModel);
@@ -74,5 +73,4 @@ void OrchestraEditor::resized()
 
 	mPianoRollView.setBounds(mPianoRollX, mPianoRollY, mWidth, mPianoRollHeight);
 	mMenuBar.setBounds(mMenuBarX, mMenuBarY, mWidth, mMenuBarHeight);
-	// mInstrumentInfoView.setBoundsRelative(0.01f, 0.05f, 0.98f, 0.8f);
 }

@@ -22,7 +22,6 @@ InformationView::~InformationView()
 
 void InformationView::init()
 {
-	//setLookAndFeel(&mCustomLookAndFeel);
 	setSize(mWidth, mHeight);
 
 	// Set the title
@@ -49,5 +48,4 @@ void InformationView::init()
 
 void InformationView::deinit()
 {
-	//setLookAndFeel(nullptr);
 }

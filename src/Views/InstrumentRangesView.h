@@ -34,8 +34,6 @@ private:
 	DrawableImage	  mHigherRangeNoteImage;
 	DrawableImage	  mTranspositionNoteImage;
 
-	//CustomLookAndFeel mCustomLookAndFeel;
-
 	const int		  mWidth					= 269;
 	const int		  mHeight					= 328;
 
@@ -71,7 +69,4 @@ private:
 
 	const int		  mImageBoxWidth			= 87;
 	const int		  mImageBoxHeight			= 64;
-
-
-	//friend class InstrumentRangesViewModel;
 };

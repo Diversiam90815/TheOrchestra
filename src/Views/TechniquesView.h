@@ -23,8 +23,6 @@ public:
 
 private:
 
-	//CustomLookAndFeel mCustomLookNFeel;
-
 	Label			  mTitle;
 
 	// Techniques displays using text buttons with tooltips in 3 rows á 3-3-2

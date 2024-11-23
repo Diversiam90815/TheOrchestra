@@ -23,10 +23,6 @@ ViewModel::~ViewModel()
 
 void ViewModel::init()
 {
-	//mInstrumentView.init();
-	//mRangesView.init();
-	//mQualitiesView.init();
-	//mTechniquesView.init();
 }
 
 

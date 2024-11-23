@@ -22,7 +22,6 @@ public:
 	void deinit();
 
 private:
-	//CustomLookAndFeel mCustomLookNFeel;
 
 	Label			  mName;  // Name of the instrument
 
