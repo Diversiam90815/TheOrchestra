@@ -34,35 +34,14 @@ float CustomLookAndFeel::getCornerRadius() const
 
 void CustomLookAndFeel::init()
 {
-	// Set default font
-	// setDefaultSansSerifTypefaceName("Lato"); // A modern, readable font that works well for UI
-
 	// Set different colours
 	setColour(ResizableWindow::backgroundColourId, background);
-
-	// setColour(TextEditor::backgroundColourId, Colour(0xFF1E1E1E));
-	// setColour(TextEditor::textColourId, Colour(0xFFF0F0F0));
-	// setColour(TextEditor::outlineColourId, Colour(0xFF404040));
-
 	setColour(Label::textColourId, fontColor);
 
 	setColour(PopupMenu::backgroundColourId, Colours::black);
 	setColour(PopupMenu::highlightedBackgroundColourId, menuBarBackground);
 	setColour(PopupMenu::highlightedTextColourId, whiteFontColour);
 	setColour(PopupMenu::textColourId, fontColor);
-
-	//// Configure fonts
-	////infoFont.setTypefaceName("Lato");
-	// infoFont.setHeight(16);
-	// infoFont
-	//	.setBold(false);
-
-	////titleFont.setTypefaceName("Lato");
-	// titleFont.setBold(true);
-	// titleFont.setHeight(20);
-
-	////popupmenuFont.setTypefaceName("Lato");
-	// popupmenuFont.setHeight(16);
 }
 
 

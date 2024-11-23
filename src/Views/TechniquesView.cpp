@@ -22,7 +22,6 @@ TechniquesView::~TechniquesView()
 
 void TechniquesView::init()
 {
-	//setLookAndFeel(&mCustomLookNFeel);
 	setSize(mWidth, mHeight);
 	
 	// Set the title
@@ -57,5 +56,4 @@ void TechniquesView::init()
 
 void TechniquesView::deinit()
 {
-	//setLookAndFeel(nullptr);
 }
