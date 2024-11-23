@@ -167,6 +167,16 @@ target_sources(${PROJECT_NAME} PRIVATE ${ALL_PROJECT_FILES} )
 
 
 ###########################################
+#   BINARY DATA
+###########################################
+
+juce_add_binary_data(FontBinaryData
+    SOURCES ${ASSETS_DIR}/Font/Instrument-Serif/Instrument-Serif.ttf
+)
+
+
+
+###########################################
 #   TARGET INCLUDE DIRECTORIES
 ###########################################
 
@@ -245,6 +255,7 @@ target_compile_options(${PROJECT_NAME}
 set (PROJECT_LIBS juce::juce_audio_utils
                   juce::juce_audio_plugin_client
                   juce::juce_core
+                  FontBinaryData
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_LIBS} )

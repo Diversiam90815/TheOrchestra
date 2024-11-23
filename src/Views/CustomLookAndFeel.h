@@ -11,7 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-
+#include "BinaryData.h"
 
 // Enum to differentiate each label use
 enum labelType
@@ -38,6 +38,8 @@ public:
 
 private:
 	void		init();
+
+	void		setFont();
 
 	void		drawLabel(Graphics &g, Label &label) override;
 
