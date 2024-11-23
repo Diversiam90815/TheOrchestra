@@ -29,8 +29,4 @@ public:
 	void deinit();
 
 	void setInstrument(int instrumentKey);
-
-private:
-	//InstrumentController mInstrumentController;
-
 };

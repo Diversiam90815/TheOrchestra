@@ -22,7 +22,6 @@ InstrumentView::~InstrumentView()
 
 void InstrumentView::init()
 {
-	//setLookAndFeel(&mCustomLookNFeel);
 	setSize(mWidth, mHeight);
 
 	// Set the instrument's name
@@ -38,5 +37,4 @@ void InstrumentView::init()
 
 void InstrumentView::deinit()
 {
-	//setLookAndFeel(nullptr);
 }

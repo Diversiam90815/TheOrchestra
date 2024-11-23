@@ -22,7 +22,6 @@ public:
 
 
 private:
-	//CustomLookAndFeel mCustomLookAndFeel;
 
 	Label			  mTitle;
 

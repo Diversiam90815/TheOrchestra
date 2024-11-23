@@ -21,8 +21,6 @@ public:
 	void deinit();
 
 private:
-	//CustomLookAndFeel mCustomLookNFeel;
-
 
 	Label			  mTitle;
 
