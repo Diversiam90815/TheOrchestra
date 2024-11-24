@@ -53,6 +53,14 @@ void OrchestraEditor::init()
 	mTechniquesView.init();
 	mInfoView.init();
 	mFamousWorksView.init();
+
+	mCustomMenuBarModel.setInstrumentSelectedCallback([this](int key) { changeInstrument(key); });
+}
+
+
+void OrchestraEditor::changeInstrument(int key)
+{
+	int i = 0;
 }
 
 

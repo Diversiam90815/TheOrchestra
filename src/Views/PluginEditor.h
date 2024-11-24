@@ -37,6 +37,9 @@ public:
 	void init();
 
 private:
+
+	void changeInstrument(int key);
+	
 	OrchestraProcessor	&audioProcessor;
 
 	PianoRoll			 mPianoRollView;
