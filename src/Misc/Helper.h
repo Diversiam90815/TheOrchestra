@@ -72,3 +72,46 @@ static int getInstrumentKey(String &family, String &instrument)
 
 	return getInstrumentKey(familyKey, instrumentKey);
 }
+
+/*
+	@brief                 Splits a String containing a range into the lower and higher note
+	@param                 [IN] range -> Range of notes (e.g. G4 - E6)
+	@param                 [IN] getLower -> if true, the lower note will be returned, false otherwise
+	@return                Note Value as a String
+*/
+static String getLowerOrHigherNote(const String &range, bool getLower)
+{
+	// Split range into two parts (lower and higher note)
+	StringArray rangeParts = StringArray::fromTokens(range, "-", "");
+
+	if (rangeParts.size() != 2)
+		return {};
+
+	// Trim whitespaces
+	String lowerNote  = rangeParts[0].trim();
+	String higherNote = rangeParts[1].trim();
+
+	return getLower ? lowerNote : higherNote;
+}
+
+
+/*
+	@brief                 Splits a by a colon separated String into two parts
+	@param                 [IN] Colonized String ( part A : part B)
+	@param                 [IN] firstPart -> if true, the left part will be returned, false otherwise
+	@return                Left or right value as a String 
+*/
+static String splitColonizedStrings(String &colonizedString, bool firstPart)
+{
+	// Find the colon (:) and split the string
+	StringArray parts = StringArray::fromTokens(colonizedString, ":", "");
+
+	if (parts.size() != 2)
+		return {};
+
+	// Trim whitespaces
+	String leftPart	 = parts[0].trim();
+	String rightPart = parts[1].trim();
+
+	return firstPart ? leftPart : rightPart;
+}
