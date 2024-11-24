@@ -1,0 +1,519 @@
+{
+    "Strings": {
+      "playingTechniques": [
+        "Pizzicato: Plucking the strings with fingers",
+        "Arco: Using the bow to produce sound",
+        "Sul ponticello: Playing near the bridge for a tense sound",
+        "Sul tasto: Playing over the fingerboard for a flute-like tone",
+        "Con sordino: Using a mute to soften the sound",
+        "Tremolo: Rapid back-and-forth bowing",
+        "Col legno: Tapping the strings with the wood of the bow",
+        "Vibrato: Varying pitch slightly for warmth",
+        "Spiccato: Bouncing the bow for light, short notes"
+      ],
+      "instruments": [
+        {
+          "name": "Violin",
+          "range": "G3 - A7",
+          "transposition": "-",
+          "qualities": [
+            "G3: Rich and resonant, foundational for warmth and depth",
+            "D4: Subtly vibrant, a balance of warmth and lyrical expression",
+            "A4: Versatile, blends smoothly across ensembles",
+            "E5: Bright and penetrating, carries a mysterious quality at softer dynamics"
+          ],
+          "roles": [
+            "Leads with melody, expressive and prominent",
+            "Provides harmonic support",
+            "Enriches texture",
+            "2nd Violins complements first violins in octaves"
+          ],
+          "famousWorks": [
+            "Beethoven - Violin Concerto in D major, Op. 61",
+            "Tchaikovsky - Violin Concerto in D major, Op. 35",
+            "Mendelssohn - Violin Concerto in E minor, Op. 64"
+          ]
+        },
+        {
+          "name": "Viola",
+          "range": "C3 - E6",
+          "transposition": "-",
+          "qualities": [
+            "C3: Most characteristic viola sound; somber, austere, sometimes a bit forbidding",
+            "G3: Rich and dark, capable of profound depth",
+            "D4: Dark and resonant, with a velvety quality",
+            "A4: Piercing and nasal; blends well with woodwinds, soft trumpets, and trombones"
+          ],
+          "roles": [
+            "Fills harmony in the center",
+            "Often doubling second violins or basslines",
+            "Enriches the orchestral texture"
+          ],
+          "famousWorks": [
+            "Walton - Viola Concerto",
+            "Bartok - Viola Concerto",
+            "Hindemith - Der Schwanendreher"
+          ]
+        },
+        {
+          "name": "Violoncello (Cello)",
+          "range": "C2 - C6",
+          "transposition": "-",
+          "qualities": [
+            "C2: Richly sonorous bass, profound and enveloping",
+            "G2: Subtler strength, carries warmth and expressiveness",
+            "D3: Musically captivating, warm and lyrical quality",
+            "A3: Brilliant and piercing, with a vibrant upper register"
+          ],
+          "roles": [
+            "Versatile in melody and harmony",
+            "Often doubled with bassoon",
+            "Frequently coupled with contrabass",
+            "Complements horns and clarinets",
+            "Supports trombone and tuba lines",
+            "Effective in pizzicato alongside timpani"
+          ],
+          "famousWorks": [
+            "Dvorak - Cello Concerto in B minor, Op. 104",
+            "Elgar - Cello Concerto in E minor, Op. 85",
+            "Haydn - Cello Concerto No. 1 in C major"
+          ]
+        },
+        {
+          "name": "Double Bass",
+          "range": "E1 - C4",
+          "transposition": "Sounds one octave lower than written",
+          "qualities": [
+            "E1: Weighty, dark, and powerful with a sonorous fundamental bass",
+            "A1: Clear and precise with a sonorous timbre",
+            "D2: Fuller, more powerful, and darker, sharing the cello's range",
+            "G2: Similarly full and powerful, darker than the cello"
+          ],
+          "roles": [
+            "Provides foundational bass",
+            "Often doubling the cello, especially in mid 18th-century music"
+          ],
+          "famousWorks": [
+            "Koussevitzky - Double Bass Concerto in F# minor, Op. 3",
+            "Bottesini - Double Bass Concerto No. 2 in B minor",
+            "Dittersdorf - Double Bass Concerto No. 2 in E major"
+          ]
+        }
+      ]
+    },
+    "Brass": {
+      "playingTechniques": [
+        "Flutter tonguing: Rolling the 'R' for a trembling effect",
+        "Pedal tones: Playing the very low notes of the instrument's range",
+        "Mute: Inserting a mute into the bell to alter the sound",
+        "Sforzando: A sudden forceful emphasis",
+        "Legato slide: Smooth transition between notes (Trombone)",
+        "Stopped Horn: Hand in the bell to alter pitch/timbre",
+        "Rip: Quick, glissando-like rise to a higher note",
+        "Bell Up: Raising the bell for a louder, more projected sound (Horns)"
+      ],
+      "instruments": [
+        {
+          "name": "French Horn",
+          "range": "F2 - C6",
+          "transposition": "F: Sounds a perfect 5th lower",
+          "qualities": [
+            "F2 - G3: Dark and a bit unfocused, with a mysterious depth",
+            "A3 - C4: Deep and solid, the core of the horn's range",
+            "D4 - G5: Bright and heroic, capable of stirring emotions",
+            "A5 - C6: Brilliant and loud, cutting through the orchestra with clarity"
+          ],
+          "roles": [
+            "Capable of playing chromatically with valves",
+            "Emblematic of heroism since the 18th century",
+            "Equivalent in power to two trumpets"
+          ],
+          "famousWorks": [
+            "Mozart - Horn Concerto No. 4 in E flat major, K. 495",
+            "Strauss - Horn Concerto No. 1 in E flat major, Op. 11",
+            "Schumann - Konzertstueck for Four Horns and Orchestra"
+          ]
+        },
+        {
+          "name": "Trumpet",
+          "range": "F#3 - D6",
+          "transposition": "C: as written; Bb: Major 2nd lower",
+          "qualities": [
+            "F#3 - B3: Warm but can be dull, foundational",
+            "C4 - A5: Clear, bright, and articulate, the trumpet's sweet spot",
+            "B5 - D6: Brilliant but can be shrill at the extreme upper range"
+          ],
+          "roles": [
+            "Agile within the brass choir",
+            "Creates anticipation and excitement",
+            "Often doubled with oboe and timpani"
+          ],
+          "famousWorks": [
+            "Haydn - Trumpet Concerto in E-flat major",
+            "Hummel - Trumpet Concerto in E major",
+            "Dmitri Shostakovich - Concerto No. 1 for Piano, Trumpet, and String Orchestra"
+          ]
+        },
+        {
+          "name": "Tenor Trombone",
+          "range": "E2 - Bb4",
+          "transposition": "-",
+          "qualities": [
+            "E2 - G2: Dark and commanding, with a foundational depth",
+            "A2 - F4: Firm, powerful, and resonant across its core range",
+            "G4 - Bb4: Intense and commanding, with a significant presence"
+          ],
+          "roles": [
+            "Excels in glissandi and legato passages",
+            "Effective in harmony and contrapuntal lines",
+            "Useful for doubling",
+            "Fast position changes can be challenging"
+          ],
+          "famousWorks": [
+            "Rimsky-Korsakov - Trombone Concerto in B-flat major",
+            "David - Concertino in E flat major, Op. 4",
+            "Groendahl - Trombone Concerto"
+          ]
+        },
+        {
+          "name": "Bass Trombone",
+          "range": "Bb1 - Bb4",
+          "transposition": "-",
+          "qualities": [
+            "Bb1 - F2: Heavy and strong, with a profound bass foundation",
+            "G2 - G3: Deep and solid, adding weight to the ensemble",
+            "A3 - Bb4: Very powerful, with a commanding upper register"
+          ],
+          "roles": [
+            "Can be light and agile or hard and menacing",
+            "Pedal tones more accessible than on the tenor trombone",
+            "Often parts now assigned to the tuba"
+          ],
+          "famousWorks": [
+            "Lebedev - Concerto in One Movement",
+            "Ewazen - Concerto for Bass Trombone",
+            "Schnyder - SubZERO Bass Trombone Concerto"
+          ]
+        },
+        {
+          "name": "Cimbasso",
+          "range": "F1 - F4",
+          "transposition": "-",
+          "qualities": [
+            "F1 - G2: Full, clear, and concise, with a robust foundation",
+            "G#2 - G3: Soft, round, and bright, adding a unique color",
+            "G#3 - F4: Softer and brighter, lending subtlety to the ensemble"
+          ],
+          "roles": [
+            "Combines qualities of tuba and bass trombone without the metallic edge",
+            "Mixes well with low brass and woodwinds"
+          ],
+          "famousWorks": [
+            "Verdi - Operas like Aida and Otello, where it often replaces the bass trombone and tuba",
+            "Puccini - Turandot",
+            "Contemporary film scores and symphonic works that require a unique brass tone"
+          ]
+        },
+        {
+          "name": "Tuba",
+          "range": "D1 - F4",
+          "transposition": "-",
+          "qualities": [
+            "D1 - Bb1: Deep and heavy, anchoring the orchestra",
+            "B1 - E3: Strong and resonant, with a commanding presence",
+            "F3 - F4: Weaker in the upper register but still intense"
+          ],
+          "roles": [
+            "Capable of lyrical lines and providing foundation",
+            "Often paired with a second tuba for balance against large horn and trumpet sections"
+          ],
+          "famousWorks": [
+            "Vaughan Williams - Tuba Concerto in F minor",
+            "John Williams - Concerto for Tuba and Orchestra",
+            "Hindemith - Sonata for Bass Tuba and Piano"
+          ]
+        }
+      ]
+    },
+    "Woodwinds": {
+      "playingTechniques": [
+        "Flutter tonguing: Rolling the tongue to create a trembling sound",
+        "Glissando: Sliding from one note to another",
+        "Staccato: Playing notes sharply and detached",
+        "Cross-fingering: Achieving alternate fingerings for microtonal effects",
+        "Legato: Smooth and connected style of play",
+        "Slur: Smoothly connecting two or more notes without rearticulating",
+        "Vibrato: Modulating pitch slightly for a warmer sound",
+        "Double tonguing: Articulation technique for fast passages"
+      ],
+      "instruments": [
+        {
+          "name": "Piccolo",
+          "range": "D4 - C8",
+          "transposition": "Sounds one octave higher than written",
+          "qualities": [
+            "D4 - G4: Quiet, hauntingly hollow",
+            "A4 - G5: Soft and mellow",
+            "A5 - G6: Bright and clear",
+            "A6 - C8: Shrill, edgy"
+          ],
+          "roles": [
+            "Excels in adding brightness and flair to the upper register",
+            "Effective in punctuating musical phrases",
+            "Used for special coloristic effects"
+          ],
+          "famousWorks": [
+            "Vivaldi - Piccolo Concerto in C Major, RV 443",
+            "Tchaikovsky - Symphony No. 4 (2nd movement)",
+            "Rimsky-Korsakov - Scheherazade"
+          ]
+        },
+        {
+          "name": "Flute",
+          "range": "C4 - D7",
+          "transposition": "-",
+          "qualities": [
+            "C4 - G4: Weak, but luscious",
+            "A4 - G5: Sweet, with little power",
+            "A5 - G6: Clear and brilliant",
+            "A6 - D7: A bit shrill"
+          ],
+          "roles": [
+            "Carries the melody in higher registers",
+            "Provides light and agile articulations",
+            "Used for lyrical passages and fast runs"
+          ],
+          "famousWorks": [
+            "Mozart - Flute Concerto No. 2 in D major, K. 314",
+            "Debussy - Syrinx for solo flute",
+            "Quantz - Flute Concertos"
+          ]
+        },
+        {
+          "name": "Oboe",
+          "range": "Bb3 - A6",
+          "transposition": "-",
+          "qualities": [
+            "Bb3 - F4: Thick and heavy",
+            "G4 - A5: Warm, prominent, reedy, poignant",
+            "B5 - E6: Thin, but clear",
+            "F6 - A6: Pinched and effective"
+          ],
+          "roles": [
+            "Avoids very soft dynamics in the extreme registers",
+            "Excels in carrying the melodic line with its distinctive timbre",
+            "Suitable for long, sustained notes and expressive solos"
+          ],
+          "famousWorks": [
+            "Strauss - Oboe Concerto in D Major",
+            "Mozart - Oboe Concerto in C major, K. 314",
+            "Vaughan Williams - Concerto for Oboe and Strings"
+          ]
+        },
+        {
+          "name": "Cor Anglais (English Horn)",
+          "range": "B3 - G6",
+          "transposition": "Sounds a perfect 5th lower than written",
+          "qualities": [
+            "B3 - G4: Deep, rich, and intense",
+            "A4 - A5: Mellow, reedy, sonorous",
+            "B5 - G6: Thin, pinched"
+          ],
+          "roles": [
+            "Imparts a melancholic touch, often used to convey sadness",
+            "More mellow than the oboe, blending well without dominating",
+            "Excellent for solo passages requiring depth and emotion"
+          ],
+          "famousWorks": [
+            "Dvorak - Symphony No. 9 'From the New World' (2nd movement)",
+            "Rossini - William Tell Overture (3rd part, Ranz des Vaches)",
+            "Berlioz - Roman Carnival Overture"
+          ]
+        },
+        {
+          "name": "Clarinet",
+          "range": "E3 - C7",
+          "transposition": "Bb: Major 2nd lower; A: Minor 3rd lower",
+          "qualities": [
+            "E3 - F#4: Chalumeau Register: deep and rich",
+            "G4 - A#4: Throat Tones: rather pale",
+            "B4 - C6: Clarino Register: bright, incisive, expressive",
+            "D6 - C7: Shrill, piercing"
+          ],
+          "roles": [
+            "Homogenous across all pitches and dynamics",
+            "Features a fingering break between A#4 and B4",
+            "The A clarinet is better for sharp keys, while the Bb clarinet favors flat keys",
+            "Known for its lyrical qualities and flexibility"
+          ],
+          "famousWorks": [
+            "Mozart - Clarinet Concerto in A major, K. 622",
+            "Weber - Clarinet Concerto No. 2 in E-flat major, Op. 74",
+            "Copland - Clarinet Concerto"
+          ]
+        },
+        {
+          "name": "Bass Clarinet",
+          "range": "D3 - G6",
+          "transposition": "Bb: Sounds a major ninth lower",
+          "qualities": [
+            "D3 - G3: Chalumeau Register: mysterious, shadowy, sinister",
+            "A3 - G4: Clarino Register: versatile and expressive",
+            "A4 - G6: Thin, challenging to produce"
+          ],
+          "roles": [
+            "Notated in treble clef, sounding a major ninth lower",
+            "Agile, capable of blending or standing out",
+            "Suitable for bass lines as well as melodic passages in its mid to upper range"
+          ],
+          "famousWorks": [
+            "Stravinsky - The Rite of Spring",
+            "Wagner - Lohengrin (Act III Prelude)",
+            "Holst - The Planets"
+          ]
+        },
+        {
+          "name": "Bassoon",
+          "range": "Bb1 - Eb5",
+          "transposition": "-",
+          "qualities": [
+            "Bb1 - G2: Sonorous, dark, vibrant",
+            "A2 - D4: Sweet, subdued, but expressive",
+            "E4 - Bb4: Thin, but intense",
+            "B4 - Eb5: Thin, often pinched"
+          ],
+          "roles": [
+            "Often unison with clarinet",
+            "The lowest and highest P5 intervals are challenging/not playable at low dynamics",
+            "Versatile for both foundational bass lines and melodic solos"
+          ],
+          "famousWorks": [
+            "Mozart - Bassoon Concerto in B flat major, K.191",
+            "Vivaldi - Bassoon Concertos",
+            "Weber - Bassoon Concerto in F major, Op. 75"
+          ]
+        },
+        {
+          "name": "Contrabassoon",
+          "range": "Bb0 - Bb4",
+          "transposition": "Sounds one octave lower than written",
+          "qualities": [
+            "Similar characteristics as the Bassoon but slower and more stubborn in the lows"
+          ],
+          "roles": [
+            "Doubles with contrabasses and bassoons/celli at octave",
+            "In its higher register, it's paler and weaker than the bassoon",
+            "Requires periodic rests due to its size and breath demands"
+          ],
+          "famousWorks": [
+            "Strauss - Eine Alpensinfonie, Op. 64",
+            "Stravinsky - The Rite of Spring",
+            "Prokofiev - Symphony No. 5, Op. 100"
+          ]
+        }
+      ]
+    },
+    "Percussion": {
+      "playingTechniques": [
+        "Tuning changes: Adjusting pitch during performance",
+        "Rolls: Rapid hits to create a sustained sound",
+        "Muffling: Dampening the drum head to stop the sound",
+        "Delicate touch: For the instrument's gentle, bell-like tones",
+        "Pedaling: To sustain or dampen the sound",
+        "Layering: Often used in combination with other instruments to add texture",
+        "Four-mallet grip: Using two mallets in each hand",
+        "Rolls: Rapidly alternating mallets to create a sustained note",
+        "Dead stroke: Letting the mallet rest on the bar after striking for a muted effect"
+      ],
+      "instruments": [
+        {
+          "name": "Timpani",
+          "range": "D2 - C4",
+          "transposition": "-",
+          "qualities": [
+            "Can vary from dull to thunderous, deep, heavy, velvety, to dry",
+            "Depending on mallet and technique used"
+          ],
+          "roles": [
+            "Unison with bass instruments creates a homogenous blend",
+            "Blends nicely with trumpets and horns, adding depth and resonance",
+            "Rolls combined with string tremolo chords produce a tremendous effect",
+            "Works well with pizzicato strings and harps for rhythmic elements"
+          ],
+          "famousWorks": [
+            "Beethoven - Symphony No. 9",
+            "Tchaikovsky - 1812 Overture",
+            "Mahler - Symphony No. 1"
+          ]
+        },
+        {
+          "name": "Harp",
+          "range": "C1 - G7",
+          "transposition": "-",
+          "qualities": [
+            "B1 - B3: Deep and sonorous",
+            "C3 - C5: Rich, warm",
+            "C#5 - G7: Bright, clear, with limited dynamic range"
+          ],
+          "roles": [
+            "Sometimes used in pairs for fuller sound",
+            "Chords and arpeggios lend a unique texture",
+            "Pedal adjustments allow for chromaticism and modulation",
+            "Glissandi create ethereal soundscapes"
+          ],
+          "famousWorks": [
+            "Debussy - Danses sacrée et profane",
+            "Ravel - Introduction and Allegro for Harp, Flute, Clarinet and String Quartet",
+            "Tchaikovsky - Swan Lake"
+          ]
+        },
+        {
+          "name": "Celesta",
+          "range": "C4 - C8",
+          "transposition": "-",
+          "qualities": [
+            "Silvery, glistening, ethereal, sweet, shimmering across its range",
+            "Warmer and rounder than the glockenspiel",
+            "Not very loud, can be easily covered by the orchestra",
+            "Limited dynamic range but responsive to touch"
+          ],
+          "roles": [
+            "Highlights in chords or single notes, akin to triangle/glockenspiel",
+            "Effective for doubling voices in octaves, unisons, or fifths",
+            "Used for dreamlike scales, arpeggios, or octave tremolos"
+          ],
+          "famousWorks": [
+            "Tchaikovsky - The Dance of the Sugar Plum Fairy from The Nutcracker",
+            "Bartok - Music for Strings, Percussion and Celesta",
+            "Harry Potter Theme (Hedwig's Theme) by John Williams"
+          ]
+        },
+        {
+          "name": "Marimba",
+          "range": "C2 - C7",
+          "transposition": "-",
+          "qualities": [
+            "Dark, mellow, gentle, melodious, resonant",
+            "Sound character varies with mallet hardness: harder mallets emphasize higher partials"
+          ],
+          "roles": [
+            "Pairs well with percussion, especially celesta and glockenspiel",
+            "Accompanies brass melodies, particularly trumpet",
+            "Blends with woodwinds, adding warmth in octaves",
+            "Complements low strings in unison and octaves, though blend may vary"
+          ],
+          "famousWorks": [
+            "Keiko Abe - Prism Rhapsody for Marimba and Orchestra",
+            "Emmanuel Sejourne - Concerto for Marimba and Strings",
+            "Ney Rosauro - Concerto for Marimba and Orchestra No. 1"
+          ],
+          "playingTechniques": [
+            "Four-mallet grip: Using two mallets in each hand",
+            "Rolls: Rapidly alternating mallets to create a sustained note",
+            "Dead stroke: Letting the mallet rest on the bar after striking for a muted effect"
+          ]
+        }
+      ]
+    }
+  }
+  
