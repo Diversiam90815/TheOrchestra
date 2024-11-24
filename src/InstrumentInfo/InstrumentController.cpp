@@ -14,10 +14,6 @@
 
 InstrumentController::InstrumentController()
 {
-	addWoodwindInstruments();
-	addBrassInstruments();
-	addPercussionInstruments();
-	addStringInstruments();
 }
 
 
@@ -26,11 +22,115 @@ InstrumentController::~InstrumentController()
 }
 
 
-void				  InstrumentController::addInstrument(Family family, int instrumentId, const InstrumentInfo &info)
+void InstrumentController::addInstrument(Family family, int instrumentId, const InstrumentInfo &info)
 {
 	int key			 = getInstrumentKey(family, instrumentId);
 	instruments[key] = info;
 }
+
+
+StringArray InstrumentController::readPlayingTechniquesFromJSON(DynamicObject *obj)
+{
+	StringArray playingTechniques;
+	if (obj->hasProperty("playingTechniques"))
+	{
+		var techniquesVar = obj->getProperty("playingTechniques");
+		if (techniquesVar.isArray())
+		{
+			for (int i = 0; i < techniquesVar.size(); ++i)
+			{
+				var techniqueVar = techniquesVar[i];
+				if (techniqueVar.isString())
+					playingTechniques.add(techniqueVar.toString());
+			}
+		}
+	}
+	return playingTechniques;
+}
+
+
+StringArray InstrumentController::readQualitiesFromJSON(DynamicObject *obj)
+{
+	StringArray qualities;
+
+	if (obj->hasProperty("qualities"))
+	{
+		var qualitiesVar = obj->getProperty("qualities");
+		if (qualitiesVar.isArray())
+		{
+			for (int q = 0; q < qualitiesVar.size(); ++q)
+			{
+				var qualityVar = qualitiesVar[q];
+				if (qualityVar.isString())
+					qualities.add(qualityVar.toString());
+			}
+		}
+	}
+	return qualities;
+}
+
+
+String InstrumentController::readNameFromJSON(DynamicObject *obj)
+{
+	String name = obj->getProperty("name").toString();
+	return name;
+}
+
+
+String InstrumentController::readRangeFromJSON(DynamicObject *obj)
+{
+	String range = obj->getProperty("range").toString();
+	return range;
+}
+
+
+String InstrumentController::readTranspositionFromJSON(DynamicObject *obj)
+{
+	String transposition = obj->getProperty("transposition").toString();
+	return transposition;
+}
+
+
+StringArray InstrumentController::readInformationFromJSON(DynamicObject *obj)
+{
+	StringArray roles;
+	if (obj->hasProperty("roles"))
+	{
+		var rolesVar = obj->getProperty("roles");
+		if (rolesVar.isArray())
+		{
+			for (int r = 0; r < rolesVar.size(); ++r)
+			{
+				var roleVar = rolesVar[r];
+				if (roleVar.isString())
+					roles.add(roleVar.toString());
+			}
+		}
+	}
+	return roles;
+}
+
+
+StringArray InstrumentController::readFamousWorksFromJSON(DynamicObject *obj)
+{
+	StringArray famousWorks;
+
+	if (obj->hasProperty("famousWorks"))
+	{
+		var worksVar = obj->getProperty("famousWorks");
+		if (worksVar.isArray())
+		{
+			for (int w = 0; w < worksVar.size(); ++w)
+			{
+				var workVar = worksVar[w];
+				if (workVar.isString())
+					famousWorks.add(workVar.toString());
+			}
+		}
+	}
+	return famousWorks;
+}
+
 
 
 InstrumentInfo InstrumentController::getInstrument(int key)
@@ -45,74 +145,94 @@ InstrumentInfo InstrumentController::getInstrument(int key)
 }
 
 
-void InstrumentController::addBrassInstruments()
+
+bool InstrumentController::loadFromJSON()
 {
-	auto frenchHorn = InstrumentInfo(FrenchHornName, frenchHornRange, frenchHornQualities, frenchHornRoles, frenchHornFamousWorks, frenchHornTransposition, brassPlayingTechniques);
-	auto trumpet	= InstrumentInfo(TrumpetName, trumpetRange, trumpetQualities, trumpetRoles, trumpetFamousWorks, trumpetTransposition, brassPlayingTechniques);
-	auto tenorTrmb	= InstrumentInfo(TenorTromboneName, tenorTromboneRange, tenorTromboneQualities, tenorTromboneRoles, tenorTromboneFamousWorks, tenorTromboneTransposition,
-									 brassPlayingTechniques);
-	auto bassTrmb =
-		InstrumentInfo(BassTromboneName, bassTromboneRange, bassTromboneQualities, bassTromboneRoles, bassTromboneFamousWorks, bassTromboneTransposition, brassPlayingTechniques);
-	auto cimbasso = InstrumentInfo(CimbassoName, cimbassoRange, cimbassoQualities, cimbassoRoles, cimbassoFamousWorks, cimbassoTransposition, brassPlayingTechniques);
-	auto tuba	  = InstrumentInfo(TubaName, tubaRange, tubaQualities, tubaRoles, tubaFamousWorks, tubaTransposition, brassPlayingTechniques);
+	std::string jsonFilePath = mFileManager.getInstrumentDataJSONPath();
+	File		jsonFile(jsonFilePath);
 
-	addInstrument(Family::Brass, Brass::FrenchHorn, frenchHorn);
-	addInstrument(Family::Brass, Brass::Trumpet, trumpet);
-	addInstrument(Family::Brass, Brass::TenorTrombone, tenorTrmb);
-	addInstrument(Family::Brass, Brass::BassTrombone, bassTrmb);
-	addInstrument(Family::Brass, Brass::Cimbasso, cimbasso);
-	addInstrument(Family::Brass, Brass::Tuba, tuba);
-}
+	if (!jsonFile.existsAsFile())
+		return false;
 
 
-void InstrumentController::addStringInstruments()
-{
-	auto violin = InstrumentInfo(ViolinName, violinRange, violinQualities, violinRoles, violinFamousWorks, violinTransposition, stringsPlayingTechniques);
-	auto viola	= InstrumentInfo(ViolaName, violaRange, violaQualities, violaRoles, violaFamousWorks, violaTransposition, stringsPlayingTechniques);
-	auto cello	= InstrumentInfo(VioloncelloName, celloRange, celloQualities, celloRoles, celloFamousWorks, celloTransposition, stringsPlayingTechniques);
-	auto db		= InstrumentInfo(DoubleBassName, doubleBassRange, doubleBassQualities, doubleBassRoles, doubleBassFamousWorks, doubleBassTransposition, stringsPlayingTechniques);
+	String jsonContent = jsonFile.loadFileAsString();
 
-	addInstrument(Family::Strings, Strings::Violin, violin);
-	addInstrument(Family::Strings, Strings::Viola, viola);
-	addInstrument(Family::Strings, Strings::Violoncello, cello);
-	addInstrument(Family::Strings, Strings::DoubleBass, db);
-}
+	var	   parsedJSON  = JSON::parse(jsonContent);
+
+	if (parsedJSON.isVoid())
+		return false;
 
 
-void InstrumentController::addWoodwindInstruments()
-{
-	auto piccolo = InstrumentInfo(PiccoloName, piccoloRange, piccoloQualities, piccoloRoles, piccoloFamousWorks, piccoloTransposition, woodwindsPlayingTechniques);
-	auto flute	 = InstrumentInfo(FluteName, fluteRange, fluteQualities, fluteRoles, fluteFamousWorks, fluteTransposition, woodwindsPlayingTechniques);
-	auto oboe	 = InstrumentInfo(OboeName, oboeRange, oboeQualities, oboeRoles, oboeFamousWorks, oboeTransposition, woodwindsPlayingTechniques);
-	auto coranglais =
-		InstrumentInfo(CorAnglaisName, corAnglaisRange, corAnglaisQualities, corAnglaisRoles, corAnglaisFamousWorks, corAnglaisTransposition, woodwindsPlayingTechniques);
-	auto clarinet	   = InstrumentInfo(ClarinetName, clarinetRange, clarinetQualities, clarinetRoles, clarinetFamousWorks, clarinetTransposition, woodwindsPlayingTechniques);
-	auto bassClarinet  = InstrumentInfo(BassClarinetName, bassClarinetRange, bassClarinetQualities, bassClarinetRoles, bassClarinetFamousWorks, bassClarinetTransposition,
-										woodwindsPlayingTechniques);
-	auto bassoon	   = InstrumentInfo(BassoonName, bassoonRange, bassoonQualities, bassoonRoles, bassoonFamousWorks, bassoonTransposition, woodwindsPlayingTechniques);
-	auto contrabassoon = InstrumentInfo(ContrabassoonName, contrabassoonRange, contrabassoonQualities, contrabassoonRoles, contrabassoonFamousWorks, contrabassoonTransposition,
-										woodwindsPlayingTechniques);
-
-	addInstrument(Family::Woodwinds, Woodwinds::Piccolo, piccolo);
-	addInstrument(Family::Woodwinds, Woodwinds::Flute, flute);
-	addInstrument(Family::Woodwinds, Woodwinds::Oboe, oboe);
-	addInstrument(Family::Woodwinds, Woodwinds::CorAnglais, coranglais);
-	addInstrument(Family::Woodwinds, Woodwinds::Clarinet, clarinet);
-	addInstrument(Family::Woodwinds, Woodwinds::BassClarinet, bassClarinet);
-	addInstrument(Family::Woodwinds, Woodwinds::Bassoon, bassoon);
-	addInstrument(Family::Woodwinds, Woodwinds::Contrabassoon, contrabassoon);
-}
+	if (!parsedJSON.isObject())
+		return false;
 
 
-void InstrumentController::addPercussionInstruments()
-{
-	auto timpani = InstrumentInfo(TimpaniName, timpaniRange, timpaniQualities, timpaniRoles, timpaniFamousWorks, timpaniTransposition, timpaniPlayingTechniques);
-	auto celeste = InstrumentInfo(CelesteName, celesteRange, celesteQualities, celesteRoles, celestaFamousWorks, celesteTransposition, celestaPlayingTechniques);
-	auto marimba = InstrumentInfo(MarimbaName, marimbaRange, marimbaQualities, marimbaRoles, marimbaFamousWorks, marimbaTransposition, marimbaPlayingTechniques);
-	auto harp	 = InstrumentInfo(HarpName, harpRange, harpQualities, harpRoles, harpFamousWorks, harpTransposition, harpPlayingTechniques);
+	auto *rootObj = parsedJSON.getDynamicObject();
 
-	addInstrument(Family::Percussion, Percussion::Timpani, timpani);
-	addInstrument(Family::Percussion, Percussion::Celeste, celeste);
-	addInstrument(Family::Percussion, Percussion::Marimba, marimba);
-	addInstrument(Family::Percussion, Percussion::Harp, harp);
+
+	// Iterate through each family
+	for (auto it = rootObj->getProperties().begin(); it != rootObj->getProperties().end(); ++it)
+	{
+		String familyName = it->name.toString();
+		var	   familyVar  = it->value;
+
+		// Determine the family enum based on familyName
+		Family familyEnum = familyMap[familyName];
+
+		if (!familyVar.isObject())
+			continue;
+
+
+		auto	   *familyObj				= familyVar.getDynamicObject();
+		StringArray familyPlayingTechniques = readPlayingTechniquesFromJSON(familyObj);
+
+
+		// Retrieve instruments array
+		if (!familyObj->hasProperty("instruments"))
+			continue;
+
+
+		var instrumentsVar = familyObj->getProperty("instruments");
+
+		if (!instrumentsVar.isArray())
+			continue;
+
+
+		for (int i = 0; i < instrumentsVar.size(); ++i)
+		{
+			var instrumentVar = instrumentsVar[i];
+
+			if (!instrumentVar.isObject())
+				continue;
+
+			auto	   *instrumentObj		 = instrumentVar.getDynamicObject();
+
+			String		name				 = readNameFromJSON(instrumentObj);
+			String		range				 = readRangeFromJSON(instrumentObj);
+			String		transposition		 = readTranspositionFromJSON(instrumentObj);
+
+			StringArray qualities			 = readQualitiesFromJSON(instrumentObj);
+			StringArray information			 = readInformationFromJSON(instrumentObj);
+			StringArray famousWorks			 = readFamousWorksFromJSON(instrumentObj);
+
+			// For some instruments, the playing techniques are instrument-specific ( e.g. for the percussion section)
+			// So if there are instrument specific techniques available, we override them here
+			StringArray instrumentTechniques = readPlayingTechniquesFromJSON(instrumentObj);
+
+			if (instrumentTechniques.isEmpty())
+			{
+				instrumentTechniques = familyPlayingTechniques;
+			}
+
+			// Create InstrumentInfo object
+			InstrumentInfo info(name, range, qualities, information, famousWorks, transposition, instrumentTechniques);
+
+			int			   instrumentID = instrumentMap[name];
+
+			// Add instrument to the map
+			addInstrument(familyEnum, instrumentID, info);
+		}
+	}
+
+	return true;
 }

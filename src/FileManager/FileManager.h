@@ -5,7 +5,7 @@
 	Description		Managing files and folders
 
   ==============================================================================
-*/ 
+*/
 
 #pragma once
 
@@ -21,4 +21,16 @@ public:
 
 	std::string getSamplesFolder();
 
+	std::string getInstrumentDataJSONPath();
+
+private:
+
+	// Gets the project's directory
+	std::filesystem::path getProjectDirectory();
+
+	std::string			  AssetsFolderName		   = "Assets";
+
+	std::string			  SampleFolderName		   = "Samples";
+
+	std::string			  InstrumentDataFolderName = "InstrumentData";
 };
