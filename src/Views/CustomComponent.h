@@ -20,11 +20,12 @@ public:
 	CustomComponent();
 	~CustomComponent();
 
-	void paint(Graphics &g) override;
+	void		 paint(Graphics &g) override;
 
+	virtual void displayInstrument(InstrumentInfo &instrument) = 0;
 
 private:
 	CustomLookAndFeel mCustomLookNFeel;
 
-	Path p;		// used for drawing the corner radius
+	Path			  p; // used for drawing the corner radius
 };

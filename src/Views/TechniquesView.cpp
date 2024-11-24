@@ -23,7 +23,7 @@ TechniquesView::~TechniquesView()
 void TechniquesView::init()
 {
 	setSize(mWidth, mHeight);
-	
+
 	// Set the title
 	addAndMakeVisible(&mTitle);
 	mTitle.setName("TechniqueTitle");
@@ -54,6 +54,44 @@ void TechniquesView::init()
 }
 
 
-void TechniquesView::deinit()
+void TechniquesView::displayInstrument(InstrumentInfo &instrument)
 {
+	StringArray							   techniques = instrument.getTechniques();
+
+	std::vector<std::pair<String, String>> technique;
+	technique.reserve(8);
+
+	for (auto &tech : techniques)
+	{
+		String left	 = splitColonizedStrings(tech, true);
+		String right = splitColonizedStrings(tech, false);
+
+		technique.emplace_back(left, right);
+	}
+
+	auto &technique1 = technique.at(0);
+	auto &technique2 = technique.at(1);
+	auto &technique3 = technique.at(2);		// last one when selecting Marimba
+	auto &technique4 = technique.at(3);
+	auto &technique5 = technique.at(4);
+	auto &technique6 = technique.at(5);
+	auto &technique7 = technique.at(6);
+	auto &technique8 = technique.at(7);
+
+	mTech1.setButtonText(technique1.first);
+	mTech1.setTooltip(technique1.second);
+	mTech2.setButtonText(technique2.first);
+	mTech2.setTooltip(technique2.second);
+	mTech3.setButtonText(technique3.first);
+	mTech3.setTooltip(technique3.second);
+	mTech4.setButtonText(technique4.first);
+	mTech4.setTooltip(technique4.second);
+	mTech5.setButtonText(technique5.first);
+	mTech5.setTooltip(technique5.second);
+	mTech6.setButtonText(technique6.first);
+	mTech6.setTooltip(technique6.second);
+	mTech7.setButtonText(technique7.first);
+	mTech7.setTooltip(technique7.second);
+	mTech8.setButtonText(technique8.first);
+	mTech8.setTooltip(technique8.second);
 }

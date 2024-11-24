@@ -39,6 +39,11 @@ void FamousWorksView::init()
 }
 
 
-void FamousWorksView::deinit()
+void FamousWorksView::displayInstrument(InstrumentInfo &instrument)
 {
+	const StringArray &works = instrument.getFamousWorks();
+
+	mFirstWork.setText(works[0], dontSendNotification);
+	mSecondWork.setText(works[1], dontSendNotification);
+	mThirdWork.setText(works[2], dontSendNotification);
 }
