@@ -35,6 +35,8 @@ void InstrumentView::init()
 }
 
 
-void InstrumentView::deinit()
+void InstrumentView::displayInstrument(InstrumentInfo &instrument)
 {
+	const String &name = instrument.getName();
+	mName.setText(name, dontSendNotification);
 }

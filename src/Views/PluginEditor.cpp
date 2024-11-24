@@ -60,10 +60,22 @@ void OrchestraEditor::init()
 
 void OrchestraEditor::changeInstrument(int key)
 {
-	int i = 0;
 	auto instrument = mController.getInstrument(key);
 
+	mInstrumentView.displayInstrument(instrument);
 	mRangesView.displayInstrument(instrument);
+	mQualitiesView.displayInstrument(instrument);
+	mTechniquesView.displayInstrument(instrument);
+	mFamousWorksView.displayInstrument(instrument);
+	mInfoView.displayInstrument(instrument);
+
+	bool result = mPianoRollView.mPianoRoll->setMidiRanges(instrument.getQualities());
+	if (!result)
+	{
+		mPianoRollView.mPianoRoll->setMidiRanges(instrument.getRange());
+	}
+	mPianoRollView.repaint();
+	resized();
 }
 
 
