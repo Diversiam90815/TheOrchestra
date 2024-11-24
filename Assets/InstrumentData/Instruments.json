@@ -56,7 +56,7 @@
           ]
         },
         {
-          "name": "Violoncello (Cello)",
+          "name": "Violoncello",
           "range": "C2 - C6",
           "transposition": "-",
           "qualities": [
@@ -311,7 +311,7 @@
           ]
         },
         {
-          "name": "Cor Anglais (English Horn)",
+          "name": "Cor Anglais",
           "range": "B3 - G6",
           "transposition": "Sounds a perfect 5th lower than written",
           "qualities": [
@@ -468,7 +468,7 @@
           ]
         },
         {
-          "name": "Celesta",
+          "name": "Celeste",
           "range": "C4 - C8",
           "transposition": "-",
           "qualities": [
