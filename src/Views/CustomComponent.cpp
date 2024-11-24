@@ -9,6 +9,7 @@
 
 #include "CustomComponent.h"
 
+
 CustomComponent::CustomComponent()
 {
 	setLookAndFeel(&mCustomLookNFeel);

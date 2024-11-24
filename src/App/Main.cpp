@@ -46,6 +46,7 @@ private:
 			setContentOwned(editor.get(), true);
 
 			setResizable(false, false);
+						
 			centreWithSize(getWidth(), getHeight());
 
 			setVisible(true);
