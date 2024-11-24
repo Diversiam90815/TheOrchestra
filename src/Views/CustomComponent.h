@@ -10,6 +10,7 @@
 #pragma once
 #include "JuceHeader.h"
 #include "CustomLookAndFeel.h"
+#include "InstrumentInfo.h"
 
 
 class CustomComponent : public Component
