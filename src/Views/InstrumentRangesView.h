@@ -22,6 +22,8 @@ public:
 
 	void deinit();
 
+	void			  displayInstrument(InstrumentInfo& instr);
+	
 private:
 	Label			  mRangesTitle;
 	Label			  mTranspositionTitle;

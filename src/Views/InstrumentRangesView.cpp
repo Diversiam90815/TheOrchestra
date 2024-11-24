@@ -39,7 +39,7 @@ void InstrumentRangesView::init()
 	// Set the images positions
 	addAndMakeVisible(&mLowerRangeNoteImage);
 	mLowerRangeNoteImage.setBounds(mLowerNoteImageX, mLowerNoteImageY, mImageBoxWidth, mImageBoxHeight);
-	
+
 	addAndMakeVisible(&mHigherRangeNoteImage);
 	mHigherRangeNoteImage.setBounds(mHigherNoteImageX, mHigherNoteImageY, mImageBoxWidth, mImageBoxHeight);
 
@@ -49,10 +49,10 @@ void InstrumentRangesView::init()
 	// Set the note name's positions
 	addAndMakeVisible(&mLowerRangeNoteName);
 	mLowerRangeNoteName.setBounds(mLowerNoteNameX, mLowerNoteNameY, mNoteNameWidth, mNoteNameHeight);
-	
+
 	addAndMakeVisible(&mHigherRangeNoteName);
 	mHigherRangeNoteName.setBounds(mHigherNoteNameX, mHigherNoteNameY, mNoteNameWidth, mNoteNameHeight);
-	
+
 	addAndMakeVisible(&mTranspositionNoteName);
 	mTranspositionNoteName.setBounds(mTranspositionNoteX, mTranspositionNoteY, mTranspositionNoteWidth, mTranspositionNoteHeight);
 }
@@ -60,4 +60,16 @@ void InstrumentRangesView::init()
 
 void InstrumentRangesView::deinit()
 {
+}
+
+
+void InstrumentRangesView::displayInstrument(InstrumentInfo &instr)
+{
+	const String &range		 = instr.getRange();
+
+	String		  lowerNote	 = getLowerOrHigherNote(range, true);
+	String		  higherNote = getLowerOrHigherNote(range, false);
+
+	mLowerRangeNoteName.setText(lowerNote, dontSendNotification);
+	mHigherRangeNoteName.setText(higherNote, dontSendNotification);
 }
