@@ -71,4 +71,15 @@ PopupMenu CustomMenuBar::getMenuForIndex(int topLevelMenuIndex, const String &me
 void CustomMenuBar::menuItemSelected(int menuItemID, int topLevelMenuIndex)
 {
 	int key = (topLevelMenuIndex + 1) * 100 + menuItemID;
+
+	if (mInstrumentSelectedCallback)
+	{
+		mInstrumentSelectedCallback(key);
+	}
+}
+
+
+void CustomMenuBar::setInstrumentSelectedCallback(InstrumentSelectedCallback callback)
+{
+	mInstrumentSelectedCallback = callback;
 }

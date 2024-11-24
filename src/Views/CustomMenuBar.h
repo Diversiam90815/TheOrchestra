@@ -12,6 +12,9 @@
 #include "Parameters.h"
 
 
+using InstrumentSelectedCallback = std::function<void(int)>;
+
+
 class CustomMenuBar : public MenuBarModel
 {
 public:
@@ -25,6 +28,10 @@ public:
 
 	void		menuItemSelected(int menuItemID, int topLevelMenuIndex) override;
 
+	void		setInstrumentSelectedCallback(InstrumentSelectedCallback callback);
+
 private:
-	MenuBarComponent menuBar; // Menubar instance
+	MenuBarComponent		   menuBar; // Menubar instance
+
+	InstrumentSelectedCallback mInstrumentSelectedCallback;
 };
