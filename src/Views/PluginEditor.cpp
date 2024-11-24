@@ -61,6 +61,9 @@ void OrchestraEditor::init()
 void OrchestraEditor::changeInstrument(int key)
 {
 	int i = 0;
+	auto instrument = mController.getInstrument(key);
+
+	mRangesView.displayInstrument(instrument);
 }
 
 

@@ -34,7 +34,7 @@ std::string FileManager::getInstrumentDataJSONPath()
 {
 	std::filesystem::path projectDir = getProjectDirectory();
 
-	std::filesystem::path dataDir = projectDir / AssetsFolderName / InstrumentDataFolderName;
+	std::filesystem::path dataDir = projectDir / AssetsFolderName / InstrumentDataFolderName / InstrumentsDataFileName;
 
 	return dataDir.string();
 }
@@ -43,6 +43,6 @@ std::string FileManager::getInstrumentDataJSONPath()
 std::filesystem::path FileManager::getProjectDirectory()
 {
 	std::filesystem::path cwd		 = std::filesystem::current_path();
-	std::filesystem::path projectDir = cwd / "..";
+	std::filesystem::path projectDir = cwd.parent_path();
 	return projectDir;
 }
