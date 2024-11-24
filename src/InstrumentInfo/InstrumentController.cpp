@@ -14,6 +14,7 @@
 
 InstrumentController::InstrumentController()
 {
+	loadFromJSON();
 }
 
 
@@ -136,7 +137,7 @@ StringArray InstrumentController::readFamousWorksFromJSON(DynamicObject *obj)
 InstrumentInfo InstrumentController::getInstrument(int key)
 {
 	auto it = instruments.find(key);
-	assert(it != instruments.end());
+	assert(it != instruments.end());	// Doesn't find the Cor Anglais and key (303)
 
 	if (it != instruments.end())
 		return it->second;

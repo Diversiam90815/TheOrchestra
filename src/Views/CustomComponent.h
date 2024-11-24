@@ -11,6 +11,7 @@
 #include "JuceHeader.h"
 #include "CustomLookAndFeel.h"
 #include "InstrumentInfo.h"
+#include "Helper.h"
 
 
 class CustomComponent : public Component

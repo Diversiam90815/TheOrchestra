@@ -37,9 +37,8 @@ public:
 	void init();
 
 private:
+	void				 changeInstrument(int key);
 
-	void changeInstrument(int key);
-	
 	OrchestraProcessor	&audioProcessor;
 
 	PianoRoll			 mPianoRollView;
@@ -49,6 +48,8 @@ private:
 	MenuBarComponent	 mMenuBar;
 
 	CustomLookAndFeel	 mCustomLookAndFeel;
+
+	InstrumentController mController;
 
 	InstrumentView		 mInstrumentView;
 	InstrumentRangesView mRangesView;

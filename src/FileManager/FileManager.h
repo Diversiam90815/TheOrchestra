@@ -33,4 +33,6 @@ private:
 	std::string			  SampleFolderName		   = "Samples";
 
 	std::string			  InstrumentDataFolderName = "InstrumentData";
+
+	std::string			  InstrumentsDataFileName  = "Instruments.json";
 };
