@@ -63,6 +63,6 @@ void QualitiesView::init()
 }
 
 
-void QualitiesView::deinit()
+void QualitiesView::displayInstrument(InstrumentInfo &instrument)
 {
 }

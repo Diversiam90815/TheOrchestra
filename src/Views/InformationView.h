@@ -18,7 +18,8 @@ public:
 	~InformationView();
 
 	void init();
-	void deinit();
+
+	void displayInstrument(InstrumentInfo &instrument) override;
 
 
 private:
