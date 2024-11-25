@@ -58,11 +58,12 @@ private:
 									const Colour			   *textColour) override;
 
 
-	void		  drawButtonBackground(	Graphics &g, 
-										Button &button, 
-										const Colour &backgroundColour, 
-										bool shouldDrawButtonAsHighlighted, 
-										bool shouldDrawButtonAsDown) override;
+	void		  drawButtonBackground(Graphics &g, Button &button, const Colour &backgroundColour, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override;
+
+
+	void		  drawTooltip(Graphics &, const String &text, int width, int height) override;
+
+	TextLayout	  layoutTooltipText(const String &text) const noexcept;
 
 
 	// Fonts
@@ -72,19 +73,25 @@ private:
 	Font		  noteNameFonts;
 	Font		  menuFont;
 	Font		  infoTextFont;
+	Font		  tooltipFont;
 
 	// Font Colours
-	Colour		  fontColor				= Colour::fromRGB(238, 233, 218);
-	Colour		  whiteFontColour		= Colour::fromRGB(255, 255, 255);
+	const Colour  fontColor				  = Colour::fromRGB(238, 233, 218);
+	const Colour  whiteFontColour		  = Colour::fromRGB(255, 255, 255);
+	const Colour  tooltipFontColour		  = Colour::fromRGB(255, 255, 255);
 
 	// Button Colours
-	Colour		  techniqueButtonColour = Colour::fromRGB(158, 104, 61);
+	const Colour  techniqueButtonColour	  = Colour::fromRGB(158, 104, 61);
 
 	// Background Colours
-	Colour		  menuBarBackground		= Colour::fromRGB(44, 44, 44);	 // Menubar background colour
-	Colour		  background			= Colour::fromRGB(16, 14, 21);	 // Colour used for the background of the app window
-	Colour		  buttonColor			= Colour::fromRGB(158, 104, 61); // Colour used for the buttons in "Playing Techniques"
-	Colour		  boxesBackground		= background.brighter(0.02f);	 // Colours used for the background of the different UI elements
+	const Colour  menuBarBackground		  = Colour::fromRGB(44, 44, 44);   // Menubar background colour
+	const Colour  background			  = Colour::fromRGB(16, 14, 21);   // Colour used for the background of the app window
+	const Colour  buttonColor			  = Colour::fromRGB(158, 104, 61); // Colour used for the buttons in "Playing Techniques"
+	const Colour  boxesBackground		  = background.brighter(0.02f);	   // Colours used for the background of the different UI elements
+	const Colour  tooltipWindowBackground = Colour::fromRGB(0, 0, 0);
 
-	const float	  mCornerRadius			= 8;
+	const float	  mCornerRadius			  = 8;
+
+	const int	  tooltipWidth			  = 450;
+	const int	  tooltipHeight			  = 20;
 };

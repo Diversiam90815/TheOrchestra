@@ -53,10 +53,17 @@ void CustomLookAndFeel::setFont()
 	instrumentTypeface = Typeface::createSystemTypefaceFor(BinaryData::InstrumentSerifRegular_ttf, BinaryData::InstrumentSerifRegular_ttfSize);
 
 	// Set the font
-	headerFont		   = Font(instrumentTypeface).withHeight(24.0f);
-	noteNameFonts	   = Font(instrumentTypeface).withHeight(24.0f);
-	menuFont		   = Font(instrumentTypeface).withHeight(24.0f);
-	infoTextFont	   = Font(instrumentTypeface).withHeight(14.0f);
+	headerFont		   = Font(instrumentTypeface).withHeight(27.0f);
+	noteNameFonts	   = Font(instrumentTypeface).withHeight(25.0f);
+	menuFont		   = Font(instrumentTypeface).withHeight(27.0f);
+	infoTextFont	   = Font(instrumentTypeface).withHeight(22.0f);
+	tooltipFont		   = Font(instrumentTypeface).withHeight(20.0f);
+
+	headerFont.setExtraKerningFactor(0.003f);
+	noteNameFonts.setExtraKerningFactor(0.003f);
+	menuFont.setExtraKerningFactor(0.003f);
+	infoTextFont.setExtraKerningFactor(0.003f);
+	tooltipFont.setExtraKerningFactor(0.003f);
 }
 
 
@@ -122,11 +129,6 @@ void CustomLookAndFeel::drawButtonBackground(Graphics &g, Button &button, const 
 	auto cornerSize = 6.0f;
 	auto bounds		= button.getLocalBounds().toFloat().reduced(0.5f, 0.5f);
 
-	//auto baseColour = backgroundColour.withMultipliedSaturation(button.hasKeyboardFocus(true) ? 1.3f : 0.9f).withMultipliedAlpha(button.isEnabled() ? 1.0f : 0.5f);
-
-	//if (shouldDrawButtonAsDown || shouldDrawButtonAsHighlighted)
-	//	baseColour = baseColour.contrasting(shouldDrawButtonAsDown ? 0.2f : 0.05f);
-
 	g.setColour(techniqueButtonColour);
 
 	auto flatOnLeft	  = button.isConnectedOnLeft();
@@ -152,4 +154,28 @@ void CustomLookAndFeel::drawButtonBackground(Graphics &g, Button &button, const 
 		g.setColour(button.findColour(ComboBox::outlineColourId));
 		g.drawRoundedRectangle(bounds, cornerSize, 1.0f);
 	}
+}
+
+
+void CustomLookAndFeel::drawTooltip(Graphics &g, const String &text, int width, int height)
+{
+	Rectangle<int> bounds(tooltipWidth, tooltipHeight);
+
+	g.setColour(tooltipWindowBackground);
+	g.fillRoundedRectangle(bounds.toFloat(), mCornerRadius);
+
+	TextLayout tl = layoutTooltipText(text);
+	tl.draw(g, bounds.toFloat());
+}
+
+
+TextLayout CustomLookAndFeel::layoutTooltipText(const String &text) const noexcept
+{
+	AttributedString s;
+	s.setJustification(Justification::centredLeft);
+	s.append(text, tooltipFont, tooltipFontColour);
+
+	TextLayout tl;
+	tl.createLayoutWithBalancedLineLengths(s, (float)tooltipWidth);
+	return tl;
 }
