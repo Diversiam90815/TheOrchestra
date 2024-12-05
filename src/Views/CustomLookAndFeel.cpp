@@ -57,6 +57,7 @@ void CustomLookAndFeel::setFont()
 	noteNameFonts	   = Font(instrumentTypeface).withHeight(25.0f);
 	menuFont		   = Font(instrumentTypeface).withHeight(27.0f);
 	infoTextFont	   = Font(instrumentTypeface).withHeight(22.0f);
+	qualityTextFont	   = Font(instrumentTypeface).withHeight(20.0f);
 	tooltipFont		   = Font(instrumentTypeface).withHeight(20.0f);
 
 	headerFont.setExtraKerningFactor(0.003f);
@@ -64,6 +65,7 @@ void CustomLookAndFeel::setFont()
 	menuFont.setExtraKerningFactor(0.003f);
 	infoTextFont.setExtraKerningFactor(0.003f);
 	tooltipFont.setExtraKerningFactor(0.003f);
+	qualityTextFont.setExtraKerningFactor(0.003f);
 }
 
 
@@ -178,4 +180,24 @@ TextLayout CustomLookAndFeel::layoutTooltipText(const String &text) const noexce
 	TextLayout tl;
 	tl.createLayoutWithBalancedLineLengths(s, (float)tooltipWidth);
 	return tl;
+}
+
+
+void CustomLookAndFeel::drawTextEditorOutline(Graphics &g, int width, int height, TextEditor &textEditor)
+{
+	g.setColour(Colours::transparentBlack);
+	g.drawRect(0, 0, width, height);
+}
+
+
+void CustomLookAndFeel::fillTextEditorBackground(Graphics &g, int width, int height, TextEditor &textEditor)
+{
+	g.setColour(Colours::transparentBlack);
+	g.fillRect(0, 0, width, height);
+}
+
+
+Font CustomLookAndFeel::getTextEditorFont()
+{
+	return qualityTextFont;
 }
