@@ -36,7 +36,7 @@ public:
 
 	float  getCornerRadius() const;
 
-	Font		  getTextEditorFont();
+	Font   getTextEditorFont();
 
 private:
 	void		  init();
@@ -71,7 +71,6 @@ private:
 	void		  drawTextEditorOutline(Graphics &g, int width, int height, TextEditor &textEditor) override;
 
 	void		  fillTextEditorBackground(Graphics &g, int width, int height, TextEditor &textEditor) override;
-
 
 
 

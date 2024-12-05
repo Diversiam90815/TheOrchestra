@@ -131,7 +131,30 @@ void CustomLookAndFeel::drawButtonBackground(Graphics &g, Button &button, const 
 	auto cornerSize = 6.0f;
 	auto bounds		= button.getLocalBounds().toFloat().reduced(0.5f, 0.5f);
 
-	g.setColour(techniqueButtonColour);
+	if (button.getName().contains("FirstQuality"))
+	{
+		g.setColour(firstQualityColour);
+	}
+
+	else if (button.getName().contains("SecondQuality"))
+	{
+		g.setColour(secondQualityColour);
+	}
+
+	else if (button.getName().contains("ThirdQuality"))
+	{
+		g.setColour(thirdQualityColour);
+	}
+
+	else if (button.getName().contains("FourthQuality"))
+	{
+		g.setColour(fourthQualityColour);
+	}
+
+	else
+	{
+		g.setColour(techniqueButtonColour);
+	}
 
 	auto flatOnLeft	  = button.isConnectedOnLeft();
 	auto flatOnRight  = button.isConnectedOnRight();
