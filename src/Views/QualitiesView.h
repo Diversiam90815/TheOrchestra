@@ -26,27 +26,24 @@ private:
 
 	TextButton mFirstLowerNote;
 	TextButton mFirstHigherNote;
-	Label	   mFirstQuality;
+	TextEditor mFirstQuality;
 
 	TextButton mSecondLowerNote;
 	TextButton mSecondHigherNote;
-	Label	   mSecondQuality;
+	TextEditor mSecondQuality;
 
 	TextButton mThirdLowerNote;
 	TextButton mThirdHigherNote;
-	Label	   mThirdQuality;
+	TextEditor mThirdQuality;
 
 	TextButton mFourthLowerNote;
 	TextButton mFourthHigherNote;
-	Label	   mFourthQuality;
+	TextEditor mFourthQuality;
 
 	const int  mQualitiesTitleX			 = 79;
 	const int  mQualitiesTitleY			 = 15;
 	const int  mQualitiesTitleWidth		 = 110;
 	const int  mQualitiesTitleHeight	 = 33;
-
-	const int  mNoteLabelWidth			 = 17;
-	const int  mNoteLabelHeight			 = 17;
 
 	const int  mNoteButtonWidth			 = 36;
 	const int  mNoteButtonHeight		 = 31;
