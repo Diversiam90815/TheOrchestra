@@ -36,6 +36,8 @@ public:
 
 	float  getCornerRadius() const;
 
+	Font		  getTextEditorFont();
+
 private:
 	void		  init();
 
@@ -66,6 +68,13 @@ private:
 	TextLayout	  layoutTooltipText(const String &text) const noexcept;
 
 
+	void		  drawTextEditorOutline(Graphics &g, int width, int height, TextEditor &textEditor) override;
+
+	void		  fillTextEditorBackground(Graphics &g, int width, int height, TextEditor &textEditor) override;
+
+
+
+
 	// Fonts
 	Typeface::Ptr instrumentTypeface;
 
@@ -73,6 +82,7 @@ private:
 	Font		  noteNameFonts;
 	Font		  menuFont;
 	Font		  infoTextFont;
+	Font		  qualityTextFont;
 	Font		  tooltipFont;
 
 	// Font Colours
@@ -94,4 +104,10 @@ private:
 
 	const int	  tooltipWidth			  = 450;
 	const int	  tooltipHeight			  = 20;
+
+	// Quality Colours	(Still need to be evaluated!)
+	const Colour  firstQualityColour	  = Colours::lightblue.darker();
+	const Colour  secondQualityColour	  = Colours::lightgreen;
+	const Colour  thirdQualityColour	  = Colours::lightcoral;
+	const Colour  fourthQualityColour	  = Colours::gold;
 };

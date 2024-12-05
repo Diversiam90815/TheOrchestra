@@ -24,8 +24,9 @@ public:
 
 	virtual void displayInstrument(InstrumentInfo &instrument) = 0;
 
-private:
+protected:
 	CustomLookAndFeel mCustomLookNFeel;
 
-	Path			  p; // used for drawing the corner radius
+private:
+	Path p; // used for drawing the corner radius
 };

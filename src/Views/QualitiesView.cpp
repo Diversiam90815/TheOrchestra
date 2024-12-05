@@ -67,12 +67,23 @@ void QualitiesView::init()
 	// Setting the qualities positions
 	addAndMakeVisible(&mFirstQuality);
 	mFirstQuality.setBounds(mQualityX, mFirstRowY, mQualityWidth, mQualityHeight);
+	mFirstQuality.setJustification(Justification::centredTop);
+	mFirstQuality.setFont(mCustomLookNFeel.getTextEditorFont());
+
 	addAndMakeVisible(&mSecondQuality);
 	mSecondQuality.setBounds(mQualityX, mSecondRowY, mQualityWidth, mQualityHeight);
+	mSecondQuality.setJustification(Justification::centredTop);
+	mSecondQuality.setFont(mCustomLookNFeel.getTextEditorFont());
+
 	addAndMakeVisible(&mThirdQuality);
 	mThirdQuality.setBounds(mQualityX, mThirdRowY, mQualityWidth, mQualityHeight);
+	mThirdQuality.setJustification(Justification::centredTop);
+	mThirdQuality.setFont(mCustomLookNFeel.getTextEditorFont());
+
 	addAndMakeVisible(&mFourthQuality);
 	mFourthQuality.setBounds(mQualityX, mFourthRowY, mQualityWidth, mQualityHeight);
+	mFourthQuality.setJustification(Justification::centredTop);
+	mFourthQuality.setFont(mCustomLookNFeel.getTextEditorFont());
 }
 
 
@@ -95,14 +106,17 @@ void QualitiesView::displayInstrument(InstrumentInfo &instrument)
 		parsedQualities.emplace_back(lowerNote, higherNote, qualityText);
 	}
 
-	TextButton *lowerNotes[]	  = {&mFirstLowerNote, &mSecondLowerNote, &mThirdLowerNote, &mFourthLowerNote};
-	TextButton *higherNotes[]	  = {&mFirstHigherNote, &mSecondHigherNote, &mThirdHigherNote, &mFourthHigherNote};
-	Label	   *qualitiesLabels[] = {&mFirstQuality, &mSecondQuality, &mThirdQuality, &mFourthQuality};
+	TextButton *lowerNotes[]	 = {&mFirstLowerNote, &mSecondLowerNote, &mThirdLowerNote, &mFourthLowerNote};
+	TextButton *higherNotes[]	 = {&mFirstHigherNote, &mSecondHigherNote, &mThirdHigherNote, &mFourthHigherNote};
+	TextEditor *qualitiesTexts[] = {&mFirstQuality, &mSecondQuality, &mThirdQuality, &mFourthQuality};
 
-	auto		configureLabel	  = [](Label &label, const String &text)
+	auto		configureEditor	 = [](TextEditor &editor, const String &text)
 	{
-		label.setVisible(!text.isEmpty());
-		label.setText(text, dontSendNotification);
+		editor.setReadOnly(false);
+		editor.setVisible(!text.isEmpty());
+		editor.setText(text, dontSendNotification);
+		editor.setMultiLine(true);
+		editor.setReadOnly(true);
 	};
 
 	auto configureButton = [](TextButton &button, const String &text)
@@ -118,13 +132,13 @@ void QualitiesView::displayInstrument(InstrumentInfo &instrument)
 			const auto &[lowerNote, higherNote, qualityText] = parsedQualities[i];
 			configureButton(*lowerNotes[i], lowerNote);
 			configureButton(*higherNotes[i], higherNote);
-			configureLabel(*qualitiesLabels[i], qualityText);
+			configureEditor(*qualitiesTexts[i], qualityText);
 		}
 		else
 		{
 			lowerNotes[i]->setVisible(false);
 			higherNotes[i]->setVisible(false);
-			qualitiesLabels[i]->setVisible(false);
+			qualitiesTexts[i]->setVisible(false);
 		}
 	}
 }
