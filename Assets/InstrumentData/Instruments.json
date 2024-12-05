@@ -335,9 +335,9 @@
           "range": "E3 - C7",
           "transposition": "Bb: Major 2nd lower; A: Minor 3rd lower",
           "qualities": [
-            "E3 - F#4: Chalumeau Register: deep and rich",
-            "G4 - A#4: Throat Tones: rather pale",
-            "B4 - C6: Clarino Register: bright, incisive, expressive",
+            "E3 - F#4: Chalumeau Register (deep, rich)",
+            "G4 - A#4: Throat Tones (rather pale)",
+            "B4 - C6: Clarino Register (bright, incisive, expressive)",
             "D6 - C7: Shrill, piercing"
           ],
           "roles": [
@@ -357,8 +357,8 @@
           "range": "D3 - G6",
           "transposition": "Bb: Sounds a major ninth lower",
           "qualities": [
-            "D3 - G3: Chalumeau Register: mysterious, shadowy, sinister",
-            "A3 - G4: Clarino Register: versatile and expressive",
+            "D3 - G3: Chalumeau Register (mysterious, shadowy, sinister)",
+            "A3 - G4: Clarino Register (versatile and expressive)",
             "A4 - G6: Thin, challenging to produce"
           ],
           "roles": [
