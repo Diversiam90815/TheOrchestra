@@ -12,6 +12,7 @@
 #include "InstrumentInfo.h"
 #include "Parameters.h"
 
+
 static std::map<String, Family> familyMap = {{StringsName, Family::Strings}, {WoodwindsName, Family::Woodwinds}, {BrassName, Family::Brass}, {PercussionName, Family::Percussion}};
 
 
@@ -73,8 +74,6 @@ static int getInstrumentKey(String &family, String &instrument)
 
 	return getInstrumentKey(familyKey, instrumentKey);
 }
-
-
 
 
 

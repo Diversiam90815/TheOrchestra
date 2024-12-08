@@ -29,7 +29,7 @@ public:
 
 
 private:
-	void						  addInstrument(Family family, int instrumentId, const InstrumentInfo &info);
+	void						  addInstrument(const InstrumentInfo &info);
 
 	StringArray					  readPlayingTechniquesFromJSON(DynamicObject *obj);
 
@@ -44,7 +44,6 @@ private:
 	StringArray					  readInformationFromJSON(DynamicObject *obj);
 
 	StringArray					  readFamousWorksFromJSON(DynamicObject *obj);
-
 
 
 	std::map<int, InstrumentInfo> instruments; // Mapping the instrument's key to the corresponding InstrumentInfo object
