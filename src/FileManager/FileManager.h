@@ -14,7 +14,7 @@
 
 #include "Parameters.h"
 #include "Helper.h"
-
+#include <JuceHeader.h>
 
 class FileManager
 {
@@ -22,27 +22,28 @@ public:
 	FileManager();
 	~FileManager();
 
-	std::string				 getSamplesFolder();
+	std::string getSamplesFolder();
 
-	std::string				 getInstrumentDataJSONPath();
+	std::string getInstrumentDataJSONPath();
 
-	std::vector<std::string> getInstrumentsImagesFolder(int instrumentKey);
 
+	File		getInstrumentImage(int instrumentKey);
 
 private:
-	// Gets the project's directory
-	std::filesystem::path getProjectDirectory();
+	std::filesystem::path	 getProjectDirectory(); // Gets the project's directory
+
+	std::vector<std::string> getInstrumentsImages(int instrumentKey);
 
 	std::vector<std::string> getInstrumentImages(const std::string &family, const std::string &instrumentName);
 
 
-	std::string			  AssetsFolderName		   = "Assets";
+	std::string				 AssetsFolderName		  = "Assets";
 
-	std::string			  SampleFolderName		   = "Samples";
+	std::string				 SampleFolderName		  = "Samples";
 
-	std::string			  ImageFolderName		   = "Images";
+	std::string				 ImageFolderName		  = "Images";
 
-	std::string			  InstrumentDataFolderName = "InstrumentData";
+	std::string				 InstrumentDataFolderName = "InstrumentData";
 
-	std::string			  InstrumentsDataFileName  = "Instruments.json";
+	std::string				 InstrumentsDataFileName  = "Instruments.json";
 };
