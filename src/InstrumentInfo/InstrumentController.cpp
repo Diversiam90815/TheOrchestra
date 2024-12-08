@@ -133,7 +133,6 @@ StringArray InstrumentController::readFamousWorksFromJSON(DynamicObject *obj)
 }
 
 
-
 InstrumentInfo InstrumentController::getInstrument(int key)
 {
 	auto it = instruments.find(key);
@@ -144,7 +143,6 @@ InstrumentInfo InstrumentController::getInstrument(int key)
 
 	return InstrumentInfo();
 }
-
 
 
 bool InstrumentController::loadFromJSON()
@@ -224,11 +222,12 @@ bool InstrumentController::loadFromJSON()
 			{
 				instrumentTechniques = familyPlayingTechniques;
 			}
+			int			   instrumentID = instrumentMap[name];
+
+			int			   key			= getInstrumentKey(familyEnum, instrumentID);
 
 			// Create InstrumentInfo object
-			InstrumentInfo info(name, range, qualities, information, famousWorks, transposition, instrumentTechniques);
-
-			int			   instrumentID = instrumentMap[name];
+			InstrumentInfo info(name, range, qualities, information, famousWorks, transposition, instrumentTechniques, key);
 
 			// Add instrument to the map
 			addInstrument(familyEnum, instrumentID, info);
