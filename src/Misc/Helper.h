@@ -15,28 +15,28 @@
 static std::map<String, Family> familyMap = {{StringsName, Family::Strings}, {WoodwindsName, Family::Woodwinds}, {BrassName, Family::Brass}, {PercussionName, Family::Percussion}};
 
 
-static std::map<String, int>	instrumentMap = {{ViolinName, Strings::Violin},
-												 {ViolaName, Strings::Viola},
-												 {VioloncelloName, Strings::Violoncello},
-												 {DoubleBassName, Strings::DoubleBass},
-												 {FrenchHornName, Brass::FrenchHorn},
-												 {TenorTromboneName, Brass::TenorTrombone},
-												 {BassTromboneName, Brass::BassTrombone},
-												 {CimbassoName, Brass::Cimbasso},
-												 {TrumpetName, Brass::Trumpet},
-												 {TubaName, Brass::Tuba},
-												 {FluteName, Woodwinds::Flute},
-												 {ClarinetName, Woodwinds::Clarinet},
-												 {OboeName, Woodwinds::Oboe},
-												 {BassClarinetName, Woodwinds::BassClarinet},
-												 {PiccoloName, Woodwinds::Piccolo},
-												 {CorAnglaisName, Woodwinds::CorAnglais},
-												 {BassoonName, Woodwinds::Bassoon},
-												 {ContrabassoonName, Woodwinds::Contrabassoon},
-												 {TimpaniName, Percussion::Timpani},
-												 {CelesteName, Percussion::Celeste},
-												 {MarimbaName, Percussion::Marimba},
-												 {HarpName, Percussion::Harp}};
+static std::map<String, int>	instrumentMap	 = {{ViolinName, Strings::Violin},
+													{ViolaName, Strings::Viola},
+													{VioloncelloName, Strings::Violoncello},
+													{DoubleBassName, Strings::DoubleBass},
+													{FrenchHornName, Brass::FrenchHorn},
+													{TenorTromboneName, Brass::TenorTrombone},
+													{BassTromboneName, Brass::BassTrombone},
+													{CimbassoName, Brass::Cimbasso},
+													{TrumpetName, Brass::Trumpet},
+													{TubaName, Brass::Tuba},
+													{FluteName, Woodwinds::Flute},
+													{ClarinetName, Woodwinds::Clarinet},
+													{OboeName, Woodwinds::Oboe},
+													{BassClarinetName, Woodwinds::BassClarinet},
+													{PiccoloName, Woodwinds::Piccolo},
+													{CorAnglaisName, Woodwinds::CorAnglais},
+													{BassoonName, Woodwinds::Bassoon},
+													{ContrabassoonName, Woodwinds::Contrabassoon},
+													{TimpaniName, Percussion::Timpani},
+													{CelesteName, Percussion::Celeste},
+													{MarimbaName, Percussion::Marimba},
+													{HarpName, Percussion::Harp}};
 
 
 /*
@@ -46,7 +46,7 @@ static std::map<String, int>	instrumentMap = {{ViolinName, Strings::Violin},
 	@param                 [IN] instrument -> enum values of the different instruments found in 'InstrumentInfo.h'
 	@return                int value of the 3 digit key
 */
-static int						getInstrumentKey(int family, int instrument)
+static int getInstrumentKey(int family, int instrument)
 {
 	int key = family * 100 + instrument;
 	return key;
@@ -74,6 +74,46 @@ static int getInstrumentKey(String &family, String &instrument)
 	return getInstrumentKey(familyKey, instrumentKey);
 }
 
+
+
+
+
+static std::map<Family, String> reverseFamilyMap = {
+	{Family::Strings, StringsName}, {Family::Woodwinds, WoodwindsName}, {Family::Brass, BrassName}, {Family::Percussion, PercussionName}};
+
+
+// Reverse instrument map using the full key:
+static std::map<int, String> reverseInstrumentMap = {
+	{getInstrumentKey(Family::Strings, Strings::Violin), ViolinName},			{getInstrumentKey(Family::Strings, Strings::Viola), ViolaName},
+	{getInstrumentKey(Family::Strings, Strings::Violoncello), VioloncelloName}, {getInstrumentKey(Family::Strings, Strings::DoubleBass), DoubleBassName},
+
+	{getInstrumentKey(Family::Woodwinds, Woodwinds::Piccolo), PiccoloName},		{getInstrumentKey(Family::Woodwinds, Woodwinds::Flute), FluteName},
+	{getInstrumentKey(Family::Woodwinds, Woodwinds::Oboe), OboeName},			{getInstrumentKey(Family::Woodwinds, Woodwinds::CorAnglais), CorAnglaisName},
+	{getInstrumentKey(Family::Woodwinds, Woodwinds::Clarinet), ClarinetName},	{getInstrumentKey(Family::Woodwinds, Woodwinds::BassClarinet), BassClarinetName},
+	{getInstrumentKey(Family::Woodwinds, Woodwinds::Bassoon), BassoonName},		{getInstrumentKey(Family::Woodwinds, Woodwinds::Contrabassoon), ContrabassoonName},
+
+	{getInstrumentKey(Family::Brass, Brass::FrenchHorn), FrenchHornName},		{getInstrumentKey(Family::Brass, Brass::Trumpet), TrumpetName},
+	{getInstrumentKey(Family::Brass, Brass::TenorTrombone), TenorTromboneName}, {getInstrumentKey(Family::Brass, Brass::BassTrombone), BassTromboneName},
+	{getInstrumentKey(Family::Brass, Brass::Cimbasso), CimbassoName},			{getInstrumentKey(Family::Brass, Brass::Tuba), TubaName},
+
+	{getInstrumentKey(Family::Percussion, Percussion::Harp), HarpName},			{getInstrumentKey(Family::Percussion, Percussion::Celeste), CelesteName},
+	{getInstrumentKey(Family::Percussion, Percussion::Timpani), TimpaniName},	{getInstrumentKey(Family::Percussion, Percussion::Marimba), MarimbaName}};
+
+
+
+static std::string getInstrumentNameFromKey(int key)
+{
+	return reverseInstrumentMap.at(key).toStdString();
+}
+
+
+static std::string getFamilyNameFromKey(int key)
+{
+	int familyVal = key / 100;
+	return reverseFamilyMap.at(static_cast<Family>(familyVal)).toStdString();
+}
+
+
 /*
 	@brief                 Splits a String containing a range into the lower and higher note
 	@param                 [IN] range -> Range of notes (e.g. G4 - E6)
@@ -100,7 +140,7 @@ static String getLowerOrHigherNote(const String &range, bool getLower)
 	@brief                 Splits a by a colon separated String into two parts
 	@param                 [IN] Colonized String ( part A : part B)
 	@param                 [IN] firstPart -> if true, the left part will be returned, false otherwise
-	@return                Left or right value as a String 
+	@return                Left or right value as a String
 */
 static String splitColonizedStrings(String &colonizedString, bool firstPart)
 {
