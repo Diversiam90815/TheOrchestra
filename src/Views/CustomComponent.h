@@ -25,8 +25,17 @@ public:
 	virtual void displayInstrument(InstrumentInfo &instrument) = 0;
 
 protected:
-	CustomLookAndFeel mCustomLookNFeel;
+	void addAndConfigureTextEditor(TextEditor &editor, int x, int y, int width, int height);
+
+	void addAndConfigureButton(TextButton &button, const String &componentName, int x, int y, int width, int height, bool initiallyVisible = true);
+
+	void addAndConfigureLabel(
+		Label &label, const String &componentName, const String &text, int x, int y, int width, int height, Justification justification = Justification::centred);
+
+	void addAndConfigureImage(DrawableImage &image, int x, int y, int width, int height);
 
 private:
-	Path p; // used for drawing the corner radius
+	CustomLookAndFeel mCustomLookNFeel;
+
+	Path			  p; // used for drawing the corner radius
 };

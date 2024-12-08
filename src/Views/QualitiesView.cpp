@@ -24,81 +24,27 @@ void QualitiesView::init()
 {
 	setSize(mWidth, mHeight);
 
-	// Set the title
-	addAndMakeVisible(&mTitle);
-	mTitle.setName("QualitiesTitle");
-	mTitle.setText("Qualities", dontSendNotification);
-	mTitle.setBounds(mQualitiesTitleX, mQualitiesTitleY, mQualitiesTitleWidth, mQualitiesTitleHeight);
+	// Title
+	addAndConfigureLabel(mTitle, "QualitiesTitle", "Qualities", mQualitiesTitleX, mQualitiesTitleY, mQualitiesTitleWidth, mQualitiesTitleHeight);
 
-	// Settings the note names positions
-	addAndMakeVisible(&mFirstLowerNote);
-	mFirstLowerNote.setName("FirstQualityLower");
-	mFirstLowerNote.setBounds(mLowerNoteX, mFirstRowY, mNoteButtonWidth, mNoteButtonHeight);
-	mFirstLowerNote.setConnectedEdges(Button::ConnectedOnRight);
-	mFirstLowerNote.setVisible(false);
+	// Note buttons
+	addAndConfigureButton(mFirstLowerNote, "FirstQualityLower", mLowerNoteX, mFirstRowY, mNoteButtonWidth, mNoteButtonHeight, false);
+	addAndConfigureButton(mFirstHigherNote, "FirstQualityHigher", mHigherNoteX, mFirstRowY, mNoteButtonWidth, mNoteButtonHeight, false);
 
-	addAndMakeVisible(&mFirstHigherNote);
-	mFirstHigherNote.setName("FirstQualityHigher");
-	mFirstHigherNote.setBounds(mHigherNoteX, mFirstRowY, mNoteButtonWidth, mNoteButtonHeight);
-	mFirstHigherNote.setConnectedEdges(Button::ConnectedOnLeft);
-	mFirstHigherNote.setVisible(false);
+	addAndConfigureButton(mSecondLowerNote, "SecondQualityLower", mLowerNoteX, mSecondRowY, mNoteButtonWidth, mNoteButtonHeight, false);
+	addAndConfigureButton(mSecondHigherNote, "SecondQualityHigher", mHigherNoteX, mSecondRowY, mNoteButtonWidth, mNoteButtonHeight, false);
 
-	addAndMakeVisible(&mSecondLowerNote);
-	mSecondLowerNote.setName("SecondQualityLower");
-	mSecondLowerNote.setBounds(mLowerNoteX, mSecondRowY, mNoteButtonWidth, mNoteButtonHeight);
-	mSecondLowerNote.setConnectedEdges(Button::ConnectedOnRight);
-	mSecondLowerNote.setVisible(false);
+	addAndConfigureButton(mThirdLowerNote, "ThirdQualityLower", mLowerNoteX, mThirdRowY, mNoteButtonWidth, mNoteButtonHeight, false);
+	addAndConfigureButton(mThirdHigherNote, "ThirdQualityHigher", mHigherNoteX, mThirdRowY, mNoteButtonWidth, mNoteButtonHeight, false);
 
-	addAndMakeVisible(&mSecondHigherNote);
-	mSecondHigherNote.setName("SecondQualityHigher");
-	mSecondHigherNote.setBounds(mHigherNoteX, mSecondRowY, mNoteButtonWidth, mNoteButtonHeight);
-	mSecondHigherNote.setConnectedEdges(Button::ConnectedOnLeft);
-	mSecondHigherNote.setVisible(false);
+	addAndConfigureButton(mFourthLowerNote, "FourthQualityLower", mLowerNoteX, mFourthRowY, mNoteButtonWidth, mNoteButtonHeight, false);
+	addAndConfigureButton(mFourthHigherNote, "FourthQualityHigher", mHigherNoteX, mFourthRowY, mNoteButtonWidth, mNoteButtonHeight, false);
 
-	addAndMakeVisible(&mThirdLowerNote);
-	mThirdLowerNote.setName("ThirdQualityLower");
-	mThirdLowerNote.setBounds(mLowerNoteX, mThirdRowY, mNoteButtonWidth, mNoteButtonHeight);
-	mThirdLowerNote.setConnectedEdges(Button::ConnectedOnRight);
-	mThirdLowerNote.setVisible(false);
-
-	addAndMakeVisible(&mThirdHigherNote);
-	mThirdHigherNote.setName("ThirdQualityHigher");
-	mThirdHigherNote.setBounds(mHigherNoteX, mThirdRowY, mNoteButtonWidth, mNoteButtonHeight);
-	mThirdHigherNote.setConnectedEdges(Button::ConnectedOnLeft);
-	mThirdHigherNote.setVisible(false);
-
-	addAndMakeVisible(&mFourthLowerNote);
-	mFourthLowerNote.setName("FourthQualityLower");
-	mFourthLowerNote.setBounds(mLowerNoteX, mFourthRowY, mNoteButtonWidth, mNoteButtonHeight);
-	mFourthLowerNote.setConnectedEdges(Button::ConnectedOnRight);
-	mFourthLowerNote.setVisible(false);
-
-	addAndMakeVisible(&mFourthHigherNote);
-	mFourthHigherNote.setName("FourthQualityHigher");
-	mFourthHigherNote.setBounds(mHigherNoteX, mFourthRowY, mNoteButtonWidth, mNoteButtonHeight);
-	mFourthHigherNote.setConnectedEdges(Button::ConnectedOnLeft);
-	mFourthHigherNote.setVisible(false);
-
-	// Setting the qualities positions
-	addAndMakeVisible(&mFirstQuality);
-	mFirstQuality.setBounds(mQualityX, mFirstRowY, mQualityWidth, mQualityHeight);
-	mFirstQuality.setJustification(Justification::centredTop);
-	mFirstQuality.setFont(mCustomLookNFeel.getTextEditorFont());
-
-	addAndMakeVisible(&mSecondQuality);
-	mSecondQuality.setBounds(mQualityX, mSecondRowY, mQualityWidth, mQualityHeight);
-	mSecondQuality.setJustification(Justification::centredTop);
-	mSecondQuality.setFont(mCustomLookNFeel.getTextEditorFont());
-
-	addAndMakeVisible(&mThirdQuality);
-	mThirdQuality.setBounds(mQualityX, mThirdRowY, mQualityWidth, mQualityHeight);
-	mThirdQuality.setJustification(Justification::centredTop);
-	mThirdQuality.setFont(mCustomLookNFeel.getTextEditorFont());
-
-	addAndMakeVisible(&mFourthQuality);
-	mFourthQuality.setBounds(mQualityX, mFourthRowY, mQualityWidth, mQualityHeight);
-	mFourthQuality.setJustification(Justification::centredTop);
-	mFourthQuality.setFont(mCustomLookNFeel.getTextEditorFont());
+	// Qualities TextEditors
+	addAndConfigureTextEditor(mFirstQuality, mQualityX, mFirstRowY, mQualityWidth, mQualityHeight);
+	addAndConfigureTextEditor(mSecondQuality, mQualityX, mSecondRowY, mQualityWidth, mQualityHeight);
+	addAndConfigureTextEditor(mThirdQuality, mQualityX, mThirdRowY, mQualityWidth, mQualityHeight);
+	addAndConfigureTextEditor(mFourthQuality, mQualityX, mFourthRowY, mQualityWidth, mQualityHeight);
 }
 
 

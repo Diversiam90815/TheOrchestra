@@ -29,7 +29,7 @@ private:
 
 	const int		  mNameX	   = 16;
 	const int		  mNameY	   = 22;
-	const int		  mNameWidth   = 110;
+	const int		  mNameWidth   = 120;
 	const int		  mNameHeight  = 33;
 
 	const int		  mImageX	   = 157;

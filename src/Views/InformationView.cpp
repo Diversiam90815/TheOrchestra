@@ -24,25 +24,12 @@ void InformationView::init()
 {
 	setSize(mWidth, mHeight);
 
-	// Set the title
-	addAndMakeVisible(mTitle);
-	mTitle.setName("InformationTitle");
-	mTitle.setText("Useful Information", dontSendNotification);
-	mTitle.setBounds(mTitleX, mTitleY, mTitleWidth, mTitleHeight);
-	mTitle.setJustificationType(Justification::centred);
+	addAndConfigureLabel(mTitle, "InformationTitle", "Useful Information", mTitleX, mTitleY, mTitleWidth, mTitleHeight, Justification::centred);
 
-	// Set the information label's positions
-	addAndMakeVisible(&mFirstInformation);
-	mFirstInformation.setBounds(mFirstColumX, mFirstRowY, mInfoWidth, mInfoHeight);
-
-	addAndMakeVisible(&mSecondInformation);
-	mSecondInformation.setBounds(mSecondColumx, mFirstRowY, mInfoWidth, mInfoHeight);
-
-	addAndMakeVisible(&mThirdInformation);
-	mThirdInformation.setBounds(mFirstColumX, mSecondRowY, mInfoWidth, mInfoHeight);
-
-	addAndMakeVisible(&mFourthInformation);
-	mFourthInformation.setBounds(mSecondColumx, mSecondRowY, mInfoWidth, mInfoHeight);
+	addAndConfigureTextEditor(mFirstInformation, mFirstColumX, mFirstRowY, mInfoWidth, mInfoHeight);
+	addAndConfigureTextEditor(mSecondInformation, mSecondColumx, mFirstRowY, mInfoWidth, mInfoHeight);
+	addAndConfigureTextEditor(mThirdInformation, mFirstColumX, mSecondRowY, mInfoWidth, mInfoHeight);
+	addAndConfigureTextEditor(mFourthInformation, mSecondColumx, mSecondRowY, mInfoWidth, mInfoHeight);
 }
 
 
