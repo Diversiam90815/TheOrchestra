@@ -31,3 +31,51 @@ void CustomComponent::paint(Graphics &g)
 	g.setColour(mCustomLookNFeel.getBoxBackgroundColour());
 	g.fillPath(p);
 }
+
+
+void CustomComponent::addAndConfigureTextEditor(TextEditor &editor, int x, int y, int width, int height)
+{
+	addAndMakeVisible(editor);
+	editor.setBounds(x, y, width, height);
+	editor.setFont(mCustomLookNFeel.getTextEditorFont());
+	editor.setReadOnly(true);
+	editor.setMultiLine(true);
+	editor.setJustification(Justification::centred);
+}
+
+
+void CustomComponent::addAndConfigureButton(TextButton &button, const String &componentName, int x, int y, int width, int height, bool initiallyVisible)
+{
+	button.setName(componentName);
+
+	if (componentName.contains("QualityHigher"))
+	{
+		button.setConnectedEdges(Button::ConnectedEdgeFlags::ConnectedOnLeft);
+	}
+
+	else if (componentName.contains("QualityLower"))
+	{
+		button.setConnectedEdges(Button::ConnectedEdgeFlags::ConnectedOnRight);
+	}
+
+	addAndMakeVisible(button);
+	button.setVisible(initiallyVisible);
+	button.setBounds(x, y, width, height);
+}
+
+
+void CustomComponent::addAndConfigureLabel(Label &label, const String &componentName, const String &text, int x, int y, int width, int height, Justification justification)
+{
+	label.setName(componentName);
+	label.setText(text, dontSendNotification);
+	addAndMakeVisible(label);
+	label.setBounds(x, y, width, height);
+	label.setJustificationType(justification);
+}
+
+
+void CustomComponent::addAndConfigureImage(DrawableImage &image, int x, int y, int width, int height)
+{
+	addAndMakeVisible(&image);
+	image.setBounds(x, y, width, height);
+}

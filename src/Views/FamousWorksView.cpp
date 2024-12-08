@@ -24,18 +24,11 @@ void FamousWorksView::init()
 {
 	setSize(mWidth, mHeight);
 
-	// Set the title
-	addAndMakeVisible(&mTitle);
-	mTitle.setName("FamousWorksTitle");
-	mTitle.setText("Famous Works", dontSendNotification);
-	mTitle.setBounds(mTitleX, mTitleY, mTitleWidth, mTitleHeight);
+	addAndConfigureLabel(mTitle, "FamousWorksTitle", "Famous Works", mTitleX, mTitleY, mTitleWidth, mTitleHeight);
 
-	addAndMakeVisible(&mFirstWork);
-	mFirstWork.setBounds(mWorkX, mFirstWorkY, mWorkWidth, mWorkHeight);
-	addAndMakeVisible(&mSecondWork);
-	mSecondWork.setBounds(mWorkX, mSecondWorkY, mWorkWidth, mWorkHeight);
-	addAndMakeVisible(&mThirdWork);
-	mThirdWork.setBounds(mWorkX, mThirdWorkY, mWorkWidth, mWorkHeight);
+	addAndConfigureTextEditor(mFirstWork, mWorkX, mFirstWorkY, mWorkWidth, mWorkHeight);
+	addAndConfigureTextEditor(mSecondWork, mWorkX, mSecondWorkY, mWorkWidth, mWorkHeight);
+	addAndConfigureTextEditor(mThirdWork, mWorkX, mThirdWorkY, mWorkWidth, mWorkHeight);
 }
 
 

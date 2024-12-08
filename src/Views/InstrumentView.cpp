@@ -23,15 +23,8 @@ InstrumentView::~InstrumentView()
 void InstrumentView::init()
 {
 	setSize(mWidth, mHeight);
-
-	// Set the instrument's name
-	addAndMakeVisible(&mName);
-	mName.setName("InstrumentTitle");
-	mName.setBounds(mNameX, mNameY, mNameWidth, mNameHeight);
-
-	// Set the instrument's image
-	addAndMakeVisible(&mImage);
-	mImage.setBounds(mImageX, mImageY, mImageWidth, mImageHeight);
+	addAndConfigureLabel(mName, "InstrumentTitle", "", mNameX, mNameY, mNameWidth, mNameHeight);
+	addAndConfigureImage(mImage, mImageX, mImageY, mImageWidth, mImageHeight);
 }
 
 
