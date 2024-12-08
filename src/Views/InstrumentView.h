@@ -9,7 +9,7 @@
 
 #pragma once
 #include "CustomComponent.h"
-
+#include "FileManager.h"
 
 class InstrumentView : public CustomComponent
 {
@@ -19,24 +19,28 @@ public:
 
 	void init();
 
-	void displayInstrument(InstrumentInfo& instrument) override;
+	void displayInstrument(InstrumentInfo &instrument) override;
 
 private:
+	void		  setAndScaleImageFromFile(File &imageFile);
 
-	Label			  mName;  // Name of the instrument
 
-	DrawableImage	  mImage; // Image of the instrument
+	Label		  mName;  // Name of the instrument
 
-	const int		  mNameX	   = 16;
-	const int		  mNameY	   = 22;
-	const int		  mNameWidth   = 120;
-	const int		  mNameHeight  = 33;
+	DrawableImage mImage; // Image of the instrument
 
-	const int		  mImageX	   = 157;
-	const int		  mImageY	   = 7;
-	const int		  mImageWidth  = 100;
-	const int		  mImageHeight = 64;
+	FileManager	  mFileManager;
 
-	const int		  mWidth	   = 314;
-	const int		  mHeight	   = 77;
+	const int	  mNameX	   = 16;
+	const int	  mNameY	   = 22;
+	const int	  mNameWidth   = 120;
+	const int	  mNameHeight  = 33;
+
+	const int	  mImageX	   = 157;
+	const int	  mImageY	   = 7;
+	const int	  mImageWidth  = 100;
+	const int	  mImageHeight = 64;
+
+	const int	  mWidth	   = 314;
+	const int	  mHeight	   = 77;
 };

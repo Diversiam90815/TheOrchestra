@@ -32,4 +32,21 @@ void InstrumentView::displayInstrument(InstrumentInfo &instrument)
 {
 	const String &name = instrument.getName();
 	mName.setText(name, dontSendNotification);
+
+	int	 key	   = instrument.getKey();
+	File imagePath = mFileManager.getInstrumentImage(key);
+	setAndScaleImageFromFile(imagePath);
+}
+
+
+void InstrumentView::setAndScaleImageFromFile(File &imageFile)
+{
+	Image image = ImageFileFormat::loadFrom(imageFile);
+
+	image		= image.rescaled(mImageWidth, mImageHeight);
+
+	mImage.setImage(image);
+
+	// Reapply the bounds after setting the image
+	mImage.setBounds(mImageX, mImageY, mImageWidth, mImageHeight);
 }

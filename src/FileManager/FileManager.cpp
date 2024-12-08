@@ -40,12 +40,30 @@ std::string FileManager::getInstrumentDataJSONPath()
 }
 
 
-std::vector<std::string> FileManager::getInstrumentsImagesFolder(int instrumentKey)
+std::vector<std::string> FileManager::getInstrumentsImages(int instrumentKey)
 {
 	std::string familyName	   = getFamilyNameFromKey(instrumentKey);
 	std::string instrumentName = getInstrumentNameFromKey(instrumentKey);
 
 	return getInstrumentImages(familyName, instrumentName);
+}
+
+
+File FileManager::getInstrumentImage(int instrumentKey)
+{
+	auto images = getInstrumentsImages(instrumentKey);
+
+	// Find an image within the folder that has the name "instrument"
+	auto it		= std::find_if(images.begin(), images.end(), [](const String &imagePath) { return imagePath.containsIgnoreCase("instrument"); });
+
+	// Check if it was found
+	if (it != images.end())
+	{
+		File path = File(*it);
+		return path;
+	}
+
+	return File();	// return empty file it not found
 }
 
 
