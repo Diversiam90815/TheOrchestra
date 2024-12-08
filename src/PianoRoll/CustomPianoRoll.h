@@ -10,9 +10,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-
 #include "Parameters.h"
-
 #include "CustomLookAndFeel.h"
 
 
@@ -31,18 +29,9 @@ enum key
 class CustomPianoRoll : public MidiKeyboardComponent
 {
 public:
-	//==============================================================================
-	//                          CONSTRUCTOR - DESTRUCTOR
-	//==============================================================================
-
 	CustomPianoRoll(MidiKeyboardState &state, Orientation orientation);
 
 	~CustomPianoRoll() = default;
-
-
-	//==============================================================================
-	//                          PUBLIC METHODS
-	//==============================================================================
 
 
 	/*
@@ -69,31 +58,11 @@ public:
 
 
 private:
-	//==============================================================================
-	//                          PRIVATE METHODS
-	//==============================================================================
-
-	/*
-	 @brief                 Returns the note color depending on the note midi value
-	 @param                 [IN] midiNoteNumber -> midi note value of the note (C4 = 60)
-	 @return                Colour of the note that should be used
-	*/
 	Colour							 getNoteColour(int midiNoteNumber);
 
-	/*
-	 @brief                 Override JUCE function to paint the white notes
-	*/
 	void							 drawWhiteNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour lineColour, Colour textColour) override;
 
-	/*
-	 @brief                 Override JUCE function to paint the black notes
-	*/
 	void							 drawBlackNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour noteFillColour) override;
-
-
-	//==============================================================================
-	//                          PRIVATE OBJECTS
-	//==============================================================================
 
 	std::vector<std::pair<int, int>> mMidiRanges;						// Vector of the ranges (stored as pairs of int). This is used to draw different colours of notes
 
@@ -102,5 +71,4 @@ private:
 	Atomic<int>						 mCurrentKeyType = key::defaultKey; // Indicating the current key type for drawing
 
 	CustomLookAndFeel				 mCustomLookAndFeel;
-
 };

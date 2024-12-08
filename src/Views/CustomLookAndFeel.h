@@ -13,18 +13,6 @@
 #include <JuceHeader.h>
 #include "BinaryData.h"
 
-// Enum to differentiate each label use
-enum labelType
-{
-	title = 1,
-	range,
-	qualities,
-	playingtechnique,
-	usefulinformation,
-	famousworks,
-	transposition
-};
-
 
 class CustomLookAndFeel : public LookAndFeel_V4
 {

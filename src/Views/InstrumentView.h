@@ -11,6 +11,7 @@
 #include "CustomComponent.h"
 #include "FileManager.h"
 
+
 class InstrumentView : public CustomComponent
 {
 public:
@@ -22,9 +23,6 @@ public:
 	void displayInstrument(InstrumentInfo &instrument) override;
 
 private:
-	void		  setAndScaleImageFromFile(File &imageFile);
-
-
 	Label		  mName;  // Name of the instrument
 
 	DrawableImage mImage; // Image of the instrument
