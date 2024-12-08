@@ -160,10 +160,11 @@ void CustomPianoRoll::drawBlackNote(int midiNoteNumber, Graphics &g, Rectangle<f
 
 Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
 {
-	// Ensure there is a color for each range
-	if (mMidiRanges.size() > qualityColours.size())
+	auto qualityColours = mCustomLookAndFeel.getQualityColours(); // Get the colours for the note ranges
+
+	if (mMidiRanges.size() > qualityColours.size())				  // Ensure there is a color for each range
 	{
-		jassertfalse; // More ranges than colors provided
+		jassertfalse;											  // More ranges than colors provided
 		if (mCurrentKeyType.get() == key::whiteKey)
 		{
 			return Colours::transparentWhite;

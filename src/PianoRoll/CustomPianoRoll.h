@@ -13,6 +13,8 @@
 
 #include "Parameters.h"
 
+#include "CustomLookAndFeel.h"
+
 
 // Enum to identify the key used
 enum key
@@ -99,10 +101,6 @@ private:
 
 	Atomic<int>						 mCurrentKeyType = key::defaultKey; // Indicating the current key type for drawing
 
-	std::vector<Colour>				 qualityColours	 = {
-		  Colours::lightblue.darker(),						// For the first range
-		  Colours::lightgreen,								// For the second range
-		  Colours::lightcoral,								// For the third range
-		  Colours::gold										// Additional ranges, etc.
-	  };													// Different colours used for the ranges of the different qualities
+	CustomLookAndFeel				 mCustomLookAndFeel;
+
 };
