@@ -37,7 +37,6 @@ set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Assets")
 set (INSTRUMENT_DIR         ${SOURCE_FILES_DIR}/InstrumentInfo )
 set (PROCESSOR_DIR          ${SOURCE_FILES_DIR}/AudioProcessor )
 set (VIEW_DIR               ${SOURCE_FILES_DIR}/Views )
-set (VIEW_MODEL_DIR         ${SOURCE_FILES_DIR}/ViewModels )
 set (PIANOROLL_DIR          ${SOURCE_FILES_DIR}/PianoRoll )
 set (SAMPLER_DIR            ${SOURCE_FILES_DIR}/Sampler )
 set (MISC_DIR               ${SOURCE_FILES_DIR}/Misc )
@@ -48,7 +47,6 @@ set(ALL_PROJECT_DIRS
     ${INSTRUMENT_DIR}
     ${PROCESSOR_DIR}
     ${VIEW_DIR}
-    ${VIEW_MODEL_DIR}
     ${PIANOROLL_DIR}
     ${SAMPLER_DIR}
     ${MISC_DIR}
@@ -62,10 +60,8 @@ set(ALL_PROJECT_DIRS
 ###########################################
 
 set(INSTRUMENT_FILES
-    ${INSTRUMENT_DIR}/InstrumentData.h
     ${INSTRUMENT_DIR}/InstrumentInfo.h
     ${INSTRUMENT_DIR}/InstrumentController.h    ${INSTRUMENT_DIR}/InstrumentController.cpp
-    ${INSTRUMENT_DIR}/InstrumentInfoView.h      ${INSTRUMENT_DIR}/InstrumentInfoView.cpp
 )
 
 set(SAMPLER_FILES
@@ -88,10 +84,6 @@ set(VIEW_FILES
     ${VIEW_DIR}/QualitiesView.h           ${VIEW_DIR}/QualitiesView.cpp
     ${VIEW_DIR}/TechniquesView.h          ${VIEW_DIR}/TechniquesView.cpp
     ${VIEW_DIR}/CustomMenuBar.h           ${VIEW_DIR}/CustomMenuBar.cpp
-)
-
-set(VIEW_MODEL_FILES
-    ${VIEW_MODEL_DIR}/ViewModel.h    ${VIEW_MODEL_DIR}/ViewModel.cpp
 )
 
 set(PIANOROLL_FILES
@@ -117,7 +109,6 @@ set(ALL_PROJECT_FILES
     ${SAMPLER_FILES}
     ${PROCESSOR_FILES}
     ${VIEW_FILES}
-    ${VIEW_MODEL_FILES}
     ${PIANOROLL_FILES}
     ${MISC_FILES}
     ${FILE_MANAGER_FILES}
@@ -135,7 +126,6 @@ source_group("Sampler"          FILES ${SAMPLER_FILES})
 source_group("Processor"        FILES ${PROCESSOR_FILES})
 source_group("Piano Roll"       FILES ${PIANOROLL_FILES})
 source_group("Views"            FILES ${VIEW_FILES})
-source_group("ViewModels"       FILES ${VIEW_MODEL_FILES})  
 source_group("Misc"             FILES ${MISC_FILES})
 source_group("File Manager"     FILES ${FILE_MANAGER_FILES})
 source_group("App"              FILES ${APP_FILES})
