@@ -23,9 +23,9 @@ InstrumentController::~InstrumentController()
 }
 
 
-void InstrumentController::addInstrument(Family family, int instrumentId, const InstrumentInfo &info)
+void InstrumentController::addInstrument(const InstrumentInfo &info)
 {
-	int key			 = getInstrumentKey(family, instrumentId);
+	int key			 = info.getKey();
 	instruments[key] = info;
 }
 
@@ -153,7 +153,6 @@ bool InstrumentController::loadFromJSON()
 	if (!jsonFile.existsAsFile())
 		return false;
 
-
 	String jsonContent = jsonFile.loadFileAsString();
 
 	var	   parsedJSON  = JSON::parse(jsonContent);
@@ -161,13 +160,10 @@ bool InstrumentController::loadFromJSON()
 	if (parsedJSON.isVoid())
 		return false;
 
-
 	if (!parsedJSON.isObject())
 		return false;
 
-
 	auto *rootObj = parsedJSON.getDynamicObject();
-
 
 	// Iterate through each family
 	for (auto it = rootObj->getProperties().begin(); it != rootObj->getProperties().end(); ++it)
@@ -181,21 +177,17 @@ bool InstrumentController::loadFromJSON()
 		if (!familyVar.isObject())
 			continue;
 
-
 		auto	   *familyObj				= familyVar.getDynamicObject();
 		StringArray familyPlayingTechniques = readPlayingTechniquesFromJSON(familyObj);
-
 
 		// Retrieve instruments array
 		if (!familyObj->hasProperty("instruments"))
 			continue;
 
-
 		var instrumentsVar = familyObj->getProperty("instruments");
 
 		if (!instrumentsVar.isArray())
 			continue;
-
 
 		for (int i = 0; i < instrumentsVar.size(); ++i)
 		{
@@ -222,6 +214,7 @@ bool InstrumentController::loadFromJSON()
 			{
 				instrumentTechniques = familyPlayingTechniques;
 			}
+
 			int			   instrumentID = instrumentMap[name];
 
 			int			   key			= getInstrumentKey(familyEnum, instrumentID);
@@ -230,7 +223,7 @@ bool InstrumentController::loadFromJSON()
 			InstrumentInfo info(name, range, qualities, information, famousWorks, transposition, instrumentTechniques, key);
 
 			// Add instrument to the map
-			addInstrument(familyEnum, instrumentID, info);
+			addInstrument(info);
 		}
 	}
 
