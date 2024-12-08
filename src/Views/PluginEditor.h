@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "PianoRoll.h"
-#include "InstrumentInfoView.h"
+#include "InstrumentController.h"
 
 #include "CustomMenuBar.h"
 #include "InstrumentRangesView.h"
@@ -20,6 +20,7 @@
 #include "InformationView.h"
 #include "FamousWorksView.h"
 #include "InstrumentView.h"
+
 
 class OrchestraEditor : public AudioProcessorEditor
 {
