@@ -56,20 +56,11 @@ struct Sample
 class SamplesManagement
 {
 public:
-	//==============================================================================
-	//                          CONSTRUCTOR - DESTRUCTOR
-	//==============================================================================
 
 	SamplesManagement();
 	~SamplesManagement() = default;
 
-	//==============================================================================
-	//                          PUBLIC METHODS
-	//==============================================================================
 
-	/*
-	 @brief             Initializes the AudioFormatManager and sets the SamplesFolder of this project
-	*/
 	void				init();
 
 	/*

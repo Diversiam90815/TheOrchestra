@@ -79,3 +79,15 @@ void CustomComponent::addAndConfigureImage(DrawableImage &image, int x, int y, i
 	addAndMakeVisible(&image);
 	image.setBounds(x, y, width, height);
 }
+
+
+void CustomComponent::setAndRescaleImage(DrawableImage &imageToBeSet, File &imagePath, int x, int y, int width, int height)
+{
+	Image image = ImageFileFormat::loadFrom(imagePath);
+	image		= image.rescaled(width, height);
+
+	imageToBeSet.setImage(image);
+
+	// Reapply the bounds after setting the image
+	imageToBeSet.setBounds(x, y, width, height);
+}
