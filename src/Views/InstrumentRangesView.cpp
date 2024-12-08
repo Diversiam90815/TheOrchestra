@@ -24,39 +24,18 @@ void InstrumentRangesView::init()
 {
 	setSize(mWidth, mHeight);
 
-	// Set the Ranges title
-	addAndMakeVisible(&mRangesTitle);
-	mRangesTitle.setName("RangesTitle");
-	mRangesTitle.setText("Ranges", NotificationType::dontSendNotification);
-	mRangesTitle.setBounds(mRangesTitleX, mRangesTitleY, mRangesTitleWidth, mRangesTitleHeight);
+	addAndConfigureLabel(mRangesTitle, "RangesTitle", "Ranges", mRangesTitleX, mRangesTitleY, mRangesTitleWidth, mRangesTitleHeight);
+	addAndConfigureLabel(mTranspositionTitle, "TranspositionTitle", "Transposition", mTranspositionTitleX, mTranspositionTitleY, mTranspositionTitleWidth,
+						 mTranspositionTitleHeight);
 
-	// Set the Transposition title
-	addAndMakeVisible(&mTranspositionTitle);
-	mTranspositionTitle.setName("TranspositionTitle");
-	mTranspositionTitle.setText("Transposition", NotificationType::dontSendNotification);
-	mTranspositionTitle.setBounds(mTranspositionTitleX, mTranspositionTitleY, mTranspositionTitleWidth, mTranspositionTitleHeight);
+	addAndConfigureImage(mLowerRangeNoteImage, mLowerNoteImageX, mLowerNoteImageY, mImageBoxWidth, mImageBoxHeight);
+	addAndConfigureImage(mHigherRangeNoteImage, mHigherNoteImageX, mHigherNoteImageY, mImageBoxWidth, mImageBoxHeight);
+	addAndConfigureImage(mTranspositionNoteImage, mTranspositionImageX, mTranspositionImageY, mImageBoxWidth, mImageBoxHeight);
 
-	// Set the images positions
-	addAndMakeVisible(&mLowerRangeNoteImage);
-	mLowerRangeNoteImage.setBounds(mLowerNoteImageX, mLowerNoteImageY, mImageBoxWidth, mImageBoxHeight);
+	addAndConfigureLabel(mLowerRangeNoteName, "RangesLowerNoteName", "", mLowerNoteNameX, mLowerNoteNameY, mNoteNameWidth, mNoteNameHeight);
+	addAndConfigureLabel(mHigherRangeNoteName, "RangesHigherNoteName", "", mHigherNoteNameX, mHigherNoteNameY, mNoteNameWidth, mNoteNameHeight);
 
-	addAndMakeVisible(&mHigherRangeNoteImage);
-	mHigherRangeNoteImage.setBounds(mHigherNoteImageX, mHigherNoteImageY, mImageBoxWidth, mImageBoxHeight);
-
-	addAndMakeVisible(&mTranspositionNoteImage);
-	mTranspositionNoteImage.setBounds(mTranspositionImageX, mTranspositionImageY, mImageBoxWidth, mImageBoxHeight);
-
-	// Set the note name's positions
-	addAndMakeVisible(&mLowerRangeNoteName);
-	mLowerRangeNoteName.setName("RangesLowerNoteName");
-	mLowerRangeNoteName.setBounds(mLowerNoteNameX, mLowerNoteNameY, mNoteNameWidth, mNoteNameHeight);
-
-	addAndMakeVisible(&mHigherRangeNoteName);
-	mHigherRangeNoteName.setName("RangesHigherNoteName");
-	mHigherRangeNoteName.setBounds(mHigherNoteNameX, mHigherNoteNameY, mNoteNameWidth, mNoteNameHeight);
-
-	addAndMakeVisible(&mTranspositionNoteName);
-	mTranspositionNoteName.setBounds(mTranspositionNoteX, mTranspositionNoteY, mTranspositionNoteWidth, mTranspositionNoteHeight);
+	addAndConfigureLabel(mTranspositionNoteName, "TranspositonNote", "", mTranspositionNoteX, mTranspositionNoteY, mTranspositionNoteWidth, mTranspositionNoteHeight);
 }
 
 

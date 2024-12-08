@@ -24,33 +24,21 @@ void TechniquesView::init()
 {
 	setSize(mWidth, mHeight);
 
-	// Set the title
-	addAndMakeVisible(&mTitle);
-	mTitle.setName("TechniqueTitle");
-	mTitle.setText("Playing Techniques", dontSendNotification);
-	mTitle.setBounds(mTechTitleX, mTechTitleY, mTechTitleWidth, mTechTitleHeight);
+	addAndConfigureLabel(mTitle, "TechniqueTitle", "Playing Techniques", mTechTitleX, mTechTitleY, mTechTitleWidth, mTechTitleHeight);
 
-	// Set first row of buttons
-	addAndMakeVisible(&mTech1);
-	mTech1.setBounds(mFirstColumnX, mFirstRowY, mButtonWidth, mButtonHeight);
-	addAndMakeVisible(&mTech2);
-	mTech2.setBounds(mSecondColumnX, mFirstRowY, mButtonWidth, mButtonHeight);
-	addAndMakeVisible(&mTech3);
-	mTech3.setBounds(mThirdColumnX, mFirstRowY, mButtonWidth, mButtonHeight);
+	// First row of buttons
+	addAndConfigureButton(mTech1, "Tech1", mFirstColumnX, mFirstRowY, mButtonWidth, mButtonHeight, false);
+	addAndConfigureButton(mTech2, "Tech2", mSecondColumnX, mFirstRowY, mButtonWidth, mButtonHeight, false);
+	addAndConfigureButton(mTech3, "Tech3", mThirdColumnX, mFirstRowY, mButtonWidth, mButtonHeight, false);
 
-	// Set second row of buttons
-	addAndMakeVisible(&mTech4);
-	mTech4.setBounds(mFirstColumnX, mSecondRowY, mButtonWidth, mButtonHeight);
-	addAndMakeVisible(&mTech5);
-	mTech5.setBounds(mSecondColumnX, mSecondRowY, mButtonWidth, mButtonHeight);
-	addAndMakeVisible(&mTech6);
-	mTech6.setBounds(mThirdColumnX, mSecondRowY, mButtonWidth, mButtonHeight);
+	// Second row of buttons
+	addAndConfigureButton(mTech4, "Tech4", mFirstColumnX, mSecondRowY, mButtonWidth, mButtonHeight, false);
+	addAndConfigureButton(mTech5, "Tech5", mSecondColumnX, mSecondRowY, mButtonWidth, mButtonHeight, false);
+	addAndConfigureButton(mTech6, "Tech6", mThirdColumnX, mSecondRowY, mButtonWidth, mButtonHeight, false);
 
-	// Set third row of buttons
-	addAndMakeVisible(&mTech7);
-	mTech7.setBounds(mLastRowFirstColumnX, mThirdRowY, mButtonWidth, mButtonHeight);
-	addAndMakeVisible(&mTech8);
-	mTech8.setBounds(mLastRowSecondColumnX, mThirdRowY, mButtonWidth, mButtonHeight);
+	// Third row of buttons
+	addAndConfigureButton(mTech7, "Tech7", mLastRowFirstColumnX, mThirdRowY, mButtonWidth, mButtonHeight, false);
+	addAndConfigureButton(mTech8, "Tech8", mLastRowSecondColumnX, mThirdRowY, mButtonWidth, mButtonHeight, false);
 }
 
 

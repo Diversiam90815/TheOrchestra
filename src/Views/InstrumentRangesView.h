@@ -26,9 +26,9 @@ private:
 	Label		  mRangesTitle;
 	Label		  mTranspositionTitle;
 
-	Label		  mLowerRangeNoteName;
-	Label		  mHigherRangeNoteName;
-	Label		  mTranspositionNoteName;
+	Label	  mLowerRangeNoteName;
+	Label	  mHigherRangeNoteName;
+	Label	  mTranspositionNoteName;
 
 	DrawableImage mLowerRangeNoteImage;
 	DrawableImage mHigherRangeNoteImage;
@@ -47,7 +47,7 @@ private:
 	const int	  mTranspositionTitleWidth	= 130;
 	const int	  mTranspositionTitleHeight = 19;
 
-	const int	  mNoteNameWidth			= 26;
+	const int	  mNoteNameWidth			= 30;
 	const int	  mNoteNameHeight			= 17;
 
 	const int	  mLowerNoteImageX			= 38;
@@ -62,9 +62,9 @@ private:
 
 	const int	  mTranspositionImageX		= 91;
 	const int	  mTranspositionImageY		= 206;
-	const int	  mTranspositionNoteX		= 75;
+	const int	  mTranspositionNoteX		= 0;
 	const int	  mTranspositionNoteY		= 281;
-	const int	  mTranspositionNoteWidth	= 119;
+	const int	  mTranspositionNoteWidth	= 269;
 	const int	  mTranspositionNoteHeight	= 17;
 
 	const int	  mImageBoxWidth			= 87;
