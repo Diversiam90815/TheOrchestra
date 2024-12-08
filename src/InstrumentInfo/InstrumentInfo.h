@@ -12,7 +12,6 @@
 #include <JuceHeader.h>
 
 #include "Parameters.h"
-#include "InstrumentData.h"
 
 /*
  @brief             Struct defining an instrument and it's information (info can be found in InstrumentData.h)
