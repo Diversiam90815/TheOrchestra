@@ -12,7 +12,6 @@
 
 
 OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : AudioProcessorEditor(&proc), audioProcessor(proc), mPianoRollView()
-//, mInstrumentInfoView(*mPianoRollView.mPianoRoll.get(), audioProcessor.mOrchestraSampler)
 {
 	init();
 	showUI();
