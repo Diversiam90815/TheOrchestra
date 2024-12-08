@@ -38,6 +38,8 @@ public:
 
 	Font   getTextEditorFont();
 
+	std::vector<Colour> getQualityColours();
+
 private:
 	void		  init();
 
@@ -104,9 +106,8 @@ private:
 	const int	  tooltipWidth			  = 450;
 	const int	  tooltipHeight			  = 20;
 
-	// Quality Colours	(Still need to be evaluated!)
-	const Colour  firstQualityColour	  = Colours::lightblue.darker();
-	const Colour  secondQualityColour	  = Colours::lightgreen;
-	const Colour  thirdQualityColour	  = Colours::lightcoral;
-	const Colour  fourthQualityColour	  = Colours::gold;
+	const Colour  firstQualityColour	  = Colour::fromRGB(8, 28, 128); // Blue
+	const Colour  secondQualityColour	  = Colour::fromRGB(130, 84, 0); // Gold
+	const Colour  thirdQualityColour	  = Colour::fromRGB(24, 82, 10); // Green
+	const Colour  fourthQualityColour	  = Colour::fromRGB(84, 18, 19); // Red
 };
