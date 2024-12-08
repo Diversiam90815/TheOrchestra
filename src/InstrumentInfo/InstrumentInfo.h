@@ -27,47 +27,53 @@ public:
 				   const StringArray &roles,
 				   const StringArray &famousWorks,
 				   const String		 &transposition,
-				   const StringArray &playingTechniques)
+				   const StringArray &playingTechniques,
+				   int				  key)
 		: mName(name), mRange(range), mQualities(qualities), mUsefulInformation(roles), mFamousWorks(famousWorks), mTransposition(transposition),
-		  mPlayingTechniques(playingTechniques)
+		  mPlayingTechniques(playingTechniques), mKey(key)
 	{
 	}
 
 	~InstrumentInfo() = default;
 
-	String getName() const 
+	String getName() const
 	{
 		return mName;
 	}
 
-	String getRange() const 
+	String getRange() const
 	{
 		return mRange;
 	}
 
-	StringArray getQualities() const 
+	StringArray getQualities() const
 	{
 		return mQualities;
 	}
 
-	StringArray getInformation() const 
+	StringArray getInformation() const
 	{
 		return mUsefulInformation;
 	}
 
-	StringArray getFamousWorks() const 
+	StringArray getFamousWorks() const
 	{
 		return mFamousWorks;
 	}
 
-	String getTransposition() const 
+	String getTransposition() const
 	{
 		return mTransposition;
 	}
 
-	StringArray getTechniques() const 
+	StringArray getTechniques() const
 	{
 		return mPlayingTechniques;
+	}
+
+	int getKey() const
+	{
+		return mKey;
 	}
 
 
@@ -79,6 +85,7 @@ private:
 	StringArray mFamousWorks;		// Famous works presenting the qualitiy of the instrument
 	String		mTransposition;		// Information about the transposition of the instrument, if it applies
 	StringArray mPlayingTechniques; // Different playing techniques featured within the instrument's family
+	int			mKey = 0;			// 3 digit key defining the instrument (see Helper.h)
 
 	friend class InstrumentController;
 	friend class InstrumentInfoView;
