@@ -224,3 +224,19 @@ Font CustomLookAndFeel::getTextEditorFont()
 {
 	return qualityTextFont;
 }
+
+
+std::vector<Colour> CustomLookAndFeel::getQualityColours()
+{
+	std::vector<Colour> qualityColours;
+	qualityColours.reserve(4);
+
+
+	// Add brighter versions for the colours for the piano roll
+	qualityColours.push_back(firstQualityColour.brighter());
+	qualityColours.push_back(secondQualityColour.brighter());
+	qualityColours.push_back(thirdQualityColour.brighter());
+	qualityColours.push_back(fourthQualityColour.brighter());
+
+	return qualityColours;
+}
