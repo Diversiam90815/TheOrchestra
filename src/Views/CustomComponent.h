@@ -34,6 +34,8 @@ protected:
 
 	void addAndConfigureImage(DrawableImage &image, int x, int y, int width, int height);
 
+	void setAndRescaleImage(DrawableImage &imageToBeSet, File &imagePath, int x, int y, int width, int height);
+
 private:
 	CustomLookAndFeel mCustomLookNFeel;
 
