@@ -49,12 +49,38 @@ std::vector<std::string> FileManager::getInstrumentsImages(int instrumentKey)
 }
 
 
-File FileManager::getInstrumentImage(int instrumentKey)
+File FileManager::getInstrumentImage(TypeOfImage type, int instrumentKey)
 {
-	auto images = getInstrumentsImages(instrumentKey);
+	auto   images = getInstrumentsImages(instrumentKey);
+
+	String filter = "";
+	switch (type)
+	{
+	case (TypeOfImage::InstrumentImage):
+	{
+		filter = "instrument";
+		break;
+	}
+	case (TypeOfImage::LowerRangeNotation):
+	{
+		filter = "range_low";
+		break;
+	}
+	case (TypeOfImage::UpperRangeNotation):
+	{
+		filter = "range_high";
+		break;
+	}
+	case (TypeOfImage::TranspositionNotation):
+	{
+		filter = "transposition";
+		break;
+	}
+	default: return File();
+	}
 
 	// Find an image within the folder that has the name "instrument"
-	auto it		= std::find_if(images.begin(), images.end(), [](const String &imagePath) { return imagePath.containsIgnoreCase("instrument"); });
+	auto it = std::find_if(images.begin(), images.end(), [&filter](const String &imagePath) { return imagePath.containsIgnoreCase(filter); });
 
 	// Check if it was found
 	if (it != images.end())
@@ -63,7 +89,7 @@ File FileManager::getInstrumentImage(int instrumentKey)
 		return path;
 	}
 
-	return File();	// return empty file it not found
+	return File(); // return empty file it not found
 }
 
 

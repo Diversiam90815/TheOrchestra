@@ -10,6 +10,7 @@
 #pragma once
 
 #include "CustomComponent.h"
+#include "FileManager.h"
 
 
 class InstrumentRangesView : public CustomComponent
@@ -33,6 +34,9 @@ private:
 	DrawableImage mLowerRangeNoteImage;
 	DrawableImage mHigherRangeNoteImage;
 	DrawableImage mTranspositionNoteImage;
+
+	FileManager mFileManager;
+
 
 	const int	  mWidth					= 269;
 	const int	  mHeight					= 328;

@@ -16,6 +16,16 @@
 #include "Helper.h"
 #include <JuceHeader.h>
 
+
+enum TypeOfImage
+{
+	InstrumentImage = 1,
+	LowerRangeNotation,
+	UpperRangeNotation,
+	TranspositionNotation
+};
+
+
 class FileManager
 {
 public:
@@ -27,7 +37,7 @@ public:
 	std::string getInstrumentDataJSONPath();
 
 
-	File		getInstrumentImage(int instrumentKey);
+	File		getInstrumentImage(TypeOfImage type, int instrumentKey);
 
 private:
 	std::filesystem::path	 getProjectDirectory(); // Gets the project's directory
