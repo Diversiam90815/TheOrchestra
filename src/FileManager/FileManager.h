@@ -22,7 +22,8 @@ enum TypeOfImage
 	InstrumentImage = 1,
 	LowerRangeNotation,
 	UpperRangeNotation,
-	TranspositionNotation
+	TranspositionLowerNotation,
+	TranspositionHigherNotation
 };
 
 
@@ -35,7 +36,6 @@ public:
 	std::string getSamplesFolder();
 
 	std::string getInstrumentDataJSONPath();
-
 
 	File		getInstrumentImage(TypeOfImage type, int instrumentKey);
 

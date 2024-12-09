@@ -30,7 +30,8 @@ void InstrumentRangesView::init()
 
 	addAndConfigureImage(mLowerRangeNoteImage, mLowerNoteImageX, mLowerNoteImageY, mImageBoxWidth, mImageBoxHeight);
 	addAndConfigureImage(mHigherRangeNoteImage, mHigherNoteImageX, mHigherNoteImageY, mImageBoxWidth, mImageBoxHeight);
-	addAndConfigureImage(mTranspositionNoteImage, mTranspositionImageX, mTranspositionImageY, mImageBoxWidth, mImageBoxHeight);
+	addAndConfigureImage(mTranspositionHigherNoteImage, mHigherNoteImageX, mTranspositionImageY, mImageBoxWidth, mImageBoxHeight);
+	addAndConfigureImage(mTranspositionLowerNoteImage, mLowerNoteImageX, mTranspositionImageY, mImageBoxWidth, mImageBoxHeight);
 
 	addAndConfigureLabel(mLowerRangeNoteName, "RangesLowerNoteName", "", mLowerNoteNameX, mLowerNoteNameY, mNoteNameWidth, mNoteNameHeight);
 	addAndConfigureLabel(mHigherRangeNoteName, "RangesHigherNoteName", "", mHigherNoteNameX, mHigherNoteNameY, mNoteNameWidth, mNoteNameHeight);
@@ -60,4 +61,10 @@ void InstrumentRangesView::displayInstrument(InstrumentInfo &instrument)
 
 	File upperRangeImagePath = mFileManager.getInstrumentImage(TypeOfImage::UpperRangeNotation, key);
 	setAndRescaleImage(mHigherRangeNoteImage, upperRangeImagePath, mHigherNoteImageX, mHigherNoteImageY, mImageBoxWidth, mImageBoxHeight);
+
+	File upperTranspositionPath = mFileManager.getInstrumentImage(TypeOfImage::TranspositionHigherNotation, key);
+	setAndRescaleImage(mTranspositionHigherNoteImage, upperTranspositionPath, mHigherNoteImageX, mTranspositionImageY, mImageBoxWidth, mImageBoxHeight);
+
+	File lowerTranspositionPath = mFileManager.getInstrumentImage(TypeOfImage::TranspositionLowerNotation, key);
+	setAndRescaleImage(mTranspositionLowerNoteImage, lowerTranspositionPath, mLowerNoteImageX, mTranspositionImageY, mImageBoxWidth, mImageBoxHeight);
 }

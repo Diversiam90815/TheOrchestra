@@ -71,9 +71,14 @@ File FileManager::getInstrumentImage(TypeOfImage type, int instrumentKey)
 		filter = "range_high";
 		break;
 	}
-	case (TypeOfImage::TranspositionNotation):
+	case (TypeOfImage::TranspositionLowerNotation):
 	{
-		filter = "transposition";
+		filter = "transposition_low";
+		break;
+	}
+	case (TypeOfImage::TranspositionHigherNotation):
+	{
+		filter = "transposition_high";
 		break;
 	}
 	default: return File();
