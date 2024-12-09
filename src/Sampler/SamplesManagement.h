@@ -56,25 +56,16 @@ struct Sample
 class SamplesManagement
 {
 public:
-	//==============================================================================
-	//                          CONSTRUCTOR - DESTRUCTOR
-	//==============================================================================
 
 	SamplesManagement();
 	~SamplesManagement() = default;
 
-	//==============================================================================
-	//                          PUBLIC METHODS
-	//==============================================================================
 
-	/*
-	 @brief             Initializes the AudioFormatManager and sets the SamplesFolder of this project
-	*/
 	void				init();
 
 	/*
 	 @brief             Returns a vector of Sample structs for a given instrument identified by the instrument key
-	 @param             [IN] reference to an instrumentKey (see InstrumentInfoModel::getInstrumentKey)
+	 @param             [IN] reference to an instrumentKey (see InstrumentController::getInstrumentKey)
 	 @return            Vector collecting all Sample objects of an instrument (containing all notes and round robins)
 	*/
 	std::vector<Sample> getSamplesForInstrument(const int &instrumentKey) const;
@@ -93,13 +84,13 @@ private:
 	/*
 	 @brief             Creates a Sample object of the current instrument and samples and adds it to the map mInstrumentSamples
 	 @param             [IN] file -> reference to the file of the Samples
-	 @param             [IN] key -> reference to the key of the instrument used (see InstrumentInfoModel::getInstrumentKey)
+	 @param             [IN] key -> reference to the key of the instrument used (see InstrumentController::getInstrumentKey)
 	*/
 	void							   addSample(const File &file, const int &key);
 
 	/*
 	 @brief             Gets the path of the samples within the samples folder for a given instrument
-	 @param             [IN] key -> reference to the key of the instrument used (see InstrumentInfoModel::getInstrumentKey)
+	 @param             [IN] key -> reference to the key of the instrument used (see InstrumentController::getInstrumentKey)
 	 @return            juce::File of the instrument samples path, empty file if the instrument is not found
 	*/
 	File							   getInstrumentSamplesPath(const int &instrumentKey);

@@ -36,21 +36,22 @@ set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Assets")
 
 set (INSTRUMENT_DIR         ${SOURCE_FILES_DIR}/InstrumentInfo )
 set (PROCESSOR_DIR          ${SOURCE_FILES_DIR}/AudioProcessor )
-set (UI_DIR                 ${SOURCE_FILES_DIR}/UserInterface )
+set (VIEW_DIR               ${SOURCE_FILES_DIR}/Views )
 set (PIANOROLL_DIR          ${SOURCE_FILES_DIR}/PianoRoll )
 set (SAMPLER_DIR            ${SOURCE_FILES_DIR}/Sampler )
 set (MISC_DIR               ${SOURCE_FILES_DIR}/Misc )
 set (FILE_MANAGER_DIR       ${SOURCE_FILES_DIR}/FileManager)
-
+set (APP_DIR                ${SOURCE_FILES_DIR}/App)
 
 set(ALL_PROJECT_DIRS
     ${INSTRUMENT_DIR}
     ${PROCESSOR_DIR}
-    ${UI_DIR}
+    ${VIEW_DIR}
     ${PIANOROLL_DIR}
     ${SAMPLER_DIR}
     ${MISC_DIR}
     ${FILE_MANAGER_DIR}
+    ${APP_DIR}
 )
 
 
@@ -59,10 +60,8 @@ set(ALL_PROJECT_DIRS
 ###########################################
 
 set(INSTRUMENT_FILES
-    ${INSTRUMENT_DIR}/InstrumentData.h
-    ${INSTRUMENT_DIR}/InstrumentInfo.h          ${INSTRUMENT_DIR}/InstrumentInfo.cpp
-    ${INSTRUMENT_DIR}/InstrumentInfoModel.h     ${INSTRUMENT_DIR}/InstrumentInfoModel.cpp
-    ${INSTRUMENT_DIR}/InstrumentInfoView.h      ${INSTRUMENT_DIR}/InstrumentInfoView.cpp
+    ${INSTRUMENT_DIR}/InstrumentInfo.h
+    ${INSTRUMENT_DIR}/InstrumentController.h    ${INSTRUMENT_DIR}/InstrumentController.cpp
 )
 
 set(SAMPLER_FILES
@@ -74,9 +73,17 @@ set(PROCESSOR_FILES
     ${PROCESSOR_DIR}/PluginProcessor.h    ${PROCESSOR_DIR}/PluginProcessor.cpp
 )
 
-set(UI_FILES
-    ${UI_DIR}/PluginEditor.h        ${UI_DIR}/PluginEditor.cpp
-    ${UI_DIR}/CustomLookAndFeel.h   ${UI_DIR}/CustomLookAndFeel.cpp
+set(VIEW_FILES
+    ${VIEW_DIR}/PluginEditor.h            ${VIEW_DIR}/PluginEditor.cpp
+    ${VIEW_DIR}/CustomLookAndFeel.h       ${VIEW_DIR}/CustomLookAndFeel.cpp
+    ${VIEW_DIR}/CustomComponent.h         ${VIEW_DIR}/CustomComponent.cpp
+    ${VIEW_DIR}/InstrumentView.h          ${VIEW_DIR}/InstrumentView.cpp
+    ${VIEW_DIR}/FamousWorksView.h         ${VIEW_DIR}/FamousWorksView.cpp
+    ${VIEW_DIR}/InformationView.h         ${VIEW_DIR}/InformationView.cpp
+    ${VIEW_DIR}/InstrumentRangesView.h    ${VIEW_DIR}/InstrumentRangesView.cpp
+    ${VIEW_DIR}/QualitiesView.h           ${VIEW_DIR}/QualitiesView.cpp
+    ${VIEW_DIR}/TechniquesView.h          ${VIEW_DIR}/TechniquesView.cpp
+    ${VIEW_DIR}/CustomMenuBar.h           ${VIEW_DIR}/CustomMenuBar.cpp
 )
 
 set(PIANOROLL_FILES
@@ -86,20 +93,26 @@ set(PIANOROLL_FILES
 
 set(MISC_FILES
     ${MISC_DIR}/Parameters.h
+    ${MISC_DIR}/Helper.h
 )
 
 set(FILE_MANAGER_FILES
     ${FILE_MANAGER_DIR}/FileManager.h    ${FILE_MANAGER_DIR}/FileManager.cpp
 )
 
+set(APP_FILES
+    ${APP_DIR}/Main.cpp
+)
+
 set(ALL_PROJECT_FILES
     ${INSTRUMENT_FILES}
     ${SAMPLER_FILES}
     ${PROCESSOR_FILES}
-    ${UI_FILES}
+    ${VIEW_FILES}
     ${PIANOROLL_FILES}
     ${MISC_FILES}
     ${FILE_MANAGER_FILES}
+    ${APP_FILES}
 )
 
 
@@ -112,9 +125,10 @@ source_group("Instruments"      FILES ${INSTRUMENT_FILES})
 source_group("Sampler"          FILES ${SAMPLER_FILES})
 source_group("Processor"        FILES ${PROCESSOR_FILES})
 source_group("Piano Roll"       FILES ${PIANOROLL_FILES})
-source_group("User Interface"   FILES ${UI_FILES})
+source_group("Views"            FILES ${VIEW_FILES})
 source_group("Misc"             FILES ${MISC_FILES})
 source_group("File Manager"     FILES ${FILE_MANAGER_FILES})
+source_group("App"              FILES ${APP_FILES})
 
 
 
@@ -139,6 +153,16 @@ juce_generate_juce_header(${PROJECT_NAME})
 
 
 target_sources(${PROJECT_NAME} PRIVATE ${ALL_PROJECT_FILES} )
+
+
+
+###########################################
+#   BINARY DATA
+###########################################
+
+juce_add_binary_data(FontBinaryData
+    SOURCES ${ASSETS_DIR}/Font/Instrument-Serif/InstrumentSerif-Regular.ttf
+)
 
 
 
@@ -179,6 +203,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC
         JUCE_ASIO=0
         JUCE_USE_ANDROID_OBOE=1
         JUCE_USE_OBOE_STABILIZED_CALLBACK=1
+        JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=1
 
         -DENV_DEVELOPMENT
         _CRT_SECURE_NO_WARNINGS
@@ -220,6 +245,7 @@ target_compile_options(${PROJECT_NAME}
 set (PROJECT_LIBS juce::juce_audio_utils
                   juce::juce_audio_plugin_client
                   juce::juce_core
+                  FontBinaryData
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_LIBS} )
@@ -230,9 +256,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_LIBS} )
 #   POST BUILD COMMAND
 ###########################################
 
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${ASSETS_DIR}"
-        "${ASSETS_DEST_DIR}"
-    COMMENT "Copying Assets directory to output directory"
-)
+# add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#     COMMAND ${CMAKE_COMMAND} -E copy_directory
+#         "${ASSETS_DIR}"
+#         "${ASSETS_DEST_DIR}"
+#     COMMENT "Copying Assets directory to output directory"
+# )
