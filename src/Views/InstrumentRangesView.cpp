@@ -52,4 +52,12 @@ void InstrumentRangesView::displayInstrument(InstrumentInfo &instrument)
 	const String &transposition = instrument.getTransposition();
 
 	mTranspositionNoteName.setText(transposition, dontSendNotification);
+
+	// Set images
+	int	 key				 = instrument.getKey();
+	File lowerRangeImagePath = mFileManager.getInstrumentImage(TypeOfImage::LowerRangeNotation, key);
+	setAndRescaleImage(mLowerRangeNoteImage, lowerRangeImagePath, mLowerNoteImageX, mLowerNoteImageY, mImageBoxWidth, mImageBoxHeight);
+
+	File upperRangeImagePath = mFileManager.getInstrumentImage(TypeOfImage::UpperRangeNotation, key);
+	setAndRescaleImage(mHigherRangeNoteImage, upperRangeImagePath, mHigherNoteImageX, mHigherNoteImageY, mImageBoxWidth, mImageBoxHeight);
 }
