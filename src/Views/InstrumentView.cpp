@@ -34,6 +34,6 @@ void InstrumentView::displayInstrument(InstrumentInfo &instrument)
 	mName.setText(name, dontSendNotification);
 
 	int	 key	   = instrument.getKey();
-	File imagePath = mFileManager.getInstrumentImage(key);
+	File imagePath = mFileManager.getInstrumentImage(TypeOfImage::InstrumentImage, key);
 	setAndRescaleImage(mImage, imagePath, mImageX, mImageY, mImageWidth, mImageHeight);
 }
