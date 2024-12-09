@@ -61,8 +61,18 @@ void QualitiesView::displayInstrument(InstrumentInfo &instrument)
 
 		range		= splitColonizedStrings(quality, true);
 		qualityText = splitColonizedStrings(quality, false);
-		lowerNote	= getLowerOrHigherNote(range, true);
-		higherNote	= getLowerOrHigherNote(range, false);
+
+		if (range.contains("-")) // Ranges are divided with a '-'
+		{
+			lowerNote  = getLowerOrHigherNote(range, true);
+			higherNote = getLowerOrHigherNote(range, false);
+		}
+		else
+		{
+			// Single note case: Use the single note as both lower and higher note
+			lowerNote  = range.trim(); 
+			higherNote = range.trim();
+		}
 
 		parsedQualities.emplace_back(lowerNote, higherNote, qualityText);
 	}
