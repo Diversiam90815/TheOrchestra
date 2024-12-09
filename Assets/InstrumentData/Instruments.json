@@ -118,9 +118,9 @@
           "range": "F2 - C6",
           "transposition": "F: Sounds a perfect 5th lower",
           "qualities": [
-            "F2 - G3: Dark and a bit unfocused, with a mysterious depth",
-            "A3 - C4: Deep and solid, the core of the horn's range",
-            "D4 - G5: Bright and heroic, capable of stirring emotions",
+            "F2 - G#3: Dark and a bit unfocused, with a mysterious depth",
+            "A3 - C#4: Deep and solid, the core of the horn's range",
+            "D4 - G#5: Bright and heroic, capable of stirring emotions",
             "A5 - C6: Brilliant and loud, cutting through the orchestra with clarity"
           ],
           "roles": [
@@ -140,8 +140,8 @@
           "transposition": "C: as written; Bb: Major 2nd lower",
           "qualities": [
             "F#3 - B3: Warm but can be dull, foundational",
-            "C4 - A5: Clear, bright, and articulate, the trumpet's sweet spot",
-            "B5 - D6: Brilliant but can be shrill at the extreme upper range"
+            "C4 - A#5: Clear, bright, and articulate, the trumpet's sweet spot",
+            "B5 - D6: Brilliant but shrill at the extreme upper range"
           ],
           "roles": [
             "Agile within the brass choir",
@@ -159,9 +159,9 @@
           "range": "E2 - Bb4",
           "transposition": "-",
           "qualities": [
-            "E2 - G2: Dark and commanding, with a foundational depth",
-            "A2 - F4: Firm, powerful, and resonant across its core range",
-            "G4 - Bb4: Intense and commanding, with a significant presence"
+            "E2 - G#2: Dark, commanding, with a foundational depth",
+            "A2 - F#4: Firm, powerful, resonant across its core range",
+            "G4 - Bb4: Intense, commanding, with a significant presence"
           ],
           "roles": [
             "Excels in glissandi and legato passages",
@@ -180,8 +180,8 @@
           "range": "Bb1 - Bb4",
           "transposition": "-",
           "qualities": [
-            "Bb1 - F2: Heavy and strong, with a profound bass foundation",
-            "G2 - G3: Deep and solid, adding weight to the ensemble",
+            "Bb1 - F#2: Heavy, strong, with a profound bass foundation",
+            "G2 - G#3: Deep, solid, adding weight to the ensemble",
             "A3 - Bb4: Very powerful, with a commanding upper register"
           ],
           "roles": [
@@ -200,9 +200,9 @@
           "range": "F1 - F4",
           "transposition": "-",
           "qualities": [
-            "F1 - G2: Full, clear, and concise, with a robust foundation",
-            "G#2 - G3: Soft, round, and bright, adding a unique color",
-            "G#3 - F4: Softer and brighter, lending subtlety to the ensemble"
+            "F1 - G2: Full, clear, concise, with a robust foundation",
+            "G#2 - G3: Soft, round, bright, adding a unique color",
+            "G#3 - F4: Softer, brighter, lending subtlety to the ensemble"
           ],
           "roles": [
             "Combines qualities of tuba and bass trombone without the metallic edge",
@@ -219,9 +219,9 @@
           "range": "D1 - F4",
           "transposition": "-",
           "qualities": [
-            "D1 - Bb1: Deep and heavy, anchoring the orchestra",
-            "B1 - E3: Strong and resonant, with a commanding presence",
-            "F3 - F4: Weaker in the upper register but still intense"
+            "D1 - Bb1: Deep, heavy, anchoring the orchestra",
+            "B1 - E3: Strong, resonant, with a commanding presence",
+            "F3 - F4: Weaker in the upper register, but still intense"
           ],
           "roles": [
             "Capable of lyrical lines and providing foundation",
@@ -252,13 +252,13 @@
           "range": "D4 - C8",
           "transposition": "Sounds one octave higher than written",
           "qualities": [
-            "D4 - G4: Quiet, hauntingly hollow",
-            "A4 - G5: Soft and mellow",
-            "A5 - G6: Bright and clear",
+            "D4 - G#4: Quiet, hauntingly hollow",
+            "A4 - G#5: Soft, mellow",
+            "A5 - G#6: Bright, clear",
             "A6 - C8: Shrill, edgy"
           ],
           "roles": [
-            "Excels in adding brightness and flair to the upper register",
+            "Excels in adding brightness to the upper register",
             "Effective in punctuating musical phrases",
             "Used for special coloristic effects"
           ],
@@ -273,9 +273,9 @@
           "range": "C4 - D7",
           "transposition": "-",
           "qualities": [
-            "C4 - G4: Weak, but luscious",
-            "A4 - G5: Sweet, with little power",
-            "A5 - G6: Clear and brilliant",
+            "C4 - G#4: Weak, but luscious",
+            "A4 - G#5: Sweet, with little power",
+            "A5 - G#6: Clear, brilliant",
             "A6 - D7: A bit shrill"
           ],
           "roles": [
@@ -294,10 +294,10 @@
           "range": "Bb3 - A6",
           "transposition": "-",
           "qualities": [
-            "Bb3 - F4: Thick and heavy",
-            "G4 - A5: Warm, prominent, reedy, poignant",
-            "B5 - E6: Thin, but clear",
-            "F6 - A6: Pinched and effective"
+            "Bb3 - F4: Thick, heavy",
+            "Gb4 - A5: Warm, prominent, reedy, poignant",
+            "Bb5 - E6: Thin, but clear",
+            "F6 - A6: Pinched, effective"
           ],
           "roles": [
             "Avoids very soft dynamics in the extreme registers",
@@ -315,8 +315,8 @@
           "range": "B3 - G6",
           "transposition": "Sounds a perfect 5th lower than written",
           "qualities": [
-            "B3 - G4: Deep, rich, and intense",
-            "A4 - A5: Mellow, reedy, sonorous",
+            "B3 - G#4: Deep, rich, intense",
+            "A4 - A#5: Mellow, reedy, sonorous",
             "B5 - G6: Thin, pinched"
           ],
           "roles": [
@@ -337,11 +337,11 @@
           "qualities": [
             "E3 - F#4: Chalumeau Register (deep, rich)",
             "G4 - A#4: Throat Tones (rather pale)",
-            "B4 - C6: Clarino Register (bright, incisive, expressive)",
+            "B4 - C#6: Clarino Register (bright, incisive, expressive)",
             "D6 - C7: Shrill, piercing"
           ],
           "roles": [
-            "Homogenous across all pitches and dynamics",
+            "Homogenous across all pitches / dynamics",
             "Features a fingering break between A#4 and B4",
             "The A clarinet is better for sharp keys, while the Bb clarinet favors flat keys",
             "Known for its lyrical qualities and flexibility"
@@ -357,12 +357,12 @@
           "range": "D3 - G6",
           "transposition": "Bb: Sounds a major ninth lower",
           "qualities": [
-            "D3 - G3: Chalumeau Register (mysterious, shadowy, sinister)",
-            "A3 - G4: Clarino Register (versatile and expressive)",
+            "D3 - G#3: Chalumeau Register (mysterious, shadowy, sinister)",
+            "A3 - G#4: Clarino Register (versatile and expressive)",
             "A4 - G6: Thin, challenging to produce"
           ],
           "roles": [
-            "Notated in treble clef, sounding a major ninth lower",
+            "Notated in treble clef",
             "Agile, capable of blending or standing out",
             "Suitable for bass lines as well as melodic passages in its mid to upper range"
           ],
@@ -377,14 +377,14 @@
           "range": "Bb1 - Eb5",
           "transposition": "-",
           "qualities": [
-            "Bb1 - G2: Sonorous, dark, vibrant",
-            "A2 - D4: Sweet, subdued, but expressive",
+            "Bb1 - G#2: Sonorous, dark, vibrant",
+            "A2 - D#4: Sweet, subdued, but expressive",
             "E4 - Bb4: Thin, but intense",
             "B4 - Eb5: Thin, often pinched"
           ],
           "roles": [
             "Often unison with clarinet",
-            "The lowest and highest P5 intervals are challenging/not playable at low dynamics",
+            "The lowest and highest P5 intervals are challenging at low dynamics",
             "Versatile for both foundational bass lines and melodic solos"
           ],
           "famousWorks": [
@@ -398,7 +398,10 @@
           "range": "Bb0 - Bb4",
           "transposition": "Sounds one octave lower than written",
           "qualities": [
-            "Similar characteristics as the Bassoon but slower and more stubborn in the lows"
+            "Bb0 - G#1: Sonorous, dark, vibrant",
+            "A1 - D#3: Sweet, subdued, but expressive",
+            "E3 - Bb3: Thin, but intense",
+            "B3 - Eb4: Thin, often pinched"
           ],
           "roles": [
             "Doubles with contrabasses and bassoons/celli at octave",
