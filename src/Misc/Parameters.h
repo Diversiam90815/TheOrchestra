@@ -54,7 +54,56 @@ constexpr auto MarimbaName		 = "Marimba";
 
 
 //==============================================================================
-//                          VALUES
+//                          ENUMS
 //==============================================================================
 
-constexpr int  defaultInstrument = 100;
+// Enum for the orchestra families: Woodwinds, Brass, Strings and Percussion
+enum Family
+{
+	Woodwinds = 1,
+	Brass,
+	Strings,
+	Percussion
+};
+
+// Enum for the Strings family
+enum Strings
+{
+	Violin = 1,
+	Viola,
+	Violoncello,
+	DoubleBass
+};
+
+// Enum for the Woodwind family
+enum Woodwinds
+{
+	Piccolo = 1,
+	Flute,
+	Oboe,
+	CorAnglais,
+	Clarinet,
+	BassClarinet,
+	Bassoon,
+	Contrabassoon
+};
+
+// Enum for the Percussion family
+enum Percussion
+{
+	Harp = 1,
+	Celeste,
+	Timpani,
+	Marimba
+};
+
+// Enum for the Brass family
+enum Brass
+{
+	FrenchHorn = 1,
+	Trumpet,
+	TenorTrombone,
+	BassTrombone,
+	Cimbasso,
+	Tuba
+};

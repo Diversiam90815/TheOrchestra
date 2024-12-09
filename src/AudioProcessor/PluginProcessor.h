@@ -79,7 +79,6 @@ private:
 	void				  setStateInformation(const void *data, int sizeInBytes) override;
 
 
-
 	//==============================================================================
 	//				PRIVATE OBJECTS
 	//==============================================================================
