@@ -12,87 +12,81 @@
 #include <JuceHeader.h>
 
 #include "Parameters.h"
-#include "InstrumentData.h"
-
-
-// Enum for the orchestra families: Woodwinds, Brass, Strings and Percussion
-enum Family
-{
-	Woodwinds = 1,
-	Brass,
-	Strings,
-	Percussion
-};
-
-// Enum for the Strings family
-enum Strings
-{
-	Violin = 1,
-	Viola,
-	Violoncello,
-	DoubleBass
-};
-
-// Enum for the Woodwind family
-enum Woodwinds
-{
-	Piccolo = 1,
-	Flute,
-	Oboe,
-	CorAnglais,
-	Clarinet,
-	BassClarinet,
-	Bassoon,
-	Contrabassoon
-};
-
-// Enum for the Percussion family
-enum Percussion
-{
-	Harp = 1,
-	Celeste,
-	Timpani,
-	Marimba
-};
-
-// Enum for the Brass family
-enum Brass
-{
-	FrenchHorn = 1,
-	Trumpet,
-	TenorTrombone,
-	BassTrombone,
-	Cimbasso,
-	Tuba
-};
-
 
 /*
- @brief             Class defining an instrument and it's information (info can be found in InstrumentData.h)
+ @brief             Struct defining an instrument and it's information (info can be found in InstrumentData.h)
 */
-class InstrumentInfo
+struct InstrumentInfo
 {
 public:
-	InstrumentInfo();
+	InstrumentInfo() = default;
+
 	InstrumentInfo(const String		 &name,
 				   const String		 &range,
 				   const StringArray &qualities,
 				   const StringArray &roles,
 				   const StringArray &famousWorks,
 				   const String		 &transposition,
-				   const StringArray &playingTechniques);
-	~InstrumentInfo();
+				   const StringArray &playingTechniques,
+				   int				  key)
+		: mName(name), mRange(range), mQualities(qualities), mUsefulInformation(roles), mFamousWorks(famousWorks), mTransposition(transposition),
+		  mPlayingTechniques(playingTechniques), mKey(key)
+	{
+	}
 
-    
+	~InstrumentInfo() = default;
+
+	String getName() const
+	{
+		return mName;
+	}
+
+	String getRange() const
+	{
+		return mRange;
+	}
+
+	StringArray getQualities() const
+	{
+		return mQualities;
+	}
+
+	StringArray getInformation() const
+	{
+		return mUsefulInformation;
+	}
+
+	StringArray getFamousWorks() const
+	{
+		return mFamousWorks;
+	}
+
+	String getTransposition() const
+	{
+		return mTransposition;
+	}
+
+	StringArray getTechniques() const
+	{
+		return mPlayingTechniques;
+	}
+
+	int getKey() const
+	{
+		return mKey;
+	}
+
+
 private:
-	String		mName;                          //Name of the instrument
-	String		mRange;                         //Range of notes (lowest to highest playable note)
-	StringArray mQualities;                     //Sound characteristics of each section within the range
-	StringArray mUsefulInformation;             //Any useful information of the instrument
-	StringArray mFamousWorks;                   //Famous works presenting the qualitiy of the instrument
-	String		mTransposition;                 //Information about the transposition of the instrument, if it applies
-	StringArray mPlayingTechniques;             //Different playing techniques featured within the instrument's family
+	String		mName;				// Name of the instrument
+	String		mRange;				// Range of notes (lowest to highest playable note)
+	StringArray mQualities;			// Sound characteristics of each section within the range
+	StringArray mUsefulInformation; // Any useful information of the instrument
+	StringArray mFamousWorks;		// Famous works presenting the qualitiy of the instrument
+	String		mTransposition;		// Information about the transposition of the instrument, if it applies
+	StringArray mPlayingTechniques; // Different playing techniques featured within the instrument's family
+	int			mKey = 0;			// 3 digit key defining the instrument (see Helper.h)
 
-	friend class InstrumentInfoModel;
+	friend class InstrumentController;
 	friend class InstrumentInfoView;
 };

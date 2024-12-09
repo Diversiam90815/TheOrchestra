@@ -8,7 +8,8 @@
 */
 
 #include "SamplesManagement.h"
-#include "InstrumentInfoModel.h"
+#include "InstrumentController.h"
+#include "Helper.h"
 
 #include <filesystem>
 
@@ -38,7 +39,7 @@ File SamplesManagement::getInstrumentSamplesPath(const int &instrumentKey)
 		{
 			String instrumentName = instrument.getFileName();
 
-			int	   currentKey	  = InstrumentInfoModel::getInstrumentKey(sectionName, instrumentName);
+			int	   currentKey	  = getInstrumentKey(sectionName, instrumentName);
 			if (currentKey == instrumentKey)
 			{
 				return instrument;
@@ -57,7 +58,7 @@ void SamplesManagement::parseSampleFiles()
 		{
 			String sectionStr	 = section.getFileName();
 			String instrumentStr = instrument.getFileName();
-			int	   key			 = InstrumentInfoModel::getInstrumentKey(sectionStr, instrumentStr);
+			int	   key			 = getInstrumentKey(sectionStr, instrumentStr);
 
 			for (const auto &file : instrument.findChildFiles(File::findFiles, false))
 			{
