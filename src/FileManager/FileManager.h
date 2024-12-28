@@ -9,8 +9,9 @@
 
 #pragma once
 
-#include "string"
-#include "filesystem"
+#include <string>
+#include <filesystem>
+#include <cstdlib>
 
 #include "Parameters.h"
 #include "Helper.h"
@@ -33,11 +34,15 @@ public:
 	FileManager();
 	~FileManager();
 
-	std::string getSamplesFolder();
+	std::string			  getSamplesFolder();
 
-	std::string getInstrumentDataJSONPath();
+	std::string			  getInstrumentDataJSONPath();
 
-	File		getInstrumentImage(TypeOfImage type, int instrumentKey);
+	File				  getInstrumentImage(TypeOfImage type, int instrumentKey);
+
+	std::filesystem::path getProjectsAppDataPath();
+
+	std::filesystem::path getLoggingPath();
 
 private:
 	std::filesystem::path	 getProjectDirectory(); // Gets the project's directory
@@ -56,4 +61,8 @@ private:
 	std::string				 InstrumentDataFolderName = "InstrumentData";
 
 	std::string				 InstrumentsDataFileName  = "Instruments.json";
+
+	std::string				 mProjectName			  = ProjectInfo::projectName;
+
+	std::string				 mLogFolderName			  = "Logs";
 };
