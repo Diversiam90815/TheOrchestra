@@ -15,6 +15,7 @@
 InstrumentController::InstrumentController()
 {
 	loadFromJSON();
+	LOG_INFO("Instruments loaded into memory");
 }
 
 
@@ -27,6 +28,7 @@ void InstrumentController::addInstrument(const InstrumentInfo &info)
 {
 	int key			 = info.getKey();
 	instruments[key] = info;
+	LOG_INFO("Instrument {} loaded!", info.getName().toStdString().c_str());
 }
 
 
