@@ -2,3 +2,7 @@
 	path = submodules/JUCE
 	url = https://github.com/juce-framework/JUCE.git
 	branch = develop
+[submodule "submodules/Logger"]
+	path = submodules/Logger
+	url = https://github.com/Diversiam90815/Logger.git
+	branch = main
