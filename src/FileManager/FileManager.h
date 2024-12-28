@@ -61,8 +61,4 @@ private:
 	std::string				 InstrumentDataFolderName = "InstrumentData";
 
 	std::string				 InstrumentsDataFileName  = "Instruments.json";
-
-	std::string				 mProjectName			  = ProjectInfo::projectName;
-
-	std::string				 mLogFolderName			  = "Logs";
 };
