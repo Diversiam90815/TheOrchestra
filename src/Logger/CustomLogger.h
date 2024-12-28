@@ -14,11 +14,9 @@ public:
 	void initLogging();
 
 private:
-	std::string mLoggerName;
+	std::string mLoggerName	 = "OrchestraLogger";
 
-	std::string mLogFile = "Orchestra.log";
-
-	const int	mSlowLogTime;
+	const int	mSlowLogTime = 50;
 
 	FileManager mFileManager;
 };

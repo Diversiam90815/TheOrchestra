@@ -53,6 +53,12 @@ constexpr auto TimpaniName		 = "Timpani";
 constexpr auto MarimbaName		 = "Marimba";
 
 
+constexpr auto LogFileName		 = "Orchestra.log";
+constexpr auto ProjectName		 = "TheOrchestra";
+constexpr auto LogFolderName	 = "Logs";
+constexpr auto LogFile			 = "Orchestra.log";
+
+
 //==============================================================================
 //                          ENUMS
 //==============================================================================

@@ -109,7 +109,7 @@ std::filesystem::path FileManager::getProjectsAppDataPath()
 
 	std::filesystem::path appDataPath(appDataEnv);
 
-	std::filesystem::path projectAppDataPath = appDataPath / mProjectName;
+	std::filesystem::path projectAppDataPath = appDataPath / ProjectName;
 
 	if (!std::filesystem::exists(projectAppDataPath))
 	{
@@ -124,7 +124,7 @@ std::filesystem::path FileManager::getLoggingPath()
 {
 	std::filesystem::path projectAppDataPath = getProjectsAppDataPath();
 
-	std::filesystem::path logFolder			 = projectAppDataPath / mLogFolderName;
+	std::filesystem::path logFolder			 = projectAppDataPath / LogFolderName;
 
 	if (!std::filesystem::exists(logFolder))
 	{

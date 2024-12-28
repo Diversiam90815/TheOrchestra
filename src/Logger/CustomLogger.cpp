@@ -13,7 +13,7 @@ CustomLogger::~CustomLogger()
 void CustomLogger::initLogging()
 {
 	auto logfolder = mFileManager.getLoggingPath();
-	auto logfile = logfolder / mLogFile;
+	auto logfile = logfolder / LogFile;
 
 	logging::addConsoleOutput().setLevel(LogLevel::Debug).setMaxSkipDuration(std::chrono::microseconds(mSlowLogTime));
 
