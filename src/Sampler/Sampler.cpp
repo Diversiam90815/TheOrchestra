@@ -30,7 +30,7 @@ void Sampler::init()
 	mFormatManager.registerBasicFormats();
 
 	// Add voices to the synthesiser
-	const int numVoices = 64;				   // Adjust based on your needs
+	const int numVoices = 64;
 	for (int i = 0; i < numVoices; ++i)
 	{
 		mSampler.addVoice(new SamplerVoice()); // Use the default SamplerVoice or your custom voice class
@@ -51,6 +51,7 @@ std::vector<Sample> Sampler::filterSamplesFromNote(const int key, const String &
 		filteredSamples.push_back(sampleFromNote);
 	}
 
+	LOG_INFO("Filtered Samples with size {}", filteredSamples.size());
 	return filteredSamples;
 }
 
@@ -84,6 +85,9 @@ SamplerSound *Sampler::createSoundFromSample(const Sample &sample)
 		);
 		return newsound;
 	}
+
+
+	LOG_ERROR("Failed to create sound from sample! (Instrument = {}, Note = {})", sample.instrument.toStdString().c_str(), sample.note.toStdString().c_str());
 	return nullptr;
 }
 
@@ -108,6 +112,7 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key)
 	if (mSampler.getNumSounds() >= 1)
 	{
 		setSamplesAreReady(true);
+		LOG_INFO("Samples for instrument (Key : {}) are loaded! (NumSounds = {})", key, mSampler.getNumSounds());
 	}
 }
 

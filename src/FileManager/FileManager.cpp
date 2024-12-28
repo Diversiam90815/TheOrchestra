@@ -98,6 +98,43 @@ File FileManager::getInstrumentImage(TypeOfImage type, int instrumentKey)
 }
 
 
+std::filesystem::path FileManager::getProjectsAppDataPath()
+{
+	// Get the APPDATA environment variable
+	const char *appDataEnv = std::getenv("APPDATA");
+	if (appDataEnv == nullptr)
+	{
+		throw std::runtime_error("APPDATA environment variable is not set");
+	}
+
+	std::filesystem::path appDataPath(appDataEnv);
+
+	std::filesystem::path projectAppDataPath = appDataPath / ProjectName;
+
+	if (!std::filesystem::exists(projectAppDataPath))
+	{
+		std::filesystem::create_directories(projectAppDataPath);
+	}
+
+	return projectAppDataPath;
+}
+
+
+std::filesystem::path FileManager::getLoggingPath()
+{
+	std::filesystem::path projectAppDataPath = getProjectsAppDataPath();
+
+	std::filesystem::path logFolder			 = projectAppDataPath / LogFolderName;
+
+	if (!std::filesystem::exists(logFolder))
+	{
+		std::filesystem::create_directories(logFolder);
+	}
+
+	return logFolder;
+}
+
+
 std::filesystem::path FileManager::getProjectDirectory()
 {
 	std::filesystem::path cwd		 = std::filesystem::current_path();

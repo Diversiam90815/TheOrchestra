@@ -42,6 +42,7 @@ set (SAMPLER_DIR            ${SOURCE_FILES_DIR}/Sampler )
 set (MISC_DIR               ${SOURCE_FILES_DIR}/Misc )
 set (FILE_MANAGER_DIR       ${SOURCE_FILES_DIR}/FileManager)
 set (APP_DIR                ${SOURCE_FILES_DIR}/App)
+set (LOGGER_DIR                ${SOURCE_FILES_DIR}/Logger)
 
 set(ALL_PROJECT_DIRS
     ${INSTRUMENT_DIR}
@@ -52,6 +53,7 @@ set(ALL_PROJECT_DIRS
     ${MISC_DIR}
     ${FILE_MANAGER_DIR}
     ${APP_DIR}
+    ${LOGGER_DIR}
 )
 
 
@@ -104,6 +106,10 @@ set(APP_FILES
     ${APP_DIR}/Main.cpp
 )
 
+set(LOGGER_FILES
+    ${LOGGER_DIR}/Logger.h      ${LOGGER_DIR}/Logger.cpp
+)
+
 set(ALL_PROJECT_FILES
     ${INSTRUMENT_FILES}
     ${SAMPLER_FILES}
@@ -113,6 +119,7 @@ set(ALL_PROJECT_FILES
     ${MISC_FILES}
     ${FILE_MANAGER_FILES}
     ${APP_FILES}
+    ${LOGGER_FILES}
 )
 
 
@@ -129,6 +136,7 @@ source_group("Views"            FILES ${VIEW_FILES})
 source_group("Misc"             FILES ${MISC_FILES})
 source_group("File Manager"     FILES ${FILE_MANAGER_FILES})
 source_group("App"              FILES ${APP_FILES})
+source_group("Logger"           FILES ${LOGGER_FILES})
 
 
 
@@ -152,6 +160,13 @@ juce_add_plugin(${PROJECT_NAME}
 juce_generate_juce_header(${PROJECT_NAME})
 
 
+
+#   Logger
+
+add_subdirectory(submodules/Logger)
+
+
+
 target_sources(${PROJECT_NAME} PRIVATE ${ALL_PROJECT_FILES} )
 
 
@@ -173,6 +188,8 @@ juce_add_binary_data(FontBinaryData
 target_include_directories(${PROJECT_NAME} PUBLIC
         ${PROJECT_BINARY_DIR}
         ${ALL_PROJECT_DIRS}
+        ${SUBMODULES_DIR}/Logger/include
+
 )
 
 
@@ -246,6 +263,7 @@ set (PROJECT_LIBS juce::juce_audio_utils
                   juce::juce_audio_plugin_client
                   juce::juce_core
                   FontBinaryData
+                  Logger
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_LIBS} )

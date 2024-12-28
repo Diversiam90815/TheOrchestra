@@ -2,6 +2,8 @@
 #include <JuceHeader.h>
 #include "PluginEditor.h"
 
+#include <CustomLogger.h>
+
 
 class Application : public JUCEApplication
 {
@@ -20,6 +22,8 @@ public:
 
 	void initialise(const String &) override
 	{
+		mLog = std::make_unique<CustomLogger>();
+		mLog->initLogging();
 		mainWindow.reset(new MainWindow(getApplicationName(), *this));
 	}
 
@@ -36,6 +40,7 @@ private:
 		MainWindow(const juce::String &name, JUCEApplication &app)
 			: DocumentWindow(name, Desktop::getInstance().getDefaultLookAndFeel().findColour(ResizableWindow::backgroundColourId), DocumentWindow::allButtons), app(app)
 		{
+			
 			// Create an instance of your AudioProcessor
 			processor.reset(new OrchestraProcessor());
 
@@ -50,6 +55,8 @@ private:
 			centreWithSize(getWidth(), getHeight());
 
 			setVisible(true);
+
+			LOG_INFO("Mainwindow setup finished!");
 		}
 
 		void closeButtonPressed() override
@@ -66,6 +73,8 @@ private:
 	};
 
 	std::unique_ptr<MainWindow> mainWindow;
+
+	std::unique_ptr<CustomLogger> mLog;
 };
 
 START_JUCE_APPLICATION(Application)
