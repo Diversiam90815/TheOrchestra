@@ -75,7 +75,10 @@ void SamplesManagement::addSample(const File &file, const int &key)
 	StringArray parts	 = StringArray::fromTokens(filename, "_", "");
 
 	if (parts.size() < 3)
+	{
+		LOG_WARNING("Instrument's sample has wrong format. Filename is {}", filename.toStdString().c_str());
 		return; // Invalid file name format
+	}
 
 	String note				= parts[0];
 	String roundRobinString = parts[1];
@@ -88,10 +91,11 @@ void SamplesManagement::addSample(const File &file, const int &key)
 
 	String instrumentName	= file.getParentDirectory().getFileName();
 
-
 	Sample sampleInfo(instrumentName, note, roundRobin, dynamic, file);
 
 	mInstrumentSamples[key].emplace_back(sampleInfo);
+
+	LOG_INFO("Added sample for instrument {} (Dynamic = {}, Note = {})", instrumentName.toStdString().c_str(), dynamicString.toStdString().c_str(), note.toStdString().c_str());
 }
 
 
@@ -110,5 +114,6 @@ std::vector<Sample> SamplesManagement::getSamplesForInstrument(const int &instru
 	{
 		return it->second;
 	}
+	LOG_WARNING("Could not find instrument's samples with the key {}", instrumentKey);
 	return {};
 }

@@ -11,6 +11,8 @@
 
 #include "JuceHeader.h"
 #include "CustomPianoRoll.h"
+#include "CustomLogger.h"
+
 
 class PianoRoll : public Component, private MidiKeyboardState::Listener, public MidiInputCallback
 {

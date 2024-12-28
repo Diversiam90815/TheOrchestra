@@ -14,6 +14,7 @@
 #include "InstrumentInfo.h"
 #include "Helper.h"
 #include "FileManager.h"
+#include "CustomLogger.h"
 
 
 class InstrumentController
