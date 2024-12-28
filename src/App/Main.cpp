@@ -55,6 +55,8 @@ private:
 			centreWithSize(getWidth(), getHeight());
 
 			setVisible(true);
+
+			LOG_INFO("Mainwindow setup finished!");
 		}
 
 		void closeButtonPressed() override

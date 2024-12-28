@@ -63,6 +63,8 @@ void PianoRoll::setMidiInput()
 		}
 
 		mDeviceManager.addMidiInputDeviceCallback(midiInput.identifier, this);
+
+		LOG_INFO("Found MIDI Input {}", midiInput.name.toStdString().c_str());
 	}
 }
 
