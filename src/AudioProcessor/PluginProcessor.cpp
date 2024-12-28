@@ -13,6 +13,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include <CustomLogger.h>
 
 
 //==============================================================================
@@ -111,6 +112,7 @@ void OrchestraProcessor::changeProgramName(int index, const String &newName)
 
 void OrchestraProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
+	LOG_INFO("Prepare to play called with Samplerate = {} and SamplesPerBlock = {}.", sampleRate, samplesPerBlock);
 	//mOrchestraSampler.mSampler.setCurrentPlaybackSampleRate(sampleRate);
 }
 
