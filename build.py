@@ -1,8 +1,10 @@
 import argparse
 import os
 import sys
+import re
+import shutil
 
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, check_output
 
 
 PLATFORM_GENERATOR = '\"Visual Studio 17\"'
@@ -72,6 +74,65 @@ class BuildRunner(object):
         return result
 
 
+    def _get_number_of_commits(self):
+        autoCWD = AutoCWD(self.args.path_project)
+        sys.stdout.flush()
+        commit_hashes = check_output("git rev-list HEAD", shell=True).rstrip()
+        commit_number = commit_hashes.count(b'\n') + 1
+        del autoCWD
+        return commit_number
+
+
+    def _get_current_project_build_number(self):
+        BuildNumber = self._get_number_of_commits()
+        return BuildNumber
+    
+
+    def _get_current_project_version(self):
+        cmake_file_path = os.path.join(self.args.path_project, "CMakeLists.txt")
+        pattern = r'set\(LOGGER_VERSION\s+(\d+\.\d+\.\d+)\)'
+
+        with open(cmake_file_path, 'r') as f:
+            for line in f:
+                match = re.search(pattern, line)
+                if match:
+                    return match.group(1)
+        return None
+
+
+    def _update_version_in_cmake(self, project_version):
+        pattern = r'set\(LOGGER_VERSION\s+(\d+\.\d+\.\d+)\)'
+        cmakeFile = os.path.join(self.args.path_project, "CMakeLists.txt")
+        tmpFile = cmakeFile + '.tmp'
+
+        with open (cmakeFile, 'r') as fileIn, open (tmpFile, 'w') as fileOut:
+            for line in fileIn:
+                match = re.search(pattern, line)
+                if match:
+                    fileOut.write(f'set(LOGGER_VERSION {project_version})\n')
+                else:
+                    fileOut.write(line)
+
+        shutil.move(tmpFile, cmakeFile)
+        fileIn.close()
+        fileOut.close()
+
+
+    def _update_version(self):
+        BuildNumber = self._get_current_project_build_number()
+        current_version = self._get_current_project_version()
+
+        if current_version:
+            version_parts = current_version.split('.')
+            version_parts[-1] = str(BuildNumber)
+            self.version = '.'.join(version_parts)
+            self._update_version_in_cmake(self.version)
+            print(f"Set project version to {self.version}!")
+
+        else:
+            print("No version attribute found!")
+
+
     def _build_prepare(self):
         projectfolderVS =  os.path.join(self.args.path_project)
         autoCWD = AutoCWD(projectfolderVS)
@@ -99,8 +160,10 @@ class BuildRunner(object):
             BuildRunner.TARGET_CONFIG = 'Debug'
         if self.args.prepare:
             self._build_prepare()
+            self._update_version()
         if self.args.build:
             self._build_prepare()
+            self._update_version()
             self._build_project()
 
             
