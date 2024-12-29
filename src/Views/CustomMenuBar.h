@@ -10,7 +10,7 @@
 #pragma once
 #include "JuceHeader.h"
 #include "Parameters.h"
-#include "CustomLogger.h"
+#include "Logging.h"
 
 using InstrumentSelectedCallback = std::function<void(int)>;
 

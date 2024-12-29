@@ -5,11 +5,11 @@
 #include <Logger.h> // Logger instance from submodule
 #include "FileManager.h"
 
-class CustomLogger
+class Logging
 {
 public:
-	CustomLogger();
-	~CustomLogger();
+	Logging();
+	~Logging();
 
 	void initLogging();
 

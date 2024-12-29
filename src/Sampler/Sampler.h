@@ -12,7 +12,7 @@
 #include <JuceHeader.h>
 #include "SamplesManagement.h"
 #include "CustomPianoRoll.h"
-#include "CustomLogger.h"
+#include "Logging.h"
 
 
 class Sampler

@@ -1,21 +1,21 @@
 
-#include "CustomLogger.h"
+#include "Logging.h"
 
 
-CustomLogger::CustomLogger()
+Logging::Logging()
 {
 }
 
-CustomLogger::~CustomLogger()
+Logging::~Logging()
 {
 }
 
-void CustomLogger::initLogging()
+void Logging::initLogging()
 {
 	auto logfolder = mFileManager.getLoggingPath();
-	auto logfile = logfolder / LogFile;
+	auto logfile   = logfolder / LogFile;
 
-	logging::addConsoleOutput().setLevel(LogLevel::Debug).setMaxSkipDuration(std::chrono::microseconds(mSlowLogTime));
+	logging::addMSVCOutput().checkForPresentDebugger(true).setLevel(LogLevel::Debug).setMaxSkipDuration(std::chrono::microseconds(mSlowLogTime));
 
 	using namespace filesize;
 	logging::addFileOutput()
