@@ -24,7 +24,7 @@ public:
 private:
 	std::string mLoggerName	 = "OrchestraLogger";
 
-	const int	mSlowLogTime = 50;
+	const int	mSlowLogTime = 500;
 
 	FileManager mFileManager;
 };
