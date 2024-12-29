@@ -107,7 +107,7 @@ set(APP_FILES
 )
 
 set(LOGGER_FILES
-    ${LOGGER_DIR}/Logger.h      ${LOGGER_DIR}/Logger.cpp
+    ${LOGGER_DIR}/Logging.h      ${LOGGER_DIR}/Logging.cpp
 )
 
 set(ALL_PROJECT_FILES

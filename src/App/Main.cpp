@@ -2,7 +2,7 @@
 #include <JuceHeader.h>
 #include "PluginEditor.h"
 
-#include <CustomLogger.h>
+#include <Logging.h>
 
 
 class Application : public JUCEApplication
@@ -22,7 +22,7 @@ public:
 
 	void initialise(const String &) override
 	{
-		mLog = std::make_unique<CustomLogger>();
+		mLog = std::make_unique<Logging>();
 		mLog->initLogging();
 		mainWindow.reset(new MainWindow(getApplicationName(), *this));
 	}
@@ -74,7 +74,7 @@ private:
 
 	std::unique_ptr<MainWindow> mainWindow;
 
-	std::unique_ptr<CustomLogger> mLog;
+	std::unique_ptr<Logging>	mLog;
 };
 
 START_JUCE_APPLICATION(Application)

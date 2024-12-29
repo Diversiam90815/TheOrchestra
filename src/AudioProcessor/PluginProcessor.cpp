@@ -13,7 +13,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include <CustomLogger.h>
+#include "Logging.h"
 
 
 //==============================================================================
@@ -43,7 +43,7 @@ OrchestraProcessor::~OrchestraProcessor()
 
 void OrchestraProcessor::init()
 {
-	//mOrchestraSampler.init();
+	// mOrchestraSampler.init();
 }
 
 
@@ -113,7 +113,7 @@ void OrchestraProcessor::changeProgramName(int index, const String &newName)
 void OrchestraProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
 	LOG_INFO("Prepare to play called with Samplerate = {} and SamplesPerBlock = {}.", sampleRate, samplesPerBlock);
-	//mOrchestraSampler.mSampler.setCurrentPlaybackSampleRate(sampleRate);
+	// mOrchestraSampler.mSampler.setCurrentPlaybackSampleRate(sampleRate);
 }
 
 
@@ -142,11 +142,11 @@ void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &mi
 	for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
 		buffer.clear(i, 0, buffer.getNumSamples());
 
-	//if (!mOrchestraSampler.getSamplesAreReady())
+	// if (!mOrchestraSampler.getSamplesAreReady())
 	//	return;
 
 
-	//mOrchestraSampler.mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+	// mOrchestraSampler.mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
 
