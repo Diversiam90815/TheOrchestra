@@ -17,13 +17,14 @@ public:
 
 	const String getApplicationVersion() override
 	{
-		return String(JucePlugin_Version);
+		return String(JucePlugin_VersionString);
 	}
 
 	void initialise(const String &) override
 	{
 		mLog = std::make_unique<Logging>();
 		mLog->initLogging();
+		logProjectInfo();
 		mainWindow.reset(new MainWindow(getApplicationName(), *this));
 	}
 
@@ -32,6 +33,12 @@ public:
 		mainWindow = nullptr;
 	}
 
+	void logProjectInfo()
+	{
+		LOG_INFO("Project running is:");
+		LOG_INFO("\tName\t=\t{}", JucePlugin_Name);
+		LOG_INFO("\tVersion\t=\t{}", JucePlugin_VersionString);
+	}
 
 private:
 	class MainWindow : public DocumentWindow
@@ -40,7 +47,7 @@ private:
 		MainWindow(const juce::String &name, JUCEApplication &app)
 			: DocumentWindow(name, Desktop::getInstance().getDefaultLookAndFeel().findColour(ResizableWindow::backgroundColourId), DocumentWindow::allButtons), app(app)
 		{
-			
+
 			// Create an instance of your AudioProcessor
 			processor.reset(new OrchestraProcessor());
 
@@ -51,7 +58,7 @@ private:
 			setContentOwned(editor.get(), true);
 
 			setResizable(false, false);
-						
+
 			centreWithSize(getWidth(), getHeight());
 
 			setVisible(true);
