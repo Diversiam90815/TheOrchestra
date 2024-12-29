@@ -33,7 +33,6 @@ private:
 	const int  mTitleWidth	= 172;
 	const int  mTitleHeight = 33;
 
-
 	const int  mWorkWidth	= 151;
 	const int  mWorkHeight	= 48;
 
