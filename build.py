@@ -90,7 +90,7 @@ class BuildRunner(object):
 
     def _get_current_project_version(self):
         cmake_file_path = os.path.join(self.args.path_project, "CMakeLists.txt")
-        pattern = r'set\(LOGGER_VERSION\s+(\d+\.\d+\.\d+)\)'
+        pattern = r'set\(ORCHESTRA_VERSION\s+(\d+\.\d+\.\d+)\)'
 
         with open(cmake_file_path, 'r') as f:
             for line in f:
@@ -101,7 +101,7 @@ class BuildRunner(object):
 
 
     def _update_version_in_cmake(self, project_version):
-        pattern = r'set\(LOGGER_VERSION\s+(\d+\.\d+\.\d+)\)'
+        pattern = r'set\(ORCHESTRA_VERSION\s+(\d+\.\d+\.\d+)\)'
         cmakeFile = os.path.join(self.args.path_project, "CMakeLists.txt")
         tmpFile = cmakeFile + '.tmp'
 
@@ -109,7 +109,7 @@ class BuildRunner(object):
             for line in fileIn:
                 match = re.search(pattern, line)
                 if match:
-                    fileOut.write(f'set(LOGGER_VERSION {project_version})\n')
+                    fileOut.write(f'set(ORCHESTRA_VERSION {project_version})\n')
                 else:
                     fileOut.write(line)
 
