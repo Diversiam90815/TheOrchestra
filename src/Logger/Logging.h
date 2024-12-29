@@ -1,3 +1,11 @@
+/*
+  ==============================================================================
+
+	Module			Logging
+	Description		Logging instance providing logging features for the project
+
+  ==============================================================================
+*/
 
 #pragma once
 
