@@ -25,6 +25,8 @@ void Logging::initLogging()
 	auto logfolder = mFileManager.getLoggingPath();
 	auto logfile   = logfolder / LogFile;
 
+	logging::setLoggerName(mLoggerName);
+
 	logging::addMSVCOutput().checkForPresentDebugger(true).setLevel(LogLevel::Debug).setMaxSkipDuration(std::chrono::microseconds(mSlowLogTime));
 
 	using namespace filesize;
