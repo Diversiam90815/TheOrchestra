@@ -145,7 +145,6 @@ void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &mi
 	if (!mOrchestraSampler.getSamplesAreReady())
 		return;
 
-
 	mOrchestraSampler.mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 

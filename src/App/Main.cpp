@@ -68,6 +68,15 @@ private:
 			mPlayer.setProcessor(processor.get());
 			mDeviceManager.addAudioCallback(&mPlayer);
 
+			auto availableMIDIDevices = juce::MidiInput::getAvailableDevices();
+
+			for (auto & device : availableMIDIDevices)
+			{
+				LOG_INFO("Enabling MIDI Device : {}", device.name.toStdString().c_str());
+				mDeviceManager.setMidiInputDeviceEnabled(device.identifier, true);
+			}
+			mDeviceManager.addMidiInputCallback({}, &mPlayer);
+
 			LOG_INFO("Mainwindow setup finished!");
 		}
 
