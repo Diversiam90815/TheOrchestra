@@ -43,7 +43,7 @@ OrchestraProcessor::~OrchestraProcessor()
 
 void OrchestraProcessor::init()
 {
-	// mOrchestraSampler.init();
+	mOrchestraSampler.init();
 }
 
 
@@ -113,7 +113,7 @@ void OrchestraProcessor::changeProgramName(int index, const String &newName)
 void OrchestraProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
 	LOG_INFO("Prepare to play called with Samplerate = {} and SamplesPerBlock = {}.", sampleRate, samplesPerBlock);
-	// mOrchestraSampler.mSampler.setCurrentPlaybackSampleRate(sampleRate);
+	mOrchestraSampler.mSampler.setCurrentPlaybackSampleRate(sampleRate);
 }
 
 
@@ -142,11 +142,11 @@ void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &mi
 	for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
 		buffer.clear(i, 0, buffer.getNumSamples());
 
-	// if (!mOrchestraSampler.getSamplesAreReady())
-	//	return;
+	if (!mOrchestraSampler.getSamplesAreReady())
+		return;
 
 
-	// mOrchestraSampler.mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+	mOrchestraSampler.mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
 
@@ -170,6 +170,12 @@ void OrchestraProcessor::getStateInformation(MemoryBlock &destData)
 
 void OrchestraProcessor::setStateInformation(const void *data, int sizeInBytes)
 {
+}
+
+
+void OrchestraProcessor::setCurrentInstrument(int key)
+{
+	mOrchestraSampler.addSoundsFromInstrumentToSampler(key);
 }
 
 
