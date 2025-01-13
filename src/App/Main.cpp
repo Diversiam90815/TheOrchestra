@@ -63,11 +63,19 @@ private:
 
 			setVisible(true);
 
+			mDeviceManager.initialise(0,2,nullptr,true);
+
+			mPlayer.setProcessor(processor.get());
+			mDeviceManager.addAudioCallback(&mPlayer);
+
 			LOG_INFO("Mainwindow setup finished!");
 		}
 
 		void closeButtonPressed() override
 		{
+			mDeviceManager.removeAudioCallback(&mPlayer);
+			mPlayer.setProcessor(nullptr);
+
 			editor.reset();
 			processor.reset();
 			app.systemRequestedQuit();
@@ -77,7 +85,11 @@ private:
 		JUCEApplication					   &app;
 		std::unique_ptr<OrchestraEditor>	editor;
 		std::unique_ptr<OrchestraProcessor> processor;
+
+		AudioProcessorPlayer				mPlayer;
+		AudioDeviceManager					mDeviceManager;
 	};
+
 
 	std::unique_ptr<MainWindow> mainWindow;
 
