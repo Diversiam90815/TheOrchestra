@@ -13,6 +13,7 @@
 
 #include <filesystem>
 
+
 SamplesManagement::SamplesManagement()
 {
 	std::string sampleFolder = mFileManager.getSamplesFolder();

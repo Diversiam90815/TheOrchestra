@@ -276,9 +276,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_LIBS} )
 #   POST BUILD COMMAND
 ###########################################
 
-# add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory
-#         "${ASSETS_DIR}"
-#         "${ASSETS_DEST_DIR}"
-#     COMMENT "Copying Assets directory to output directory"
-# )
+ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+     COMMAND ${CMAKE_COMMAND} -E copy_directory
+         "${ASSETS_DIR}"
+         "${ASSETS_DEST_DIR}"
+     COMMENT "Copying Assets directory to output directory"
+ )

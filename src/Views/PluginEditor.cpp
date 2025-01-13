@@ -32,7 +32,6 @@ void OrchestraEditor::showUI()
 	mMenuBar.setModel(&mCustomMenuBarModel);
 	addAndMakeVisible(mMenuBar);
 
-
 	addAndMakeVisible(mInstrumentView);
 	addAndMakeVisible(mRangesView);
 	addAndMakeVisible(mQualitiesView);
@@ -60,6 +59,8 @@ void OrchestraEditor::init()
 void OrchestraEditor::changeInstrument(int key)
 {
 	auto instrument = mController.getInstrument(key);
+
+	audioProcessor.setCurrentInstrument(key);
 
 	mInstrumentView.displayInstrument(instrument);
 	mRangesView.displayInstrument(instrument);
