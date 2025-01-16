@@ -13,6 +13,7 @@
 #include "SamplesManagement.h"
 #include "CustomPianoRoll.h"
 #include "Logging.h"
+#include "OrchestraVoice.h"
 
 
 class Sampler
@@ -29,8 +30,6 @@ public:
 	void setSamplesAreReady(bool value);
 
 private:
-	SamplerSound					  *createSoundFromSample(const Sample &sample);
-
 	std::vector<Sample>				   filterSamplesFromNote(const int key, const String &note = "");
 
 

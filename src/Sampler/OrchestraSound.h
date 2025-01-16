@@ -11,17 +11,19 @@
 
 #include <JuceHeader.h>
 #include "Parameters.h"
+#include "SamplesManagement.h"
 
-// Enum for the different Dynamics
-enum dynamics
-{
-	pianissimo = 1,
-	piano,
-	mezzoPiano,
-	mezzoForte,
-	forte,
-	fortissimo
-};
+
+//// Enum for the different Dynamics
+//enum class dynamics
+//{
+//	pianissimo = 1,
+//	piano,
+//	mezzoPiano,
+//	mezzoForte,
+//	forte,
+//	fortissimo
+//};
 
 
 class OrchestraSound : public juce::SynthesiserSound

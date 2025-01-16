@@ -25,11 +25,6 @@ enum dynamics
 	fortissimo
 };
 
-//
-//// Mapping each Dynamic from enum to the short abbrevations used in notation
-// std::map<String, dynamics> dynamicMap = {{"pp", dynamics::pianissimo}, {"p", dynamics::piano}, {"mp", dynamics::mezzoPiano},
-//										 {"mf", dynamics::mezzoForte}, {"f", dynamics::forte}, {"ff", dynamics::fortissimo}};
-
 
 /*
  @brief             Struct holding information of the AudioSamples, such as Instrument Name, the individual note, the round robin instance,                   the dynmic of the
