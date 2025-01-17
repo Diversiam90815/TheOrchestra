@@ -27,7 +27,7 @@ public:
 
 	void pitchWheelMoved(int newPitchWheelValue) override;
 
-	void controllerMoved(int controllerNumber, int newControllerValue);
+	void controllerMoved(int controllerNumber, int newControllerValue) override;
 
 	void renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples) override;
 
@@ -49,9 +49,13 @@ private:
 
 	int								noteNumber			  = -1;
 
-	int								chosenDynamicIndex	  = -1;		 // Set in startNote()
+	int								chosenDynamicIndex	  = -1; // Set in startNote()
 
-	int								chosenRoundRobinIndex = -1;		 // Set in startNote()
+	int								chosenRoundRobinIndex = -1; // Set in startNote()
 
-	const juce::AudioBuffer<float> *currentBuffer		  = nullptr; // Pointer to the actual buffer we read from
+	juce::SmoothedValue<float>		currentCC1Value;
+
+	juce::SmoothedValue<float>		currentCC11Value;
+
+	const juce::AudioBuffer<float> *currentBuffer = nullptr; // Pointer to the actual buffer we read from
 };
