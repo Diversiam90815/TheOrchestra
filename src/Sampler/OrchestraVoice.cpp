@@ -38,6 +38,11 @@ void OrchestraVoice::startNote(int midiNoteNumber, float velocity, juce::Synthes
 
 		noteGain			  = velocity;
 	}
+
+	// Init the CC values
+	auto sampleRate = getSampleRate();
+	currentCC1Value.reset(sampleRate, 0.5);
+	currentCC11Value.reset(sampleRate, 0.5);
 }
 
 
@@ -60,6 +65,16 @@ void OrchestraVoice::pitchWheelMoved(int newPitchWheelValue)
 
 void OrchestraVoice::controllerMoved(int controllerNumber, int newControllerValue)
 {
+	// This is a CC1 message
+	if (controllerNumber == 1)
+	{
+		currentCC1Value.setTargetValue(newControllerValue);
+	}
+
+	else if (controllerNumber == 11)
+	{
+		currentCC11Value.setTargetValue(newControllerValue);
+	}
 }
 
 
