@@ -11,6 +11,7 @@
 
 #include <JuceHeader.h>
 #include "OrchestraSound.h"
+#include "Logging.h"
 
 
 class OrchestraVoice : public juce::SynthesiserVoice
@@ -45,7 +46,7 @@ private:
 
 	float							pitchRatio			  = 1.0f;
 
-	float							noteGain			  = 1.0f;
+	float							noteGain			  = 10.0f;
 
 	int								noteNumber			  = -1;
 
