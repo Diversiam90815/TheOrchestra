@@ -41,8 +41,8 @@ void OrchestraVoice::startNote(int midiNoteNumber, float velocity, juce::Synthes
 
 	// Init the CC values
 	auto sampleRate = getSampleRate();
-	currentCC1Value.reset(sampleRate, 0.5);
-	currentCC11Value.reset(sampleRate, 0.5);
+	currentCC1Value.reset(sampleRate, 0.005);
+	currentCC11Value.reset(sampleRate, 0.005);
 }
 
 
@@ -65,15 +65,14 @@ void OrchestraVoice::pitchWheelMoved(int newPitchWheelValue)
 
 void OrchestraVoice::controllerMoved(int controllerNumber, int newControllerValue)
 {
-	// This is a CC1 message
 	if (controllerNumber == 1)
 	{
-		currentCC1Value.setTargetValue(newControllerValue);
+		currentCC1Value.setTargetValue((float)newControllerValue);
 	}
 
 	else if (controllerNumber == 11)
 	{
-		currentCC11Value.setTargetValue(newControllerValue);
+		currentCC11Value.setTargetValue((float)newControllerValue);
 	}
 }
 
@@ -95,9 +94,12 @@ void OrchestraVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int
 
 	while (--numSamples >= 0)
 	{
-		int	  pos	   = (int)sourceSamplePosition;
-		float alpha	   = (float)(sourceSamplePosition - pos);
-		float invAlpha = 1.0f - alpha;
+		int	  pos		 = (int)sourceSamplePosition;
+		float alpha		 = (float)(sourceSamplePosition - pos);
+		float invAlpha	 = 1.0f - alpha;
+		float cc11Value	 = currentCC11Value.getNextValue();
+		float expression = cc11Value / 127.0f; // Normalized CC11 value between [0,1]
+
 
 		// Stop the note if we exceed the buffer size
 		if (pos + 1 >= bufferSize)
@@ -116,8 +118,10 @@ void OrchestraVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int
 			r = inRight[pos] * invAlpha + inRight[pos + 1] * alpha;
 		}
 
-		l *= noteGain;
-		r *= noteGain;
+		float amp = noteGain * expression;
+
+		l *= amp;
+		r *= amp;
 
 		if (outLeft)
 		{
