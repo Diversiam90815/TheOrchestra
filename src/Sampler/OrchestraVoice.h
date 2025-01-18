@@ -11,7 +11,6 @@
 
 #include <JuceHeader.h>
 #include "OrchestraSound.h"
-#include "Logging.h"
 
 
 class OrchestraVoice : public juce::SynthesiserVoice
