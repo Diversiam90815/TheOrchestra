@@ -1,127 +1,99 @@
 import os
 import re
-from pathlib import Path
 
-# Get the directory where the current script is located
-current_directory = Path(__file__).resolve().parent
+SAMPLES_DIR  = os.path.join(os.getcwd(), "Assets", "Samples")
 
-samples_dir = os.path.join(current_directory, "Assets", "Samples")
+NOTE_REGEX = re.compile(r'^[A-Ga-g][#b]?\d+$')  # Regex to detect note patterns like "B2", "C#3","Db4",..
 
-# Round robin indices to keep and their mappings
-valid_round_robin_indices = {'1': '1', '05': '2', '15': '3', '25': '4'}
-valid_articulations = ['normal', 'long', 'arco-normal']
-
-# Dynamic mappings
-dynamic_mappings = {
-    'pianissimo': 'pp',
-    'piano': 'p',
-    'mezzo-piano': 'mp',
-    'mezzo-forte': 'mf',
-    'forte': 'f',
-    'fortissimo': 'ff'
-}
-
-# Instruments to exclude from the process
-excluded_instruments = []
-
-# Notes to delete
-notes_to_delete = ['As', 'Cs', 'Ds', 'Fs', 'Gs']
-
-# Function to process files
-def process_files(samples_dir):
-    for section in os.listdir(samples_dir):
-        section_dir = os.path.join(samples_dir, section)
-        if not os.path.isdir(section_dir):
-            continue
-        for instrument in os.listdir(section_dir):
-            instrument_path = os.path.join(section_dir, instrument)
-            if os.path.isdir(instrument_path):
-                if instrument in excluded_instruments:
-                    print(f"Skipping excluded instrument: {instrument}")
-                    continue  # Skip excluded instruments
-                for sample in os.listdir(instrument_path):
-                    sample_path = os.path.join(instrument_path, sample)
-                    process_file_with_new_naming(sample_path)
+VALID_DYNAMICS = {"p", "pp", "ppp", "f", "ff", "fff", "mp", "mf"}
 
 
-# Function to process each file
-def process_file_with_old_naming(file_path):
-    filename = os.path.basename(file_path)
+def rename_samples(samples_dir):
+    for root, dirs, files in os.walk(samples_dir):
+        for file in files:
 
-    # Check if the file contains valid round robin factor
-    match = re.search(r'_(\d+)_', filename)
-    if not match:
-        print(f"No round robin match: {filename}")
-        return
-    round_robin_key = match.group(1)
-    if round_robin_key not in valid_round_robin_indices:
-        os.remove(file_path)
-        print(f"Deleted (invalid round robin): {file_path}")
-        return
+            if not file.lower().endswith(".wav"):
+                continue
 
-    # Parse filename to get parts
-    parts = filename.split('_')
-    if len(parts) < 3:
-        print(f"Invalid file name format: {filename}")
-        return  # Invalid file name format, skip
+            old_path = os.path.join(root, file)
+            name_no_ext = os.path.splitext(file)[0]
+            parts = name_no_ext.split('_')
 
-    note = parts[1]
-    round_robin = valid_round_robin_indices[round_robin_key]
-    dynamic = parts[3]
-    articulation = parts[4].split('.')[0]  # Remove file extension
+            # Try to detect note, dynamic, rr from the parts:
+            note_found = None
+            dynamic_found = None
+            rr_found = None
 
-    # Delete files with invalid articulations
-    if articulation not in valid_articulations:
-        os.remove(file_path)
-        print(f"Deleted (invalid articulation): {file_path}")
-        return
+            leftover_tokens = []
 
-    # Delete files with specific notes (regardless of octave)
-    note_name = re.match(r'[A-Ga-g][s#]?', note)
-    if note_name and note_name.group() in notes_to_delete:
-        os.remove(file_path)
-        print(f"Deleted (excluded note): {file_path}")
-        return
+            for part in parts:
+                # Note Check
+                if(note_found is None and NOTE_REGEX.match(part)):
+                        note_found = part
+                        continue
 
-    # Map dynamics to desired format
-    dynamic = dynamic_mappings.get(dynamic, dynamic)
+                # Dynamic Check - if it starts with v and remainder is digit
+                #                   or if it is in VALID_DYNAMICS
+                if dynamic_found is None:
+                    if part in VALID_DYNAMICS:
+                        dynamic_found = part
+                        continue
+                    elif part.startswith('v') and part[1:].isdigit():
+                        dynamic_found = part
+                        continue                    
+                
+                # Round Robbin Check - might be "rr1", "2", or just "Main" (1 rr layer),...
+                if rr_found is None:
+                    #if rrX
+                    if part.startswith("rr") and part[2:].isdigit():
+                        rr_found = part[2:]
+                        continue
+                    
+                    # if just digit
+                    elif part.isdigit():
+                        rr_found = part
+                        continue
 
-    # Create new filename without instrument name and articulation
-    new_filename = f"{note}_{round_robin}_{dynamic}.mp3"
-    new_file_path = os.path.join(os.path.dirname(file_path), new_filename)
+                    # if it is Main
+                    elif part.lower() == "main":
+                        rr_found = "1"
+                        continue
 
-    # Check if new file name already exists to avoid FileExistsError
-    if not os.path.exists(new_file_path):
-        os.rename(file_path, new_file_path)
-        print(f"Renamed: {file_path} to {new_file_path}")
-    else:
-        os.remove(file_path)
-        print(f"Deleted (duplicate after renaming): {file_path}")
+                    # Else we guess it's not rr
+                    leftover_tokens.append(part)
+                
+                else:
+                    leftover_tokens.append(part)
+        
+                # If we never found a round-robin, default to "1"
+                if rr_found is None:
+                    rr_found = "1" 
+
+                # At least we need a note and dynamic. If missing, skip rename
+                if not note_found or not dynamic_found:
+                    print(f"Skipping rename for {old_path} due to missing note / dynamic!")
+                    continue
+
+                # Build new filename
+                new_filename = f"{note_found}_{dynamic_found}_{rr_found}.wav"
+                new_path = os.path.join(root, new_filename)
+
+                # If it does not actually change, skip
+                if new_path == old_path:
+                    print(f"No rename needed for {old_path}")
+                    continue
+                
+                # if a file with that name already exists, skip
+                if os.path.exists(new_path):
+                    print(f"Cannot rename {old_path} -> {new_filename}, target already exists.")
+                    continue
+
+                # Rename
+                os.rename(old_path, new_path)
+                print(f"Renamed:\n\t{old_path}\n=>\n\t{new_path}")
 
 
-# Function to process each file
-def process_file_with_new_naming(file_path):
-    filename = os.path.basename(file_path)
+if __name__ == "__main__":
+    rename_samples(SAMPLES_DIR)
+    print("Renaming Samples in directory done!")
 
-    # Parse filename to get parts
-    parts = filename.split('_')
-    if len(parts) < 3:
-        print(f"Invalid file name format: {filename}")
-        return  # Invalid file name format, skip
-
-    note = parts[0]
-    round_robin = parts[1]
-    dynamic = parts[2].split('.')[0]  # Remove file extension
-
-    # Delete files with specific notes (regardless of octave)
-    note_name = re.match(r'[A-Ga-g][s#]?', note)
-    if note_name and note_name.group() in notes_to_delete:
-        os.remove(file_path)
-        print(f"Deleted (excluded note): {file_path}")
-        return
-    
-
-
-# Run the script
-if __name__ == '__main__':
-    process_files(samples_dir)
