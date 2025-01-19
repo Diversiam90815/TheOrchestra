@@ -61,7 +61,7 @@ void SamplesManagement::parseSampleFiles()
 			String instrumentStr = instrument.getFileName();
 			int	   key			 = getInstrumentKey(sectionStr, instrumentStr);
 
-			for (const auto &file : instrument.findChildFiles(File::findFiles, false))
+			for (const auto &file : instrument.findChildFiles(File::findFiles, false))		// Need to set the directory here, not file (-> articulation)
 			{
 				addSample(file, key);
 			}
@@ -92,7 +92,8 @@ void SamplesManagement::addSample(const File &file, const int &key)
 
 	String instrumentName	= file.getParentDirectory().getFileName();
 
-	Sample sampleInfo(instrumentName, note, roundRobin, dynamic, file);
+	//Sample sampleInfo(instrumentName, note, roundRobin, dynamic, articulation::sustain, file);
+	Sample sampleInfo(instrumentName, note, roundRobin, Dynamics::mezzoForte, Articulation::sustain, file);		// Temporary -> needs to be adapted to reflect correct sample
 
 	mInstrumentSamples[key].emplace_back(sampleInfo);
 
@@ -103,7 +104,7 @@ void SamplesManagement::addSample(const File &file, const int &key)
 int SamplesManagement::getIndexOfDynamics(const String &dynamicString)
 {
 	int dynamic = 0;
-	dynamic		= dynamicMap.at(dynamicString);
+	dynamic		= static_cast<int>(dynamicMap.at(dynamicString));
 	return dynamic;
 }
 

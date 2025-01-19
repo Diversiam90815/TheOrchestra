@@ -21,7 +21,7 @@ OrchestraSound::~OrchestraSound()
 
 
 
-void OrchestraSound::addDynamicLayer(dynamics dynamicValue, juce::OwnedArray<juce::AudioBuffer<float>> &&rrSamples)
+void OrchestraSound::addDynamicLayer(Dynamics dynamicValue, juce::OwnedArray<juce::AudioBuffer<float>> &&rrSamples)
 {
 	auto *layer				 = new DynamicLayer();
 	layer->dynamicValue		 = dynamicValue;
