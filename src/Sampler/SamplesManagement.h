@@ -1,4 +1,5 @@
 /*
+/*
   ==============================================================================
 
 	Module			SamplesManagerment
@@ -15,7 +16,7 @@
 #include "Parameters.h"
 
 /*
- @brief             Struct holding information of the AudioSamples, such as Instrument Name, the individual note, the round robin instance,                   the dynmic of the
+ @brief             Struct holding information of the AudioSamples, such as Instrument Name, the individual note, the round robin instance, the dynmic & articulation of the
  recording and the actual buffer holding the audio samples
 */
 struct Sample
@@ -69,7 +70,7 @@ private:
 	 @param             [IN] file -> reference to the file of the Samples
 	 @param             [IN] key -> reference to the key of the instrument used (see InstrumentController::getInstrumentKey)
 	*/
-	void							   addSample(const File &file, const int &key);
+	void							   addSample(const File &file, const int &key, Articulation articulation);
 
 	/*
 	 @brief             Gets the path of the samples within the samples folder for a given instrument

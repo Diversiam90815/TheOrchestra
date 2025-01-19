@@ -61,16 +61,23 @@ void SamplesManagement::parseSampleFiles()
 			String instrumentStr = instrument.getFileName();
 			int	   key			 = getInstrumentKey(sectionStr, instrumentStr);
 
-			for (const auto &file : instrument.findChildFiles(File::findFiles, false))		// Need to set the directory here, not file (-> articulation)
+			// Find articulations
+			for (const auto &articulationFolder : instrument.findChildFiles(File::findDirectories, false))
 			{
-				addSample(file, key);
+				String		 articulationStr   = articulationFolder.getFileName();
+				Articulation articulationValue = articulationMap.at(articulationStr);
+
+				for (const auto &file : articulationFolder.findChildFiles(File::findFiles, false))
+				{
+					addSample(file, key, articulationValue);
+				}
 			}
 		}
 	}
 }
 
 
-void SamplesManagement::addSample(const File &file, const int &key)
+void SamplesManagement::addSample(const File &file, const int &key, Articulation articulation)
 {
 	String		filename = file.getFileNameWithoutExtension();
 	StringArray parts	 = StringArray::fromTokens(filename, "_", "");
@@ -82,18 +89,17 @@ void SamplesManagement::addSample(const File &file, const int &key)
 	}
 
 	String note				= parts[0];
-	String roundRobinString = parts[1];
-	String dynamicString	= parts[2];
+	String dynamicString	= parts[1];
+	String roundRobinString = parts[2];
 
 	int	   roundRobin		= 0;
 	roundRobin				= stoi(roundRobinString.toStdString());
 
-	int	   dynamic			= getIndexOfDynamics(dynamicString);
+	int	   dynamic			= getIndexOfDynamics(dynamicString);		// V values need to be adapted
 
 	String instrumentName	= file.getParentDirectory().getFileName();
 
-	//Sample sampleInfo(instrumentName, note, roundRobin, dynamic, articulation::sustain, file);
-	Sample sampleInfo(instrumentName, note, roundRobin, Dynamics::mezzoForte, Articulation::sustain, file);		// Temporary -> needs to be adapted to reflect correct sample
+	Sample sampleInfo(instrumentName, note, roundRobin, static_cast<Dynamics>(dynamic), articulation, file);
 
 	mInstrumentSamples[key].emplace_back(sampleInfo);
 
