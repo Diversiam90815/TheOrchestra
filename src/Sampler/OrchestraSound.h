@@ -14,24 +14,12 @@
 #include "SamplesManagement.h"
 
 
-//// Enum for the different Dynamics
-//enum class dynamics
-//{
-//	pianissimo = 1,
-//	piano,
-//	mezzoPiano,
-//	mezzoForte,
-//	forte,
-//	fortissimo
-//};
-
-
 class OrchestraSound : public juce::SynthesiserSound
 {
 public:
 	struct DynamicLayer
 	{
-		dynamics								   dynamicValue;
+		Dynamics								   dynamicValue;
 		juce::OwnedArray<juce::AudioBuffer<float>> roundRobinSamples;
 	};
 
@@ -44,7 +32,7 @@ public:
 
 	~OrchestraSound() override;
 
-	void						   addDynamicLayer(dynamics dynamicValue, juce::OwnedArray<juce::AudioBuffer<float>> &&rrSamples);
+	void						   addDynamicLayer(Dynamics dynamicValue, juce::OwnedArray<juce::AudioBuffer<float>> &&rrSamples);
 
 	bool						   appliesToNote(int midiNoteNumber) override;
 
