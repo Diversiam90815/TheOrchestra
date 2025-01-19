@@ -12,19 +12,7 @@
 #include <JuceHeader.h>
 
 #include "FileManager.h"
-
-
-// Enum for the different Dynamics
-enum dynamics
-{
-	pianissimo = 1,
-	piano,
-	mezzoPiano,
-	mezzoForte,
-	forte,
-	fortissimo
-};
-
+#include "Parameters.h"
 
 /*
  @brief             Struct holding information of the AudioSamples, such as Instrument Name, the individual note, the round robin instance,                   the dynmic of the
@@ -32,16 +20,17 @@ enum dynamics
 */
 struct Sample
 {
-	Sample(const String &instrument, const String &note, const int &roundRobin, const int &dynamic, const File &file)
-		: instrument(instrument), note(note), roundRobin(roundRobin), dynamic(dynamic), file(file)
+	Sample(const String &instrument, const String &note, const int &roundRobin, const Dynamics &dynamic, const Articulation &articulation, const File &file)
+		: instrument(instrument), note(note), roundRobin(roundRobin), dynamic(dynamic), articulation(articulation), file(file)
 	{
 	}
 
-	String instrument;
-	String note;
-	int	   roundRobin;
-	int	   dynamic;
-	File   file;
+	String		 instrument;
+	String		 note;
+	int			 roundRobin;
+	Dynamics	 dynamic;
+	Articulation articulation;
+	File		 file;
 };
 
 
@@ -51,7 +40,6 @@ struct Sample
 class SamplesManagement
 {
 public:
-
 	SamplesManagement();
 	~SamplesManagement() = default;
 
@@ -107,8 +95,4 @@ private:
 	std::map<int, std::vector<Sample>> mInstrumentSamples; // Map of the instrument (identified by their key) and their assigned 'Sample'
 
 	FileManager						   mFileManager;
-
-	std::map<String, dynamics>		   dynamicMap = {
-		{"pp", dynamics::pianissimo}, {"p", dynamics::piano}, {"mp", dynamics::mezzoPiano},
-		{"mf", dynamics::mezzoForte}, {"f", dynamics::forte}, {"ff", dynamics::fortissimo}}; // Mapping each Dynamic from enum to the short abbrevations used in notation
 };

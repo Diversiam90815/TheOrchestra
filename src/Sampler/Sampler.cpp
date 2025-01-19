@@ -77,7 +77,7 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key)
 	for (auto &s : samples)
 	{
 		int midiNote = CustomPianoRoll::turnNotenameIntoMidinumber(s.note);
-		int dynValue = s.dynamic;
+		int dynValue = static_cast<int>(s.dynamic);
 		// Round Robbin' for now are not stored as value, but as count of files
 		noteDynMap[midiNote][dynValue].push_back(s.file);
 	}
@@ -109,7 +109,7 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key)
 				}
 			}
 
-			auto mappedDyn = static_cast<dynamics>(dynValue);
+			auto mappedDyn = static_cast<Dynamics>(dynValue);
 			orchestraSound->addDynamicLayer(mappedDyn, std::move(rrBuffers));
 		}
 		mSampler.addSound(orchestraSound);
