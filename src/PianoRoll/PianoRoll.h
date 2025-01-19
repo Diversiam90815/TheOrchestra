@@ -24,24 +24,21 @@ public:
 
 
 private:
+	void								 showPianoRoll();
 
-	void			  showPianoRoll();
+	void								 resized() override;
 
-	void			  resized() override;
+	void								 setMidiInput();
 
-	void			  setMidiInput();
+	void								 handleIncomingMidiMessage(MidiInput *source, const MidiMessage &message) override;
 
-	void			  handleIncomingMidiMessage(MidiInput *source, const MidiMessage &message) override;
+	void								 handleNoteOn(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override;
 
-	void			  handleNoteOn(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override;
+	void								 handleNoteOff(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override;
 
-	void			  handleNoteOff(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override;
+	MidiKeyboardState					 mPianoState;
 
-	MidiKeyboardState mPianoState;
+	AudioDeviceManager					 mDeviceManager;
 
-
-	//MidiInput mMidiInput;
-	AudioDeviceManager mDeviceManager;
 	AudioDeviceManager::AudioDeviceSetup mAudioSetup;
-
 };
