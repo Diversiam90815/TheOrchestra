@@ -16,10 +16,10 @@ PianoRoll::PianoRoll()
 
 	mPianoRoll = std::make_unique<CustomPianoRoll>(mPianoState, MidiKeyboardComponent::horizontalKeyboard);
 
+	mDeviceManager.initialise(2, 2, nullptr, true, "", &mAudioSetup);
+
 	showPianoRoll();
 	setMidiInput();
-
-	mDeviceManager.initialise(2, 2, nullptr, true, "", &mAudioSetup);
 }
 
 
