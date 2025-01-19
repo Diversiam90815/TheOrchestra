@@ -1,96 +1,96 @@
 import os
 import re
 
-SAMPLES_DIR  = os.path.join(os.getcwd(), "Assets", "Samples")
+# Main folder where each subfolder might be "Woodwinds", "Strings", "Brass", etc.
+SAMPLES_DIR = os.path.join(os.getcwd(), "Assets", "Samples")
 
-NOTE_REGEX = re.compile(r'^[A-Ga-g][#b]?\d+$')  # Regex to detect note patterns like "B2", "C#3","Db4",..
-
+NOTE_REGEX = re.compile(r'^[A-Ga-g][#b]?\d+$')  # e.g. B2, C#3, etc.
 VALID_DYNAMICS = {"p", "pp", "ppp", "f", "ff", "fff", "mp", "mf"}
+DEFAULT_DYNAMIC = "mf"
+DEFAULT_RR      = "1"
+
+def rename_in_folder(folder_path):
+    """
+    Rename all .wav files in the given folder and *its* subfolders
+    according to the note/dynamic/round-robin pattern.
+    """
+    for root, _, files in os.walk(folder_path):
+        for filename in files:
+            if not filename.lower().endswith(".wav"):
+                continue
+
+            old_path = os.path.join(root, filename)
+            name_no_ext = os.path.splitext(filename)[0]
+            parts = name_no_ext.split('_')
+
+            note_found    = None
+            dynamic_found = None
+            rr_found      = None
+
+            # Parse all parts
+            for part in parts:
+                lower_part = part.lower()
+
+                # 1) Note
+                if note_found is None and NOTE_REGEX.match(part):
+                    note_found = part
+                    continue
+
+                # 2) Dynamic
+                if dynamic_found is None:
+                    if lower_part in VALID_DYNAMICS:
+                        dynamic_found = lower_part
+                        continue
+                    elif lower_part.startswith('v') and lower_part[1:].isdigit():
+                        dynamic_found = lower_part
+                        continue
+
+                # 3) Round Robin
+                if rr_found is None:
+                    if lower_part.startswith("rr") and lower_part[2:].isdigit():
+                        rr_found = lower_part[2:]
+                        continue
+                    elif lower_part.isdigit():
+                        rr_found = lower_part
+                        continue
+
+            # Set defaults
+            if dynamic_found is None:
+                dynamic_found = DEFAULT_DYNAMIC
+            if rr_found is None:
+                rr_found = DEFAULT_RR
+
+            # Must have a note
+            if not note_found:
+                # skip
+                continue
+
+            new_filename = f"{note_found}_{dynamic_found}_{rr_found}.wav"
+            new_path     = os.path.join(root, new_filename)
+
+            if new_path == old_path:
+                continue
+            if os.path.exists(new_path):
+                continue
+
+            os.rename(old_path, new_path)
+
 
 
 def rename_samples(samples_dir):
-    for root, dirs, files in os.walk(samples_dir):
-        for file in files:
+    """
+    For each *section folder* (e.g. 'Woodwinds', 'Strings', etc.) 
+    in SAMPLES_DIR, rename its contents, then print 'Done' once complete.
+    """
+    for section_name in os.listdir(samples_dir):
+        section_path = os.path.join(samples_dir, section_name)
+        if not os.path.isdir(section_path):
+            continue
 
-            if not file.lower().endswith(".wav"):
-                continue
+        print(f"Processing folder : {section_name}...", end="", flush=True)
+        rename_in_folder(section_path)
+        print("Done!")
 
-            old_path = os.path.join(root, file)
-            name_no_ext = os.path.splitext(file)[0]
-            parts = name_no_ext.split('_')
-
-            # Try to detect note, dynamic, rr from the parts:
-            note_found = None
-            dynamic_found = None
-            rr_found = None
-
-            leftover_tokens = []
-
-            for part in parts:
-                # Note Check
-                if(note_found is None and NOTE_REGEX.match(part)):
-                        note_found = part
-                        continue
-
-                # Dynamic Check - if it starts with v and remainder is digit
-                #                   or if it is in VALID_DYNAMICS
-                if dynamic_found is None:
-                    if part in VALID_DYNAMICS:
-                        dynamic_found = part
-                        continue
-                    elif part.startswith('v') and part[1:].isdigit():
-                        dynamic_found = part
-                        continue                    
-                
-                # Round Robbin Check - might be "rr1", "2", or just "Main" (1 rr layer),...
-                if rr_found is None:
-                    #if rrX
-                    if part.startswith("rr") and part[2:].isdigit():
-                        rr_found = part[2:]
-                        continue
-                    
-                    # if just digit
-                    elif part.isdigit():
-                        rr_found = part
-                        continue
-
-                    # if it is Main
-                    elif part.lower() == "main":
-                        rr_found = "1"
-                        continue
-
-                    # Else we guess it's not rr
-                    leftover_tokens.append(part)
-                
-                else:
-                    leftover_tokens.append(part)
-        
-                # If we never found a round-robin, default to "1"
-                if rr_found is None:
-                    rr_found = "1" 
-
-                # At least we need a note and dynamic. If missing, skip rename
-                if not note_found or not dynamic_found:
-                    print(f"Skipping rename for {old_path} due to missing note / dynamic!")
-                    continue
-
-                # Build new filename
-                new_filename = f"{note_found}_{dynamic_found}_{rr_found}.wav"
-                new_path = os.path.join(root, new_filename)
-
-                # If it does not actually change, skip
-                if new_path == old_path:
-                    print(f"No rename needed for {old_path}")
-                    continue
-                
-                # if a file with that name already exists, skip
-                if os.path.exists(new_path):
-                    print(f"Cannot rename {old_path} -> {new_filename}, target already exists.")
-                    continue
-
-                # Rename
-                os.rename(old_path, new_path)
-                print(f"Renamed:\n\t{old_path}\n=>\n\t{new_path}")
 
 
 if __name__ == "__main__":
