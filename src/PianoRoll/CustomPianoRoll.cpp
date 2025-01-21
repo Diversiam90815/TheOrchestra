@@ -197,32 +197,6 @@ Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
 }
 
 
-int CustomPianoRoll::turnNotenameIntoMidinumber(String notename)
-{
-	wchar_t				  wOctave			= notename.getLastCharacter();
-	int					  octave			= wOctave - '0';
-
-	String				  noteWithoutOctave = notename.dropLastCharacters(1);
-
-	std::map<String, int> noteToMidi		= {{"C", 0},  {"C#", 1}, {"Db", 1}, {"D", 2},  {"D#", 3}, {"Eb", 3},  {"E", 4},	  {"F", 5}, {"F#", 6},
-											   {"Gb", 6}, {"G", 7},	 {"G#", 8}, {"Ab", 8}, {"A", 9},  {"A#", 10}, {"Bb", 10}, {"B", 11}};
-
-	int					  noteValue			= 0;
-
-	if (noteToMidi.find(noteWithoutOctave) != noteToMidi.end())
-	{
-		noteValue = noteToMidi[noteWithoutOctave];
-	}
-
-	else
-		return -1;
-
-	int midiNumber = 12 * (octave + 2) + noteValue;
-
-	return midiNumber;
-}
-
-
 bool CustomPianoRoll::setMidiRanges(const StringArray &qualities)
 {
 	mRangesSet = false;

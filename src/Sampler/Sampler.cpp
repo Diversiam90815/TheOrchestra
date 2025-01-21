@@ -38,7 +38,7 @@ void Sampler::init()
 }
 
 
-std::vector<Sample> Sampler::filterSamplesFromNote(const int key, const String &note)
+std::vector<Sample> Sampler::filterSamplesFromInstrument(const int key, const String &note)
 {
 	auto				allSamplesForInstrument = mSamplesManager->getSamplesForInstrument(key);
 	std::vector<Sample> filteredSamples;
@@ -63,7 +63,7 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key)
 
 	mSampler.clearSounds();
 
-	auto samples = filterSamplesFromNote(key);
+	auto samples = filterSamplesFromInstrument(key);
 
 	if (samples.empty())
 	{
@@ -76,16 +76,59 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key)
 
 	for (auto &s : samples)
 	{
-		int midiNote = CustomPianoRoll::turnNotenameIntoMidinumber(s.note);
+		int midiNote = s.noteMidiValue;
 		int dynValue = static_cast<int>(s.dynamic);
 		// Round Robbin' for now are not stored as value, but as count of files
 		noteDynMap[midiNote][dynValue].push_back(s.file);
 	}
 
+
+	// Extract all unique MIDI notes into a sorted list
+	std::vector<int> noteList;
+	noteList.reserve(noteDynMap.size());
+
+	for (auto &val : noteDynMap)
+		noteList.push_back(val.first);
+
+	std::sort(noteList.begin(), noteList.end());
+
+	if (noteList.empty())
+	{
+		LOG_ERROR("Notelist is empty. We are skipping.");
+		return;
+	}
+
+	// building a map of note range (low, high)
+	std::map<int, std::pair<int, int>> noteRanges;
+	for (auto &note : noteList)
+	{
+		noteRanges[note] = {0, 127}; // First initialize the values to 0-127 -> we refine them later
+	}
+
+	// Set the min and max for instrument (for now leave it at 0 and 127)
+	noteRanges[noteList.front()].first = 0;
+	noteRanges[noteList.back()].first  = 127;
+
+	// Fill midpoint ranges between adjacent sampled notes
+	for (size_t i = 0; i < noteList.size() - 1; ++i)
+	{
+		int nA				  = noteList[i];
+		int nB				  = noteList[i + 1];
+
+		int mid				  = (nA + nB) / 2;
+
+		noteRanges[nA].second = mid;
+		noteRanges[nB].first  = mid + 1;
+	}
+
+
 	for (auto &notePair : noteDynMap)
 	{
 		int	  midiNote		 = notePair.first;
-		auto *orchestraSound = new OrchestraSound(midiNote, midiNote);
+		int	  rangeLow		 = noteRanges[midiNote].first;
+		int	  rangeHigh		 = noteRanges[midiNote].second;
+
+		auto *orchestraSound = new OrchestraSound(rangeLow, rangeHigh);
 
 		for (auto &dynPair : notePair.second)
 		{
@@ -112,6 +155,7 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key)
 			auto mappedDyn = static_cast<Dynamics>(dynValue);
 			orchestraSound->addDynamicLayer(mappedDyn, std::move(rrBuffers));
 		}
+
 		mSampler.addSound(orchestraSound);
 	}
 
