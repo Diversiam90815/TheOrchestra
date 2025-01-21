@@ -77,7 +77,8 @@ private:
 
 	void				  setStateInformation(const void *data, int sizeInBytes) override;
 
-	void				  setCurrentInstrument(int key);
+	void				  setCurrentInstrument(int key, Articulation articulationUsed);
+
 
 	//==============================================================================
 	//				PRIVATE OBJECTS
