@@ -12,6 +12,7 @@
 #include <JuceHeader.h>
 #include "Parameters.h"
 #include "CustomLookAndFeel.h"
+#include "Helper.h"
 
 
 // Enum to identify the key used
@@ -33,14 +34,6 @@ public:
 
 	~CustomPianoRoll() = default;
 
-
-	/*
-	 @brief                 Turns the note name in accordance with the octave in form of E4, C3,.. to the corresponding midi note value.                          Middle C (C4)
-	 corresponds to a midi note value of 60.
-	 @param                 [IN] notename -> The name of the note and the octave -> E4, C6, C#2, Gb3,...
-	 @return                Midi note value as an int of the note given. If there an error occured, it returns -1.
-	*/
-	static int turnNotenameIntoMidinumber(String notename);
 
 	/*
 	 @brief                 Fills the vector 'mMidiRanges' with the note ranges information from a StringArray

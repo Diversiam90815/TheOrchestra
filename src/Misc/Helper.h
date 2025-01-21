@@ -172,3 +172,35 @@ static String splitColonizedStrings(String &colonizedString, bool firstPart)
 
 	return firstPart ? leftPart : rightPart;
 }
+
+
+/*
+@brief                 Turns the note name in accordance with the octave in form of E4, C3,.. to the corresponding midi note value.                          Middle C (C4)
+corresponds to a midi note value of 60.
+@param                 [IN] notename -> The name of the note and the octave -> E4, C6, C#2, Gb3,...
+@return                Midi note value as an int of the note given. If there an error occured, it returns -1.
+*/
+static int turnNotenameIntoMidinumber(String notename)
+{
+	wchar_t				  wOctave			= notename.getLastCharacter();
+	int					  octave			= wOctave - '0';
+
+	String				  noteWithoutOctave = notename.dropLastCharacters(1);
+
+	std::map<String, int> noteToMidi		= {{"C", 0},  {"C#", 1}, {"Db", 1}, {"D", 2},  {"D#", 3}, {"Eb", 3},  {"E", 4},	  {"F", 5}, {"F#", 6},
+											   {"Gb", 6}, {"G", 7},	 {"G#", 8}, {"Ab", 8}, {"A", 9},  {"A#", 10}, {"Bb", 10}, {"B", 11}};
+
+	int					  noteValue			= 0;
+
+	if (noteToMidi.find(noteWithoutOctave) != noteToMidi.end())
+	{
+		noteValue = noteToMidi[noteWithoutOctave];
+	}
+
+	else
+		return -1;
+
+	int midiNumber = 12 * (octave + 2) + noteValue;
+
+	return midiNumber;
+}

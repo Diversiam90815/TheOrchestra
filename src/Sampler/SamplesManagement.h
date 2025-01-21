@@ -14,6 +14,7 @@
 
 #include "FileManager.h"
 #include "Parameters.h"
+#include "Helper.h"
 
 /*
  @brief             Struct holding information of the AudioSamples, such as Instrument Name, the individual note, the round robin instance, the dynmic & articulation of the
@@ -24,14 +25,19 @@ struct Sample
 	Sample(const String &instrument, const String &note, const int &roundRobin, const Dynamics &dynamic, const Articulation &articulation, const File &file)
 		: instrument(instrument), note(note), roundRobin(roundRobin), dynamic(dynamic), articulation(articulation), file(file)
 	{
+		noteMidiValue = turnNotenameIntoMidinumber(note);
 	}
 
 	String		 instrument;
 	String		 note;
+	int			 noteMidiValue = 0;
 	int			 roundRobin;
 	Dynamics	 dynamic;
 	Articulation articulation;
 	File		 file;
+
+	int			 rangeLow  = 0;
+	int			 rengeHigh = 0;
 };
 
 

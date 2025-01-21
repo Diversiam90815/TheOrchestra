@@ -30,7 +30,8 @@ public:
 	void setSamplesAreReady(bool value);
 
 private:
-	std::vector<Sample>				   filterSamplesFromNote(const int key, const String &note = "");
+	// Filters the samples from a instrument identified by the key value. If note is not empty, it will gather only the note's samples
+	std::vector<Sample>				   filterSamplesFromInstrument(const int key, const String &note = "");
 
 
 	Synthesiser						   mSampler;
