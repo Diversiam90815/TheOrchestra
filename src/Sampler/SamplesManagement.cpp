@@ -61,6 +61,9 @@ void SamplesManagement::parseSampleFiles()
 			String instrumentStr = instrument.getFileName();
 			int	   key			 = getInstrumentKey(sectionStr, instrumentStr);
 
+			if (sectionStr == "Percussion") // Pass the percussion for now, since they need different handling
+				continue;
+
 			// Find articulations
 			for (const auto &articulationFolder : instrument.findChildFiles(File::findDirectories, false))
 			{
