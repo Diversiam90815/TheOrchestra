@@ -51,7 +51,7 @@ static std::map<String, Dynamics> dynamicMap	   = {{PianissimoDynamic, Dynamics:
 
 
 // Some samples have the velocity layer in their name instead of the dynamic value, so we set them to default values
-static std::map<String, Dynamics> velocityLayerMap = {{"v1", Dynamics::mezzoPiano}, {"v2", Dynamics::mezzoForte}, {"v3", Dynamics::forte}};
+static std::map<String, Dynamics> velocityLayerMap = {{"v1", Dynamics::mezzoPiano}, {"v2", Dynamics::mezzoForte}, {"v3", Dynamics::forte}, {"v4", Dynamics::fortissimo}};
 
 
 /*
