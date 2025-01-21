@@ -172,9 +172,9 @@ void OrchestraProcessor::setStateInformation(const void *data, int sizeInBytes)
 }
 
 
-void OrchestraProcessor::setCurrentInstrument(int key)
+void OrchestraProcessor::setCurrentInstrument(int key, Articulation articulationUsed)
 {
-	mOrchestraSampler.addSoundsFromInstrumentToSampler(key);
+	mOrchestraSampler.addSoundsFromInstrumentToSampler(key, articulationUsed);
 }
 
 

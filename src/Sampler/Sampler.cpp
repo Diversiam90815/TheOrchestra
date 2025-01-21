@@ -56,7 +56,7 @@ std::vector<Sample> Sampler::filterSamplesFromInstrument(const int key, const St
 }
 
 
-void Sampler::addSoundsFromInstrumentToSampler(const int key)
+void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed)
 {
 	std::vector<SamplerSound> sounds;
 	setSamplesAreReady(false);
@@ -79,7 +79,10 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key)
 		int midiNote = s.noteMidiValue;
 		int dynValue = static_cast<int>(s.dynamic);
 		// Round Robbin' for now are not stored as value, but as count of files
-		noteDynMap[midiNote][dynValue].push_back(s.file);
+
+		// Filter for the articulation here for now
+		if (s.articulation == articulationUsed)
+			noteDynMap[midiNote][dynValue].push_back(s.file);
 	}
 
 
