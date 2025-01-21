@@ -46,8 +46,12 @@ static std::map<String, Articulation> articulationMap = {
 	{TremoloArticulation, Articulation::tremolo},	  {HitsArticulation, Articulation::hits},		  {RollsArticulation, Articulation::rolls}};
 
 
-static std::map<String, Dynamics> dynamicMap = {{PianissimoDynamic, Dynamics::pianissimo}, {PianoDynamic, Dynamics::piano}, {MezzoPianoDynamic, Dynamics::mezzoPiano},
-												{MezzoForteDynamic, Dynamics::mezzoForte}, {ForteDynamic, Dynamics::forte}, {FortissimoDynamic, Dynamics::fortissimo}};
+static std::map<String, Dynamics> dynamicMap	   = {{PianissimoDynamic, Dynamics::pianissimo}, {PianoDynamic, Dynamics::piano}, {MezzoPianoDynamic, Dynamics::mezzoPiano},
+													  {MezzoForteDynamic, Dynamics::mezzoForte}, {ForteDynamic, Dynamics::forte}, {FortissimoDynamic, Dynamics::fortissimo}};
+
+
+// Some samples have the velocity layer in their name instead of the dynamic value, so we set them to default values
+static std::map<String, Dynamics> velocityLayerMap = {{"v1", Dynamics::mezzoPiano}, {"v2", Dynamics::mezzoForte}, {"v3", Dynamics::forte}};
 
 
 /*
@@ -74,8 +78,8 @@ static int getInstrumentKey(Family family, InstrumentEnum instrument)
 */
 static int getInstrumentKey(String &family, String &instrument)
 {
-	Family		   familyKey;
-	int instrumentKey{0};
+	Family familyKey;
+	int	   instrumentKey{0};
 
 	familyKey	  = familyMap.at(family);
 
