@@ -24,7 +24,7 @@ public:
 
 	void init();
 
-	void addSoundsFromInstrumentToSampler(const int key);
+	void addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed);
 
 	bool getSamplesAreReady();
 	void setSamplesAreReady(bool value);
