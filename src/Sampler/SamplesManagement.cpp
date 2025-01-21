@@ -95,7 +95,7 @@ void SamplesManagement::addSample(const File &file, const int &key, Articulation
 	int	   roundRobin		= 0;
 	roundRobin				= stoi(roundRobinString.toStdString());
 
-	int	   dynamic			= getIndexOfDynamics(dynamicString);		// V values need to be adapted
+	int	   dynamic			= getIndexOfDynamics(dynamicString); // V values need to be adapted
 
 	String instrumentName	= file.getParentDirectory().getFileName();
 
@@ -110,7 +110,28 @@ void SamplesManagement::addSample(const File &file, const int &key, Articulation
 int SamplesManagement::getIndexOfDynamics(const String &dynamicString)
 {
 	int dynamic = 0;
-	dynamic		= static_cast<int>(dynamicMap.at(dynamicString));
+
+	if (dynamicString.startsWith("v")) // If the dynamic layer is set to a v# value, we hardcode them to the following dynamic layers
+	{
+		auto it = velocityLayerMap.find(dynamicString);
+		if (it != velocityLayerMap.end())
+			return static_cast<int>(it->second);
+
+		// Fallback:
+		LOG_WARNING("Unhandled velocity layer: {}", dynamicString.toStdString().c_str());
+		return static_cast<int>(Dynamics::mezzoForte);
+	}
+	else // Otherwise see if it is in the standart dynamic map
+	{
+		auto it = dynamicMap.find(dynamicString);
+		if (it != dynamicMap.end())
+			return static_cast<int>(it->second);
+
+		// Fallback:
+		LOG_WARNING("Unknown dynamic token: {}", dynamicString.toStdString().c_str());
+		dynamic = static_cast<int>(Dynamics::mezzoForte);
+	}
+
 	return dynamic;
 }
 
