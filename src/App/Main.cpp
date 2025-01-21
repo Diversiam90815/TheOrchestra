@@ -47,34 +47,28 @@ private:
 		MainWindow(const juce::String &name, JUCEApplication &app)
 			: DocumentWindow(name, Desktop::getInstance().getDefaultLookAndFeel().findColour(ResizableWindow::backgroundColourId), DocumentWindow::allButtons), app(app)
 		{
-			mDeviceManager.initialise(0,2,nullptr,true);
-
-			mPlayer.setProcessor(processor.get());
-			mDeviceManager.addAudioCallback(&mPlayer);
+			mDeviceManager.initialise(0, 2, nullptr, true);
 
 			auto availableMIDIDevices = juce::MidiInput::getAvailableDevices();
 
-			for (auto & device : availableMIDIDevices)
+			for (auto &device : availableMIDIDevices)
 			{
 				LOG_INFO("Enabling MIDI Device : {}", device.name.toStdString().c_str());
 				mDeviceManager.setMidiInputDeviceEnabled(device.identifier, true);
 			}
 			mDeviceManager.addMidiInputCallback({}, &mPlayer);
 
-
-			// Create an instance of your AudioProcessor
 			processor.reset(new OrchestraProcessor());
 
-			// Create an instance of your editor directly
 			editor.reset(new OrchestraEditor(*processor));
+
+			mPlayer.setProcessor(processor.get());
+			mDeviceManager.addAudioCallback(&mPlayer);
 
 			setUsingNativeTitleBar(true);
 			setContentOwned(editor.get(), true);
-
 			setResizable(false, false);
-
 			centreWithSize(getWidth(), getHeight());
-
 			setVisible(true);
 
 			LOG_INFO("Mainwindow setup finished!");
