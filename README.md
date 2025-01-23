@@ -16,6 +16,7 @@ Additionally, it includes basic sampling functionalities using a MIDI keyboard t
 - **C++ Compiler**: Compatible with C++20 or higher.
 - **CMake**: Version 3.15 or higher.
 - **Git**: For cloning the repository.
+- **Python**: Version 3.x (for running `build.py`).
 
 
 ## Features
