@@ -15,7 +15,7 @@
 InstrumentController::InstrumentController()
 {
 	loadFromJSON();
-	LOG_INFO("Instruments loaded into memory");
+	LOG_INFO("Instruments loaded from JSON");
 }
 
 
