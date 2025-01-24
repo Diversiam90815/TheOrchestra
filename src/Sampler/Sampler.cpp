@@ -38,15 +38,15 @@ void Sampler::init()
 }
 
 
-std::list<Articulation> Sampler::getAvailableArticulationsForInstrument(const int key)
+std::set<Articulation> Sampler::getAvailableArticulationsForInstrument(const int key)
 {
 	auto					samples = mSamplesManager->getSamplesForInstrument(key);
 
-	std::list<Articulation> availableArticulations{};
+	std::set<Articulation> availableArticulations{};
 
 	for (auto &s : samples)
 	{
-		availableArticulations.push_back(s.articulation);
+		availableArticulations.insert(s.articulation);
 	}
 
 	return availableArticulations;
