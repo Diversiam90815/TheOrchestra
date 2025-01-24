@@ -20,6 +20,7 @@
 #include "InformationView.h"
 #include "FamousWorksView.h"
 #include "InstrumentView.h"
+#include "SamplerView.h"
 
 
 class OrchestraEditor : public AudioProcessorEditor
@@ -58,6 +59,7 @@ private:
 	TechniquesView		 mTechniquesView;
 	InformationView		 mInfoView;
 	FamousWorksView		 mFamousWorksView;
+	SamplerView			 mSamplerView;
 
 	const int			 mInstrumentViewX  = 443;
 	const int			 mInstrumentViewY  = 49;

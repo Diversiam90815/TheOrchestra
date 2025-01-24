@@ -89,6 +89,7 @@ set(VIEW_FILES
     ${VIEW_DIR}/InstrumentRangesView.h    ${VIEW_DIR}/InstrumentRangesView.cpp
     ${VIEW_DIR}/QualitiesView.h           ${VIEW_DIR}/QualitiesView.cpp
     ${VIEW_DIR}/TechniquesView.h          ${VIEW_DIR}/TechniquesView.cpp
+    ${VIEW_DIR}/SamplerView.h             ${VIEW_DIR}/SamplerView.cpp
     ${VIEW_DIR}/CustomMenuBar.h           ${VIEW_DIR}/CustomMenuBar.cpp
 )
 

@@ -58,9 +58,12 @@ void OrchestraEditor::init()
 
 void OrchestraEditor::changeInstrument(int key)
 {
-	auto instrument = mController.getInstrument(key);
+	auto instrument		  = mController.getInstrument(key);
 
-	audioProcessor.setCurrentInstrument(key, Articulation::staccato);		// Also give the articulation here
+	auto availableSamples = audioProcessor.mOrchestraSampler.getAvailableArticulationsForInstrument(key);
+	mSamplerView.displayInstrument(availableSamples);
+
+	audioProcessor.setCurrentInstrument(key, Articulation::staccato); // Also give the articulation here
 
 	mInstrumentView.displayInstrument(instrument);
 	mRangesView.displayInstrument(instrument);
