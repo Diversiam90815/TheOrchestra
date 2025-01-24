@@ -77,11 +77,10 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 		int dynValue = static_cast<int>(s.dynamic);
 		// Round Robbin' for now are not stored as value, but as count of files
 
-		// Filter for the articulation here for now
+		// Filter for the articulation
 		if (s.articulation == articulationUsed)
 			noteDynMap[midiNote][dynValue].push_back(s.file);
 	}
-
 
 	// Extract all unique MIDI notes into a sorted list
 	std::vector<int> noteList;
