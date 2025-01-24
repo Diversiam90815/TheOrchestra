@@ -16,10 +16,10 @@
 
 enum class Family
 {
-	Woodwinds = 1,
-	Brass,
-	Strings,
-	Percussion
+	Woodwinds  = 1,
+	Brass	   = 2,
+	Strings	   = 3,
+	Percussion = 4
 };
 
 constexpr auto StringsName	  = "Strings";
@@ -34,10 +34,10 @@ constexpr auto PercussionName = "Percussion";
 
 enum class Strings
 {
-	Violin = 1,
-	Viola,
-	Violoncello,
-	DoubleBass
+	Violin		= 1,
+	Viola		= 2,
+	Violoncello = 3,
+	DoubleBass	= 4
 };
 
 constexpr auto ViolinName	   = "Violin";
@@ -47,12 +47,12 @@ constexpr auto DoubleBassName  = "Double Bass";
 
 enum class Brass
 {
-	FrenchHorn = 1,
-	Trumpet,
-	TenorTrombone,
-	BassTrombone,
-	Cimbasso,
-	Tuba
+	FrenchHorn	  = 1,
+	Trumpet		  = 2,
+	TenorTrombone = 3,
+	BassTrombone  = 4,
+	Cimbasso	  = 5,
+	Tuba		  = 6
 };
 
 constexpr auto FrenchHornName	 = "French Horn";
@@ -64,14 +64,14 @@ constexpr auto TubaName			 = "Tuba";
 
 enum class Woodwinds
 {
-	Piccolo = 1,
-	Flute,
-	Oboe,
-	CorAnglais,
-	Clarinet,
-	BassClarinet,
-	Bassoon,
-	Contrabassoon
+	Piccolo		  = 1,
+	Flute		  = 2,
+	Oboe		  = 3,
+	CorAnglais	  = 4,
+	Clarinet	  = 5,
+	BassClarinet  = 6,
+	Bassoon		  = 7,
+	Contrabassoon = 8
 };
 
 constexpr auto PiccoloName		 = "Piccolo";
@@ -85,10 +85,10 @@ constexpr auto ContrabassoonName = "Contrabassoon";
 
 enum class Percussion
 {
-	Harp = 1,
-	Celeste,
-	Timpani,
-	Marimba
+	Harp	= 1,
+	Celeste = 2,
+	Timpani = 3,
+	Marimba = 4
 };
 
 constexpr auto HarpName	   = "Harp";
@@ -103,15 +103,15 @@ constexpr auto MarimbaName = "Marimba";
 
 enum class Articulation
 {
-	sustain,
-	staccato,
-	spiccato,
-	pizzicato,
-	mute,
-	vibrato,
-	tremolo,
-	hits,
-	rolls
+	sustain	  = 1,
+	staccato  = 2,
+	spiccato  = 3,
+	pizzicato = 4,
+	mute	  = 5,
+	vibrato	  = 6,
+	tremolo	  = 7,
+	hits	  = 8,
+	rolls	  = 9
 };
 
 constexpr auto SustainArticulation	 = "Sustain";
@@ -132,11 +132,11 @@ constexpr auto RollsArticulation	 = "Rolls";
 enum class Dynamics
 {
 	pianissimo = 1,
-	piano,
-	mezzoPiano,
-	mezzoForte,
-	forte,
-	fortissimo
+	piano	   = 2,
+	mezzoPiano = 3,
+	mezzoForte = 4,
+	forte	   = 5,
+	fortissimo = 6
 };
 
 constexpr auto PianissimoDynamic = "pp";

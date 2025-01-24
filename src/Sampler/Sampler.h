@@ -22,14 +22,14 @@ public:
 	Sampler();
 	~Sampler();
 
-	void					init();
+	void				   init();
 
-	std::list<Articulation> getAvailableArticulationsForInstrument(const int key);
+	std::set<Articulation> getAvailableArticulationsForInstrument(const int key);
 
-	void					addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed);
+	void				   addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed);
 
-	bool					getSamplesAreReady();
-	void					setSamplesAreReady(bool value);
+	bool				   getSamplesAreReady();
+	void				   setSamplesAreReady(bool value);
 
 private:
 	Synthesiser						   mSampler;
