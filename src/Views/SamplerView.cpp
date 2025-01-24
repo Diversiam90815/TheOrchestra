@@ -22,6 +22,17 @@ SamplerView::~SamplerView()
 
 void SamplerView::init()
 {
+	setSize(mWidth, mHeight);
+
+	addAndConfigureLabel(mTitle, "SamplerViewTitle", "Articulations", mTitleX, mTitleY, mTitleWidth, mTitleHeight);
+
+	addAndConfigureComboBox(mArticulations, mArticulationsX, mArticulationsY, mArticulationsWidth, mArticulationsHeight);
+	mArticulations.onChange = [this]()
+	{
+		const int		   selectedID	   = mArticulations.getSelectedId();
+		const Articulation newArticulation = static_cast<Articulation>(selectedID);
+		articulationChanged(newArticulation);
+	};
 }
 
 
@@ -34,4 +45,9 @@ void SamplerView::displayInstrument(std::set<Articulation> availableArticulation
 		String articulationString = articulationReverseMap.at(articulation);
 		mArticulations.addItem(articulationString, static_cast<int>(articulation));
 	}
+}
+
+
+void SamplerView::articulationChanged(Articulation newArticulation)
+{
 }
