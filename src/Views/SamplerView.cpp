@@ -2,7 +2,7 @@
   ==============================================================================
 
 	Module			SamplerView
-	Description		View box containing sampler information such as articulations & MIDI CC values
+	Description		View box containing sampler information
 
   ==============================================================================
 */
@@ -31,7 +31,10 @@ void SamplerView::init()
 	{
 		const int		   selectedID	   = mArticulations.getSelectedId();
 		const Articulation newArticulation = static_cast<Articulation>(selectedID);
-		articulationChanged(newArticulation);
+		if (mArticulationChangedCallback)
+		{
+			mArticulationChangedCallback(newArticulation);
+		}
 	};
 }
 
@@ -48,6 +51,7 @@ void SamplerView::displayInstrument(std::set<Articulation> availableArticulation
 }
 
 
-void SamplerView::articulationChanged(Articulation newArticulation)
+void SamplerView::setArticulationChangedCallback(ArticulationChangedCallback callback)
 {
+	mArticulationChangedCallback = callback;
 }

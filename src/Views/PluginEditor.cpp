@@ -55,17 +55,17 @@ void OrchestraEditor::init()
 	mSamplerView.init();
 
 	mCustomMenuBarModel.setInstrumentSelectedCallback([this](int key) { changeInstrument(key); });
+	mSamplerView.setArticulationChangedCallback([this](Articulation articulation) { changeArticulation(mCurrentKey, articulation); });
 }
 
 
 void OrchestraEditor::changeInstrument(int key)
 {
+	mCurrentKey			  = key;
 	auto instrument		  = mController.getInstrument(key);
 
 	auto availableSamples = audioProcessor.mOrchestraSampler.getAvailableArticulationsForInstrument(key);
 	mSamplerView.displayInstrument(availableSamples);
-
-	audioProcessor.setCurrentInstrument(key, Articulation::staccato); // Also give the articulation here
 
 	mInstrumentView.displayInstrument(instrument);
 	mRangesView.displayInstrument(instrument);
@@ -81,6 +81,13 @@ void OrchestraEditor::changeInstrument(int key)
 	}
 	mPianoRollView.repaint();
 	resized();
+}
+
+
+void OrchestraEditor::changeArticulation(int key, Articulation articulation)
+{
+	audioProcessor.mOrchestraSampler.addSoundsFromInstrumentToSampler(key, articulation);
+	LOG_INFO("Current selected instrument (Key = {}) selected articulation {}", key, static_cast<int>(articulation));
 }
 
 

@@ -41,6 +41,8 @@ public:
 private:
 	void				 changeInstrument(int key);
 
+	void				 changeArticulation(int key, Articulation articulation);
+
 	OrchestraProcessor	&audioProcessor;
 
 	PianoRoll			 mPianoRollView;
@@ -92,6 +94,8 @@ private:
 
 	const int			 mWidth			   = 1200;
 	const int			 mHeight		   = 700;
+
+	int					 mCurrentKey	   = 0;
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OrchestraEditor)
 };
