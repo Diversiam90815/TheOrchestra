@@ -22,10 +22,12 @@ public:
 
 	void init();
 
-	void displayInstrument(std::list<Articulation> availableArticulations);
+	void displayInstrument(InstrumentInfo &instrument) override
+	{
+	}
+
+	void displayInstrument(std::set<Articulation> availableArticulations);
 
 private:
-	
 	ComboBox mArticulations;
-
 };

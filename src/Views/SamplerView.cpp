@@ -25,7 +25,7 @@ void SamplerView::init()
 }
 
 
-void SamplerView::displayInstrument(std::list<Articulation> availableArticulations)
+void SamplerView::displayInstrument(std::set<Articulation> availableArticulations)
 {
 	mArticulations.clear();
 
