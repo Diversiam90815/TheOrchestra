@@ -68,7 +68,16 @@ void SamplesManagement::parseSampleFiles()
 			for (const auto &articulationFolder : instrument.findChildFiles(File::findDirectories, false))
 			{
 				String		 articulationStr   = articulationFolder.getFileName();
-				Articulation articulationValue = articulationMap.at(articulationStr);
+				Articulation articulationValue{};
+				try
+				{
+					articulationValue = articulationMap.at(articulationStr);
+				}
+				catch (std::exception e)
+				{
+					LOG_ERROR("Could not locate articulation for {}. Error : {}", articulationStr.toStdString().c_str(), e.what());
+					continue;
+				}
 
 				for (const auto &file : articulationFolder.findChildFiles(File::findFiles, false))
 				{

@@ -63,7 +63,8 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 
 	mSampler.clearSounds();
 
-	auto samples = filterSamplesFromInstrument(key);
+	//auto samples = filterSamplesFromInstrument(key);
+	auto samples = mSamplesManager->getSamplesForInstrument(key);
 
 	if (samples.empty())
 	{
