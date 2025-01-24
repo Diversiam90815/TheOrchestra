@@ -22,18 +22,16 @@ public:
 	Sampler();
 	~Sampler();
 
-	void init();
+	void					init();
 
-	void addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed);
+	std::list<Articulation> getAvailableArticulationsForInstrument(const int key);
 
-	bool getSamplesAreReady();
-	void setSamplesAreReady(bool value);
+	void					addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed);
+
+	bool					getSamplesAreReady();
+	void					setSamplesAreReady(bool value);
 
 private:
-	// Filters the samples from a instrument identified by the key value. If note is not empty, it will gather only the note's samples
-	std::vector<Sample>				   filterSamplesFromInstrument(const int key, const String &note = "");
-
-
 	Synthesiser						   mSampler;
 
 	AudioFormatManager				   mFormatManager; // AudioFormatManager registering the audio formats

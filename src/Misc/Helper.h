@@ -45,6 +45,11 @@ static std::map<String, Articulation> articulationMap = {
 	{PizzicatoArticulation, Articulation::pizzicato}, {MutedArticulation, Articulation::mute},		  {VibratoArticulation, Articulation::vibrato},
 	{TremoloArticulation, Articulation::tremolo},	  {HitsArticulation, Articulation::hits},		  {RollsArticulation, Articulation::rolls}};
 
+static std::map<Articulation, String> articulationReverseMap = {
+	{Articulation::sustain, SustainArticulation},	  {Articulation::staccato, StaccatoArticulation}, {Articulation::spiccato, SpiccatoArticulation},
+	{Articulation::pizzicato, PizzicatoArticulation}, {Articulation::mute, MutedArticulation},		  {Articulation::vibrato, VibratoArticulation},
+	{Articulation::tremolo, TremoloArticulation},	  {Articulation::hits, HitsArticulation},		  {Articulation::rolls, RollsArticulation}};
+
 
 static std::map<String, Dynamics> dynamicMap	   = {{PianissimoDynamic, Dynamics::pianissimo}, {PianoDynamic, Dynamics::piano}, {MezzoPianoDynamic, Dynamics::mezzoPiano},
 													  {MezzoForteDynamic, Dynamics::mezzoForte}, {ForteDynamic, Dynamics::forte}, {FortissimoDynamic, Dynamics::fortissimo}};
