@@ -38,21 +38,18 @@ void Sampler::init()
 }
 
 
-std::vector<Sample> Sampler::filterSamplesFromInstrument(const int key, const String &note)
+std::list<Articulation> Sampler::getAvailableArticulationsForInstrument(const int key)
 {
-	auto				allSamplesForInstrument = mSamplesManager->getSamplesForInstrument(key);
-	std::vector<Sample> filteredSamples;
+	auto					samples = mSamplesManager->getSamplesForInstrument(key);
 
-	for (auto &sampleFromNote : allSamplesForInstrument)
+	std::list<Articulation> availableArticulations{};
+
+	for (auto &s : samples)
 	{
-		if (note.isNotEmpty() && sampleFromNote.note != note)
-			continue;
-
-		filteredSamples.push_back(sampleFromNote);
+		availableArticulations.push_back(s.articulation);
 	}
 
-	LOG_INFO("Filtered Samples with size {}", filteredSamples.size());
-	return filteredSamples;
+	return availableArticulations;
 }
 
 
@@ -63,7 +60,6 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 
 	mSampler.clearSounds();
 
-	//auto samples = filterSamplesFromInstrument(key);
 	auto samples = mSamplesManager->getSamplesForInstrument(key);
 
 	if (samples.empty())
