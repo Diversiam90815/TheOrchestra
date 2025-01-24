@@ -79,6 +79,9 @@ private:
 	const int			 mFamousWorksViewX = 962;
 	const int			 mFamousWorksViewY = 145;
 
+	const int			 mSamplerViewX	   = 335;
+	const int			 mSamplerViewY	   = 459;
+
 	const int			 mPianoRollX	   = 0;
 	const int			 mPianoRollY	   = 586;
 	const int			 mPianoRollHeight  = 114;

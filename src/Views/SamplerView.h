@@ -28,6 +28,24 @@ public:
 
 	void displayInstrument(std::set<Articulation> availableArticulations);
 
+	void articulationChanged(Articulation newArticulation);
+
 private:
-	ComboBox mArticulations;
+	Label	  mTitle;
+	ComboBox  mArticulations;
+
+	const int mWidth			   = 269;
+	const int mHeight			   = 107;
+
+	const int mTitleWidth		   = 110;
+	const int mTitleHeight		   = 33;
+
+	const int mTitleX			   = 79;
+	const int mTitleY			   = 10;
+
+	const int mArticulationsWidth  = 239;
+	const int mArticulationsHeight = 40;
+
+	const int mArticulationsX	   = 15;
+	const int mArticulationsY	   = 54;
 };

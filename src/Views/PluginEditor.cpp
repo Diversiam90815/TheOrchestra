@@ -38,6 +38,7 @@ void OrchestraEditor::showUI()
 	addAndMakeVisible(mTechniquesView);
 	addAndMakeVisible(mInfoView);
 	addAndMakeVisible(mFamousWorksView);
+	addAndMakeVisible(mSamplerView);
 
 	setSize(mWidth, mHeight);
 }
@@ -51,6 +52,7 @@ void OrchestraEditor::init()
 	mTechniquesView.init();
 	mInfoView.init();
 	mFamousWorksView.init();
+	mSamplerView.init();
 
 	mCustomMenuBarModel.setInstrumentSelectedCallback([this](int key) { changeInstrument(key); });
 }
@@ -96,6 +98,7 @@ void OrchestraEditor::resized()
 	mTechniquesView.setBounds(mTechniquesViewX, mTechniquesViewY, mTechniquesView.getWidth(), mTechniquesView.getHeight());
 	mInfoView.setBounds(mInfoViewX, mInfoViewY, mInfoView.getWidth(), mInfoView.getHeight());
 	mFamousWorksView.setBounds(mFamousWorksViewX, mFamousWorksViewY, mFamousWorksView.getWidth(), mFamousWorksView.getHeight());
+	mSamplerView.setBounds(mSamplerViewX, mSamplerViewY, mSamplerView.getWidth(), mSamplerView.getHeight());
 
 	mPianoRollView.setBounds(mPianoRollX, mPianoRollY, mWidth, mPianoRollHeight);
 	mMenuBar.setBounds(mMenuBarX, mMenuBarY, mWidth, mMenuBarHeight);

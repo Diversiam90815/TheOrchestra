@@ -26,7 +26,7 @@ private:
 	
 	TooltipWindow tooltipWindow{this};
 	
-	// Techniques displays using text buttons with tooltips in 3 rows á 3-3-2
+	// Techniques displays using text buttons with tooltips in 3 rows a 3-3-2
 	TextButton	  mTech1;
 	TextButton	  mTech2;
 	TextButton	  mTech3;
