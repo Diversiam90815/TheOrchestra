@@ -10,7 +10,7 @@
 #include "OrchestraSound.h"
 
 
-OrchestraSound::OrchestraSound(int noteRangeStart, int noteRangeEnd) : noteRangeStart(noteRangeStart), noteRangeEnd(noteRangeEnd)
+OrchestraSound::OrchestraSound(int noteRangeStart, int noteRangeEnd, int rootNote) : noteRangeStart(noteRangeStart), noteRangeEnd(noteRangeEnd), rootNote(rootNote)
 {
 }
 
@@ -39,6 +39,12 @@ bool OrchestraSound::appliesToNote(int midiNoteNumber)
 bool OrchestraSound::appliesToChannel(int midiChannel)
 {
 	return true; // Skip for now
+}
+
+
+int OrchestraSound::getRootNote() const
+{
+	return rootNote;
 }
 
 
