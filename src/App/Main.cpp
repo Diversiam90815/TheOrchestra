@@ -4,12 +4,6 @@
 
 #include <Logging.h>
 
-/*
-TODO:
-	1 - Make the pitch shift with the notes different from the rootnotes
-	3 - Refactor the Sampler to be more modular
-*/
-
 
 class Application : public JUCEApplication
 {
