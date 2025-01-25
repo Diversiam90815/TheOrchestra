@@ -28,7 +28,7 @@ public:
 	@param	[IN] noteRangeStart			-> Minimum MIDI note
 	@param	[IN] noteRangeEnd			-> Maximum MIDI note
 	*/
-	OrchestraSound(int noteRangeStart, int noteRangeEnd);
+	OrchestraSound(int noteRangeStart, int noteRangeEnd, int rootNote);
 
 	~OrchestraSound() override;
 
@@ -38,6 +38,8 @@ public:
 
 	bool						   appliesToChannel(int midiChannel) override;
 
+	int							   getRootNote() const;
+
 	juce::OwnedArray<DynamicLayer> dynamicLayers;
 
 private:
@@ -45,4 +47,5 @@ private:
 
 	int						noteRangeStart;
 	int						noteRangeEnd;
+	int						rootNote;
 };

@@ -40,7 +40,7 @@ void Sampler::init()
 
 std::set<Articulation> Sampler::getAvailableArticulationsForInstrument(const int key)
 {
-	auto					samples = mSamplesManager->getSamplesForInstrument(key);
+	auto				   samples = mSamplesManager->getSamplesForInstrument(key);
 
 	std::set<Articulation> availableArticulations{};
 
@@ -127,7 +127,7 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 		int	  rangeLow		 = noteRanges[midiNote].first;
 		int	  rangeHigh		 = noteRanges[midiNote].second;
 
-		auto *orchestraSound = new OrchestraSound(rangeLow, rangeHigh);
+		auto *orchestraSound = new OrchestraSound(rangeLow, rangeHigh, midiNote);
 
 		for (auto &dynPair : notePair.second)
 		{

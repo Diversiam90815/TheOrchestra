@@ -34,7 +34,8 @@ void OrchestraVoice::startNote(int midiNoteNumber, float velocity, juce::Synthes
 		currentBuffer		  = getBuffer(orchestraSound, chosenDynamicIndex, chosenRoundRobinIndex);
 
 		// Pitch shifting
-		pitchRatio			  = std::pow(2.0, (midiNoteNumber - /*rootNote=*/midiNoteNumber) / 12.0); // If root note = midiNoteNumber, pitch ratio = 1.0 => no shift
+		const double semitToneShift = static_cast<double>(midiNoteNumber - orchestraSound->getRootNote());
+		pitchRatio			  = std::pow(2.0, semitToneShift / 12.0); // If root note = midiNoteNumber, pitch ratio = 1.0 => no shift
 
 		noteGain			  = velocity;
 	}

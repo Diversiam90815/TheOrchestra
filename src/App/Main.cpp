@@ -7,7 +7,6 @@
 /*
 TODO:
 	1 - Make the pitch shift with the notes different from the rootnotes
-	2 - Set Articulations dynamically (by pressing the Techniques buttons for example)
 	3 - Refactor the Sampler to be more modular
 */
 
