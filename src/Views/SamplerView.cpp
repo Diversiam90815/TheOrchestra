@@ -36,6 +36,7 @@ void SamplerView::init()
 			mArticulationChangedCallback(newArticulation);
 		}
 	};
+	mArticulations.setTextWhenNoChoicesAvailable("Instrument not available");
 }
 
 
