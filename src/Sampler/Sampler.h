@@ -31,14 +31,24 @@ public:
 	bool				   getSamplesAreReady();
 	void				   setSamplesAreReady(bool value);
 
+
 private:
-	Synthesiser						   mSampler;
+	std::map<int, std::map<int, std::vector<juce::File>>> createDynamicMap(std::vector<Sample> &samples);
 
-	AudioFormatManager				   mFormatManager; // AudioFormatManager registering the audio formats
+	std::vector<Sample>									  filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed);
 
-	std::unique_ptr<SamplesManagement> mSamplesManager;
+	std::vector<int>									  createNoteList(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap);
 
-	std::atomic<bool>				   mSamplesAreReady = false;
+	std::map<int, std::pair<int, int>>					  createNoteRangeMap(std::vector<int> &noteList);
+
+
+	Synthesiser											  mSampler;
+
+	AudioFormatManager									  mFormatManager; // AudioFormatManager registering the audio formats
+
+	std::unique_ptr<SamplesManagement>					  mSamplesManager;
+
+	std::atomic<bool>									  mSamplesAreReady = false;
 
 
 	friend class OrchestraProcessor;

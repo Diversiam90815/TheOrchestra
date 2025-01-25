@@ -68,60 +68,21 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 		return;
 	}
 
-	// Group the samples by midinote -> dynamic -> files
-	std::map<int, std::map<int, std::vector<juce::File>>> noteDynMap;
+	auto filteredSamples = filterArticulation(samples, articulationUsed);
 
-	for (auto &s : samples)
-	{
-		int midiNote = s.noteMidiValue;
-		int dynValue = static_cast<int>(s.dynamic);
-		// Round Robbin' for now are not stored as value, but as count of files
+	auto noteDynamicMap	 = createDynamicMap(filteredSamples);
 
-		// Filter for the articulation
-		if (s.articulation == articulationUsed)
-			noteDynMap[midiNote][dynValue].push_back(s.file);
-	}
-
-	// Extract all unique MIDI notes into a sorted list
-	std::vector<int> noteList;
-	noteList.reserve(noteDynMap.size());
-
-	for (auto &val : noteDynMap)
-		noteList.push_back(val.first);
-
-	std::sort(noteList.begin(), noteList.end());
+	auto noteList		 = createNoteList(noteDynamicMap);
 
 	if (noteList.empty())
 	{
-		LOG_ERROR("Notelist is empty. We are skipping.");
+		LOG_WARNING("Notelist is empty. We are skipping.");
 		return;
 	}
 
-	// building a map of note range (low, high)
-	std::map<int, std::pair<int, int>> noteRanges;
-	for (auto &note : noteList)
-	{
-		noteRanges[note] = {0, 127}; // First initialize the values to 0-127 -> we refine them later
-	}
+	auto noteRanges = createNoteRangeMap(noteList);
 
-	// Set the min and max for instrument (for now leave it at 0 and 127)
-	noteRanges[noteList.front()].first = 0;
-	noteRanges[noteList.back()].first  = 127;
-
-	// Fill midpoint ranges between adjacent sampled notes
-	for (size_t i = 0; i < noteList.size() - 1; ++i)
-	{
-		int nA				  = noteList[i];
-		int nB				  = noteList[i + 1];
-
-		int mid				  = (nA + nB) / 2;
-
-		noteRanges[nA].second = mid;
-		noteRanges[nB].first  = mid + 1;
-	}
-
-
-	for (auto &notePair : noteDynMap)
+	for (auto &notePair : noteDynamicMap)
 	{
 		int	  midiNote		 = notePair.first;
 		int	  rangeLow		 = noteRanges[midiNote].first;
@@ -172,6 +133,85 @@ void Sampler::setSamplesAreReady(bool value)
 	{
 		mSamplesAreReady = value;
 	}
+}
+
+
+std::map<int, std::map<int, std::vector<juce::File>>> Sampler::createDynamicMap(std::vector<Sample> &samples)
+{
+	// Group the samples by midinote -> dynamic -> files
+	std::map<int, std::map<int, std::vector<juce::File>>> noteDynMap;
+
+	for (auto &s : samples)
+	{
+		int midiNote = s.noteMidiValue;
+		int dynValue = static_cast<int>(s.dynamic);
+		// Round Robbin' for now are not stored as value, but as count of files
+
+		noteDynMap[midiNote][dynValue].push_back(s.file);
+	}
+
+	return noteDynMap;
+}
+
+
+std::vector<Sample> Sampler::filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed)
+{
+	std::vector<Sample> filteredSamples;
+	filteredSamples.reserve(allSamples.size()); // Reserve size even though allSamples is bigger to avoid reallocation
+
+	for (auto &sample : allSamples)
+	{
+		if (sample.articulation != articulationUsed)
+			continue;
+
+		filteredSamples.push_back(sample);
+	}
+
+	return filteredSamples;
+}
+
+
+std::vector<int> Sampler::createNoteList(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap)
+{
+	// Extract all unique MIDI notes into a sorted list
+	std::vector<int> noteList;
+	noteList.reserve(noteDynamicMap.size());
+
+	for (auto &val : noteDynamicMap)
+		noteList.push_back(val.first);
+
+	std::sort(noteList.begin(), noteList.end());
+
+	return noteList;
+}
+
+
+std::map<int, std::pair<int, int>> Sampler::createNoteRangeMap(std::vector<int> &noteList)
+{
+	// building a map of note range (low, high)
+	std::map<int, std::pair<int, int>> noteRanges;
+	for (auto &note : noteList)
+	{
+		noteRanges[note] = {0, 127}; // First initialize the values to 0-127 -> we refine them later
+	}
+
+	// Set the min and max for instrument (for now leave it at 0 and 127)
+	noteRanges[noteList.front()].first = 0;
+	noteRanges[noteList.back()].first  = 127;
+
+	// Fill midpoint ranges between adjacent sampled notes
+	for (size_t i = 0; i < noteList.size() - 1; ++i)
+	{
+		int nA				  = noteList[i];
+		int nB				  = noteList[i + 1];
+
+		int mid				  = (nA + nB) / 2;
+
+		noteRanges[nA].second = mid;
+		noteRanges[nB].first  = mid + 1;
+	}
+
+	return noteRanges;
 }
 
 
