@@ -20,11 +20,11 @@ public:
 	CustomLookAndFeel();
 	~CustomLookAndFeel();
 
-	Colour getBoxBackgroundColour() const;
+	Colour				getBoxBackgroundColour() const;
 
-	float  getCornerRadius() const;
+	float				getCornerRadius() const;
 
-	Font   getTextEditorFont();
+	Font				getTextEditorFont();
 
 	std::vector<Colour> getQualityColours();
 
@@ -87,7 +87,8 @@ private:
 	const Colour  background			  = Colour::fromRGB(16, 14, 21);   // Colour used for the background of the app window
 	const Colour  buttonColor			  = Colour::fromRGB(158, 104, 61); // Colour used for the buttons in "Playing Techniques"
 	const Colour  boxesBackground		  = background.brighter(0.02f);	   // Colours used for the background of the different UI elements
-	const Colour  tooltipWindowBackground = Colour::fromRGB(0, 0, 0);
+	const Colour  tooltipWindowBackground = Colour::fromRGB(81, 133, 246);
+	const Colour  comboBoxBackground	  = Colour::fromRGB(17, 19, 31);
 
 	const float	  mCornerRadius			  = 8;
 

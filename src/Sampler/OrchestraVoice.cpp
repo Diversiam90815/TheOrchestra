@@ -75,9 +75,7 @@ void OrchestraVoice::stopNote(float velocity, bool allowTailOff)
 }
 
 
-void OrchestraVoice::pitchWheelMoved(int newPitchWheelValue)
-{
-}
+void OrchestraVoice::pitchWheelMoved(int newPitchWheelValue) {}
 
 
 void OrchestraVoice::controllerMoved(int controllerNumber, int newControllerValue)
@@ -150,7 +148,7 @@ void OrchestraVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int
 		float		expression = cc11Value / 127.f;
 		float		amp		   = noteGain * expression;
 
-		if (pos + 1 >= bufISize && pos + 1 >= bufJSize)	// If we exceed both buffers' lengths, time to stop
+		if (pos + 1 >= bufISize && pos + 1 >= bufJSize) // If we exceed both buffers' lengths, time to stop
 		{
 			clearCurrentNote();
 			isPlaying = false;

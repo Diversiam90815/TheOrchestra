@@ -19,9 +19,7 @@ InstrumentController::InstrumentController()
 }
 
 
-InstrumentController::~InstrumentController()
-{
-}
+InstrumentController::~InstrumentController() {}
 
 
 void InstrumentController::addInstrument(const InstrumentInfo &info)
