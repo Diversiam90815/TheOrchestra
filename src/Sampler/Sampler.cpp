@@ -69,18 +69,11 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 	}
 
 	auto filteredSamples = filterArticulation(samples, articulationUsed);
-
 	auto noteDynamicMap	 = createDynamicMap(filteredSamples);
+	auto noteRanges		 = createNoteRangeMap(noteDynamicMap);
 
-	auto noteList		 = createNoteList(noteDynamicMap);
-
-	if (noteList.empty())
-	{
-		LOG_WARNING("Notelist is empty. We are skipping.");
+	if (noteRanges.empty())
 		return;
-	}
-
-	auto noteRanges = createNoteRangeMap(noteList);
 
 	for (auto &notePair : noteDynamicMap)
 	{
@@ -186,8 +179,15 @@ std::vector<int> Sampler::createNoteList(std::map<int, std::map<int, std::vector
 }
 
 
-std::map<int, std::pair<int, int>> Sampler::createNoteRangeMap(std::vector<int> &noteList)
+std::map<int, std::pair<int, int>> Sampler::createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap)
 {
+	auto noteList = createNoteList(noteDynamicMap);
+	if (noteList.empty())
+	{
+		LOG_WARNING("Notelist is empty. We are skipping.");
+		return {};
+	}
+
 	// building a map of note range (low, high)
 	std::map<int, std::pair<int, int>> noteRanges;
 	for (auto &note : noteList)

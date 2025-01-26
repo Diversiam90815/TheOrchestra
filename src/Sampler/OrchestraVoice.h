@@ -41,6 +41,7 @@ private:
 
 	float										  mapCC1ToDynamicPosition();
 
+
 	bool										  isPlaying				= false;
 
 	double										  sourceSamplePosition	= 0.0;
@@ -61,6 +62,5 @@ private:
 
 	juce::SmoothedValue<float>					  CC11;
 
-	// const juce::AudioBuffer<float> *currentBuffer = nullptr; // Pointer to the actual buffer we read from
 	std::vector<const juce::AudioBuffer<float> *> layerBuffers; // layerBuffers[i] will hold the round robbin sample for the dynamic layer i
 };

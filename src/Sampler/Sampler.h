@@ -39,7 +39,7 @@ private:
 
 	std::vector<int>									  createNoteList(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap);
 
-	std::map<int, std::pair<int, int>>					  createNoteRangeMap(std::vector<int> &noteList);
+	std::map<int, std::pair<int, int>>					  createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap);
 
 
 	Synthesiser											  mSampler;
