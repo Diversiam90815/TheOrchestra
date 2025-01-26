@@ -33,31 +33,34 @@ public:
 
 
 private:
-	int								pickDynamicLayer(OrchestraSound *orchestraSound, float velocity);
+	int											  pickDynamicLayer(OrchestraSound *orchestraSound, float velocity);
 
-	int								pickRoundRobin(OrchestraSound *orchestraSound, int dynamicIndex);
+	int											  pickRoundRobin(OrchestraSound *orchestraSound, int dynamicIndex);
 
-	const juce::AudioBuffer<float> *getBuffer(OrchestraSound *orchestraSound, int dynamicIndex, int rrIndex);
+	const juce::AudioBuffer<float>				 *getBuffer(OrchestraSound *orchestraSound, int dynamicIndex, int rrIndex);
 
-	float							mapCC1ToDynamicPosition(OrchestraSound *orchestraSound);
+	float										  mapCC1ToDynamicPosition();
 
-	bool							isPlaying			  = false;
+	bool										  isPlaying				= false;
 
-	double							sourceSamplePosition  = 0.0;
+	double										  sourceSamplePosition	= 0.0;
 
-	float							pitchRatio			  = 1.0f;
+	float										  pitchRatio			= 1.0f;
 
-	float							noteGain			  = 10.0f;
+	float										  noteGain				= 10.0f;
 
-	int								noteNumber			  = -1;
+	int											  noteNumber			= -1;
 
-	int								chosenDynamicIndex	  = -1; // Set in startNote()
+	int											  numDynamicLayers		= -1; // Set in startNote()
 
-	int								chosenRoundRobinIndex = -1; // Set in startNote()
+	int											  chosenDynamicIndex	= -1; // Set in startNote()
 
-	juce::SmoothedValue<float>		CC1;
+	int											  chosenRoundRobinIndex = -1; // Set in startNote()
 
-	juce::SmoothedValue<float>		CC11;
+	juce::SmoothedValue<float>					  CC1;
 
-	const juce::AudioBuffer<float> *currentBuffer = nullptr; // Pointer to the actual buffer we read from
+	juce::SmoothedValue<float>					  CC11;
+
+	// const juce::AudioBuffer<float> *currentBuffer = nullptr; // Pointer to the actual buffer we read from
+	std::vector<const juce::AudioBuffer<float> *> layerBuffers; // layerBuffers[i] will hold the round robbin sample for the dynamic layer i
 };
