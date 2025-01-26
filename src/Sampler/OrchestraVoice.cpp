@@ -20,18 +20,43 @@ void OrchestraVoice::startNote(int midiNoteNumber, float velocity, juce::Synthes
 {
 	if (auto *orchestraSound = dynamic_cast<OrchestraSound *>(sound))
 	{
-		noteNumber					= midiNoteNumber;
-		sourceSamplePosition		= 0.0;
-		isPlaying					= true;
+		noteNumber			 = midiNoteNumber;
+		sourceSamplePosition = 0.0;
+		isPlaying			 = true;
 
-		// Choose Dynamic Layer
-		chosenDynamicIndex			= pickDynamicLayer(orchestraSound, velocity);
+		numDynamicLayers	 = orchestraSound->dynamicLayers.size();
 
-		// Choose Round Robin
-		chosenRoundRobinIndex		= pickRoundRobin(orchestraSound, chosenDynamicIndex);
+		layerBuffers.clear();
 
-		// Get the buffer
-		currentBuffer				= getBuffer(orchestraSound, chosenDynamicIndex, chosenRoundRobinIndex);
+		// For each dynamic layer in the sound, pick a round-robin sample:
+		for (int d = 0; d < orchestraSound->dynamicLayers.size(); ++d)
+		{
+			auto *layer = orchestraSound->dynamicLayers[d];
+			if (layer == nullptr)
+				continue;
+
+			int rrIndex = pickRoundRobin(orchestraSound, d);
+
+			// store a pointer to that buffer
+			if (rrIndex >= 0 && rrIndex < layer->roundRobinSamples.size())
+			{
+				layerBuffers.push_back(layer->roundRobinSamples[rrIndex]);
+			}
+			else
+			{
+				// no valid sample found
+				layerBuffers.push_back(nullptr);
+			}
+		}
+
+		//// Choose Dynamic Layer
+		// chosenDynamicIndex			= pickDynamicLayer(orchestraSound, velocity);
+
+		//// Choose Round Robin
+		// chosenRoundRobinIndex		= pickRoundRobin(orchestraSound, chosenDynamicIndex);
+
+		//// Get the buffer
+		// currentBuffer				= getBuffer(orchestraSound, chosenDynamicIndex, chosenRoundRobinIndex);
 
 		// Pitch shifting
 		const double semitToneShift = static_cast<double>(midiNoteNumber - orchestraSound->getRootNote());
@@ -80,58 +105,114 @@ void OrchestraVoice::controllerMoved(int controllerNumber, int newControllerValu
 
 void OrchestraVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
 {
-	if (!isPlaying || currentBuffer == nullptr)
+	if (!isPlaying || layerBuffers.empty())
 		return;
 
-	const int	 bufferSize		  = currentBuffer->getNumSamples();
-	const int	 numInputChannels = currentBuffer->getNumChannels();
+	const int numLayers = (int)layerBuffers.size();
+	if (numLayers < 1)
+		return;
 
-	float		*outLeft		  = outputBuffer.getWritePointer(0, startSample);
-	float		*outRight		  = (outputBuffer.getNumChannels() > 1) ? outputBuffer.getWritePointer(1, startSample) : nullptr;
+	float *outLeft	= outputBuffer.getWritePointer(0, startSample);
+	float *outRight = (outputBuffer.getNumChannels() > 1) ? outputBuffer.getWritePointer(1, startSample) : nullptr;
 
-	const float *inLeft			  = currentBuffer->getReadPointer(0);
-	const float *inRight		  = (numInputChannels > 1) ? currentBuffer->getReadPointer(1) : nullptr;
+	float  dynPos	= mapCC1ToDynamicPosition(); // If CC1 = 64 in [0..127], that might be about ~1.5, which is halfway between layer 1 and layer 2, etc.
+
+	int	   i		= (int)std::floor(dynPos);	 // lower layer index
+	int	   j		= i + 1;					 // upper layer index above
+	int	   alpha	= dynPos - (float)i;		 // How much to crossfade to the upper
+
+	// Ensure indices valid limits
+	if (i < 0)
+	{
+		i	  = 0;
+		alpha = 0.0f;
+	}
+
+	if (j >= numLayers)
+	{
+		j	  = numLayers - 1;
+		alpha = 0.0f;
+	}
+
+	// We'll read from buffer i and buffer j
+	const juce::AudioBuffer<float> *bufferI = layerBuffers[i];
+	const juce::AudioBuffer<float> *bufferJ = layerBuffers[j];
+
+	// Basic safety checks
+	if (bufferI == nullptr && bufferJ == nullptr)
+	{
+		clearCurrentNote();
+		isPlaying = false;
+		return;
+	}
+
+	const int bufISize	= (bufferI != nullptr) ? bufferI->getNumSamples() : 0;
+	const int bufIChans = (bufferI != nullptr) ? bufferI->getNumChannels() : 0;
+	const int bufJSize	= (bufferJ != nullptr) ? bufferJ->getNumSamples() : 0;
+	const int bufJChans = (bufferJ != nullptr) ? bufferJ->getNumChannels() : 0;
 
 
 	while (--numSamples >= 0)
 	{
-		int	  pos		 = (int)sourceSamplePosition;
-		float alpha		 = (float)(sourceSamplePosition - pos);
-		float invAlpha	 = 1.0f - alpha;
-		float cc11Value	 = CC11.getNextValue();
-		float expression = cc11Value / 127.0f; // Normalized CC11 value between [0,1]
+		const int	pos		   = (int)sourceSamplePosition;
+		const float frac	   = (float)(sourceSamplePosition - pos);
+		const float invFrac	   = 1.0f - frac;
 
+		// expression from CC11
+		float		cc11Value  = CC11.getNextValue();
+		float		expression = cc11Value / 127.f;
+		float		amp		   = noteGain * expression;
 
-		// Stop the note if we exceed the buffer size
-		if (pos + 1 >= bufferSize)
+		// If we exceed both buffers' lengths, time to stop
+		if (pos + 1 >= bufISize && pos + 1 >= bufJSize)
 		{
 			clearCurrentNote();
 			isPlaying = false;
 			break;
 		}
 
-		// Basic linear interpolation
-		float l = inLeft[pos] * invAlpha + inLeft[pos + 1] * alpha;
-		float r = 0.0f;
-
-		if (inRight)
+		// read from bufferI if valid
+		float li = 0.f, ri = 0.f;
+		if (bufferI != nullptr && pos + 1 < bufISize)
 		{
-			r = inRight[pos] * invAlpha + inRight[pos + 1] * alpha;
+			auto *inL = bufferI->getReadPointer(0);
+			li		  = inL[pos] * invFrac + inL[pos + 1] * frac;
+
+			if (bufIChans > 1)
+			{
+				auto *inR = bufferI->getReadPointer(1);
+				ri		  = inR[pos] * invFrac + inR[pos + 1] * frac;
+			}
 		}
 
-		float amp = noteGain * expression;
-
-		l *= amp;
-		r *= amp;
-
-		if (outLeft)
+		// read from bufferJ if valid
+		float lj = 0.f, rj = 0.f;
+		if (bufferJ != nullptr && pos + 1 < bufJSize)
 		{
-			*outLeft++ += l;
+			auto *inL = bufferJ->getReadPointer(0);
+			lj		  = inL[pos] * invFrac + inL[pos + 1] * frac;
+
+			if (bufJChans > 1)
+			{
+				auto *inR = bufferJ->getReadPointer(1);
+				rj		  = inR[pos] * invFrac + inR[pos + 1] * frac;
+			}
 		}
-		if (outRight)
-		{
-			*outRight++ += r;
-		}
+
+		// crossfade between i and j
+		float lMix = li * (1.f - alpha) + lj * alpha;
+		float rMix = ri * (1.f - alpha) + rj * alpha;
+
+		// scale by amplitude
+		lMix *= amp;
+		rMix *= amp;
+
+		// add to output
+		*outLeft++ += lMix;
+		if (outRight != nullptr)
+			*outRight++ += rMix;
+
+		// move forward
 		sourceSamplePosition += pitchRatio;
 	}
 }
@@ -185,15 +266,15 @@ const juce::AudioBuffer<float> *OrchestraVoice::getBuffer(OrchestraSound *orches
 }
 
 
-float OrchestraVoice::mapCC1ToDynamicPosition(OrchestraSound *orchestraSound)
+float OrchestraVoice::mapCC1ToDynamicPosition()
 {
 	// Get normalized current CC1 value
 	float currentCC1 = CC1.getNextValue();
 	float normCC1	 = currentCC1 / 127.0f;
 
 	// Get Number of Dynamic Layers
-	int	  n			 = orchestraSound->dynamicLayers.size();
-	if (n == 0)
+	int	  n			 = numDynamicLayers;
+	if (n < 1)
 		return -1;
 
 	// Determine "Dynamic Layer Position" ->
