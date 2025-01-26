@@ -99,7 +99,6 @@ void OrchestraVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int
 	if (!isPlaying || layerBuffers.empty())
 		return;
 
-
 	float	 *outLeft	= outputBuffer.getWritePointer(0, startSample);
 	float	 *outRight	= (outputBuffer.getNumChannels() > 1) ? outputBuffer.getWritePointer(1, startSample) : nullptr;
 
@@ -151,8 +150,7 @@ void OrchestraVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int
 		float		expression = cc11Value / 127.f;
 		float		amp		   = noteGain * expression;
 
-		// If we exceed both buffers' lengths, time to stop
-		if (pos + 1 >= bufISize && pos + 1 >= bufJSize)
+		if (pos + 1 >= bufISize && pos + 1 >= bufJSize)	// If we exceed both buffers' lengths, time to stop
 		{
 			clearCurrentNote();
 			isPlaying = false;
