@@ -40,14 +40,14 @@ public:
 	 @param                 [IN] qualities as an StringArray.
 	 @return                Boolean indicating success/failure
 	*/
-	bool	   setMidiRanges(const StringArray &qualities);
+	bool setMidiRanges(const StringArray &qualities);
 
 	/*
 	 @brief                 Fills the vector 'mMidiRanges' with the note ranges information from a String
 	 @param                 [IN] ranges as an String.
 	 @return                Boolean indicating success/failure
 	*/
-	bool	   setMidiRanges(const String &ranges);
+	bool setMidiRanges(const String &ranges);
 
 
 private:

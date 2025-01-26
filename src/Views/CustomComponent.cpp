@@ -47,7 +47,7 @@ void CustomComponent::addAndConfigureTextEditor(TextEditor &editor, int x, int y
 void CustomComponent::addAndConfigureComboBox(ComboBox &box, int x, int y, int width, int height)
 {
 	addAndMakeVisible(box);
-	box.setBounds(x,y,width,height);
+	box.setBounds(x, y, width, height);
 	box.setEditableText(false);
 }
 

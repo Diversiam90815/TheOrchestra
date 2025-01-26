@@ -13,16 +13,16 @@
 #include "Parameters.h"
 #include "SamplesManagement.h"
 
+struct DynamicLayer
+{
+	Dynamics								   dynamicValue;
+	juce::OwnedArray<juce::AudioBuffer<float>> roundRobinSamples;
+};
+
 
 class OrchestraSound : public juce::SynthesiserSound
 {
 public:
-	struct DynamicLayer
-	{
-		Dynamics								   dynamicValue;
-		juce::OwnedArray<juce::AudioBuffer<float>> roundRobinSamples;
-	};
-
 	OrchestraSound(int noteRangeStart, int noteRangeEnd, int rootNote);
 
 	~OrchestraSound() override;
@@ -39,6 +39,7 @@ public:
 
 private:
 	static juce::BigInteger getNoteRangeBit(int start, int end);
+
 
 	int						noteRangeStart;
 	int						noteRangeEnd;

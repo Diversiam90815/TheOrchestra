@@ -9,9 +9,7 @@
 
 #include "CustomPianoRoll.h"
 
-CustomPianoRoll::CustomPianoRoll(MidiKeyboardState &state, Orientation orientation) : MidiKeyboardComponent(state, orientation)
-{
-}
+CustomPianoRoll::CustomPianoRoll(MidiKeyboardState &state, Orientation orientation) : MidiKeyboardComponent(state, orientation) {}
 
 
 void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour lineColour, Colour textColour)

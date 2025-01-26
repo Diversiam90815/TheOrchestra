@@ -10,14 +10,10 @@
 #include "InstrumentRangesView.h"
 
 
-InstrumentRangesView::InstrumentRangesView()
-{
-}
+InstrumentRangesView::InstrumentRangesView() {}
 
 
-InstrumentRangesView::~InstrumentRangesView()
-{
-}
+InstrumentRangesView::~InstrumentRangesView() {}
 
 
 void InstrumentRangesView::init()
