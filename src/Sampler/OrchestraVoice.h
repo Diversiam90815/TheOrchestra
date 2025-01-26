@@ -39,6 +39,8 @@ private:
 
 	const juce::AudioBuffer<float> *getBuffer(OrchestraSound *orchestraSound, int dynamicIndex, int rrIndex);
 
+	float							mapCC1ToDynamicPosition(OrchestraSound *orchestraSound);
+
 	bool							isPlaying			  = false;
 
 	double							sourceSamplePosition  = 0.0;
@@ -53,9 +55,9 @@ private:
 
 	int								chosenRoundRobinIndex = -1; // Set in startNote()
 
-	juce::SmoothedValue<float>		currentCC1Value;
+	juce::SmoothedValue<float>		CC1;
 
-	juce::SmoothedValue<float>		currentCC11Value;
+	juce::SmoothedValue<float>		CC11;
 
 	const juce::AudioBuffer<float> *currentBuffer = nullptr; // Pointer to the actual buffer we read from
 };

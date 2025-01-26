@@ -20,30 +20,30 @@ void OrchestraVoice::startNote(int midiNoteNumber, float velocity, juce::Synthes
 {
 	if (auto *orchestraSound = dynamic_cast<OrchestraSound *>(sound))
 	{
-		noteNumber			  = midiNoteNumber;
-		sourceSamplePosition  = 0.0;
-		isPlaying			  = true;
+		noteNumber					= midiNoteNumber;
+		sourceSamplePosition		= 0.0;
+		isPlaying					= true;
 
 		// Choose Dynamic Layer
-		chosenDynamicIndex	  = pickDynamicLayer(orchestraSound, velocity);
+		chosenDynamicIndex			= pickDynamicLayer(orchestraSound, velocity);
 
 		// Choose Round Robin
-		chosenRoundRobinIndex = pickRoundRobin(orchestraSound, chosenDynamicIndex);
+		chosenRoundRobinIndex		= pickRoundRobin(orchestraSound, chosenDynamicIndex);
 
 		// Get the buffer
-		currentBuffer		  = getBuffer(orchestraSound, chosenDynamicIndex, chosenRoundRobinIndex);
+		currentBuffer				= getBuffer(orchestraSound, chosenDynamicIndex, chosenRoundRobinIndex);
 
 		// Pitch shifting
 		const double semitToneShift = static_cast<double>(midiNoteNumber - orchestraSound->getRootNote());
-		pitchRatio			  = std::pow(2.0, semitToneShift / 12.0); // If root note = midiNoteNumber, pitch ratio = 1.0 => no shift
+		pitchRatio					= std::pow(2.0, semitToneShift / 12.0); // If root note = midiNoteNumber, pitch ratio = 1.0 => no shift
 
-		noteGain			  = velocity;
+		noteGain					= velocity;
 	}
 
 	// Init the CC values
 	auto sampleRate = getSampleRate();
-	currentCC1Value.reset(sampleRate, 0.005);
-	currentCC11Value.reset(sampleRate, 0.005);
+	CC1.reset(sampleRate, 0.005);
+	CC11.reset(sampleRate, 0.005);
 }
 
 
@@ -68,12 +68,12 @@ void OrchestraVoice::controllerMoved(int controllerNumber, int newControllerValu
 {
 	if (controllerNumber == 1)
 	{
-		currentCC1Value.setTargetValue((float)newControllerValue);
+		CC1.setTargetValue((float)newControllerValue);
 	}
 
 	else if (controllerNumber == 11)
 	{
-		currentCC11Value.setTargetValue((float)newControllerValue);
+		CC11.setTargetValue((float)newControllerValue);
 	}
 }
 
@@ -98,7 +98,7 @@ void OrchestraVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int
 		int	  pos		 = (int)sourceSamplePosition;
 		float alpha		 = (float)(sourceSamplePosition - pos);
 		float invAlpha	 = 1.0f - alpha;
-		float cc11Value	 = currentCC11Value.getNextValue();
+		float cc11Value	 = CC11.getNextValue();
 		float expression = cc11Value / 127.0f; // Normalized CC11 value between [0,1]
 
 
@@ -182,4 +182,21 @@ const juce::AudioBuffer<float> *OrchestraVoice::getBuffer(OrchestraSound *orches
 		return nullptr;
 
 	return layer->roundRobinSamples[rrIndex];
+}
+
+
+float OrchestraVoice::mapCC1ToDynamicPosition(OrchestraSound *orchestraSound)
+{
+	// Get normalized current CC1 value
+	float currentCC1 = CC1.getNextValue();
+	float normCC1	 = currentCC1 / 127.0f;
+
+	// Get Number of Dynamic Layers
+	int	  n			 = orchestraSound->dynamicLayers.size();
+	if (n == 0)
+		return -1;
+
+	// Determine "Dynamic Layer Position" ->
+	float layerPosition = normCC1 * (n - 1);
+	return layerPosition;
 }
