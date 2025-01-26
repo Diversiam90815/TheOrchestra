@@ -10,14 +10,10 @@
 #include "FamousWorksView.h"
 
 
-FamousWorksView::FamousWorksView()
-{
-}
+FamousWorksView::FamousWorksView() {}
 
 
-FamousWorksView::~FamousWorksView()
-{
-}
+FamousWorksView::~FamousWorksView() {}
 
 
 void FamousWorksView::init()

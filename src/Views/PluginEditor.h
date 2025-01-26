@@ -29,7 +29,6 @@ public:
 	OrchestraEditor(OrchestraProcessor &);
 	~OrchestraEditor() override;
 
-
 	void paint(Graphics &) override;
 
 	void resized() override;

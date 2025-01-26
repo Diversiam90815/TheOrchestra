@@ -10,14 +10,10 @@
 #include "Logging.h"
 
 
-Logging::Logging()
-{
-}
+Logging::Logging() {}
 
 
-Logging::~Logging()
-{
-}
+Logging::~Logging() {}
 
 
 void Logging::initLogging()

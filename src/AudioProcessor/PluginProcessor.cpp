@@ -36,9 +36,7 @@ OrchestraProcessor::OrchestraProcessor()
 	init();
 }
 
-OrchestraProcessor::~OrchestraProcessor()
-{
-}
+OrchestraProcessor::~OrchestraProcessor() {}
 
 
 void OrchestraProcessor::init()
@@ -94,9 +92,7 @@ int OrchestraProcessor::getCurrentProgram()
 }
 
 
-void OrchestraProcessor::setCurrentProgram(int index)
-{
-}
+void		 OrchestraProcessor::setCurrentProgram(int index) {}
 
 
 const String OrchestraProcessor::getProgramName(int index)
@@ -105,9 +101,7 @@ const String OrchestraProcessor::getProgramName(int index)
 }
 
 
-void OrchestraProcessor::changeProgramName(int index, const String &newName)
-{
-}
+void OrchestraProcessor::changeProgramName(int index, const String &newName) {}
 
 
 void OrchestraProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
@@ -117,9 +111,7 @@ void OrchestraProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 }
 
 
-void OrchestraProcessor::releaseResources()
-{
-}
+void OrchestraProcessor::releaseResources() {}
 
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -162,14 +154,10 @@ AudioProcessorEditor *OrchestraProcessor::createEditor()
 }
 
 
-void OrchestraProcessor::getStateInformation(MemoryBlock &destData)
-{
-}
+void OrchestraProcessor::getStateInformation(MemoryBlock &destData) {}
 
 
-void OrchestraProcessor::setStateInformation(const void *data, int sizeInBytes)
-{
-}
+void OrchestraProcessor::setStateInformation(const void *data, int sizeInBytes) {}
 
 
 void OrchestraProcessor::setCurrentInstrument(int key, Articulation articulationUsed)

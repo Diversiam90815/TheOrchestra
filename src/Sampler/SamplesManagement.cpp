@@ -67,7 +67,7 @@ void SamplesManagement::parseSampleFiles()
 			// Find articulations
 			for (const auto &articulationFolder : instrument.findChildFiles(File::findDirectories, false))
 			{
-				String		 articulationStr   = articulationFolder.getFileName();
+				String		 articulationStr = articulationFolder.getFileName();
 				Articulation articulationValue{};
 				try
 				{
@@ -107,7 +107,7 @@ void SamplesManagement::addSample(const File &file, const int &key, Articulation
 	int	   roundRobin		= 0;
 	roundRobin				= stoi(roundRobinString.toStdString());
 
-	int	   dynamic			= getIndexOfDynamics(dynamicString); // V values need to be adapted
+	int	   dynamic			= getIndexOfDynamics(dynamicString);
 
 	String instrumentName	= file.getParentDirectory().getFileName();
 

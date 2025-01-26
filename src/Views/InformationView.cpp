@@ -10,14 +10,10 @@
 #include "InformationView.h"
 
 
-InformationView::InformationView()
-{
-}
+InformationView::InformationView() {}
 
 
-InformationView::~InformationView()
-{
-}
+InformationView::~InformationView() {}
 
 
 void InformationView::init()

@@ -15,9 +15,7 @@ CustomLookAndFeel::CustomLookAndFeel()
 }
 
 
-CustomLookAndFeel::~CustomLookAndFeel()
-{
-}
+CustomLookAndFeel::~CustomLookAndFeel() {}
 
 
 Colour CustomLookAndFeel::getBoxBackgroundColour() const
@@ -42,6 +40,8 @@ void CustomLookAndFeel::init()
 	setColour(PopupMenu::highlightedBackgroundColourId, menuBarBackground);
 	setColour(PopupMenu::highlightedTextColourId, whiteFontColour);
 	setColour(PopupMenu::textColourId, fontColor);
+
+	setColour(ComboBox::backgroundColourId, comboBoxBackground);
 
 	setFont();
 }

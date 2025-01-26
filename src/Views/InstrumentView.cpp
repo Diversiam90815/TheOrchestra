@@ -10,14 +10,10 @@
 #include "InstrumentView.h"
 
 
-InstrumentView::InstrumentView()
-{
-}
+InstrumentView::InstrumentView() {}
 
 
-InstrumentView::~InstrumentView()
-{
-}
+InstrumentView::~InstrumentView() {}
 
 
 void InstrumentView::init()

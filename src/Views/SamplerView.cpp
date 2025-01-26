@@ -10,14 +10,10 @@
 #include "SamplerView.h"
 
 
-SamplerView::SamplerView()
-{
-}
+SamplerView::SamplerView() {}
 
 
-SamplerView::~SamplerView()
-{
-}
+SamplerView::~SamplerView() {}
 
 
 void SamplerView::init()
@@ -27,6 +23,7 @@ void SamplerView::init()
 	addAndConfigureLabel(mTitle, "SamplerViewTitle", "Articulations", mTitleX, mTitleY, mTitleWidth, mTitleHeight);
 
 	addAndConfigureComboBox(mArticulations, mArticulationsX, mArticulationsY, mArticulationsWidth, mArticulationsHeight);
+	mArticulations.setTextWhenNoChoicesAvailable(textIfNoSamplesAvailable);
 	mArticulations.onChange = [this]()
 	{
 		const int		   selectedID	   = mArticulations.getSelectedId();
@@ -36,7 +33,6 @@ void SamplerView::init()
 			mArticulationChangedCallback(newArticulation);
 		}
 	};
-	mArticulations.setTextWhenNoChoicesAvailable("Instrument not available");
 }
 
 

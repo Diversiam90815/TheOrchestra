@@ -10,9 +10,7 @@
 #include "Sampler.h"
 
 
-Sampler::Sampler()
-{
-}
+Sampler::Sampler() {}
 
 
 Sampler::~Sampler()
@@ -122,9 +120,9 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 
 void Sampler::setSamplesAreReady(bool value)
 {
-	if (mSamplesAreReady != value)
+	if (mSamplesAreReady.load() != value)
 	{
-		mSamplesAreReady = value;
+		mSamplesAreReady.store(value);
 	}
 }
 
@@ -217,5 +215,5 @@ std::map<int, std::pair<int, int>> Sampler::createNoteRangeMap(std::map<int, std
 
 bool Sampler::getSamplesAreReady()
 {
-	return mSamplesAreReady;
+	return mSamplesAreReady.load();
 }

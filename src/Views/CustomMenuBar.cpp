@@ -10,13 +10,9 @@
 #include "CustomMenuBar.h"
 
 
-CustomMenuBar::CustomMenuBar()
-{
-}
+CustomMenuBar::CustomMenuBar() {}
 
-CustomMenuBar::~CustomMenuBar()
-{
-}
+CustomMenuBar::~CustomMenuBar() {}
 
 
 StringArray CustomMenuBar::getMenuBarNames()

@@ -10,14 +10,10 @@
 #include "FileManager.h"
 
 
-FileManager::FileManager()
-{
-}
+FileManager::FileManager() {}
 
 
-FileManager::~FileManager()
-{
-}
+FileManager::~FileManager() {}
 
 
 std::string FileManager::getSamplesFolder()

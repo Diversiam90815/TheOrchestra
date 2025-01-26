@@ -10,14 +10,10 @@
 #include "OrchestraSound.h"
 
 
-OrchestraSound::OrchestraSound(int noteRangeStart, int noteRangeEnd, int rootNote) : noteRangeStart(noteRangeStart), noteRangeEnd(noteRangeEnd), rootNote(rootNote)
-{
-}
+OrchestraSound::OrchestraSound(int noteRangeStart, int noteRangeEnd, int rootNote) : noteRangeStart(noteRangeStart), noteRangeEnd(noteRangeEnd), rootNote(rootNote) {}
 
 
-OrchestraSound::~OrchestraSound()
-{
-}
+OrchestraSound::~OrchestraSound() {}
 
 
 
