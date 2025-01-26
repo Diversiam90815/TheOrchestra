@@ -23,11 +23,6 @@ public:
 		juce::OwnedArray<juce::AudioBuffer<float>> roundRobinSamples;
 	};
 
-	/**
-	@brief	Create an OrchestraSound for a specific note or note range.
-	@param	[IN] noteRangeStart			-> Minimum MIDI note
-	@param	[IN] noteRangeEnd			-> Maximum MIDI note
-	*/
 	OrchestraSound(int noteRangeStart, int noteRangeEnd, int rootNote);
 
 	~OrchestraSound() override;
