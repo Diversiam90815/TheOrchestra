@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-	Module			SamplesManagerment
+	Module			SamplesManagement
 	Description		Managing the samples
 
   ==============================================================================

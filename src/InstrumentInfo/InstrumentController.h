@@ -23,6 +23,7 @@ public:
 	InstrumentController();
 	~InstrumentController();
 
+	void init();
 
 	InstrumentInfo getInstrument(int key);
 

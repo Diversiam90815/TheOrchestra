@@ -46,6 +46,9 @@ void OrchestraEditor::showUI()
 
 void OrchestraEditor::init()
 {
+
+	//	mController.init();
+
 	mInstrumentView.init();
 	mRangesView.init();
 	mQualitiesView.init();
@@ -62,7 +65,7 @@ void OrchestraEditor::init()
 void OrchestraEditor::changeInstrument(int key)
 {
 	mCurrentKey			  = key;
-	auto instrument		  = mController.getInstrument(key);
+	auto instrument		  = this->audioProcessor.mInstrumentController.getInstrument(key);
 
 	auto availableSamples = audioProcessor.mOrchestraSampler.getAvailableArticulationsForInstrument(key);
 	mSamplerView.displayInstrument(availableSamples);

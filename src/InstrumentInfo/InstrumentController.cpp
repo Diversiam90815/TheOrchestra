@@ -12,14 +12,17 @@
 #include <cassert>
 
 
-InstrumentController::InstrumentController()
+InstrumentController::InstrumentController() {}
+
+
+InstrumentController::~InstrumentController() {}
+
+
+void InstrumentController::init()
 {
 	loadFromJSON();
 	LOG_INFO("Instruments loaded from JSON");
 }
-
-
-InstrumentController::~InstrumentController() {}
 
 
 void InstrumentController::addInstrument(const InstrumentInfo &info)
