@@ -35,13 +35,21 @@ public:
 
 	int							   getRootNote() const;
 
+	void						   setArticulation(const Articulation art);
+	Articulation				   getArticulation() const;
+
 	juce::OwnedArray<DynamicLayer> dynamicLayers;
 
 private:
 	static juce::BigInteger getNoteRangeBit(int start, int end);
 
+	Articulation			articulation = Articulation::sustain; // Default value -> will be set at creation
+
+
 
 	int						noteRangeStart;
+
 	int						noteRangeEnd;
+
 	int						rootNote;
 };

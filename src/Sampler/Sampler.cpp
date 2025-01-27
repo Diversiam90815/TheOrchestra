@@ -81,6 +81,8 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 
 		auto *orchestraSound = new OrchestraSound(rangeLow, rangeHigh, midiNote);
 
+		orchestraSound->setArticulation(articulationUsed);
+
 		for (auto &dynPair : notePair.second)
 		{
 			int										   dynValue	  = dynPair.first;

@@ -44,6 +44,21 @@ int OrchestraSound::getRootNote() const
 }
 
 
+void OrchestraSound::setArticulation(const Articulation art)
+{
+	if (articulation != art)
+	{
+		articulation = art;
+	}
+}
+
+
+Articulation OrchestraSound::getArticulation() const
+{
+	return articulation;
+}
+
+
 juce::BigInteger OrchestraSound::getNoteRangeBit(int start, int end)
 {
 	juce::BigInteger notes;
