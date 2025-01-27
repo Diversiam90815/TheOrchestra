@@ -28,6 +28,18 @@ void OrchestraVoice::startNote(int midiNoteNumber, float velocity, juce::Synthes
 
 		layerBuffers.clear();
 
+		auto art			= orchestraSound->getArticulation();
+		isShortArticulation = (art == Articulation::pizzicato) || (art == Articulation::staccato) || (art == Articulation::spiccato) || (art == Articulation::hits);
+
+		if (isShortArticulation)
+		{
+			noteGain = velocity;
+		}
+		else
+		{
+			noteGain = 1.0f; // Set with CC1 and CC11
+		}
+
 		// For each dynamic layer in the sound, pick a round-robin sample:
 		for (int d = 0; d < orchestraSound->dynamicLayers.size(); ++d)
 		{
@@ -52,14 +64,13 @@ void OrchestraVoice::startNote(int midiNoteNumber, float velocity, juce::Synthes
 		// Pitch shifting
 		const double semitToneShift = static_cast<double>(midiNoteNumber - orchestraSound->getRootNote());
 		pitchRatio					= std::pow(2.0, semitToneShift / 12.0); // If root note = midiNoteNumber, pitch ratio = 1.0 => no shift
-
-		noteGain					= velocity;
 	}
 
 	// Init the CC values
-	auto sampleRate = getSampleRate();
-	CC1.reset(sampleRate, 0.005);
-	CC11.reset(sampleRate, 0.005);
+	auto sr = getSampleRate();
+	CC1.reset(sr, 0.005);
+	CC11.reset(sr, 0.005);
+	CC11.setCurrentAndTargetValue(127.f); // full volume by default
 }
 
 
@@ -100,12 +111,12 @@ void OrchestraVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int
 	float	 *outLeft	= outputBuffer.getWritePointer(0, startSample);
 	float	 *outRight	= (outputBuffer.getNumChannels() > 1) ? outputBuffer.getWritePointer(1, startSample) : nullptr;
 
-	float	  dynPos	= mapCC1ToDynamicPosition(); // If CC1 = 64 in [0..127], that might be about ~1.5, which is halfway between layer 1 and layer 2, etc.
+	float	  dynPos	= mapDynamicPosition();	   // If CC1 = 64 in [0..127], that might be about ~1.5, which is halfway between layer 1 and layer 2, etc.
 
 	const int numLayers = (int)layerBuffers.size();
-	int		  i			= (int)std::floor(dynPos);	 // lower layer index
-	int		  j			= i + 1;					 // upper layer index above
-	int		  alpha		= dynPos - (float)i;		 // How much to crossfade to the upper
+	int		  i			= (int)std::floor(dynPos); // lower layer index
+	int		  j			= i + 1;				   // upper layer index above
+	float	  alpha		= dynPos - (float)i;	   // How much to crossfade to the upper
 
 	// Ensure indices valid limits
 	if (i < 0)
@@ -146,7 +157,13 @@ void OrchestraVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int
 		// expression from CC11
 		float		cc11Value  = CC11.getNextValue();
 		float		expression = cc11Value / 127.f;
-		float		amp		   = noteGain * expression;
+
+		float		amp		   = 1.0f;
+		if (isShortArticulation)
+			amp = noteGain;
+		else
+			amp = noteGain * expression;
+
 
 		if (pos + 1 >= bufISize && pos + 1 >= bufJSize) // If we exceed both buffers' lengths, time to stop
 		{
@@ -250,18 +267,27 @@ const juce::AudioBuffer<float> *OrchestraVoice::getBuffer(OrchestraSound *orches
 }
 
 
-float OrchestraVoice::mapCC1ToDynamicPosition()
+float OrchestraVoice::mapDynamicPosition()
 {
-	// Get normalized current CC1 value
-	float currentCC1 = CC1.getNextValue();
-	float normCC1	 = currentCC1 / 127.0f;
+	if (isShortArticulation)
+	{
+		float scaledVelocity = noteGain * 127.0f; // noteGain was velocity [0,1]
+		float norm			 = scaledVelocity / 127.0f;
+		return norm * (float)(numDynamicLayers - 1);
+	}
+	else
+	{
+		// Get normalized current CC1 value
+		float currentCC1 = CC1.getNextValue();
+		float normCC1	 = currentCC1 / 127.0f;
 
-	// Get Number of Dynamic Layers
-	int	  n			 = numDynamicLayers;
-	if (n < 1)
-		return -1;
+		// Get Number of Dynamic Layers
+		int	  n			 = numDynamicLayers;
+		if (n < 1)
+			return -1;
 
-	// Determine "Dynamic Layer Position" -> Currently evenly distributed
-	float layerPosition = normCC1 * (n - 1);
-	return layerPosition;
+		// Determine "Dynamic Layer Position" -> Currently evenly distributed
+		float layerPosition = normCC1 * (n - 1);
+		return layerPosition;
+	}
 }

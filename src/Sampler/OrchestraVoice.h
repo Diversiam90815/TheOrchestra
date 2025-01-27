@@ -39,10 +39,12 @@ private:
 
 	const juce::AudioBuffer<float>				 *getBuffer(OrchestraSound *orchestraSound, int dynamicIndex, int rrIndex);
 
-	float										  mapCC1ToDynamicPosition();
+	float										  mapDynamicPosition();
 
 
 	bool										  isPlaying				= false;
+
+	bool										  isShortArticulation	= false;
 
 	double										  sourceSamplePosition	= 0.0;
 
