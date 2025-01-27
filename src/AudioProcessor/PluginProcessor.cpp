@@ -41,14 +41,10 @@ OrchestraProcessor::~OrchestraProcessor() {}
 
 void OrchestraProcessor::init()
 {
-	mOrchestraSampler.init();
+	mInstrumentController.init();
+	mOrchestraSampler.init(&mInstrumentController);
 }
 
-
-
-//==============================================================================
-//				JUCE Overrides
-//==============================================================================
 
 const String OrchestraProcessor::getName() const
 {
@@ -139,7 +135,6 @@ void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &mi
 
 	mOrchestraSampler.mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
-
 
 
 bool OrchestraProcessor::hasEditor() const

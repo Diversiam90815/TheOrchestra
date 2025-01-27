@@ -7,38 +7,22 @@
   ==============================================================================
 */
 
-
-//==============================================================================
-//				INCLUDES
-//==============================================================================
-
 #pragma once
 
 #include <JuceHeader.h>
 #include "Sampler.h"
+#include "InstrumentController.h"
 
-//==============================================================================
-//				AUDIO PROCESSOR
-//==============================================================================
 
 class OrchestraProcessor : public AudioProcessor
 {
 public:
-	//==============================================================================
-	//				CONSTRUCTOR DESTRUCTOR
-	//==============================================================================
 	OrchestraProcessor();
-
 	~OrchestraProcessor() override;
 
 	void init();
 
-
 private:
-	//==============================================================================
-	//				PRIVATE METHODS - JUCE OVERRIDES
-	//==============================================================================
-
 	void prepareToPlay(double sampleRate, int samplesPerBlock) override;
 
 	void releaseResources() override;
@@ -80,14 +64,11 @@ private:
 	void				  setCurrentInstrument(int key, Articulation articulationUsed);
 
 
-	//==============================================================================
-	//				PRIVATE OBJECTS
-	//==============================================================================
+	InstrumentController  mInstrumentController;
 
 	Sampler				  mOrchestraSampler;
 
 	friend class OrchestraEditor;
-
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OrchestraProcessor)
 };

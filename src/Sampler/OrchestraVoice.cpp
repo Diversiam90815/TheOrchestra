@@ -219,21 +219,6 @@ void OrchestraVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int
 }
 
 
-int OrchestraVoice::pickDynamicLayer(OrchestraSound *orchestraSound, float velocity)
-{
-	// dummy demo : if v <= 0.5 -> layer 0 ; else -> last layer
-
-	if (orchestraSound->dynamicLayers.size() == 0)
-		return -1;
-
-	if (velocity < 0.5f)
-		return 0;
-
-	else
-		return orchestraSound->dynamicLayers.size() - 1;
-}
-
-
 int OrchestraVoice::pickRoundRobin(OrchestraSound *orchestraSound, int dynamicIndex)
 {
 	if (dynamicIndex < 0 || dynamicIndex >= orchestraSound->dynamicLayers.size())
@@ -250,20 +235,6 @@ int OrchestraVoice::pickRoundRobin(OrchestraSound *orchestraSound, int dynamicIn
 	rrCounter++;
 
 	return rrIndex;
-}
-
-
-const juce::AudioBuffer<float> *OrchestraVoice::getBuffer(OrchestraSound *orchestraSound, int dynamicIndex, int rrIndex)
-{
-	if (dynamicIndex < 0 || dynamicIndex >= orchestraSound->dynamicLayers.size())
-		return nullptr;
-
-	auto *layer = orchestraSound->dynamicLayers[dynamicIndex];
-
-	if (rrIndex < 0 || rrIndex >= layer->roundRobinSamples.size())
-		return nullptr;
-
-	return layer->roundRobinSamples[rrIndex];
 }
 
 

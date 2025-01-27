@@ -14,6 +14,11 @@
 #include "CustomPianoRoll.h"
 #include "Logging.h"
 #include "OrchestraVoice.h"
+#include "Helper.h"
+
+/*
+Sampled note values and JSON note values do not match currently -> samples note values are one octave lower notated than the JSON instruments
+*/
 
 
 class Sampler
@@ -22,7 +27,7 @@ public:
 	Sampler();
 	~Sampler();
 
-	void				   init();
+	void				   init(InstrumentController *controller);
 
 	std::set<Articulation> getAvailableArticulationsForInstrument(const int key);
 
@@ -39,17 +44,20 @@ private:
 
 	std::vector<int>									  createNoteList(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap);
 
-	std::map<int, std::pair<int, int>>					  createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap);
+	std::map<int, std::pair<int, int>>					  createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap, const int key);
+
+	std::pair<int, int>									  getRangesOfInstrument(const int key);
 
 
 	Synthesiser											  mSampler;
 
-	AudioFormatManager									  mFormatManager; // AudioFormatManager registering the audio formats
+	AudioFormatManager									  mFormatManager;
 
 	std::unique_ptr<SamplesManagement>					  mSamplesManager;
 
-	std::atomic<bool>									  mSamplesAreReady = false;
+	std::atomic<bool>									  mSamplesAreReady		= false;
 
+	InstrumentController								 *mInstrumentController = nullptr;
 
 	friend class OrchestraProcessor;
 };
