@@ -16,7 +16,7 @@ PianoRoll::PianoRoll()
 
 	mPianoRoll = std::make_unique<CustomPianoRoll>(mPianoState, MidiKeyboardComponent::horizontalKeyboard);
 
-	mDeviceManager.initialise(2, 2, nullptr, true, "", &mAudioSetup);
+	//mDeviceManager.initialise(2, 2, nullptr, true, "", &mAudioSetup);
 
 	showPianoRoll();
 	setMidiInput();
@@ -53,19 +53,19 @@ void PianoRoll::handleIncomingMidiMessage(MidiInput *source, const MidiMessage &
 
 void PianoRoll::setMidiInput()
 {
-	auto list = juce::MidiInput::getAvailableDevices();
+	//auto list = juce::MidiInput::getAvailableDevices();
 
-	for (const auto &midiInput : list)
-	{
-		if (!mDeviceManager.isMidiInputDeviceEnabled(midiInput.identifier))
-		{
-			mDeviceManager.setMidiInputDeviceEnabled(midiInput.identifier, true);
-		}
+	//for (const auto &midiInput : list)
+	//{
+	//	if (!mDeviceManager.isMidiInputDeviceEnabled(midiInput.identifier))
+	//	{
+	//		mDeviceManager.setMidiInputDeviceEnabled(midiInput.identifier, true);
+	//	}
 
-		mDeviceManager.addMidiInputDeviceCallback(midiInput.identifier, this);
+	//	mDeviceManager.addMidiInputDeviceCallback(midiInput.identifier, this);
 
-		LOG_INFO("Found MIDI Input {}", midiInput.name.toStdString().c_str());
-	}
+	//	LOG_INFO("Found MIDI Input {}", midiInput.name.toStdString().c_str());
+	//}
 }
 
 
@@ -76,13 +76,7 @@ void PianoRoll::showPianoRoll()
 }
 
 
-void PianoRoll::handleNoteOn(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity)
-{
-	int i = 0;
-}
+void PianoRoll::handleNoteOn(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) {}
 
 
-void PianoRoll::handleNoteOff(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity)
-{
-	int i = 0;
-}
+void PianoRoll::handleNoteOff(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) {}

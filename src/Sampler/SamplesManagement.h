@@ -2,7 +2,7 @@
 /*
   ==============================================================================
 
-	Module			SamplesManagerment
+	Module			SamplesManagement
 	Description		Managing the samples
 
   ==============================================================================
@@ -16,10 +16,7 @@
 #include "Parameters.h"
 #include "Helper.h"
 
-/*
- @brief             Struct holding information of the AudioSamples, such as Instrument Name, the individual note, the round robin instance, the dynmic & articulation of the
- recording and the actual buffer holding the audio samples
-*/
+
 struct Sample
 {
 	Sample(const String &instrument, const String &note, const int &roundRobin, const Dynamics &dynamic, const Articulation &articulation, const File &file)
@@ -41,61 +38,26 @@ struct Sample
 };
 
 
-/*
- @brief             Managing the Samples and the according files
-*/
 class SamplesManagement
 {
 public:
 	SamplesManagement();
 	~SamplesManagement() = default;
 
-
 	void				init();
 
-	/*
-	 @brief             Returns a vector of Sample structs for a given instrument identified by the instrument key
-	 @param             [IN] reference to an instrumentKey (see InstrumentController::getInstrumentKey)
-	 @return            Vector collecting all Sample objects of an instrument (containing all notes and round robins)
-	*/
 	std::vector<Sample> getSamplesForInstrument(const int &instrumentKey) const;
 
 
 private:
-	//==============================================================================
-	//                          PRIVATE METHODS
-	//==============================================================================
-
-	/*
-	 @brief             Iterates through each section and their instruments and add the samples calls the 'addSample' method
-	*/
 	void							   parseSampleFiles();
 
-	/*
-	 @brief             Creates a Sample object of the current instrument and samples and adds it to the map mInstrumentSamples
-	 @param             [IN] file -> reference to the file of the Samples
-	 @param             [IN] key -> reference to the key of the instrument used (see InstrumentController::getInstrumentKey)
-	*/
 	void							   addSample(const File &file, const int &key, Articulation articulation);
 
-	/*
-	 @brief             Gets the path of the samples within the samples folder for a given instrument
-	 @param             [IN] key -> reference to the key of the instrument used (see InstrumentController::getInstrumentKey)
-	 @return            juce::File of the instrument samples path, empty file if the instrument is not found
-	*/
 	File							   getInstrumentSamplesPath(const int &instrumentKey);
 
-	/*
-	 @brief             Returns the value of the dynamic within the enum 'dynamics'
-	 @param             [IN] Dynamic as used in notation (pp, p, mp, mf, f, ff)
-	 @return            int value of the dynamic from the enum 'dynamics'
-	*/
 	int								   getIndexOfDynamics(const String &dynamicsString);
 
-
-	//==============================================================================
-	//                          PRIVATE OBJECTS
-	//==============================================================================
 
 	File							   mSamplesFolder;	   // Folder of the samples folder ( /Assets/Samples)
 

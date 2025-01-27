@@ -8,6 +8,7 @@
 */
 
 #include "Sampler.h"
+#include "InstrumentController.h" // For note ranges
 
 
 Sampler::Sampler() {}
@@ -20,9 +21,11 @@ Sampler::~Sampler()
 }
 
 
-void Sampler::init()
+void Sampler::init(InstrumentController *controller)
 {
-	mSamplesManager = std::make_unique<SamplesManagement>();
+	mInstrumentController = controller;
+
+	mSamplesManager		  = std::make_unique<SamplesManagement>();
 	mSamplesManager->init();
 
 	mFormatManager.registerBasicFormats();
@@ -68,7 +71,7 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 
 	auto filteredSamples = filterArticulation(samples, articulationUsed);
 	auto noteDynamicMap	 = createDynamicMap(filteredSamples);
-	auto noteRanges		 = createNoteRangeMap(noteDynamicMap);
+	auto noteRanges		 = createNoteRangeMap(noteDynamicMap, key);
 
 	if (noteRanges.empty())
 		return;
@@ -116,15 +119,6 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 	{
 		setSamplesAreReady(true);
 		LOG_INFO("Samples for instrument (Key : {}) are loaded! (NumSounds = {})", key, mSampler.getNumSounds());
-	}
-}
-
-
-void Sampler::setSamplesAreReady(bool value)
-{
-	if (mSamplesAreReady.load() != value)
-	{
-		mSamplesAreReady.store(value);
 	}
 }
 
@@ -179,7 +173,7 @@ std::vector<int> Sampler::createNoteList(std::map<int, std::map<int, std::vector
 }
 
 
-std::map<int, std::pair<int, int>> Sampler::createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap)
+std::map<int, std::pair<int, int>> Sampler::createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap, const int key)
 {
 	auto noteList = createNoteList(noteDynamicMap);
 	if (noteList.empty())
@@ -195,9 +189,10 @@ std::map<int, std::pair<int, int>> Sampler::createNoteRangeMap(std::map<int, std
 		noteRanges[note] = {0, 127}; // First initialize the values to 0-127 -> we refine them later
 	}
 
-	// Set the min and max for instrument (for now leave it at 0 and 127)
-	noteRanges[noteList.front()].first = 0;
-	noteRanges[noteList.back()].first  = 127;
+	// Set the min and max for instrument
+	auto noteLimits					   = getRangesOfInstrument(key);
+	noteRanges[noteList.front()].first = noteLimits.first;
+	noteRanges[noteList.back()].second  = noteLimits.second;
 
 	// Fill midpoint ranges between adjacent sampled notes
 	for (size_t i = 0; i < noteList.size() - 1; ++i)
@@ -212,6 +207,33 @@ std::map<int, std::pair<int, int>> Sampler::createNoteRangeMap(std::map<int, std
 	}
 
 	return noteRanges;
+}
+
+
+std::pair<int, int> Sampler::getRangesOfInstrument(const int key)
+{
+	if (mInstrumentController == nullptr)
+		return {};
+
+	auto   instrument	   = mInstrumentController->getInstrument(key);
+	String range		   = instrument.getRange();
+
+	String lowerNote	   = getLowerOrHigherNote(range, true);
+	String higherNote	   = getLowerOrHigherNote(range, false);
+
+	int	   lowerNoteValue  = turnNotenameIntoMidinumber(lowerNote);
+	int	   higherNoteValue = turnNotenameIntoMidinumber(higherNote);
+
+	return std::pair<int, int>(lowerNoteValue, higherNoteValue);
+}
+
+
+void Sampler::setSamplesAreReady(bool value)
+{
+	if (mSamplesAreReady.load() != value)
+	{
+		mSamplesAreReady.store(value);
+	}
 }
 
 

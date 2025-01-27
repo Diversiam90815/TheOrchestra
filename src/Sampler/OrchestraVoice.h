@@ -33,11 +33,7 @@ public:
 
 
 private:
-	int											  pickDynamicLayer(OrchestraSound *orchestraSound, float velocity);
-
 	int											  pickRoundRobin(OrchestraSound *orchestraSound, int dynamicIndex);
-
-	const juce::AudioBuffer<float>				 *getBuffer(OrchestraSound *orchestraSound, int dynamicIndex, int rrIndex);
 
 	float										  mapDynamicPosition();
 
@@ -50,7 +46,7 @@ private:
 
 	float										  pitchRatio			= 1.0f;
 
-	float										  noteGain				= 10.0f;
+	float										  noteGain				= 1.0f;
 
 	int											  noteNumber			= -1;
 

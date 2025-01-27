@@ -52,8 +52,6 @@ private:
 
 	CustomLookAndFeel	 mCustomLookAndFeel;
 
-	InstrumentController mController;
-
 	InstrumentView		 mInstrumentView;
 	InstrumentRangesView mRangesView;
 	QualitiesView		 mQualitiesView;
