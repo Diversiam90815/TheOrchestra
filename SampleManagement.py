@@ -4,7 +4,7 @@ import re
 # Main folder where each subfolder might be "Woodwinds", "Strings", "Brass", etc.
 SAMPLES_DIR = os.path.join(os.getcwd(), "Assets", "Samples")
 
-NOTE_REGEX = re.compile(r'^[A-Ga-g][#b]?\d+$')  # e.g. B2, C#3, etc.
+NOTE_REGEX = re.compile(r'^([A-Ga-g][#b]?)(\d+)$')  # capturing note name + octave
 VALID_DYNAMICS = {"p", "pp", "ppp", "f", "ff", "fff", "mp", "mf"}
 DEFAULT_DYNAMIC = "mf"
 DEFAULT_RR      = "1"
@@ -32,8 +32,13 @@ def rename_in_folder(folder_path):
                 lower_part = part.lower()
 
                 # 1) Note
-                if note_found is None and NOTE_REGEX.match(part):
-                    note_found = part
+                match = NOTE_REGEX.match(part)
+                if note_found is None and match:
+                    note_name  = match.group(1)  # e.g. C, C#, Db, etc.
+                    octave_str = match.group(2)  # e.g. 3, 4, etc.
+                    new_octave = str(int(octave_str) + 1)  # bump octave by +1
+                    # Build the new note string
+                    note_found = note_name + new_octave
                     continue
 
                 # 2) Dynamic
