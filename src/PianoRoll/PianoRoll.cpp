@@ -9,6 +9,13 @@
 
 #include "PianoRoll.h"
 
+/*
+- Ranges are set correctly (note names)
+- Samples are named one octave too low
+- 
+
+*/
+
 
 PianoRoll::PianoRoll()
 {
@@ -16,7 +23,7 @@ PianoRoll::PianoRoll()
 
 	mPianoRoll = std::make_unique<CustomPianoRoll>(mPianoState, MidiKeyboardComponent::horizontalKeyboard);
 
-	//mDeviceManager.initialise(2, 2, nullptr, true, "", &mAudioSetup);
+	mDeviceManager.initialise(2, 2, nullptr, true, "", &mAudioSetup);
 
 	showPianoRoll();
 	setMidiInput();
@@ -53,19 +60,19 @@ void PianoRoll::handleIncomingMidiMessage(MidiInput *source, const MidiMessage &
 
 void PianoRoll::setMidiInput()
 {
-	//auto list = juce::MidiInput::getAvailableDevices();
+	auto list = juce::MidiInput::getAvailableDevices();
 
-	//for (const auto &midiInput : list)
-	//{
-	//	if (!mDeviceManager.isMidiInputDeviceEnabled(midiInput.identifier))
-	//	{
-	//		mDeviceManager.setMidiInputDeviceEnabled(midiInput.identifier, true);
-	//	}
+	for (const auto &midiInput : list)
+	{
+		if (!mDeviceManager.isMidiInputDeviceEnabled(midiInput.identifier))
+		{
+			mDeviceManager.setMidiInputDeviceEnabled(midiInput.identifier, true);
+		}
 
-	//	mDeviceManager.addMidiInputDeviceCallback(midiInput.identifier, this);
+		mDeviceManager.addMidiInputDeviceCallback(midiInput.identifier, this);
 
-	//	LOG_INFO("Found MIDI Input {}", midiInput.name.toStdString().c_str());
-	//}
+		LOG_INFO("Found MIDI Input {}", midiInput.name.toStdString().c_str());
+	}
 }
 
 

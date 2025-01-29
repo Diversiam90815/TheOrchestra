@@ -192,7 +192,7 @@ std::map<int, std::pair<int, int>> Sampler::createNoteRangeMap(std::map<int, std
 	// Set the min and max for instrument
 	auto noteLimits					   = getRangesOfInstrument(key);
 	noteRanges[noteList.front()].first = noteLimits.first;
-	noteRanges[noteList.back()].second  = noteLimits.second;
+	noteRanges[noteList.back()].second = noteLimits.second;
 
 	// Fill midpoint ranges between adjacent sampled notes
 	for (size_t i = 0; i < noteList.size() - 1; ++i)
