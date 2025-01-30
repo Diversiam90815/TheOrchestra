@@ -20,7 +20,9 @@ public:
 	OrchestraProcessor();
 	~OrchestraProcessor() override;
 
-	void init();
+	void			   init();
+
+	MidiKeyboardState *getMidiKeyboardState() { return &mKeyboardState; }
 
 private:
 	void prepareToPlay(double sampleRate, int samplesPerBlock) override;
@@ -67,6 +69,9 @@ private:
 	InstrumentController  mInstrumentController;
 
 	Sampler				  mOrchestraSampler;
+
+	MidiKeyboardState	  mKeyboardState;
+
 
 	friend class OrchestraEditor;
 

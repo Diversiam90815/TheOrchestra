@@ -12,8 +12,6 @@
 CustomPianoRoll::CustomPianoRoll(MidiKeyboardState &state, Orientation orientation) : MidiKeyboardComponent(state, orientation)
 {
 	setOctaveForMiddleC(4);
-
-	//setAvailableRange(12, 127);
 }
 
 
