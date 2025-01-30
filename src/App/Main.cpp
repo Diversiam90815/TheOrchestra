@@ -21,7 +21,7 @@ public:
 			mDeviceManager.setMidiInputDeviceEnabled(device.identifier, true);
 		}
 		mDeviceManager.addMidiInputCallback({}, &mPlayer);
-
+		
 		processor.reset(new OrchestraProcessor());
 
 		editor.reset(new OrchestraEditor(*processor));
