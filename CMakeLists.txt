@@ -5,7 +5,7 @@
 
 cmake_minimum_required(VERSION 3.25)
 
-set(ORCHESTRA_VERSION 1.1.125)
+set(ORCHESTRA_VERSION 2.0.183)
 
 project(TheOrchestra VERSION ${ORCHESTRA_VERSION} LANGUAGES CXX)
 
@@ -44,7 +44,7 @@ set (SAMPLER_DIR            ${SOURCE_FILES_DIR}/Sampler )
 set (MISC_DIR               ${SOURCE_FILES_DIR}/Misc )
 set (FILE_MANAGER_DIR       ${SOURCE_FILES_DIR}/FileManager)
 set (APP_DIR                ${SOURCE_FILES_DIR}/App)
-set (LOGGER_DIR                ${SOURCE_FILES_DIR}/Logger)
+set (LOGGER_DIR             ${SOURCE_FILES_DIR}/Logger)
 
 set(ALL_PROJECT_DIRS
     ${INSTRUMENT_DIR}
@@ -194,7 +194,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
         ${PROJECT_BINARY_DIR}
         ${ALL_PROJECT_DIRS}
         ${SUBMODULES_DIR}/Logger/include
-
 )
 
 
