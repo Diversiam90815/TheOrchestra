@@ -10,14 +10,10 @@
 #include "TechniquesView.h"
 
 
-TechniquesView::TechniquesView()
-{
-}
+TechniquesView::TechniquesView() {}
 
 
-TechniquesView::~TechniquesView()
-{
-}
+TechniquesView::~TechniquesView() {}
 
 
 void TechniquesView::init()

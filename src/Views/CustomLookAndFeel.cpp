@@ -15,9 +15,7 @@ CustomLookAndFeel::CustomLookAndFeel()
 }
 
 
-CustomLookAndFeel::~CustomLookAndFeel()
-{
-}
+CustomLookAndFeel::~CustomLookAndFeel() {}
 
 
 Colour CustomLookAndFeel::getBoxBackgroundColour() const
@@ -42,6 +40,8 @@ void CustomLookAndFeel::init()
 	setColour(PopupMenu::highlightedBackgroundColourId, menuBarBackground);
 	setColour(PopupMenu::highlightedTextColourId, whiteFontColour);
 	setColour(PopupMenu::textColourId, fontColor);
+
+	setColour(ComboBox::backgroundColourId, comboBoxBackground);
 
 	setFont();
 }
@@ -184,13 +184,11 @@ void CustomLookAndFeel::drawButtonBackground(Graphics &g, Button &button, const 
 
 void CustomLookAndFeel::drawTooltip(Graphics &g, const String &text, int width, int height)
 {
-	Rectangle<int> bounds(tooltipWidth, tooltipHeight);
-
 	g.setColour(tooltipWindowBackground);
-	g.fillRoundedRectangle(bounds.toFloat(), mCornerRadius);
+	g.fillRoundedRectangle(0, 0, (float)tooltipWidth, (float)tooltipHeight, mCornerRadius);
 
 	TextLayout tl = layoutTooltipText(text);
-	tl.draw(g, bounds.toFloat());
+	tl.draw(g, Rectangle<float>(5.0f, 0.0f, (float)tooltipWidth - 10.0f, (float)tooltipHeight - 6.0f));
 }
 
 
@@ -199,9 +197,10 @@ TextLayout CustomLookAndFeel::layoutTooltipText(const String &text) const noexce
 	AttributedString s;
 	s.setJustification(Justification::centredLeft);
 	s.append(text, tooltipFont, tooltipFontColour);
+	s.setLineSpacing(1.05);
 
 	TextLayout tl;
-	tl.createLayoutWithBalancedLineLengths(s, (float)tooltipWidth);
+	tl.createLayout(s, (float)tooltipWidth - 10.0f);
 	return tl;
 }
 

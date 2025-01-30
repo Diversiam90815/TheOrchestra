@@ -5,7 +5,7 @@
 
 cmake_minimum_required(VERSION 3.25)
 
-set(ORCHESTRA_VERSION 1.1.125)
+set(ORCHESTRA_VERSION 2.0.183)
 
 project(TheOrchestra VERSION ${ORCHESTRA_VERSION} LANGUAGES CXX)
 
@@ -44,7 +44,7 @@ set (SAMPLER_DIR            ${SOURCE_FILES_DIR}/Sampler )
 set (MISC_DIR               ${SOURCE_FILES_DIR}/Misc )
 set (FILE_MANAGER_DIR       ${SOURCE_FILES_DIR}/FileManager)
 set (APP_DIR                ${SOURCE_FILES_DIR}/App)
-set (LOGGER_DIR                ${SOURCE_FILES_DIR}/Logger)
+set (LOGGER_DIR             ${SOURCE_FILES_DIR}/Logger)
 
 set(ALL_PROJECT_DIRS
     ${INSTRUMENT_DIR}
@@ -71,6 +71,8 @@ set(INSTRUMENT_FILES
 set(SAMPLER_FILES
     ${SAMPLER_DIR}/Sampler.h                ${SAMPLER_DIR}/Sampler.cpp
     ${SAMPLER_DIR}/SamplesManagement.h      ${SAMPLER_DIR}/SamplesManagement.cpp
+    ${SAMPLER_DIR}/OrchestraSound.h         ${SAMPLER_DIR}/OrchestraSound.cpp
+    ${SAMPLER_DIR}/OrchestraVoice.h         ${SAMPLER_DIR}/OrchestraVoice.cpp
 )
 
 set(PROCESSOR_FILES
@@ -87,6 +89,7 @@ set(VIEW_FILES
     ${VIEW_DIR}/InstrumentRangesView.h    ${VIEW_DIR}/InstrumentRangesView.cpp
     ${VIEW_DIR}/QualitiesView.h           ${VIEW_DIR}/QualitiesView.cpp
     ${VIEW_DIR}/TechniquesView.h          ${VIEW_DIR}/TechniquesView.cpp
+    ${VIEW_DIR}/SamplerView.h             ${VIEW_DIR}/SamplerView.cpp
     ${VIEW_DIR}/CustomMenuBar.h           ${VIEW_DIR}/CustomMenuBar.cpp
 )
 
@@ -191,7 +194,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
         ${PROJECT_BINARY_DIR}
         ${ALL_PROJECT_DIRS}
         ${SUBMODULES_DIR}/Logger/include
-
 )
 
 
@@ -276,9 +278,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_LIBS} )
 #   POST BUILD COMMAND
 ###########################################
 
-# add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-#     COMMAND ${CMAKE_COMMAND} -E copy_directory
-#         "${ASSETS_DIR}"
-#         "${ASSETS_DEST_DIR}"
-#     COMMENT "Copying Assets directory to output directory"
-# )
+ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+     COMMAND ${CMAKE_COMMAND} -E copy_directory
+         "${ASSETS_DIR}"
+         "${ASSETS_DEST_DIR}"
+     COMMENT "Copying Assets directory to output directory"
+ )

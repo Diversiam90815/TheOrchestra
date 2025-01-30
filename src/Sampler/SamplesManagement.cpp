@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-	Module			SamplesManagerment
+	Module			SamplesManagement
 	Description		Managing the samples
 
   ==============================================================================
@@ -12,6 +12,7 @@
 #include "Helper.h"
 
 #include <filesystem>
+
 
 SamplesManagement::SamplesManagement()
 {
@@ -60,16 +61,35 @@ void SamplesManagement::parseSampleFiles()
 			String instrumentStr = instrument.getFileName();
 			int	   key			 = getInstrumentKey(sectionStr, instrumentStr);
 
-			for (const auto &file : instrument.findChildFiles(File::findFiles, false))
+			if (sectionStr == "Percussion") // Pass the percussion for now, since they need different handling
+				continue;
+
+			// Find articulations
+			for (const auto &articulationFolder : instrument.findChildFiles(File::findDirectories, false))
 			{
-				addSample(file, key);
+				String		 articulationStr = articulationFolder.getFileName();
+				Articulation articulationValue{};
+				try
+				{
+					articulationValue = articulationMap.at(articulationStr);
+				}
+				catch (std::exception e)
+				{
+					LOG_ERROR("Could not locate articulation for {}. Error : {}", articulationStr.toStdString().c_str(), e.what());
+					continue;
+				}
+
+				for (const auto &file : articulationFolder.findChildFiles(File::findFiles, false))
+				{
+					addSample(file, key, articulationValue);
+				}
 			}
 		}
 	}
 }
 
 
-void SamplesManagement::addSample(const File &file, const int &key)
+void SamplesManagement::addSample(const File &file, const int &key, Articulation articulation)
 {
 	String		filename = file.getFileNameWithoutExtension();
 	StringArray parts	 = StringArray::fromTokens(filename, "_", "");
@@ -81,8 +101,8 @@ void SamplesManagement::addSample(const File &file, const int &key)
 	}
 
 	String note				= parts[0];
-	String roundRobinString = parts[1];
-	String dynamicString	= parts[2];
+	String dynamicString	= parts[1];
+	String roundRobinString = parts[2];
 
 	int	   roundRobin		= 0;
 	roundRobin				= stoi(roundRobinString.toStdString());
@@ -91,7 +111,7 @@ void SamplesManagement::addSample(const File &file, const int &key)
 
 	String instrumentName	= file.getParentDirectory().getFileName();
 
-	Sample sampleInfo(instrumentName, note, roundRobin, dynamic, file);
+	Sample sampleInfo(instrumentName, note, roundRobin, static_cast<Dynamics>(dynamic), articulation, file);
 
 	mInstrumentSamples[key].emplace_back(sampleInfo);
 
@@ -102,7 +122,28 @@ void SamplesManagement::addSample(const File &file, const int &key)
 int SamplesManagement::getIndexOfDynamics(const String &dynamicString)
 {
 	int dynamic = 0;
-	dynamic		= dynamicMap.at(dynamicString);
+
+	if (dynamicString.startsWith("v")) // If the dynamic layer is set to a v# value, we hardcode them to the following dynamic layers
+	{
+		auto it = velocityLayerMap.find(dynamicString);
+		if (it != velocityLayerMap.end())
+			return static_cast<int>(it->second);
+
+		// Fallback:
+		LOG_WARNING("Unhandled velocity layer: {}", dynamicString.toStdString().c_str());
+		return static_cast<int>(Dynamics::mezzoForte);
+	}
+	else // Otherwise see if it is in the standart dynamic map
+	{
+		auto it = dynamicMap.find(dynamicString);
+		if (it != dynamicMap.end())
+			return static_cast<int>(it->second);
+
+		// Fallback:
+		LOG_WARNING("Unknown dynamic token: {}", dynamicString.toStdString().c_str());
+		dynamic = static_cast<int>(Dynamics::mezzoForte);
+	}
+
 	return dynamic;
 }
 

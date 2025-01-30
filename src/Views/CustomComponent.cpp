@@ -44,6 +44,14 @@ void CustomComponent::addAndConfigureTextEditor(TextEditor &editor, int x, int y
 }
 
 
+void CustomComponent::addAndConfigureComboBox(ComboBox &box, int x, int y, int width, int height)
+{
+	addAndMakeVisible(box);
+	box.setBounds(x, y, width, height);
+	box.setEditableText(false);
+}
+
+
 void CustomComponent::addAndConfigureButton(TextButton &button, const String &componentName, int x, int y, int width, int height, bool initiallyVisible)
 {
 	button.setName(componentName);

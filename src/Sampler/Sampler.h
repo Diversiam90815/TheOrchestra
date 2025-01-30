@@ -13,6 +13,8 @@
 #include "SamplesManagement.h"
 #include "CustomPianoRoll.h"
 #include "Logging.h"
+#include "OrchestraVoice.h"
+#include "Helper.h"
 
 
 class Sampler
@@ -21,27 +23,37 @@ public:
 	Sampler();
 	~Sampler();
 
-	void init();
+	void				   init(InstrumentController *controller);
 
-	void addSoundsFromInstrumentToSampler(const int key);
+	std::set<Articulation> getAvailableArticulationsForInstrument(const int key);
 
-	bool getSamplesAreReady();
-	void setSamplesAreReady(bool value);
+	void				   addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed);
+
+	bool				   getSamplesAreReady();
+	void				   setSamplesAreReady(bool value);
+
 
 private:
-	SamplerSound					  *createSoundFromSample(const Sample &sample);
+	std::map<int, std::map<int, std::vector<juce::File>>> createDynamicMap(std::vector<Sample> &samples);
 
-	std::vector<Sample>				   filterSamplesFromNote(const int key, const String &note = "");
+	std::vector<Sample>									  filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed);
+
+	std::vector<int>									  createNoteList(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap);
+
+	std::map<int, std::pair<int, int>>					  createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap, const int key);
+
+	std::pair<int, int>									  getRangesOfInstrument(const int key);
 
 
-	Synthesiser						   mSampler;
+	Synthesiser											  mSampler;
 
-	AudioFormatManager				   mFormatManager; // AudioFormatManager registering the audio formats
+	AudioFormatManager									  mFormatManager;
 
-	std::unique_ptr<SamplesManagement> mSamplesManager;
+	std::unique_ptr<SamplesManagement>					  mSamplesManager;
 
-	std::atomic<bool>				   mSamplesAreReady = false;
+	std::atomic<bool>									  mSamplesAreReady		= false;
 
+	InstrumentController								 *mInstrumentController = nullptr;
 
 	friend class OrchestraProcessor;
 };

@@ -36,45 +36,21 @@ public:
 
 	~InstrumentInfo() = default;
 
-	String getName() const
-	{
-		return mName;
-	}
+	String		getName() const { return mName; }
 
-	String getRange() const
-	{
-		return mRange;
-	}
+	String		getRange() const { return mRange; }
 
-	StringArray getQualities() const
-	{
-		return mQualities;
-	}
+	StringArray getQualities() const { return mQualities; }
 
-	StringArray getInformation() const
-	{
-		return mUsefulInformation;
-	}
+	StringArray getInformation() const { return mUsefulInformation; }
 
-	StringArray getFamousWorks() const
-	{
-		return mFamousWorks;
-	}
+	StringArray getFamousWorks() const { return mFamousWorks; }
 
-	String getTransposition() const
-	{
-		return mTransposition;
-	}
+	String		getTransposition() const { return mTransposition; }
 
-	StringArray getTechniques() const
-	{
-		return mPlayingTechniques;
-	}
+	StringArray getTechniques() const { return mPlayingTechniques; }
 
-	int getKey() const
-	{
-		return mKey;
-	}
+	int			getKey() const { return mKey; }
 
 
 private:
