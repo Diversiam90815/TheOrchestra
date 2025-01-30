@@ -21,7 +21,7 @@ public:
 			mDeviceManager.setMidiInputDeviceEnabled(device.identifier, true);
 		}
 		mDeviceManager.addMidiInputCallback({}, &mPlayer);
-		
+
 		processor.reset(new OrchestraProcessor());
 
 		editor.reset(new OrchestraEditor(*processor));
@@ -34,6 +34,8 @@ public:
 		setResizable(false, false);
 		centreWithSize(getWidth(), getHeight());
 		setVisible(true);
+
+		mDeviceManager.addMidiInputCallback({}, editor->mPianoRollView.get());
 
 		LOG_INFO("Mainwindow setup finished!");
 	}

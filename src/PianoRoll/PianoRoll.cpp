@@ -9,31 +9,23 @@
 
 #include "PianoRoll.h"
 
-/*
-- Ranges are set correctly (note names)
-- Samples are named one octave too low
-- 
 
-*/
-
-
-PianoRoll::PianoRoll()
+PianoRoll::PianoRoll(MidiKeyboardState* state)
 {
-	mPianoState.addListener(this);
+	pianoState = state;
 
-	mPianoRoll = std::make_unique<CustomPianoRoll>(mPianoState, MidiKeyboardComponent::horizontalKeyboard);
+	pianoState->addListener(this);
 
-	mDeviceManager.initialise(2, 2, nullptr, true, "", &mAudioSetup);
+	mPianoRoll = std::make_unique<CustomPianoRoll>(*pianoState, MidiKeyboardComponent::horizontalKeyboard);
 
 	showPianoRoll();
-	setMidiInput();
 }
 
 
 PianoRoll::~PianoRoll()
 {
 	mPianoRoll->removeAllChangeListeners();
-	mPianoState.removeListener(this);
+	pianoState->removeListener(this);
 	mPianoRoll.reset();
 }
 
@@ -46,32 +38,17 @@ void PianoRoll::resized()
 
 void PianoRoll::handleIncomingMidiMessage(MidiInput *source, const MidiMessage &message)
 {
+
+	pianoState->processNextMidiEvent(message);
+
 	if (message.isNoteOn())
 	{
-		mPianoState.noteOn(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
+		pianoState->noteOn(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
 	}
 
 	else if (message.isNoteOff())
 	{
-		mPianoState.noteOff(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
-	}
-}
-
-
-void PianoRoll::setMidiInput()
-{
-	auto list = juce::MidiInput::getAvailableDevices();
-
-	for (const auto &midiInput : list)
-	{
-		if (!mDeviceManager.isMidiInputDeviceEnabled(midiInput.identifier))
-		{
-			mDeviceManager.setMidiInputDeviceEnabled(midiInput.identifier, true);
-		}
-
-		mDeviceManager.addMidiInputDeviceCallback(midiInput.identifier, this);
-
-		LOG_INFO("Found MIDI Input {}", midiInput.name.toStdString().c_str());
+		pianoState->noteOff(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
 	}
 }
 

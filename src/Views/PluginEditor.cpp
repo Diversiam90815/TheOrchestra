@@ -11,7 +11,7 @@
 #include "PluginEditor.h"
 
 
-OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : AudioProcessorEditor(&proc), audioProcessor(proc), mPianoRollView()
+OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : AudioProcessorEditor(&proc), audioProcessor(proc)
 {
 	init();
 	showUI();
@@ -27,7 +27,7 @@ OrchestraEditor::~OrchestraEditor()
 
 void OrchestraEditor::showUI()
 {
-	addAndMakeVisible(mPianoRollView);
+	addAndMakeVisible(*mPianoRollView);
 
 	mMenuBar.setModel(&mCustomMenuBarModel);
 	addAndMakeVisible(mMenuBar);
@@ -46,8 +46,7 @@ void OrchestraEditor::showUI()
 
 void OrchestraEditor::init()
 {
-
-	//	mController.init();
+	mPianoRollView = std::make_unique<PianoRoll>(audioProcessor.getMidiKeyboardState());
 
 	mInstrumentView.init();
 	mRangesView.init();
@@ -77,12 +76,12 @@ void OrchestraEditor::changeInstrument(int key)
 	mFamousWorksView.displayInstrument(instrument);
 	mInfoView.displayInstrument(instrument);
 
-	bool result = mPianoRollView.mPianoRoll->setMidiRanges(instrument.getQualities());
+	bool result = mPianoRollView->mPianoRoll->setMidiRanges(instrument.getQualities());
 	if (!result)
 	{
-		mPianoRollView.mPianoRoll->setMidiRanges(instrument.getRange());
+		mPianoRollView->mPianoRoll->setMidiRanges(instrument.getRange());
 	}
-	mPianoRollView.repaint();
+	mPianoRollView->repaint();
 	resized();
 }
 
@@ -110,6 +109,6 @@ void OrchestraEditor::resized()
 	mFamousWorksView.setBounds(mFamousWorksViewX, mFamousWorksViewY, mFamousWorksView.getWidth(), mFamousWorksView.getHeight());
 	mSamplerView.setBounds(mSamplerViewX, mSamplerViewY, mSamplerView.getWidth(), mSamplerView.getHeight());
 
-	mPianoRollView.setBounds(mPianoRollX, mPianoRollY, mWidth, mPianoRollHeight);
+	mPianoRollView->setBounds(mPianoRollX, mPianoRollY, mWidth, mPianoRollHeight);
 	mMenuBar.setBounds(mMenuBarX, mMenuBarY, mWidth, mMenuBarHeight);
 }

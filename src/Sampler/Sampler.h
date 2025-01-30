@@ -16,10 +16,6 @@
 #include "OrchestraVoice.h"
 #include "Helper.h"
 
-/*
-Sampled note values and JSON note values do not match currently -> samples note values are one octave lower notated than the JSON instruments
-*/
-
 
 class Sampler
 {
