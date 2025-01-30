@@ -195,6 +195,7 @@ Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
 	{
 		return Colours::black;
 	}
+	return {};
 }
 
 
