@@ -8,6 +8,7 @@
 */
 
 #pragma once
+
 #include "JuceHeader.h"
 #include "CustomLookAndFeel.h"
 #include "InstrumentInfo.h"
@@ -26,6 +27,8 @@ public:
 
 protected:
 	void addAndConfigureTextEditor(TextEditor &editor, int x, int y, int width, int height);
+
+	void addAndConfigureComboBox(ComboBox &box, int x, int y, int width, int height);
 
 	void addAndConfigureButton(TextButton &button, const String &componentName, int x, int y, int width, int height, bool initiallyVisible = true);
 
