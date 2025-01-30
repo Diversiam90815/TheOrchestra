@@ -77,7 +77,7 @@ private:
 	// Font Colours
 	const Colour  fontColor				  = Colour::fromRGB(238, 233, 218);
 	const Colour  whiteFontColour		  = Colour::fromRGB(255, 255, 255);
-	const Colour  tooltipFontColour		  = Colour::fromRGB(255, 255, 255);
+	const Colour  tooltipFontColour		  = Colour::fromRGB(0, 0, 0);
 
 	// Button Colours
 	const Colour  techniqueButtonColour	  = Colour::fromRGB(158, 104, 61);
