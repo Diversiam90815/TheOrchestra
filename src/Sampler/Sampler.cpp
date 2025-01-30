@@ -8,11 +8,10 @@
 */
 
 #include "Sampler.h"
+#include "InstrumentController.h" // For note ranges
 
 
-Sampler::Sampler()
-{
-}
+Sampler::Sampler() {}
 
 
 Sampler::~Sampler()
@@ -22,9 +21,11 @@ Sampler::~Sampler()
 }
 
 
-void Sampler::init()
+void Sampler::init(InstrumentController *controller)
 {
-	mSamplesManager = std::make_unique<SamplesManagement>();
+	mInstrumentController = controller;
+
+	mSamplesManager		  = std::make_unique<SamplesManagement>();
 	mSamplesManager->init();
 
 	mFormatManager.registerBasicFormats();
@@ -33,83 +34,88 @@ void Sampler::init()
 	const int numVoices = 64;
 	for (int i = 0; i < numVoices; ++i)
 	{
-		mSampler.addVoice(new SamplerVoice()); // Use the default SamplerVoice or your custom voice class
+		mSampler.addVoice(new OrchestraVoice());
 	}
 }
 
 
-std::vector<Sample> Sampler::filterSamplesFromNote(const int key, const String &note)
+std::set<Articulation> Sampler::getAvailableArticulationsForInstrument(const int key)
 {
-	auto				allSamplesForInstrument = mSamplesManager->getSamplesForInstrument(key);
-	std::vector<Sample> filteredSamples;
+	auto				   samples = mSamplesManager->getSamplesForInstrument(key);
 
-	for (auto &sampleFromNote : allSamplesForInstrument)
+	std::set<Articulation> availableArticulations{};
+
+	for (auto &s : samples)
 	{
-		if (note.isNotEmpty() && sampleFromNote.note != note)
-			continue;
-
-		filteredSamples.push_back(sampleFromNote);
+		availableArticulations.insert(s.articulation);
 	}
 
-	LOG_INFO("Filtered Samples with size {}", filteredSamples.size());
-	return filteredSamples;
+	return availableArticulations;
 }
 
 
-SamplerSound *Sampler::createSoundFromSample(const Sample &sample)
-{
-	int		   midiNote = CustomPianoRoll::turnNotenameIntoMidinumber(sample.note);
-
-	BigInteger midiNoteRange;
-
-	if (sample.note.contains("B") || sample.note.contains("E"))
-	{
-		midiNoteRange.setRange(midiNote, midiNote, true);
-	}
-	else
-	{
-		midiNoteRange.setRange(midiNote, midiNote + 1, true);
-	}
-
-	std::unique_ptr<AudioFormatReader> formatReader(mFormatManager.createReaderFor(sample.file));
-
-	if (formatReader != nullptr)
-	{
-		SamplerSound *newsound = new SamplerSound(sample.instrument, // name
-												  *formatReader,
-												  midiNoteRange,	 // MIDI note range
-												  midiNote,			 // root note
-												  0.1,				 // attack time in seconds
-												  0.3,				 // release time in seconds
-												  100.0				 // maximum sample length in seconds
-		);
-		return newsound;
-	}
-
-
-	LOG_ERROR("Failed to create sound from sample! (Instrument = {}, Note = {})", sample.instrument.toStdString().c_str(), sample.note.toStdString().c_str());
-	return nullptr;
-}
-
-
-void Sampler::addSoundsFromInstrumentToSampler(const int key)
+void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed)
 {
 	std::vector<SamplerSound> sounds;
 	setSamplesAreReady(false);
 
 	mSampler.clearSounds();
 
-	auto samples = filterSamplesFromNote(key);
+	auto samples = mSamplesManager->getSamplesForInstrument(key);
 
-	for (auto &sample : samples)
+	if (samples.empty())
 	{
-		SamplerSound *sound = createSoundFromSample(sample);
-		if (sound != nullptr)
-		{
-			mSampler.addSound(sound);
-		}
+		LOG_WARNING("No samples found for instrument key {}", key);
+		return;
 	}
-	if (mSampler.getNumSounds() >= 1)
+
+	auto filteredSamples = filterArticulation(samples, articulationUsed);
+	auto noteDynamicMap	 = createDynamicMap(filteredSamples);
+	auto noteRanges		 = createNoteRangeMap(noteDynamicMap, key);
+
+	if (noteRanges.empty())
+		return;
+
+	for (auto &notePair : noteDynamicMap)
+	{
+		int	  midiNote		 = notePair.first;
+		int	  rangeLow		 = noteRanges[midiNote].first;
+		int	  rangeHigh		 = noteRanges[midiNote].second;
+
+		auto *orchestraSound = new OrchestraSound(rangeLow, rangeHigh, midiNote);
+
+		orchestraSound->setArticulation(articulationUsed);
+
+		for (auto &dynPair : notePair.second)
+		{
+			int										   dynValue	  = dynPair.first;
+			auto									  &fileVector = dynPair.second;
+
+			juce::OwnedArray<juce::AudioBuffer<float>> rrBuffers;
+
+			for (auto &file : fileVector)
+			{
+				std::unique_ptr<juce::AudioFormatReader> reader(mFormatManager.createReaderFor(file));
+				if (reader)
+				{
+					auto *newBuffer = new juce::AudioBuffer<float>((int)reader->numChannels, (int)reader->lengthInSamples);
+					reader->read(newBuffer, 0, (int)reader->lengthInSamples, 0, true, true);
+					rrBuffers.add(newBuffer);
+				}
+				else
+				{
+					LOG_ERROR("Failed to read sample file: {}", file.getFileName().toStdString().c_str());
+				}
+			}
+
+			auto mappedDyn = static_cast<Dynamics>(dynValue);
+			orchestraSound->addDynamicLayer(mappedDyn, std::move(rrBuffers));
+		}
+
+		mSampler.addSound(orchestraSound);
+	}
+
+	if (mSampler.getNumSounds() > 0)
 	{
 		setSamplesAreReady(true);
 		LOG_INFO("Samples for instrument (Key : {}) are loaded! (NumSounds = {})", key, mSampler.getNumSounds());
@@ -117,16 +123,121 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key)
 }
 
 
+std::map<int, std::map<int, std::vector<juce::File>>> Sampler::createDynamicMap(std::vector<Sample> &samples)
+{
+	// Group the samples by midinote -> dynamic -> files
+	std::map<int, std::map<int, std::vector<juce::File>>> noteDynMap;
+
+	for (auto &s : samples)
+	{
+		int midiNote = s.noteMidiValue;
+		int dynValue = static_cast<int>(s.dynamic);
+		// Round Robbin' for now are not stored as value, but as count of files
+
+		noteDynMap[midiNote][dynValue].push_back(s.file);
+	}
+
+	return noteDynMap;
+}
+
+
+std::vector<Sample> Sampler::filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed)
+{
+	std::vector<Sample> filteredSamples;
+	filteredSamples.reserve(allSamples.size()); // Reserve size even though allSamples is bigger to avoid reallocation
+
+	for (auto &sample : allSamples)
+	{
+		if (sample.articulation != articulationUsed)
+			continue;
+
+		filteredSamples.push_back(sample);
+	}
+
+	return filteredSamples;
+}
+
+
+std::vector<int> Sampler::createNoteList(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap)
+{
+	// Extract all unique MIDI notes into a sorted list
+	std::vector<int> noteList;
+	noteList.reserve(noteDynamicMap.size());
+
+	for (auto &val : noteDynamicMap)
+		noteList.push_back(val.first);
+
+	std::sort(noteList.begin(), noteList.end());
+
+	return noteList;
+}
+
+
+std::map<int, std::pair<int, int>> Sampler::createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap, const int key)
+{
+	auto noteList = createNoteList(noteDynamicMap);
+	if (noteList.empty())
+	{
+		LOG_WARNING("Notelist is empty. We are skipping.");
+		return {};
+	}
+
+	// building a map of note range (low, high)
+	std::map<int, std::pair<int, int>> noteRanges;
+	for (auto &note : noteList)
+	{
+		noteRanges[note] = {0, 127}; // First initialize the values to 0-127 -> we refine them later
+	}
+
+	// Set the min and max for instrument
+	auto noteLimits					   = getRangesOfInstrument(key);
+	noteRanges[noteList.front()].first = std::min(noteLimits.first, noteList.front());
+	noteRanges[noteList.back()].second = std::max(noteLimits.second, noteList.back());
+
+	// Fill midpoint ranges between adjacent sampled notes
+	for (size_t i = 0; i < noteList.size() - 1; ++i)
+	{
+		int nA				  = noteList[i];
+		int nB				  = noteList[i + 1];
+
+		int mid				  = (nA + nB) / 2;
+
+		noteRanges[nA].second = mid;
+		noteRanges[nB].first  = mid + 1;
+	}
+
+	return noteRanges;
+}
+
+
+std::pair<int, int> Sampler::getRangesOfInstrument(const int key)
+{
+	if (mInstrumentController == nullptr)
+		return {};
+
+	auto   instrument	   = mInstrumentController->getInstrument(key);
+	String range		   = instrument.getRange();
+
+	String lowerNote	   = getLowerOrHigherNote(range, true);
+	String higherNote	   = getLowerOrHigherNote(range, false);
+
+	int	   lowerNoteValue  = turnNotenameIntoMidinumber(lowerNote);
+	int	   higherNoteValue = turnNotenameIntoMidinumber(higherNote);
+
+	return std::pair<int, int>(lowerNoteValue, higherNoteValue);
+}
+
+
 void Sampler::setSamplesAreReady(bool value)
 {
-	if (mSamplesAreReady != value)
+	if (mSamplesAreReady.load() != value)
 	{
-		mSamplesAreReady = value;
+		mSamplesAreReady.store(value);
 	}
 }
 
 
 bool Sampler::getSamplesAreReady()
 {
-	return mSamplesAreReady;
+	return mSamplesAreReady.load();
 }

@@ -12,15 +12,16 @@
 #include <cassert>
 
 
-InstrumentController::InstrumentController()
+InstrumentController::InstrumentController() {}
+
+
+InstrumentController::~InstrumentController() {}
+
+
+void InstrumentController::init()
 {
 	loadFromJSON();
-	LOG_INFO("Instruments loaded into memory");
-}
-
-
-InstrumentController::~InstrumentController()
-{
+	LOG_INFO("Instruments loaded from JSON");
 }
 
 

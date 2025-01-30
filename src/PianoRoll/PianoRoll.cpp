@@ -10,23 +10,22 @@
 #include "PianoRoll.h"
 
 
-PianoRoll::PianoRoll()
+PianoRoll::PianoRoll(MidiKeyboardState* state)
 {
-	mPianoState.addListener(this);
+	pianoState = state;
 
-	mPianoRoll = std::make_unique<CustomPianoRoll>(mPianoState, MidiKeyboardComponent::horizontalKeyboard);
+	pianoState->addListener(this);
+
+	mPianoRoll = std::make_unique<CustomPianoRoll>(*pianoState, MidiKeyboardComponent::horizontalKeyboard);
 
 	showPianoRoll();
-	setMidiInput();
-
-	mDeviceManager.initialise(2, 2, nullptr, true, "", &mAudioSetup);
 }
 
 
 PianoRoll::~PianoRoll()
 {
 	mPianoRoll->removeAllChangeListeners();
-	mPianoState.removeListener(this);
+	pianoState->removeListener(this);
 	mPianoRoll.reset();
 }
 
@@ -39,32 +38,17 @@ void PianoRoll::resized()
 
 void PianoRoll::handleIncomingMidiMessage(MidiInput *source, const MidiMessage &message)
 {
+
+	pianoState->processNextMidiEvent(message);
+
 	if (message.isNoteOn())
 	{
-		mPianoState.noteOn(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
+		pianoState->noteOn(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
 	}
 
 	else if (message.isNoteOff())
 	{
-		mPianoState.noteOff(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
-	}
-}
-
-
-void PianoRoll::setMidiInput()
-{
-	auto list = juce::MidiInput::getAvailableDevices();
-
-	for (const auto &midiInput : list)
-	{
-		if (!mDeviceManager.isMidiInputDeviceEnabled(midiInput.identifier))
-		{
-			mDeviceManager.setMidiInputDeviceEnabled(midiInput.identifier, true);
-		}
-
-		mDeviceManager.addMidiInputDeviceCallback(midiInput.identifier, this);
-
-		LOG_INFO("Found MIDI Input {}", midiInput.name.toStdString().c_str());
+		pianoState->noteOff(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
 	}
 }
 
@@ -76,13 +60,7 @@ void PianoRoll::showPianoRoll()
 }
 
 
-void PianoRoll::handleNoteOn(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity)
-{
-	int i = 0;
-}
+void PianoRoll::handleNoteOn(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) {}
 
 
-void PianoRoll::handleNoteOff(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity)
-{
-	int i = 0;
-}
+void PianoRoll::handleNoteOff(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) {}

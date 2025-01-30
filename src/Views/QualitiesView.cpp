@@ -10,14 +10,10 @@
 #include "QualitiesView.h"
 
 
-QualitiesView::QualitiesView()
-{
-}
+QualitiesView::QualitiesView() {}
 
 
-QualitiesView::~QualitiesView()
-{
-}
+QualitiesView::~QualitiesView() {}
 
 
 void QualitiesView::init()
@@ -70,7 +66,7 @@ void QualitiesView::displayInstrument(InstrumentInfo &instrument)
 		else
 		{
 			// Single note case: Use the single note as both lower and higher note
-			lowerNote  = range.trim(); 
+			lowerNote  = range.trim();
 			higherNote = range.trim();
 		}
 

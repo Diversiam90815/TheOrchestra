@@ -36,21 +36,15 @@ OrchestraProcessor::OrchestraProcessor()
 	init();
 }
 
-OrchestraProcessor::~OrchestraProcessor()
-{
-}
+OrchestraProcessor::~OrchestraProcessor() {}
 
 
 void OrchestraProcessor::init()
 {
-	// mOrchestraSampler.init();
+	mInstrumentController.init();
+	mOrchestraSampler.init(&mInstrumentController);
 }
 
-
-
-//==============================================================================
-//				JUCE Overrides
-//==============================================================================
 
 const String OrchestraProcessor::getName() const
 {
@@ -94,9 +88,7 @@ int OrchestraProcessor::getCurrentProgram()
 }
 
 
-void OrchestraProcessor::setCurrentProgram(int index)
-{
-}
+void		 OrchestraProcessor::setCurrentProgram(int index) {}
 
 
 const String OrchestraProcessor::getProgramName(int index)
@@ -105,21 +97,17 @@ const String OrchestraProcessor::getProgramName(int index)
 }
 
 
-void OrchestraProcessor::changeProgramName(int index, const String &newName)
-{
-}
+void OrchestraProcessor::changeProgramName(int index, const String &newName) {}
 
 
 void OrchestraProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
 	LOG_INFO("Prepare to play called with Samplerate = {} and SamplesPerBlock = {}.", sampleRate, samplesPerBlock);
-	// mOrchestraSampler.mSampler.setCurrentPlaybackSampleRate(sampleRate);
+	mOrchestraSampler.mSampler.setCurrentPlaybackSampleRate(sampleRate);
 }
 
 
-void OrchestraProcessor::releaseResources()
-{
-}
+void OrchestraProcessor::releaseResources() {}
 
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -139,16 +127,21 @@ void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &mi
 	auto			  totalNumInputChannels	 = getTotalNumInputChannels();
 	auto			  totalNumOutputChannels = getTotalNumOutputChannels();
 
+
+	for (const auto metadata : midiMessages)
+	{
+		const auto msg = metadata.getMessage();
+		mKeyboardState.processNextMidiEvent(msg);
+	}
+
 	for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
 		buffer.clear(i, 0, buffer.getNumSamples());
 
-	// if (!mOrchestraSampler.getSamplesAreReady())
-	//	return;
+	if (!mOrchestraSampler.getSamplesAreReady())
+		return;
 
-
-	// mOrchestraSampler.mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+	mOrchestraSampler.mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
-
 
 
 bool OrchestraProcessor::hasEditor() const
@@ -163,13 +156,15 @@ AudioProcessorEditor *OrchestraProcessor::createEditor()
 }
 
 
-void OrchestraProcessor::getStateInformation(MemoryBlock &destData)
-{
-}
+void OrchestraProcessor::getStateInformation(MemoryBlock &destData) {}
 
 
-void OrchestraProcessor::setStateInformation(const void *data, int sizeInBytes)
+void OrchestraProcessor::setStateInformation(const void *data, int sizeInBytes) {}
+
+
+void OrchestraProcessor::setCurrentInstrument(int key, Articulation articulationUsed)
 {
+	mOrchestraSampler.addSoundsFromInstrumentToSampler(key, articulationUsed);
 }
 
 
