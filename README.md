@@ -96,6 +96,17 @@ After a successful build, the application can be found in the build output direc
 - **Implement Advanced Sampling Features**: Enhance the MIDI sampling functionality by adding features like multiple articulations, dynamic control, and other expressive playing techniques to provide a more realistic and nuanced sound.
 - **Notation and Score Viewing**: Add features for viewing and interacting with musical scores, including playback functionality, annotation capabilities, and synchronization with MIDI inputs for real-time score following.
 
+
+## Showcase
+
+### Image Preview
+<img src="Examples/Example_French_Horn.png" alt="Orchestral Overview" width="640" height="360">
+
+### Demo Video
+<video width="640" height="360" controls>
+  <source src="Examples/Example_Showcase_2.0.mp4" type="video/mp4">
+</video>
+
 ---
 
 Thank you for using The Orchestra! I hope it helps you on your journey to mastering orchestration.
