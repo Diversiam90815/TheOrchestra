@@ -160,6 +160,7 @@ juce_add_plugin(${PROJECT_NAME}
     PLUGIN_CODE IOTO
     FORMATS Standalone
     PRODUCT_NAME ${PROJECT_NAME}
+    ICON_BIG ${ASSETS_DIR}/Logo/TheOrchestraLogo.png
 )
 
 juce_generate_juce_header(${PROJECT_NAME})
