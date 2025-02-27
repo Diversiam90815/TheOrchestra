@@ -103,9 +103,8 @@ After a successful build, the application can be found in the build output direc
 <img src="Examples/Example_French_Horn.png" alt="Orchestral Overview" width="640" height="360">
 
 ### Demo Video
-<video width="640" height="360" controls>
-  <source src="Examples/Example_Showcase_2.0.mp4" type="video/mp4">
-</video>
+![](Examples/Example_Showcase_2.0.gif)
+
 
 ---
 
