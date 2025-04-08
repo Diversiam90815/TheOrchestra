@@ -71,7 +71,7 @@ void SamplesManagement::parseSampleFiles()
 					{
 						for (const auto &instrument : percussionType.findChildFiles(File::findDirectories, false))
 						{
-							parsePercussionFiles(instrument);
+							parseRhythmicPercussionFiles(instrument);
 						}
 					}
 					else if (percussionTypeStr == "Melodic")
@@ -96,7 +96,32 @@ void SamplesManagement::parseSampleFiles()
 }
 
 
-void SamplesManagement::parsePercussionFiles(const File &instrument) {}
+void SamplesManagement::parseRhythmicPercussionFiles(const File &instrument)
+{
+	String instrumentName	  = instrument.getFileName();
+	String tmpPercSectionName = "Percussion";
+	int	   instrumentKey	  = getInstrumentKey(tmpPercSectionName, instrumentName);
+
+	for (const auto &articulationFolder : instrument.findChildFiles(File::findDirectories, false))
+	{
+		String		 articulationStr = articulationFolder.getFileName();
+		Articulation articulationValue{};
+		try
+		{
+			articulationValue = articulationMap.at(articulationStr);
+		}
+		catch (std::exception &e)
+		{
+			LOG_ERROR("Could not locate articulation for {}. Error: {}", articulationStr.toStdString(), e.what());
+			continue;
+		}
+
+		for (const auto &file : articulationFolder.findChildFiles(File::findFiles, false))
+		{
+			addPercussionSamples(file, instrumentKey, articulationValue);
+		}
+	}
+}
 
 
 void SamplesManagement::parseInstrumentSamples(const File &instrumentFolder, String &sectionName)
@@ -127,7 +152,61 @@ void SamplesManagement::parseInstrumentSamples(const File &instrumentFolder, Str
 }
 
 
-void SamplesManagement::addPercussionSamples(const File &instrumentFolder, int instrumentKey) {}
+void SamplesManagement::addPercussionSamples(const File &file, const int &key, Articulation articulation)
+{
+	String		filename = file.getFileNameWithoutExtension();
+	StringArray parts	 = StringArray::fromTokens(filename, "_", "");
+
+	if (parts.size() < 3)
+	{
+		LOG_WARNING("Percussion sample has wrong format. Filename is {}", filename.toStdString().c_str());
+		return;
+	}
+
+	String note				= parts[0];
+	String dynamicString	= parts[1];
+	String roundRobinString = parts[2];
+
+	int	   roundRobin		= 0;
+	try
+	{
+		roundRobin = stoi(roundRobinString.toStdString());
+	}
+	catch (std::exception &e)
+	{
+		LOG_WARNING("Failed to parse round robin value: {}, Error: {}", roundRobinString.toStdString().c_str(), e.what());
+		roundRobin = 1; // Default to first round robin
+	}
+
+	int	   dynamic		  = getIndexOfDynamics(dynamicString);
+
+	String instrumentName = file.getParentDirectory().getParentDirectory().getFileName();
+
+	// For percussion, we'll determine the MIDI note based on a mapping
+	int	   midiNote		  = turnNotenameIntoMidinumber(note);
+	if (midiNote == -1)
+	{
+		LOG_WARNING("Invalid note name for percussion: {}, defaulting to C3 (60)", note.toStdString().c_str());
+		midiNote = 60; // Default to middle C if parsing fails
+	}
+
+	PercussionSample sampleInfo(instrumentName, note, roundRobin, static_cast<Dynamics>(dynamic), articulation, file, midiNote);
+
+	// Set percussion element name if we have more than 3 parts in the filename
+	if (parts.size() > 3)
+	{
+		sampleInfo.percussionElementName = parts[3];
+	}
+	else
+	{
+		sampleInfo.percussionElementName = instrumentName;
+	}
+
+	mInstrumentSamples[key].emplace_back(sampleInfo);
+
+	LOG_INFO("Added percussion sample for instrument {} (Note = {}, MIDI = {}, Element = {})", instrumentName.toStdString().c_str(), note.toStdString().c_str(), midiNote,
+			 sampleInfo.percussionElementName.toStdString().c_str());
+}
 
 
 void SamplesManagement::addSample(const File &file, const int &key, Articulation articulation)

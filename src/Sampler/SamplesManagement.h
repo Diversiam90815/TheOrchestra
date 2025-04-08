@@ -64,11 +64,11 @@ public:
 private:
 	void							   parseSampleFiles();
 
-	void							   parsePercussionFiles(const File &instrument);
+	void							   parseRhythmicPercussionFiles(const File &instrument);
 
 	void							   parseInstrumentSamples(const File &instrumentFolder, String &sectionName);
 
-	void							   addPercussionSamples(const File &instrumentFolder, int instrumentKey);
+	void							   addPercussionSamples(const File &file, const int &key, Articulation articulation);
 
 	void							   addSample(const File &file, const int &key, Articulation articulation);
 
