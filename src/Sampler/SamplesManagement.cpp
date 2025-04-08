@@ -61,32 +61,73 @@ void SamplesManagement::parseSampleFiles()
 			String instrumentStr = instrument.getFileName();
 			int	   key			 = getInstrumentKey(sectionStr, instrumentStr);
 
-			if (sectionStr == "Percussion") // Pass the percussion for now, since they need different handling
-				continue;
-
-			// Find articulations
-			for (const auto &articulationFolder : instrument.findChildFiles(File::findDirectories, false))
+			if (sectionStr == "Percussion")
 			{
-				String		 articulationStr = articulationFolder.getFileName();
-				Articulation articulationValue{};
-				try
+				for (const auto &percussionType : section.findChildFiles(File::findDirectories, false))
 				{
-					articulationValue = articulationMap.at(articulationStr);
-				}
-				catch (std::exception e)
-				{
-					LOG_ERROR("Could not locate articulation for {}. Error : {}", articulationStr.toStdString().c_str(), e.what());
-					continue;
-				}
+					String percussionTypeStr = section.getFileName();
 
-				for (const auto &file : articulationFolder.findChildFiles(File::findFiles, false))
+					if (percussionTypeStr == "Rhythmic")
+					{
+						for (const auto &instrument : percussionType.findChildFiles(File::findDirectories, false))
+						{
+							parsePercussionFiles(instrument);
+						}
+					}
+					else if (percussionTypeStr == "Melodic")
+					{
+						for (const auto &instrument : percussionType.findChildFiles(File::findDirectories, false))
+						{
+							parseInstrumentSamples(instrument, sectionStr);
+						}
+					}
+				}
+			}
+			else
+			{
+				// Handle non-percussion instruments
+				for (const auto &instrument : section.findChildFiles(File::findDirectories, false))
 				{
-					addSample(file, key, articulationValue);
+					parseInstrumentSamples(instrument, sectionStr);
 				}
 			}
 		}
 	}
 }
+
+
+void SamplesManagement::parsePercussionFiles(const File &instrument) {}
+
+
+void SamplesManagement::parseInstrumentSamples(const File &instrumentFolder, String &sectionName)
+{
+	String instrumentName = instrumentFolder.getFileName();
+	int	   instrumentKey  = getInstrumentKey(sectionName, instrumentName);
+
+	for (const auto &articulationFolder : instrumentFolder.findChildFiles(File::findDirectories, false))
+	{
+		String		 articulationStr = articulationFolder.getFileName();
+		Articulation articulationValue{};
+
+		try
+		{
+			articulationValue = articulationMap.at(articulationStr);
+		}
+		catch (std::exception &e)
+		{
+			LOG_ERROR("Could not locate articulation for {}. Error: {}", articulationStr.toStdString(), e.what());
+			continue;
+		}
+
+		for (const auto &file : articulationFolder.findChildFiles(File::findFiles, false))
+		{
+			addSample(file, instrumentKey, articulationValue);
+		}
+	}
+}
+
+
+void SamplesManagement::addPercussionSamples(const File &instrumentFolder, int instrumentKey) {}
 
 
 void SamplesManagement::addSample(const File &file, const int &key, Articulation articulation)
