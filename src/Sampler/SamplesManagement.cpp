@@ -58,14 +58,12 @@ void SamplesManagement::parseSampleFiles()
 		for (const auto &instrument : section.findChildFiles(File::findDirectories, false))
 		{
 			String sectionStr	 = section.getFileName();
-			String instrumentStr = instrument.getFileName();
-			int	   key			 = getInstrumentKey(sectionStr, instrumentStr);
 
 			if (sectionStr == "Percussion")
 			{
 				for (const auto &percussionType : section.findChildFiles(File::findDirectories, false))
 				{
-					String percussionTypeStr = section.getFileName();
+					String percussionTypeStr = percussionType.getFileName();
 
 					if (percussionTypeStr == "Rhythmic")
 					{
@@ -229,7 +227,7 @@ void SamplesManagement::addSample(const File &file, const int &key, Articulation
 
 	int	   dynamic			= getIndexOfDynamics(dynamicString);
 
-	String instrumentName	= file.getParentDirectory().getFileName();
+	String instrumentName	= file.getParentDirectory().getParentDirectory().getFileName();
 
 	Sample sampleInfo(instrumentName, note, roundRobin, static_cast<Dynamics>(dynamic), articulation, file);
 
