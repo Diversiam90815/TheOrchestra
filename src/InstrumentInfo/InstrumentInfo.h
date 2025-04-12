@@ -28,9 +28,11 @@ public:
 				   const StringArray &famousWorks,
 				   const String		 &transposition,
 				   const StringArray &playingTechniques,
-				   int				  key)
+				   int				  key,
+				   bool				  isRhythmicPercussion = false,
+				   String			 &displayedRange	   = {})
 		: mName(name), mRange(range), mQualities(qualities), mUsefulInformation(roles), mFamousWorks(famousWorks), mTransposition(transposition),
-		  mPlayingTechniques(playingTechniques), mKey(key)
+		  mPlayingTechniques(playingTechniques), mKey(key), mIsRhythmicPercussion(isRhythmicPercussion), mDisplayedRange(displayedRange)
 	{
 	}
 
@@ -52,16 +54,22 @@ public:
 
 	int			getKey() const { return mKey; }
 
+	String		getDisplayedRange() const { return mDisplayedRange; }
+
+	bool		isRhythmicPercussion() const { return mIsRhythmicPercussion; }
 
 private:
-	String		mName;				// Name of the instrument
-	String		mRange;				// Range of notes (lowest to highest playable note)
-	StringArray mQualities;			// Sound characteristics of each section within the range
-	StringArray mUsefulInformation; // Any useful information of the instrument
-	StringArray mFamousWorks;		// Famous works presenting the qualitiy of the instrument
-	String		mTransposition;		// Information about the transposition of the instrument, if it applies
-	StringArray mPlayingTechniques; // Different playing techniques featured within the instrument's family
-	int			mKey = 0;			// 3 digit key defining the instrument (see Helper.h)
+	String		mName;						   // Name of the instrument
+	String		mRange;						   // Range of notes (lowest to highest playable note)
+	StringArray mQualities;					   // Sound characteristics of each section within the range
+	StringArray mUsefulInformation;			   // Any useful information of the instrument
+	StringArray mFamousWorks;				   // Famous works presenting the qualitiy of the instrument
+	String		mTransposition;				   // Information about the transposition of the instrument, if it applies
+	StringArray mPlayingTechniques;			   // Different playing techniques featured within the instrument's family
+	bool		mIsRhythmicPercussion = false; // If the instrument is a rhythmic percussion instrument, it will be set to true
+	String		mDisplayedRange;			   // The range that is displayed if it differs from the actual range such as for rhythmic percussion
+
+	int			mKey = 0;					   // 3 digit key defining the instrument (see Helper.h)
 
 	friend class InstrumentController;
 	friend class InstrumentInfoView;

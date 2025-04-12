@@ -41,6 +41,10 @@ private:
 
 	String						  readRangeFromJSON(DynamicObject *obj);
 
+	String						  readDisplayedRangeFromJSON(DynamicObject *obj);
+	
+	bool						  readIsRhythmicPercussionFromJSON(DynamicObject *obj);
+
 	String						  readTranspositionFromJSON(DynamicObject *obj);
 
 	StringArray					  readInformationFromJSON(DynamicObject *obj);

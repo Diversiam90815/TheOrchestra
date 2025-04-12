@@ -88,6 +88,26 @@ String InstrumentController::readRangeFromJSON(DynamicObject *obj)
 }
 
 
+String InstrumentController::readDisplayedRangeFromJSON(DynamicObject *obj)
+{
+	String range = obj->getProperty("displayedRange").toString();
+	return range;
+}
+
+
+bool InstrumentController::readIsRhythmicPercussionFromJSON(DynamicObject *obj)
+{
+	bool isRhythmicPercussion = false;
+	if (obj->hasProperty("isRhythmicPercussion"))
+	{
+		var rhythmicPercussionVar = obj->getProperty("isRhythmicPercussion");
+		if (rhythmicPercussionVar.isBool())
+			isRhythmicPercussion = rhythmicPercussionVar.toBool();
+	}
+	return isRhythmicPercussion;
+}
+
+
 String InstrumentController::readTranspositionFromJSON(DynamicObject *obj)
 {
 	String transposition = obj->getProperty("transposition").toString();
@@ -199,10 +219,19 @@ bool InstrumentController::loadFromJSON()
 			if (!instrumentVar.isObject())
 				continue;
 
-			auto	   *instrumentObj		 = instrumentVar.getDynamicObject();
+			String displayedRange{};
 
-			String		name				 = readNameFromJSON(instrumentObj);
-			String		range				 = readRangeFromJSON(instrumentObj);
+			auto  *instrumentObj		= instrumentVar.getDynamicObject();
+
+			String name					= readNameFromJSON(instrumentObj);
+			String range				= readRangeFromJSON(instrumentObj);
+
+			bool   isRhythmicPercussion = readIsRhythmicPercussionFromJSON(instrumentObj);
+			if (isRhythmicPercussion)
+			{
+				displayedRange = readDisplayedRangeFromJSON(instrumentObj);
+			}
+
 			String		transposition		 = readTranspositionFromJSON(instrumentObj);
 
 			StringArray qualities			 = readQualitiesFromJSON(instrumentObj);
@@ -223,7 +252,7 @@ bool InstrumentController::loadFromJSON()
 			int			   key			= getInstrumentKey(familyEnum, instrumentID);
 
 			// Create InstrumentInfo object
-			InstrumentInfo info(name, range, qualities, information, famousWorks, transposition, instrumentTechniques, key);
+			InstrumentInfo info(name, range, qualities, information, famousWorks, transposition, instrumentTechniques, key, isRhythmicPercussion, displayedRange);
 
 			// Add instrument to the map
 			addInstrument(info);
