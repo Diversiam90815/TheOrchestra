@@ -102,7 +102,7 @@ bool InstrumentController::readIsRhythmicPercussionFromJSON(DynamicObject *obj)
 	{
 		var rhythmicPercussionVar = obj->getProperty("isRhythmicPercussion");
 		if (rhythmicPercussionVar.isBool())
-			isRhythmicPercussion = rhythmicPercussionVar.toBool();
+			isRhythmicPercussion = rhythmicPercussionVar;
 	}
 	return isRhythmicPercussion;
 }

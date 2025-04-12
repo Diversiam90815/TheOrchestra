@@ -30,7 +30,7 @@ public:
 				   const StringArray &playingTechniques,
 				   int				  key,
 				   bool				  isRhythmicPercussion = false,
-				   String			 &displayedRange	   = {})
+				   String			  displayedRange	   = juce::String(""))
 		: mName(name), mRange(range), mQualities(qualities), mUsefulInformation(roles), mFamousWorks(famousWorks), mTransposition(transposition),
 		  mPlayingTechniques(playingTechniques), mKey(key), mIsRhythmicPercussion(isRhythmicPercussion), mDisplayedRange(displayedRange)
 	{
