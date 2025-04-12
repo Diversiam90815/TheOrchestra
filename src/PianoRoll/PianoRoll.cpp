@@ -10,7 +10,7 @@
 #include "PianoRoll.h"
 
 
-PianoRoll::PianoRoll(MidiKeyboardState* state)
+PianoRoll::PianoRoll(MidiKeyboardState *state)
 {
 	pianoState = state;
 
@@ -50,6 +50,25 @@ void PianoRoll::handleIncomingMidiMessage(MidiInput *source, const MidiMessage &
 	{
 		pianoState->noteOff(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
 	}
+}
+
+
+void PianoRoll::displayInstrumentRanges(InstrumentInfo &info)
+{
+	if (info.isRhythmicPercussion())
+	{
+		mPianoRoll->setMidiRanges(info.getDisplayedRange());
+	}
+	else
+	{
+		bool result = mPianoRoll->setMidiRanges(info.getQualities());
+		if (!result)
+		{
+			mPianoRoll->setMidiRanges(info.getRange());
+		}
+	}
+
+	repaint();
 }
 
 
