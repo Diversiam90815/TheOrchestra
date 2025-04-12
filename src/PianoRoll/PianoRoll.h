@@ -22,6 +22,7 @@ public:
 
 	std::unique_ptr<CustomPianoRoll> mPianoRoll;
 
+	void							 displayInstrumentRanges(InstrumentInfo &info);
 
 private:
 	void			   showPianoRoll();

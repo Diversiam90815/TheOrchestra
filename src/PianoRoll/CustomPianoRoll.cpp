@@ -237,6 +237,9 @@ bool CustomPianoRoll::setMidiRanges(const StringArray &qualities)
 
 bool CustomPianoRoll::setMidiRanges(const String &range)
 {
+	mMidiRanges.clear();
+	mRangesSet	= false;
+
 	// Find the dash separating the start and end notes
 	int dashPos = range.indexOf("-");
 	if (dashPos != -1)

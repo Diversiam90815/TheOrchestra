@@ -433,7 +433,7 @@
           "name": "Timpani",
           "range": "D2 - C4",
           "displayedRange" :"D1 - A1",
-          "isRythmic" : true,
+          "isRhythmicPercussion" : true,
           "transposition": "-",
           "qualities": [
             "Can vary from dull to thunderous, deep, heavy, velvety, to dry",
@@ -455,7 +455,7 @@
           "name": "Harp",
           "range": "C1 - G7",
           "transposition": "-",
-          "isRythmic":false,
+          "isRhythmicPercussion":false,
           "qualities": [
             "B1 - B3: Deep and sonorous",
             "C3 - C5: Rich, warm",
