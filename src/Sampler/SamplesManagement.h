@@ -38,6 +38,18 @@ struct Sample
 };
 
 
+struct PercussionSample : public Sample
+{
+	PercussionSample(
+		const String &instrument, const String &note, const int &roundRobin, const Dynamics &dynamic, const Articulation &articulation, const File &file, int specificMidiNote)
+		: Sample(instrument, note, roundRobin, dynamic, articulation, file)
+	{
+		noteMidiValue = specificMidiNote; // Override the noteMidiValue with the specific value for a percussion sound
+	}
+	String percussionElementName;		  // Name of the percussion element (e.g., "Snare", "Kick")
+};
+
+
 class SamplesManagement
 {
 public:
@@ -51,6 +63,12 @@ public:
 
 private:
 	void							   parseSampleFiles();
+
+	void							   parseRhythmicPercussionFiles(const File &instrument);
+
+	void							   parseInstrumentSamples(const File &instrumentFolder, String &sectionName);
+
+	void							   addPercussionSamples(const File &file, const int &key, Articulation articulation);
 
 	void							   addSample(const File &file, const int &key, Articulation articulation);
 
