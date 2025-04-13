@@ -34,7 +34,6 @@ public:
 
 	~CustomPianoRoll() = default;
 
-
 	/*
 	 @brief                 Fills the vector 'mMidiRanges' with the note ranges information from a StringArray
 	 @param                 [IN] qualities as an StringArray.

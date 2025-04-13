@@ -78,11 +78,11 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 
 	for (auto &notePair : noteDynamicMap)
 	{
-		int	  midiNote		 = notePair.first;
-		int	  rangeLow		 = noteRanges[midiNote].first;
-		int	  rangeHigh		 = noteRanges[midiNote].second;
+		int	 midiNote		= notePair.first;
+		int	 rangeLow		= noteRanges[midiNote].first;
+		int	 rangeHigh		= noteRanges[midiNote].second;
 
-		auto *orchestraSound = new OrchestraSound(rangeLow, rangeHigh, midiNote);
+		auto orchestraSound = std::make_unique<OrchestraSound>(rangeLow, rangeHigh, midiNote);
 
 		orchestraSound->setArticulation(articulationUsed);
 
@@ -112,7 +112,7 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 			orchestraSound->addDynamicLayer(mappedDyn, std::move(rrBuffers));
 		}
 
-		mSampler.addSound(orchestraSound);
+		mSampler.addSound(orchestraSound.release());
 	}
 
 	if (mSampler.getNumSounds() > 0)
@@ -144,16 +144,7 @@ std::map<int, std::map<int, std::vector<juce::File>>> Sampler::createDynamicMap(
 std::vector<Sample> Sampler::filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed)
 {
 	std::vector<Sample> filteredSamples;
-	filteredSamples.reserve(allSamples.size()); // Reserve size even though allSamples is bigger to avoid reallocation
-
-	for (auto &sample : allSamples)
-	{
-		if (sample.articulation != articulationUsed)
-			continue;
-
-		filteredSamples.push_back(sample);
-	}
-
+	std::ranges::copy_if(allSamples, std::back_inserter(filteredSamples), [articulationUsed](const Sample &sample) { return sample.articulation == articulationUsed; });
 	return filteredSamples;
 }
 
@@ -215,8 +206,11 @@ std::pair<int, int> Sampler::getRangesOfInstrument(const int key)
 	if (mInstrumentController == nullptr)
 		return {};
 
-	auto   instrument	   = mInstrumentController->getInstrument(key);
-	String range		   = instrument.getRange();
+	auto   instrument = mInstrumentController->getInstrument(key);
+	String range	  = instrument.getRange();
+
+	if (instrument.isRhythmicPercussion())
+		range = instrument.getDisplayedRange();
 
 	String lowerNote	   = getLowerOrHigherNote(range, true);
 	String higherNote	   = getLowerOrHigherNote(range, false);

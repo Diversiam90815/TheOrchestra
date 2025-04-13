@@ -22,7 +22,7 @@ Additionally, it includes basic sampling functionalities using a MIDI keyboard t
 ## Features
 
 - **Instrument Information**: Detailed descriptions of various orchestral instruments, including their history, technical details, and roles in the orchestra.
-- **MIDI Sampling**: Use a MIDI keyboard to listen to and experiment with the sounds of different instruments. *(in development)*
+- **MIDI Sampling**: Use a MIDI keyboard to listen to and experiment with the sounds of different instruments.
 - **Composition Examples**: Examples of compositions featuring different instruments to illustrate their typical use cases and highlight their versatility.
 - **Continuous Updates**: New features and instruments are regularly added as this project is still in development.
 
@@ -93,7 +93,6 @@ After a successful build, the application can be found in the build output direc
 
 
 ## Roadmap
-- **Implement Advanced Sampling Features**: Enhance the MIDI sampling functionality by adding features like multiple articulations, dynamic control, and other expressive playing techniques to provide a more realistic and nuanced sound.
 - **Notation and Score Viewing**: Add features for viewing and interacting with musical scores, including playback functionality, annotation capabilities, and synchronization with MIDI inputs for real-time score following.
 
 
