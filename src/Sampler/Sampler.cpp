@@ -206,8 +206,11 @@ std::pair<int, int> Sampler::getRangesOfInstrument(const int key)
 	if (mInstrumentController == nullptr)
 		return {};
 
-	auto   instrument	   = mInstrumentController->getInstrument(key);
-	String range		   = instrument.getRange();
+	auto   instrument = mInstrumentController->getInstrument(key);
+	String range	  = instrument.getRange();
+
+	if (instrument.isRhythmicPercussion())
+		range = instrument.getDisplayedRange();
 
 	String lowerNote	   = getLowerOrHigherNote(range, true);
 	String higherNote	   = getLowerOrHigherNote(range, false);
