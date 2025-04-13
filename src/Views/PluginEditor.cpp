@@ -78,12 +78,6 @@ void OrchestraEditor::changeInstrument(int key)
 
 	mPianoRollView->displayInstrumentRanges(instrument);
 
-	//bool result = mPianoRollView->mPianoRoll->setMidiRanges(instrument.getQualities());
-	//if (!result)
-	//{
-	//	mPianoRollView->mPianoRoll->setMidiRanges(instrument.getRange());
-	//}
-	//mPianoRollView->repaint();
 	resized();
 }
 

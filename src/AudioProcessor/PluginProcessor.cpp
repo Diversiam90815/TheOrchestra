@@ -129,12 +129,6 @@ void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &mi
 
 	mKeyboardState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
 
-	// for (const auto metadata : midiMessages)
-	//{
-	//	const auto msg = metadata.getMessage();
-	//	mKeyboardState.processNextMidiEvent(msg);
-	// }
-
 	for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
 		buffer.clear(i, 0, buffer.getNumSamples());
 
