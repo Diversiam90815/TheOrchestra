@@ -1,30 +1,34 @@
 # The Orchestra
 
-Welcome to **The Orchestra**. This C++ application serves as an introductory guide for orchestral instruments! 
-It is designed to help you explore and understand the diverse sounds and capabilities of orchestral instruments. Whether you're a newcomer to orchestration or an entry-level composer, this app provides a comprehensive overview of different instruments, with additional information such as
-- their total range, 
-- their qualities or sub ranges, 
-- some historical context,
-- the most common playing techniques and style,
-- and examples of compositions where they are prominently featured. 
+Welcome to **The Orchestra**, an interactive and educational C++ application designed to be your comprehensive guide to the world of orchestral instruments. This tool helps you explore and understand the diverse sounds, roles, and characteristics of instruments in an orchestra. Whether you are a student, an aspiring composer, or simply a music enthusiast, this application offers valuable insights and practical experience.
 
-Additionally, it includes basic sampling functionalities using a MIDI keyboard to enhance your learning experience. (Though not all instruments are available as of now)
+## Tech Stack
 
-
-## Prerequisites
-
-- **C++ Compiler**: Compatible with C++20 or higher.
-- **CMake**: Version 3.15 or higher.
-- **Git**: For cloning the repository.
-- **Python**: Version 3.x (for running `build.py`).
-
+- **Core Language**: C++20
+- **Framework**: JUCE 8
+- **Build System**: CMake
+- **IDE**: Developed and tested with Visual Studio 2022
+- **Version Control**: Git
+- **Scripting**: Python for build automation
 
 ## Features
 
-- **Instrument Information**: Detailed descriptions of various orchestral instruments, including their history, technical details, and roles in the orchestra.
-- **MIDI Sampling**: Use a MIDI keyboard to listen to and experiment with the sounds of different instruments.
-- **Composition Examples**: Examples of compositions featuring different instruments to illustrate their typical use cases and highlight their versatility.
-- **Continuous Updates**: New features and instruments are regularly added as this project is still in development.
+### Implemented
+
+- **Interactive Instrument Encyclopedia**: Access detailed information for a wide array of orchestral instruments, including:
+  - **Instrument Families**: Browse through Strings, Woodwinds, Brass, and Percussion.
+  - **Playing Ranges**: View the complete note range for each instrument.
+  - **Sound Qualities**: Explore the distinct timbral characteristics across different registers.
+  - **Historical Context**: Learn about the history and evolution of each instrument.
+  - **Playing Techniques**: Discover common and special playing techniques.
+  - **Famous Works**: Listen to examples of compositions where the instrument is prominently featured.
+
+- **Visual Keyboard with Range Highlighting**: An interactive piano roll that visually maps out the selected instrument's range, making it easy to see which notes are playable.
+
+- **Audio Previews via MIDI**: Connect a MIDI keyboard to play and listen to high-quality samples of various instruments. The built-in sampler supports multiple articulations to provide a realistic sound experience.
+
+- **Dynamic and Modern UI**: A sleek, user-friendly interface that dynamically updates as you select different instruments, providing a seamless and intuitive learning experience.
+
 
 
 ## Getting Started
@@ -92,8 +96,6 @@ This will compile the project using the build files generated during the prepara
 After a successful build, the application can be found in the build output directory. Currently, the app is set to build standalone executable binary. They can be found within the respective folder.
 
 
-## Roadmap
-- **Notation and Score Viewing**: Add features for viewing and interacting with musical scores, including playback functionality, annotation capabilities, and synchronization with MIDI inputs for real-time score following.
 
 
 ## Showcase
@@ -105,6 +107,6 @@ After a successful build, the application can be found in the build output direc
 ![](Examples/Example_Showcase_2.0.gif)
 
 
----
+## License
 
-Thank you for using The Orchestra! I hope it helps you on your journey to mastering orchestration.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
