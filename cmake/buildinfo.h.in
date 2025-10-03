@@ -1,0 +1,16 @@
+struct BuildInfo{
+    static inline const std::string CommitSHA           = "@COMMIT_SHA@";
+    static inline const std::string CommitSHAShort      = "@COMMIT_SHA_SHORT@";
+    static inline const std::string Branch              = "@GIT_BRANCH@";
+    static inline const std::string Timestamp           = "@TIMESTAMP@";
+    static inline const std::string Version             = "@PROJECT_VERSION@";
+    static inline const std::string Name                = "@PROJECT_NAME@";
+    static inline const std::string CMakeVersion        = "@CMAKE_INFO@";
+    static inline const std::string Generator           = "@GENERATOR@";
+    static inline const std::string CxxStandard         = "@CXX_STD@";
+    static inline const std::string CompilerID          = "@CXX_ID@";
+    static inline const std::string CompilerVersion     = "@CXX_VER@";
+    static inline const std::string SystemName          = "@SYS_NAME@";
+    static inline const std::string SystemVersion       = "@SYS_VER@";
+    static inline const std::string SystemCPU           = "@SYS_CPU@";
+};

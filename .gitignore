@@ -33,7 +33,12 @@ bld/
 [Ll]og/
 [Ll]ogs/
 [Bb]uild/
-[Bb]uilds/
+[Ii]nstaller/
+[Ll]ibs/
+Generated Files/
+__pycache__/
+.idea/
+
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
