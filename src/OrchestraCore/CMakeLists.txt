@@ -61,6 +61,7 @@ set(VIEW_FILES
 )
 
 set(MISC_FILES
+    ${MISC_DIR}/JuceIncludes.h
     ${MISC_DIR}/Parameters.h
     ${MISC_DIR}/Helper.h
 )
