@@ -5,7 +5,7 @@
 
 cmake_minimum_required(VERSION 3.25)
 
-set(ORCHESTRA_VERSION 2.0.212)
+set(ORCHESTRA_VERSION 2.0.218)
 
 project(TheOrchestra VERSION ${ORCHESTRA_VERSION} LANGUAGES CXX)
 
@@ -20,18 +20,6 @@ option(ENABLE_MEMCHECK  "Add memcheck target "                              OFF)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 include(CTest)
-
-if(ENABLE_FORMAT) 
-    include(Format)
-endif()
-
-if(ENABLE_CPPCHECK)
-    include(CppCheck)
-endif()
-
-if(ENABLE_DOXYGEN)
-    include(Doxygen)
-endif()
 
 # Include sub-projects.
 add_subdirectory(src)
