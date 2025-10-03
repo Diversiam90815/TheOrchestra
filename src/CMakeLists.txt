@@ -5,19 +5,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-set (SOURCE_DIR				${CMAKE_CURRENT_SOURCE_DIR}/src)
 set (ASSETS_DIR             ${PROJECT_SOURCE_DIR}/Assets)
 set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Assets")
 
-set (INSTRUMENT_DIR         ${SOURCE_DIR}/InstrumentInfo )
-set (PROCESSOR_DIR          ${SOURCE_DIR}/AudioProcessor )
-set (VIEW_DIR               ${SOURCE_DIR}/Views )
-set (PIANOROLL_DIR          ${SOURCE_DIR}/PianoRoll )
-set (SAMPLER_DIR            ${SOURCE_DIR}/Sampler )
-set (MISC_DIR               ${SOURCE_DIR}/Misc )
-set (FILE_MANAGER_DIR       ${SOURCE_DIR}/FileManager)
-set (APP_DIR                ${SOURCE_DIR}/App)
-set (LOGGER_DIR             ${SOURCE_DIR}/Logger)
+set (INSTRUMENT_DIR         ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentInfo )
+set (PROCESSOR_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/AudioProcessor )
+set (VIEW_DIR               ${CMAKE_CURRENT_SOURCE_DIR}/Views )
+set (PIANOROLL_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/PianoRoll )
+set (SAMPLER_DIR            ${CMAKE_CURRENT_SOURCE_DIR}/Sampler )
+set (MISC_DIR               ${CMAKE_CURRENT_SOURCE_DIR}/Misc )
+set (FILE_MANAGER_DIR       ${CMAKE_CURRENT_SOURCE_DIR}/FileManager)
+set (APP_DIR                ${CMAKE_CURRENT_SOURCE_DIR}/App)
+set (LOGGER_DIR             ${CMAKE_CURRENT_SOURCE_DIR}/Logger)
 
 set(ALL_PROJECT_DIRS
     ${INSTRUMENT_DIR}
@@ -95,7 +94,7 @@ set(ALL_PROJECT_FILES
     ${LOGGER_FILES}
 )
 
-source_group(TREE ${SOURCE_DIR} FILES ${ALL_FILES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${ALL_FILES})
 
 include(cpm)
 
