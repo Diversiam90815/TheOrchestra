@@ -15,7 +15,7 @@
 
 #include "Parameters.h"
 #include "Helper.h"
-#include <JuceHeader.h>
+#include "JuceIncludes.h"
 
 
 enum TypeOfImage

@@ -14,7 +14,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "Logging.h"
-
+#include "buildinfo.h"
 
 //==============================================================================
 //				AUDIO PROCESSOR
@@ -48,7 +48,7 @@ void OrchestraProcessor::init()
 
 const String OrchestraProcessor::getName() const
 {
-	return JucePlugin_Name;
+	return BuildInfo::Name;
 }
 
 
