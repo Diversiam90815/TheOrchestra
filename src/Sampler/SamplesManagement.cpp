@@ -57,7 +57,7 @@ void SamplesManagement::parseSampleFiles()
 	{
 		for (const auto &instrument : section.findChildFiles(File::findDirectories, false))
 		{
-			String sectionStr	 = section.getFileName();
+			String sectionStr = section.getFileName();
 
 			if (sectionStr == "Percussion")
 			{
