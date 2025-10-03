@@ -1,8 +1,10 @@
 import os
 import re
+from pathlib import Path
 
 # Main folder where each subfolder might be "Woodwinds", "Strings", "Brass", etc.
-SAMPLES_DIR = os.path.join(os.getcwd(), "Assets", "Samples")
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+SAMPLES_DIR  = PROJECT_ROOT / "Assets" / "Samples"
 
 NOTE_REGEX = re.compile(r'^([A-Ga-g][#b]?)(\d+)$')  # capturing note name + octave
 VALID_DYNAMICS = {"p", "pp", "ppp", "f", "ff", "fff", "mp", "mf"}
