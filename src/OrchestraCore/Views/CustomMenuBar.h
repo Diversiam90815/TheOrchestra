@@ -8,7 +8,7 @@
 */
 
 #pragma once
-#include "JuceHeader.h"
+#include "JuceIncludes.h"
 #include "Parameters.h"
 #include "Logging.h"
 

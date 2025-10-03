@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include <JuceHeader.h>
+#include "JuceIncludes.h"
 #include <map>
 #include "InstrumentInfo.h"
 #include "Helper.h"
