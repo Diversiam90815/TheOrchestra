@@ -8,7 +8,7 @@
 */
 #pragma once
 
-#include <JuceHeader.h>
+#include "JuceIncludes.h"
 #include "PluginProcessor.h"
 #include "PianoRoll.h"
 #include "InstrumentController.h"
