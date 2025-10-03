@@ -94,7 +94,16 @@ set(ALL_PROJECT_FILES
     ${LOGGER_FILES}
 )
 
-source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${ALL_FILES})
+source_group("Instruments"      FILES ${INSTRUMENT_FILES})
+source_group("Sampler"          FILES ${SAMPLER_FILES})
+source_group("Processor"        FILES ${PROCESSOR_FILES})
+source_group("Piano Roll"       FILES ${PIANOROLL_FILES})
+source_group("Views"            FILES ${VIEW_FILES})
+source_group("Misc"             FILES ${MISC_FILES})
+source_group("File Manager"     FILES ${FILE_MANAGER_FILES})
+source_group("App"              FILES ${APP_FILES})
+source_group("Logger"           FILES ${LOGGER_FILES})
+
 
 include(cpm)
 
