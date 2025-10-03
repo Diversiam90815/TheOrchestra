@@ -23,7 +23,7 @@ public:
 	InstrumentController();
 	~InstrumentController();
 
-	void init();
+	void		   init();
 
 	InstrumentInfo getInstrument(int key);
 
@@ -42,7 +42,7 @@ private:
 	String						  readRangeFromJSON(DynamicObject *obj);
 
 	String						  readDisplayedRangeFromJSON(DynamicObject *obj);
-	
+
 	bool						  readIsRhythmicPercussionFromJSON(DynamicObject *obj);
 
 	String						  readTranspositionFromJSON(DynamicObject *obj);
