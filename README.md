@@ -1,37 +1,74 @@
-# The Orchestra
+## Overview
 
-Welcome to **The Orchestra**, an interactive and educational C++ application designed to be your comprehensive guide to the world of orchestral instruments. This tool helps you explore and understand the diverse sounds, roles, and characteristics of instruments in an orchestra. Whether you are a student, an aspiring composer, or simply a music enthusiast, this application offers valuable insights and practical experience.
+TheOrchestra is a C++20 / JUCE-based orchestral playback and exploration environment.  
+It focuses on:  
+- Managing structured instrument metadata (range, transposition, techniques, roles, famous works) loaded from JSON  
+- Real-time MIDI + audio processing (standalone app and plugin-style architecture)  
+- Sample-driven playback (sampler voices + instrument selection)  
+- Fast, structured logging (fmt-backed)  
+- Comprehensive automated tests (GoogleTest) for core musical domain logic
 
-## Tech Stack
+The project is in active development and aims to become a lightweight orchestral study / sketching tool and foundation for more advanced articulation and performance modeling.
 
-- **Core Language**: C++20
-- **Framework**: JUCE 8
-- **Build System**: CMake
-- **IDE**: Developed and tested with Visual Studio 2022
-- **Version Control**: Git
-- **Scripting**: Python for build automation
 
 ## Features
 
-### Implemented
+### Instrument Data & Metadata
+- JSON-driven instrument catalog (Woodwinds, Brass, Strings, Percussion)
+- Family -> instrument technique inheritance with instrument-level overrides
+- Rich descriptors:  
+  - Playing techniques  
+  - Qualities / timbral zones  
+  - Transposition (including octave transposers)  
+  - Displayed vs actual range (e.g. percussion, harp)  
+  - Famous works & usage roles
+- Deterministic lookup by numeric key (e.g. 301 = Violin) with caching
 
-- **Interactive Instrument Encyclopedia**: Access detailed information for a wide array of orchestral instruments, including:
-  - **Instrument Families**: Browse through Strings, Woodwinds, Brass, and Percussion.
-  - **Playing Ranges**: View the complete note range for each instrument.
-  - **Sound Qualities**: Explore the distinct timbral characteristics across different registers.
-  - **Historical Context**: Learn about the history and evolution of each instrument.
-  - **Playing Techniques**: Discover common and special playing techniques.
-  - **Famous Works**: Listen to examples of compositions where the instrument is prominently featured.
+### Audio & MIDI Engine
+- JUCE `AudioProcessor` + `AudioProcessorEditor` architecture
+- Automatic enumeration & enabling of all available MIDI inputs on startup
+- Sample playback via custom sampler classes (tested)
+- Real-time safe routing through `AudioDeviceManager` and `AudioProcessorPlayer`
 
-- **Visual Keyboard with Range Highlighting**: An interactive piano roll that visually maps out the selected instrument's range, making it easy to see which notes are playable.
+### Robust Testing
+- GoogleTest suite covering:
+  - JSON load integrity & presence of all expected instruments
+  - Technique inheritance and override logic
+  - Transposition semantics (octave / interval / non-transposing)
+  - Range formatting consistency
+  - Sampler integration & voice behavior
+  - File management (paths, asset resolution)
 
-- **Audio Previews via MIDI**: Connect a MIDI keyboard to play and listen to high-quality samples of various instruments. The built-in sampler supports multiple articulations to provide a realistic sound experience.
+### Logging & Diagnostics
+- Central logging abstraction using `{fmt}` formatting
+- Startup build info (branch, commit, timestamp)
+- Structured device enablement traces
 
-- **Dynamic and Modern UI**: A sleek, user-friendly interface that dynamically updates as you select different instruments, providing a seamless and intuitive learning experience.
+### Code Quality & Structure
+- C++20 (concepts-ready codebase)
+- Separation of concerns:
+  - Core domain (instrument, sampler, helper utilities)
+  - App/UI layer (standalone window)
+  - Tests
+- Vendor / third-party dependencies vendored under `_deps`
 
 
 
-## Getting Started
+## Technology Stack
+
+| Layer            | Technologies |
+|------------------|-------------|
+| Core / Engine    | C++20, JUCE modules |
+| UI / Windowing   | JUCE (`DocumentWindow`, custom editor) |
+| Audio / MIDI     | JUCE audio & MIDI services |
+| Logging          | fmt (via embedded logger) |
+| Build System     | CMake |
+| Testing          | GoogleTest |
+| JSON / Data      | JUCE `var` / `DynamicObject` parsing |
+| Tooling (optional) | Clang-Format, CppCheck, Doxygen |
+
+
+## Build the project
 
 ### Cloning the Repository
 
@@ -41,22 +78,7 @@ Clone the repository including:
 git clone git@github.com:Diversiam90815/TheOrchestra.git
 ```
 
-Keep in mind that you also need to check out the submodules with this project. To do so, you can include --recurse-submodules within the clone command (with git version 2.13 or higher):
-
-```bash
-git clone --recurse-submdules git@github.com:Diversiam90815/TheOrchestra.git
-```
-
-or if you already cloned the repository call
-
-```bash
-git submodule update --init --recursive
-```
-
-
-### Build Instructions
-
-#### Prepare the Build Environment
+### Prepare the Build Environment
 
 Before building the project, you need to generate the necessary build files using CMake. This can be done using the `build.py` script with the `--prepare` or `-p` option. The target build configuration can be adjusted in the build.py file: Currently it is set to build a Visual Studio 2022 project.
 
@@ -71,7 +93,7 @@ For a **Debug** build, add the `--debug` or `-d` option:
 python build.py -pd
 ```
 
-#### Build the Project
+### Build the Project
 
 To build the project, use the `--build` or `-b` option:
 
@@ -94,8 +116,6 @@ This will compile the project using the build files generated during the prepara
 ### Running the Plugin
 
 After a successful build, the application can be found in the build output directory. Currently, the app is set to build standalone executable binary. They can be found within the respective folder.
-
-
 
 
 ## Showcase
