@@ -5,6 +5,7 @@
 #include <Logging.h>
 #include "buildinfo.h"
 
+
 class MainWindow : public DocumentWindow
 {
 public:
