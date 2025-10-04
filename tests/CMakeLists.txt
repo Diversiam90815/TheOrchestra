@@ -11,18 +11,29 @@ set(SamplerTest_Files
 
 set(InstrumentTest_Files
     InstrumentTest/InstrumentControllerTest.cpp
+    InstrumentTest/InstrumentInfoTest.cpp
+    InstrumentTest/HelperTest.cpp
 )
+
+set(FileManagerTest_Files
+    FileManagerTest/FileManagerTest.cpp
+)
+
 
 set(Test_Files
     ${SamplerTest_Files}
     ${InstrumentTest_Files}
+    ${FileManagerTest_Files}
 )
 
-source_group("Sampler Tests" FILES ${SamplerTest_Files})
-source_group("InstrumentTests" FILES ${InstrumentTest_Files})
+
+source_group("Sampler Tests"        FILES ${SamplerTest_Files})
+source_group("Instrument Tests"     FILES ${InstrumentTest_Files})
+source_group("File Manager Tests"   FILES ${FileManagerTest_Files})
 
 
 add_executable(TheOrchestra.Tests ${Test_Files})
+
 
 target_link_libraries(TheOrchestra.Tests PRIVATE TheOrchestraCore)
 
