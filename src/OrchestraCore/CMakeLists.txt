@@ -39,7 +39,6 @@ set(PROCESSOR_FILES
     ${PROCESSOR_DIR}/PluginProcessor.h    ${PROCESSOR_DIR}/PluginProcessor.cpp
 )
 
-
 set(MISC_FILES
     ${MISC_DIR}/JuceIncludes.h
     ${MISC_DIR}/Parameters.h
