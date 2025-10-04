@@ -11,7 +11,6 @@
 
 #include "JuceIncludes.h"
 #include "SamplesManagement.h"
-#include "CustomPianoRoll.h"
 #include "Logging.h"
 #include "OrchestraVoice.h"
 #include "Helper.h"

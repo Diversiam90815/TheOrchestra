@@ -12,7 +12,6 @@
 //==============================================================================
 
 #include "PluginProcessor.h"
-#include "PluginEditor.h"
 #include "Logging.h"
 #include "buildinfo.h"
 
@@ -142,12 +141,6 @@ void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &mi
 bool OrchestraProcessor::hasEditor() const
 {
 	return true;
-}
-
-
-AudioProcessorEditor *OrchestraProcessor::createEditor()
-{
-	return new OrchestraEditor(*this);
 }
 
 

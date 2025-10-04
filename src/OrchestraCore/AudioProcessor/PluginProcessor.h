@@ -13,6 +13,7 @@
 #include "Sampler.h"
 #include "InstrumentController.h"
 
+class OrchestraEditor;
 
 class OrchestraProcessor : public AudioProcessor
 {

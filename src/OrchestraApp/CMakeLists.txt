@@ -87,6 +87,8 @@ target_compile_options(${TARGET_NAME}
         ${DEFAULT_CXX_EXCEPTION_HANDLING}
 )
 
-set (PROJECT_LIBS   TheOrchestraCore    )
+set (PROJECT_LIBS   TheOrchestraCore 
+                    TheOrchestraUI
+)
 
 target_link_libraries(${TARGET_NAME} PRIVATE ${PROJECT_LIBS} )
