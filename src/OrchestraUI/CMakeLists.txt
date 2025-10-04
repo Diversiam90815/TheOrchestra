@@ -3,44 +3,111 @@ set(TARGET_NAME TheOrchestraUI)
 set (ASSETS_DIR             ${PROJECT_SOURCE_DIR}/Assets)
 set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets")
 
-set (VIEW_DIR               ${CMAKE_CURRENT_SOURCE_DIR}/Views )
-set (PIANOROLL_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/PianoRoll )
+set (CustomComponent_Dir        ${CMAKE_CURRENT_SOURCE_DIR}/CustomComponent )
+set (PianoRoll_Dir              ${CMAKE_CURRENT_SOURCE_DIR}/PianoRoll )
+set (CustomLookAndFeel_Dir      ${CMAKE_CURRENT_SOURCE_DIR}/CustomLookAndFeel )
+set (CustomMenuBar_Dir          ${CMAKE_CURRENT_SOURCE_DIR}/CustomMenuBar )
+set (InstrumentFamousWorks_Dir  ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentFamousWorks )
+set (InstrumentInfo_Dir         ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentInfo )
+set (InstrumentQualities_Dir    ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentQualities )
+set (InstrumentTechniques_Dir   ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentTechniques )
+set (InstrumentHeading_Dir      ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentHeading )
+set (InstrumentRanges_Dir       ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentRanges )
+set (OrchestraEditor_Dir        ${CMAKE_CURRENT_SOURCE_DIR}/OrchestraEditor )
+set (Sampler_Dir                ${CMAKE_CURRENT_SOURCE_DIR}/Sampler )
+set (Helper_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/Helper)
+
 
 set(ALL_PROJECT_DIRS
-    ${VIEW_DIR}
-    ${PIANOROLL_DIR}
+    ${CustomComponent_Dir}
+    ${PianoRoll_Dir}
+    ${CustomLookAndFeel_Dir}
+    ${CustomMenuBar_Dir}
+    ${InstrumentFamousWorks_Dir}
+    ${InstrumentInfo_Dir}
+    ${InstrumentQualities_Dir}
+    ${InstrumentTechniques_Dir}
+    ${InstrumentHeading_Dir}
+    ${InstrumentRanges_Dir}
+    ${OrchestraEditor_Dir}
+    ${Sampler_Dir}
+    ${Helper_Dir}
 )
 
-set(VIEW_FILES
-    ${VIEW_DIR}/CreateEditor.cpp
-    ${VIEW_DIR}/PluginEditor.h            ${VIEW_DIR}/PluginEditor.cpp
-    ${VIEW_DIR}/CustomLookAndFeel.h       ${VIEW_DIR}/CustomLookAndFeel.cpp
-    ${VIEW_DIR}/CustomComponent.h         ${VIEW_DIR}/CustomComponent.cpp
-    ${VIEW_DIR}/InstrumentView.h          ${VIEW_DIR}/InstrumentView.cpp
-    ${VIEW_DIR}/FamousWorksView.h         ${VIEW_DIR}/FamousWorksView.cpp
-    ${VIEW_DIR}/InformationView.h         ${VIEW_DIR}/InformationView.cpp
-    ${VIEW_DIR}/InstrumentRangesView.h    ${VIEW_DIR}/InstrumentRangesView.cpp
-    ${VIEW_DIR}/QualitiesView.h           ${VIEW_DIR}/QualitiesView.cpp
-    ${VIEW_DIR}/TechniquesView.h          ${VIEW_DIR}/TechniquesView.cpp
-    ${VIEW_DIR}/SamplerView.h             ${VIEW_DIR}/SamplerView.cpp
-    ${VIEW_DIR}/CustomMenuBar.h           ${VIEW_DIR}/CustomMenuBar.cpp
+set(CustomComponent_Files
+    ${CustomComponent_Dir}/CustomComponent.h         ${CustomComponent_Dir}/CustomComponent.cpp
 )
 
-set(PIANOROLL_FILES
-    ${PIANOROLL_DIR}/PianoRoll.h            ${PIANOROLL_DIR}/PianoRoll.cpp
-    ${PIANOROLL_DIR}/CustomPianoRoll.h      ${PIANOROLL_DIR}/CustomPianoRoll.cpp
+set(PianoRoll_Files
+    ${PianoRoll_Dir}/PianoRoll.h            ${PianoRoll_Dir}/PianoRoll.cpp
+    ${PianoRoll_Dir}/CustomPianoRoll.h            ${PianoRoll_Dir}/CustomPianoRoll.cpp
+)
+
+set(CustomLookAndFeel_Files
+    ${CustomLookAndFeel_Dir}/CustomLookAndFeel.h       ${CustomLookAndFeel_Dir}/CustomLookAndFeel.cpp
+)
+
+set(CustomMenuBar_Dir
+    ${CustomMenuBar_Dir}/CustomMenuBar.h            ${CustomMenuBar_Dir}/CustomMenuBar.cpp
+)
+
+set(InstrumentFamousWorks_Files
+    ${InstrumentFamousWorks_Dir}/FamousWorksView.h         ${InstrumentFamousWorks_Dir}/FamousWorksView.cpp
+)
+
+set(InstrumentInfo_Files
+    ${InstrumentInfo_Dir}/InformationView.h         ${InstrumentInfo_Dir}/InformationView.cpp
+)
+
+set(InstrumentQualities_Files
+    ${InstrumentQualities_Dir}/QualitiesView.h           ${InstrumentQualities_Dir}/QualitiesView.cpp
+)
+
+set(InstrumentTechniques_Files
+    ${InstrumentTechniques_Dir}/TechniquesView.h          ${InstrumentTechniques_Dir}/TechniquesView.cpp
+)
+
+set(InstrumentHeading_Files
+    ${InstrumentHeading_Dir}/InstrumentView.h         ${InstrumentHeading_Dir}/InstrumentView.cpp
+)
+
+set(InstrumentRanges_Files
+    ${InstrumentRanges_Dir}/InstrumentRangesView.h         ${InstrumentRanges_Dir}/InstrumentRangesView.cpp
+)
+
+set(OrchestraEditor_Files
+    ${OrchestraEditor_Dir}/PluginEditor.h           ${OrchestraEditor_Dir}/PluginEditor.cpp
+)
+
+set(Sampler_Files
+    ${Sampler_Dir}/SamplerView.h          ${Sampler_Dir}/SamplerView.cpp
+)
+
+set(Helper_Files
+    ${Helper_Dir}/CreateEditor.cpp
 )
 
 set(UI_PROJECT_FILES
-    ${VIEW_FILES}
-    ${PIANOROLL_FILES}
+    ${CustomComponent_Files}
+    ${PianoRoll_Files}
+    ${CustomLookAndFeel_Files}
+    ${CustomMenuBar_Dir}
+    ${InstrumentFamousWorks_Files}
+    ${InstrumentInfo_Files}
+    ${InstrumentQualities_Files}
+    ${InstrumentTechniques_Files}
+    ${InstrumentHeading_Files}
+    ${InstrumentRanges_Files}
+    ${OrchestraEditor_Files}
+    ${Sampler_Files}
+    ${Helper_Files}
 )
 
-source_group("Views"            FILES ${VIEW_FILES})
-source_group("Piano Roll"       FILES ${PIANOROLL_FILES})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${UI_PROJECT_FILES})
 
 
 add_library(${TARGET_NAME} STATIC ${UI_PROJECT_FILES})
+
 
 if(ENABLE_CPPCHECK)
 	AddCppCheck(${TARGET_NAME})
