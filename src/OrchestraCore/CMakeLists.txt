@@ -5,18 +5,16 @@ set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets")
 
 set (INSTRUMENT_DIR         ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentInfo )
 set (PROCESSOR_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/AudioProcessor )
-set (PIANOROLL_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/PianoRoll )
 set (SAMPLER_DIR            ${CMAKE_CURRENT_SOURCE_DIR}/Sampler )
 set (MISC_DIR               ${CMAKE_CURRENT_SOURCE_DIR}/Misc )
 set (FILE_MANAGER_DIR       ${CMAKE_CURRENT_SOURCE_DIR}/FileManager)
 set (APP_DIR                ${CMAKE_CURRENT_SOURCE_DIR}/App)
 set (LOGGER_DIR             ${CMAKE_CURRENT_SOURCE_DIR}/Logger)
-set (VIEW_DIR               ${CMAKE_CURRENT_SOURCE_DIR}/Views )
+
 
 set(ALL_PROJECT_DIRS
     ${INSTRUMENT_DIR}
     ${PROCESSOR_DIR}
-    ${PIANOROLL_DIR}
     ${SAMPLER_DIR}
     ${VIEW_DIR}
     ${MISC_DIR}
@@ -41,24 +39,6 @@ set(PROCESSOR_FILES
     ${PROCESSOR_DIR}/PluginProcessor.h    ${PROCESSOR_DIR}/PluginProcessor.cpp
 )
 
-set(PIANOROLL_FILES
-    ${PIANOROLL_DIR}/PianoRoll.h            ${PIANOROLL_DIR}/PianoRoll.cpp
-    ${PIANOROLL_DIR}/CustomPianoRoll.h      ${PIANOROLL_DIR}/CustomPianoRoll.cpp
-)
-
-set(VIEW_FILES
-    ${VIEW_DIR}/PluginEditor.h            ${VIEW_DIR}/PluginEditor.cpp
-    ${VIEW_DIR}/CustomLookAndFeel.h       ${VIEW_DIR}/CustomLookAndFeel.cpp
-    ${VIEW_DIR}/CustomComponent.h         ${VIEW_DIR}/CustomComponent.cpp
-    ${VIEW_DIR}/InstrumentView.h          ${VIEW_DIR}/InstrumentView.cpp
-    ${VIEW_DIR}/FamousWorksView.h         ${VIEW_DIR}/FamousWorksView.cpp
-    ${VIEW_DIR}/InformationView.h         ${VIEW_DIR}/InformationView.cpp
-    ${VIEW_DIR}/InstrumentRangesView.h    ${VIEW_DIR}/InstrumentRangesView.cpp
-    ${VIEW_DIR}/QualitiesView.h           ${VIEW_DIR}/QualitiesView.cpp
-    ${VIEW_DIR}/TechniquesView.h          ${VIEW_DIR}/TechniquesView.cpp
-    ${VIEW_DIR}/SamplerView.h             ${VIEW_DIR}/SamplerView.cpp
-    ${VIEW_DIR}/CustomMenuBar.h           ${VIEW_DIR}/CustomMenuBar.cpp
-)
 
 set(MISC_FILES
     ${MISC_DIR}/JuceIncludes.h
@@ -78,21 +58,18 @@ set(CORE_PROJECT_FILES
     ${INSTRUMENT_FILES}
     ${SAMPLER_FILES}
     ${PROCESSOR_FILES}
-    ${PIANOROLL_FILES}
     ${MISC_FILES}
     ${FILE_MANAGER_FILES}
     ${LOGGER_FILES}
-    ${VIEW_FILES}
 )
+
 
 source_group("Instruments"      FILES ${INSTRUMENT_FILES})
 source_group("Sampler"          FILES ${SAMPLER_FILES})
 source_group("Processor"        FILES ${PROCESSOR_FILES})
-source_group("Piano Roll"       FILES ${PIANOROLL_FILES})
 source_group("Misc"             FILES ${MISC_FILES})
 source_group("File Manager"     FILES ${FILE_MANAGER_FILES})
 source_group("Logger"           FILES ${LOGGER_FILES})
-source_group("Views"            FILES ${VIEW_FILES})
 
 
 CPMAddPackage(
@@ -124,11 +101,6 @@ endif()
 if(ENABLE_DOXYGEN)
 	Doxygen(Chess_Engine ${SOURCE_DIR})
 endif()
-
-
-juce_add_binary_data(FontBinaryData
-    SOURCES ${ASSETS_DIR}/Font/Instrument-Serif/InstrumentSerif-Regular.ttf
-)
 
 
 target_include_directories(${TARGET_NAME} PUBLIC
@@ -182,7 +154,6 @@ target_compile_options(${TARGET_NAME}
 set (PROJECT_LIBS   juce::juce_audio_utils
                     juce::juce_audio_plugin_client
                     juce::juce_core
-                    FontBinaryData
                     Logger
 )
 

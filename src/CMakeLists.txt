@@ -13,4 +13,5 @@ if(ENABLE_DOXYGEN)
 endif()
 
 add_subdirectory(OrchestraCore)
+add_subdirectory(OrchestraUI)
 add_subdirectory(OrchestraApp)

@@ -134,7 +134,7 @@ std::filesystem::path FileManager::getLoggingPath()
 std::filesystem::path FileManager::getProjectDirectory()
 {
 	std::filesystem::path cwd		 = std::filesystem::current_path();
-	std::filesystem::path projectDir = cwd.parent_path().parent_path();
+	std::filesystem::path projectDir = cwd.parent_path().parent_path().parent_path();
 	return projectDir;
 }
 
