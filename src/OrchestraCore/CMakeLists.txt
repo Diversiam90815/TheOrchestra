@@ -82,6 +82,7 @@ set(CORE_PROJECT_FILES
     ${MISC_FILES}
     ${FILE_MANAGER_FILES}
     ${LOGGER_FILES}
+    ${VIEW_FILES}
 )
 
 source_group("Instruments"      FILES ${INSTRUMENT_FILES})
