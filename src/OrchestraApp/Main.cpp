@@ -67,9 +67,9 @@ class Application : public JUCEApplication
 public:
 	Application() = default;
 
-	const String getApplicationName() override { return JucePlugin_Name; }
+	const String getApplicationName() override { return BuildInfo::Name; }
 
-	const String getApplicationVersion() override { return String(JucePlugin_VersionString); }
+	const String getApplicationVersion() override { return String(BuildInfo::Version); }
 
 	void		 initialise(const String &) override
 	{
