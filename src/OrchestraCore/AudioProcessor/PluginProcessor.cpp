@@ -1,23 +1,14 @@
 /*
   ==============================================================================
-
 	Module			PluginProcessor
 	Description		Audio Plugin Processor
-
   ==============================================================================
 */
 
-//==============================================================================
-//				INCLUDES
-//==============================================================================
 
 #include "PluginProcessor.h"
 #include "Logging.h"
 #include "buildinfo.h"
-
-//==============================================================================
-//				AUDIO PROCESSOR
-//==============================================================================
 
 
 OrchestraProcessor::OrchestraProcessor()
@@ -35,8 +26,6 @@ OrchestraProcessor::OrchestraProcessor()
 	init();
 }
 
-OrchestraProcessor::~OrchestraProcessor() {}
-
 
 void OrchestraProcessor::init()
 {
@@ -45,68 +34,11 @@ void OrchestraProcessor::init()
 }
 
 
-const String OrchestraProcessor::getName() const
-{
-	return BuildInfo::Name;
-}
-
-
-bool OrchestraProcessor::acceptsMidi() const
-{
-	return true;
-}
-
-
-bool OrchestraProcessor::producesMidi() const
-{
-	return false;
-}
-
-
-bool OrchestraProcessor::isMidiEffect() const
-{
-	return false;
-}
-
-
-double OrchestraProcessor::getTailLengthSeconds() const
-{
-	return 0.0;
-}
-
-
-int OrchestraProcessor::getNumPrograms()
-{
-	return 1;
-}
-
-
-int OrchestraProcessor::getCurrentProgram()
-{
-	return 0;
-}
-
-
-void		 OrchestraProcessor::setCurrentProgram(int index) {}
-
-
-const String OrchestraProcessor::getProgramName(int index)
-{
-	return {};
-}
-
-
-void OrchestraProcessor::changeProgramName(int index, const String &newName) {}
-
-
 void OrchestraProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
 	LOG_INFO("Prepare to play called with Samplerate = {} and SamplesPerBlock = {}.", sampleRate, samplesPerBlock);
 	mOrchestraSampler.mSampler.setCurrentPlaybackSampleRate(sampleRate);
 }
-
-
-void OrchestraProcessor::releaseResources() {}
 
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -136,18 +68,6 @@ void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &mi
 
 	mOrchestraSampler.mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
-
-
-bool OrchestraProcessor::hasEditor() const
-{
-	return true;
-}
-
-
-void OrchestraProcessor::getStateInformation(MemoryBlock &destData) {}
-
-
-void OrchestraProcessor::setStateInformation(const void *data, int sizeInBytes) {}
 
 
 void OrchestraProcessor::setCurrentInstrument(int key, Articulation articulationUsed)
