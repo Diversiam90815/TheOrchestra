@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			Sampler
 	Description		Sampling the instrument and making them ready for playback
-
   ==============================================================================
 */
 
@@ -19,7 +17,7 @@
 class Sampler
 {
 public:
-	Sampler();
+	Sampler() = default;
 	~Sampler();
 
 	void				   init(InstrumentController *controller);

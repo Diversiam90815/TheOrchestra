@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			OrchestraVoice
 	Description		Custom voice that picks which dynamic layer & round-robin is being played
-
   ==============================================================================
 */
 
@@ -84,9 +82,6 @@ void OrchestraVoice::stopNote(float velocity, bool allowTailOff)
 	clearCurrentNote();
 	isPlaying = false;
 }
-
-
-void OrchestraVoice::pitchWheelMoved(int newPitchWheelValue) {}
 
 
 void OrchestraVoice::controllerMoved(int controllerNumber, int newControllerValue)

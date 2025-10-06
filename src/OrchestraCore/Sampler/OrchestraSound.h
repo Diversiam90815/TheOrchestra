@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			OrchestraSound
 	Description		Custom sound class holding multiple dynamic layers & round-robins per single MIDI note/range
-
   ==============================================================================
 */
 
@@ -12,6 +10,7 @@
 #include "JuceIncludes.h"
 #include "Parameters.h"
 #include "SamplesManagement.h"
+
 
 struct DynamicLayer
 {
@@ -25,12 +24,11 @@ class OrchestraSound : public juce::SynthesiserSound
 public:
 	OrchestraSound(int noteRangeStart, int noteRangeEnd, int rootNote);
 
-	~OrchestraSound() override;
+	~OrchestraSound() = default;
 
 	void						   addDynamicLayer(Dynamics dynamicValue, juce::OwnedArray<juce::AudioBuffer<float>> &&rrSamples);
 
 	bool						   appliesToNote(int midiNoteNumber) override;
-
 	bool						   appliesToChannel(int midiChannel) override;
 
 	int							   getRootNote() const;
@@ -44,7 +42,6 @@ private:
 	static juce::BigInteger getNoteRangeBit(int start, int end);
 
 	Articulation			articulation = Articulation::sustain; // Default value -> will be set at creation
-
 
 
 	int						noteRangeStart;
