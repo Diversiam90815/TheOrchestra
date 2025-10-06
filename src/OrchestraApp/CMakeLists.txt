@@ -14,7 +14,7 @@ CPMAddPackage(
         VERSION 8.0.3
 )
 
-juce_add_plugin(${TARGET_NAME}
+juce_add_gui_app(${TARGET_NAME}
     COMPANY_NAME "DiversiamProduction"
     PLUGIN_MANUFACTURER_CODE 3160
     PLUGIN_CODE IOTO
