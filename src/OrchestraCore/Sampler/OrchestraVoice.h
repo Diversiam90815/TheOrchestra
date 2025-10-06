@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			OrchestraVoice
 	Description		Custom voice that picks which dynamic layer & round-robin is being played
-
   ==============================================================================
 */
 
@@ -16,8 +14,8 @@
 class OrchestraVoice : public juce::SynthesiserVoice
 {
 public:
-	OrchestraVoice()		   = default;
-	~OrchestraVoice() override = default;
+	OrchestraVoice()  = default;
+	~OrchestraVoice() = default;
 
 	bool canPlaySound(juce::SynthesiserSound *sound) override;
 
@@ -25,7 +23,7 @@ public:
 
 	void stopNote(float velocity, bool allowTailOff) override;
 
-	void pitchWheelMoved(int newPitchWheelValue) override;
+	void pitchWheelMoved(int newPitchWheelValue) override {}
 
 	void controllerMoved(int controllerNumber, int newControllerValue) override;
 
@@ -51,13 +49,10 @@ private:
 	int											  noteNumber			= -1;
 
 	int											  numDynamicLayers		= -1; // Set in startNote()
-
 	int											  chosenDynamicIndex	= -1; // Set in startNote()
-
 	int											  chosenRoundRobinIndex = -1; // Set in startNote()
 
 	juce::SmoothedValue<float>					  CC1;
-
 	juce::SmoothedValue<float>					  CC11;
 
 	std::vector<const juce::AudioBuffer<float> *> layerBuffers; // layerBuffers[i] will hold the round robbin sample for the dynamic layer i

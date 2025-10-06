@@ -1,19 +1,11 @@
 /*
   ==============================================================================
-
 	Module			FileManager
 	Description		Managing files and folders
-
   ==============================================================================
 */
 
 #include "FileManager.h"
-
-
-FileManager::FileManager() {}
-
-
-FileManager::~FileManager() {}
 
 
 std::string FileManager::getSamplesFolder()

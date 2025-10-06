@@ -1,23 +1,22 @@
 /*
   ==============================================================================
-
 	Module			Logging
 	Description		Logging instance providing logging features for the project
-
   ==============================================================================
 */
 
 #pragma once
 
 #include <string>
-#include <Logger.h> // Logger instance from submodule
+#include <Logger.h>
 #include "FileManager.h"
+
 
 class Logging
 {
 public:
-	Logging();
-	~Logging();
+	Logging()  = default;
+	~Logging() = default;
 
 	void initLogging();
 
