@@ -20,8 +20,8 @@
 class InstrumentController
 {
 public:
-	InstrumentController();
-	~InstrumentController();
+	InstrumentController()	= default;
+	~InstrumentController() = default;
 
 	void		   init();
 

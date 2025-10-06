@@ -1,21 +1,13 @@
 /*
   ==============================================================================
-
 	Module			InstrumentController
 	Description		Managing instrument data for the whole orchestra
-
   ==============================================================================
 */
 
 
 #include "InstrumentController.h"
 #include <cassert>
-
-
-InstrumentController::InstrumentController() {}
-
-
-InstrumentController::~InstrumentController() {}
 
 
 void InstrumentController::init()
@@ -159,6 +151,7 @@ StringArray InstrumentController::readFamousWorksFromJSON(DynamicObject *obj)
 InstrumentInfo InstrumentController::getInstrument(int key)
 {
 	auto it = instruments.find(key);
+
 	assert(it != instruments.end());
 
 	if (it != instruments.end())

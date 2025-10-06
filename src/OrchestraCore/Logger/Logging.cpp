@@ -1,19 +1,11 @@
 /*
   ==============================================================================
-
 	Module			Logging
 	Description		Logging instance providing logging features for the project
-
   ==============================================================================
 */
 
 #include "Logging.h"
-
-
-Logging::Logging() {}
-
-
-Logging::~Logging() {}
 
 
 void Logging::initLogging()

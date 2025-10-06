@@ -1,17 +1,12 @@
 /*
   ==============================================================================
-
 	Module			Sampler
 	Description		Sampling the instrument and making them ready for playback
-
   ==============================================================================
 */
 
 #include "Sampler.h"
 #include "InstrumentController.h" // For note ranges
-
-
-Sampler::Sampler() {}
 
 
 Sampler::~Sampler()

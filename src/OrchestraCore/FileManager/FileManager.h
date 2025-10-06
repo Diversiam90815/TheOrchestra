@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			FileManager
 	Description		Managing files and folders
-
   ==============================================================================
 */
 
@@ -31,8 +29,8 @@ enum TypeOfImage
 class FileManager
 {
 public:
-	FileManager();
-	~FileManager();
+	FileManager()  = default;
+	~FileManager() = default;
 
 	std::string			  getSamplesFolder();
 
@@ -53,12 +51,8 @@ private:
 
 
 	std::string				 AssetsFolderName		  = "Assets";
-
 	std::string				 SampleFolderName		  = "Samples";
-
 	std::string				 ImageFolderName		  = "Images";
-
 	std::string				 InstrumentDataFolderName = "InstrumentData";
-
 	std::string				 InstrumentsDataFileName  = "Instruments.json";
 };
