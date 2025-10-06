@@ -27,7 +27,7 @@ public:
 	void				   addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed);
 
 	bool				   getSamplesAreReady();
-	void				   setSamplesAreReady(bool value);
+	void				   setSamplesAreReady(bool value);	// TODO: Make visible to UI
 
 
 private:

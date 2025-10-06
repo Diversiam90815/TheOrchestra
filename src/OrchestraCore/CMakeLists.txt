@@ -11,6 +11,7 @@ set (FILE_MANAGER_DIR       ${CMAKE_CURRENT_SOURCE_DIR}/FileManager)
 set (APP_DIR                ${CMAKE_CURRENT_SOURCE_DIR}/App)
 set (LOGGER_DIR             ${CMAKE_CURRENT_SOURCE_DIR}/Logger)
 
+# TODO: Create CoreManager
 
 set(ALL_PROJECT_DIRS
     ${INSTRUMENT_DIR}
@@ -158,6 +159,7 @@ set (PROJECT_LIBS   juce::juce_audio_utils
 
 target_link_libraries(${TARGET_NAME} PUBLIC ${PROJECT_LIBS} )
 
+# TODO: Only copy if different
 add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${ASSETS_DIR}"
