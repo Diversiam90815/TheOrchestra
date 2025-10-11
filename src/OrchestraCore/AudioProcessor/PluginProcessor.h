@@ -10,6 +10,7 @@
 #include "JuceIncludes.h"
 #include "Sampler.h"
 #include "InstrumentController.h"
+#include "buildinfo.h"
 
 class OrchestraEditor;
 
@@ -46,7 +47,7 @@ private:
 	void				  changeProgramName(int index, const String &newName) override {}
 	void				  getStateInformation(MemoryBlock &destData) override {}
 	void				  setStateInformation(const void *data, int sizeInBytes) override {}
-	void				  setCurrentInstrument(int key, Articulation articulationUsed) {}
+	void				  setCurrentInstrument(int key, Articulation articulationUsed);
 
 
 	InstrumentController  mInstrumentController;

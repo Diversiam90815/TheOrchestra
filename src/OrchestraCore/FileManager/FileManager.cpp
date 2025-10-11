@@ -126,7 +126,7 @@ std::filesystem::path FileManager::getLoggingPath()
 std::filesystem::path FileManager::getProjectDirectory()
 {
 	std::filesystem::path cwd		 = std::filesystem::current_path();
-	std::filesystem::path projectDir = cwd.parent_path().parent_path().parent_path();	// TODO: Use built folder instead of project folder for assets
+	std::filesystem::path projectDir = cwd.parent_path().parent_path().parent_path(); // TODO: Use built folder instead of project folder for assets
 	return projectDir;
 }
 
