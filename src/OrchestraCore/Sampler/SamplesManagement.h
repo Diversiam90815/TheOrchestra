@@ -59,7 +59,7 @@ public:
 
 
 private:
-	void							   parseSampleFiles();		// TODO: Make async
+	void							   parseSampleFiles(); // TODO: Make async
 
 	void							   parseRhythmicPercussionFiles(const File &instrument);
 
