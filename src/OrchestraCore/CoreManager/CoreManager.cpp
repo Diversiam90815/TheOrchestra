@@ -20,7 +20,7 @@ void CoreManager::init()
 	logProjectInfo();
 
 	mInstrumentController->init();
-	mSampler->init(mInstrumentController.get());
+	mSampler->init(*mInstrumentController.get());
 
 	LOG_INFO("Core Manager initialized!");
 }
