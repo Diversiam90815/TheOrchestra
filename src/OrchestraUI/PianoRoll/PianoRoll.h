@@ -17,7 +17,7 @@
 class PianoRoll : public Component, private MidiKeyboardState::Listener, public MidiInputCallback
 {
 public:
-	PianoRoll(MidiKeyboardState *state);
+	PianoRoll(MidiKeyboardState &state);
 	~PianoRoll();
 
 	void displayInstrumentRanges(InstrumentInfo &info);
@@ -36,5 +36,5 @@ private:
 
 	std::unique_ptr<CustomPianoRoll> mPianoRoll;
 
-	MidiKeyboardState				*pianoState;
+	MidiKeyboardState				*mPianoState;
 };

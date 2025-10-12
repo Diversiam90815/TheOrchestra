@@ -8,19 +8,18 @@ set (PROCESSOR_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/AudioProcessor )
 set (SAMPLER_DIR            ${CMAKE_CURRENT_SOURCE_DIR}/Sampler )
 set (MISC_DIR               ${CMAKE_CURRENT_SOURCE_DIR}/Misc )
 set (FILE_MANAGER_DIR       ${CMAKE_CURRENT_SOURCE_DIR}/FileManager)
-set (APP_DIR                ${CMAKE_CURRENT_SOURCE_DIR}/App)
 set (LOGGER_DIR             ${CMAKE_CURRENT_SOURCE_DIR}/Logger)
+set (CORE_MANAGER_DIR       ${CMAKE_CURRENT_SOURCE_DIR}/CoreManager)
 
 
 set(ALL_PROJECT_DIRS
     ${INSTRUMENT_DIR}
     ${PROCESSOR_DIR}
     ${SAMPLER_DIR}
-    ${VIEW_DIR}
     ${MISC_DIR}
     ${FILE_MANAGER_DIR}
-    ${APP_DIR}
     ${LOGGER_DIR}
+    ${CORE_MANAGER_DIR}
 )
 
 set(INSTRUMENT_FILES
@@ -37,6 +36,10 @@ set(SAMPLER_FILES
 
 set(PROCESSOR_FILES
     ${PROCESSOR_DIR}/PluginProcessor.h    ${PROCESSOR_DIR}/PluginProcessor.cpp
+)
+
+set(CORE_MANAGER_FILES
+    ${CORE_MANAGER_DIR}/CoreManager.h    ${CORE_MANAGER_DIR}/CoreManager.cpp
 )
 
 set(MISC_FILES
@@ -60,6 +63,7 @@ set(CORE_PROJECT_FILES
     ${MISC_FILES}
     ${FILE_MANAGER_FILES}
     ${LOGGER_FILES}
+    ${CORE_MANAGER_FILES}
 )
 
 
@@ -69,6 +73,7 @@ source_group("Processor"        FILES ${PROCESSOR_FILES})
 source_group("Misc"             FILES ${MISC_FILES})
 source_group("File Manager"     FILES ${FILE_MANAGER_FILES})
 source_group("Logger"           FILES ${LOGGER_FILES})
+source_group("Core Manager"     FILES ${CORE_MANAGER_FILES})
 
 
 CPMAddPackage(
@@ -157,10 +162,3 @@ set (PROJECT_LIBS   juce::juce_audio_utils
 )
 
 target_link_libraries(${TARGET_NAME} PUBLIC ${PROJECT_LIBS} )
-
-add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${ASSETS_DIR}"
-        "${ASSETS_DEST_DIR}"
-    COMMENT "Copying Assets directory to output directory"
-)

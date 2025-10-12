@@ -10,13 +10,13 @@
 #include "PianoRoll.h"
 
 
-PianoRoll::PianoRoll(MidiKeyboardState *state)
+PianoRoll::PianoRoll(MidiKeyboardState &state)
 {
-	pianoState = state;
+	mPianoState = &state;
 
-	pianoState->addListener(this);
+	mPianoState->addListener(this);
 
-	mPianoRoll = std::make_unique<CustomPianoRoll>(*pianoState, MidiKeyboardComponent::horizontalKeyboard);
+	mPianoRoll = std::make_unique<CustomPianoRoll>(*mPianoState, MidiKeyboardComponent::horizontalKeyboard);
 
 	showPianoRoll();
 }
@@ -25,7 +25,7 @@ PianoRoll::PianoRoll(MidiKeyboardState *state)
 PianoRoll::~PianoRoll()
 {
 	mPianoRoll->removeAllChangeListeners();
-	pianoState->removeListener(this);
+	mPianoState->removeListener(this);
 	mPianoRoll.reset();
 }
 
@@ -38,17 +38,16 @@ void PianoRoll::resized()
 
 void PianoRoll::handleIncomingMidiMessage(MidiInput *source, const MidiMessage &message)
 {
-
-	pianoState->processNextMidiEvent(message);
+	mPianoState->processNextMidiEvent(message);
 
 	if (message.isNoteOn())
 	{
-		pianoState->noteOn(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
+		mPianoState->noteOn(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
 	}
 
 	else if (message.isNoteOff())
 	{
-		pianoState->noteOff(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
+		mPianoState->noteOff(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
 	}
 }
 

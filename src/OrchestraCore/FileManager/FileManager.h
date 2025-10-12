@@ -36,7 +36,7 @@ public:
 
 	std::string			  getInstrumentDataJSONPath();
 
-	File				  getInstrumentImage(TypeOfImage type, int instrumentKey);
+	File				  getInstrumentImage(TypeOfImage type, InstrumentID instrumentKey);
 
 	std::filesystem::path getProjectsAppDataPath();
 
@@ -45,7 +45,7 @@ public:
 private:
 	std::filesystem::path	 getProjectDirectory(); // Gets the project's directory
 
-	std::vector<std::string> getInstrumentsImages(int instrumentKey);
+	std::vector<std::string> getInstrumentsImages(InstrumentID instrumentKey);
 
 	std::vector<std::string> getInstrumentImages(const std::string &family, const std::string &instrumentName);
 

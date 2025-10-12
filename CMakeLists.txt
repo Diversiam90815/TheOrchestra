@@ -5,7 +5,7 @@
 
 cmake_minimum_required(VERSION 3.25)
 
-set(ORCHESTRA_VERSION 2.1.235)
+set(ORCHESTRA_VERSION 2.1.238)
 
 project(TheOrchestra VERSION ${ORCHESTRA_VERSION} LANGUAGES CXX)
 
