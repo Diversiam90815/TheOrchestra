@@ -19,17 +19,23 @@ set(FileManagerTest_Files
     FileManagerTest/FileManagerTest.cpp
 )
 
+set(CoreManagerTest_Files
+    CoreManagerTest/CoreManagerTest.cpp
+)
+
 
 set(Test_Files
     ${SamplerTest_Files}
     ${InstrumentTest_Files}
     ${FileManagerTest_Files}
+    ${CoreManagerTest_Files}
 )
 
 
 source_group("Sampler Tests"        FILES ${SamplerTest_Files})
 source_group("Instrument Tests"     FILES ${InstrumentTest_Files})
 source_group("File Manager Tests"   FILES ${FileManagerTest_Files})
+source_group("Core Manager Tests"   FILES ${CoreManagerTest_Files})
 
 
 add_executable(TheOrchestra.Tests ${Test_Files})
