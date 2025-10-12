@@ -26,11 +26,11 @@ public:
 
 	juce::MidiKeyboardState &getMidiKeyboardState();
 
-	void					 changeInstrument(int key);
-	void					 changeArticulation(int key, Articulation articulation);
-	InstrumentInfo			 getInstrument(int key);
+	void					 changeInstrument(InstrumentID key);
+	void					 changeArticulation(InstrumentID key, Articulation articulation);
+	InstrumentInfo			 getInstrument(InstrumentID key);
 
-	std::set<Articulation>	 getAvailableArticulations(int instrumentKey);
+	std::set<Articulation>	 getAvailableArticulations(InstrumentID instrumentKey);
 
 	void					 processAudioBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
 

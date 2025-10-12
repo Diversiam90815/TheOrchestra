@@ -55,28 +55,28 @@ public:
 
 	void				init();
 
-	std::vector<Sample> getSamplesForInstrument(const int &instrumentKey) const;
+	std::vector<Sample> getSamplesForInstrument(const InstrumentID &instrumentKey) const;
 
 
 private:
-	void							   parseSampleFiles(); // TODO: Make async
+	void										parseSampleFiles(); // TODO: Make async
 
-	void							   parseRhythmicPercussionFiles(const File &instrument);
+	void										parseRhythmicPercussionFiles(const File &instrument);
 
-	void							   parseInstrumentSamples(const File &instrumentFolder, String &sectionName);
+	void										parseInstrumentSamples(const File &instrumentFolder, String &sectionName);
 
-	void							   addPercussionSamples(const File &file, const int &key, Articulation articulation);
+	void										addPercussionSamples(const File &file, const InstrumentID &key, Articulation articulation);
 
-	void							   addSample(const File &file, const int &key, Articulation articulation);
+	void										addSample(const File &file, const InstrumentID &key, Articulation articulation);
 
-	File							   getInstrumentSamplesPath(const int &instrumentKey);
+	File										getInstrumentSamplesPath(const InstrumentID &instrumentKey);
 
-	int								   getIndexOfDynamics(const String &dynamicsString);
+	int											getIndexOfDynamics(const String &dynamicsString);
 
 
-	File							   mSamplesFolder;	   // Folder of the samples folder ( /Assets/Samples)
+	File										mSamplesFolder;		// Folder of the samples folder ( /Assets/Samples)
 
-	std::map<int, std::vector<Sample>> mInstrumentSamples; // Map of the instrument (identified by their key) and their assigned 'Sample'
+	std::map<InstrumentID, std::vector<Sample>> mInstrumentSamples; // Map of the instrument and their assigned 'Sample'
 
-	FileManager						   mFileManager;
+	FileManager									mFileManager;
 };

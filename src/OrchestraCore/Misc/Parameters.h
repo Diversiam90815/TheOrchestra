@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			Parameters
-	Description		Storing (mostly compile time) constants
-
+	Description		Storing constants
   ==============================================================================
 */
 
@@ -155,3 +153,12 @@ constexpr auto LogFileName		 = "Orchestra.log";
 constexpr auto ProjectName		 = "TheOrchestra";
 constexpr auto LogFolderName	 = "Logs";
 constexpr auto LogFile			 = "Orchestra.log";
+
+
+//==============================================================================
+//                          TYPES
+//==============================================================================
+
+// The key is 3 digit int where the first digit represents the family and the other 2 digits represent the instrument. Usually, if the instrument digit remains below 10, the middle
+// digit remains 0.
+using InstrumentID				 = int;

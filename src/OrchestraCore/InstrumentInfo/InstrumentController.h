@@ -25,34 +25,34 @@ public:
 
 	void		   init();
 
-	InstrumentInfo getInstrument(int key);
+	InstrumentInfo getInstrument(InstrumentID key);
 
 	bool		   loadFromJSON();
 
 
 private:
-	void						  addInstrument(const InstrumentInfo &info);
+	void								   addInstrument(const InstrumentInfo &info);
 
-	StringArray					  readPlayingTechniquesFromJSON(DynamicObject *obj);
+	StringArray							   readPlayingTechniquesFromJSON(DynamicObject *obj);
 
-	StringArray					  readQualitiesFromJSON(DynamicObject *obj);
+	StringArray							   readQualitiesFromJSON(DynamicObject *obj);
 
-	String						  readNameFromJSON(DynamicObject *obj);
+	String								   readNameFromJSON(DynamicObject *obj);
 
-	String						  readRangeFromJSON(DynamicObject *obj);
+	String								   readRangeFromJSON(DynamicObject *obj);
 
-	String						  readDisplayedRangeFromJSON(DynamicObject *obj);
+	String								   readDisplayedRangeFromJSON(DynamicObject *obj);
 
-	bool						  readIsRhythmicPercussionFromJSON(DynamicObject *obj);
+	bool								   readIsRhythmicPercussionFromJSON(DynamicObject *obj);
 
-	String						  readTranspositionFromJSON(DynamicObject *obj);
+	String								   readTranspositionFromJSON(DynamicObject *obj);
 
-	StringArray					  readInformationFromJSON(DynamicObject *obj);
+	StringArray							   readInformationFromJSON(DynamicObject *obj);
 
-	StringArray					  readFamousWorksFromJSON(DynamicObject *obj);
+	StringArray							   readFamousWorksFromJSON(DynamicObject *obj);
 
 
-	std::map<int, InstrumentInfo> instruments; // Mapping the instrument's key to the corresponding InstrumentInfo object
+	std::map<InstrumentID, InstrumentInfo> instruments; // Mapping the instrument's key to the corresponding InstrumentInfo object
 
-	FileManager					  mFileManager;
+	FileManager							   mFileManager;
 };

@@ -65,9 +65,9 @@ static std::map<String, Dynamics> velocityLayerMap = {{"v1", Dynamics::mezzoPian
 	@return                int value of the 3 digit key
 */
 template <typename InstrumentEnum>
-static int getInstrumentKey(Family family, InstrumentEnum instrument)
+static InstrumentID getInstrumentKey(Family family, InstrumentEnum instrument)
 {
-	int key = static_cast<int>(family) * 100 + static_cast<int>(instrument);
+	InstrumentID key = static_cast<InstrumentID>(family) * 100 + static_cast<InstrumentID>(instrument);
 	return key;
 }
 
@@ -79,7 +79,7 @@ static int getInstrumentKey(Family family, InstrumentEnum instrument)
 	@param                 [IN] String of the instrument
 	@return                int value of the 3 digit key
 */
-static int getInstrumentKey(String &family, String &instrument)
+static InstrumentID getInstrumentKey(String &family, String &instrument)
 {
 	Family familyKey;
 	int	   instrumentKey{0};
@@ -105,7 +105,7 @@ static std::map<Family, String> reverseFamilyMap = {
 
 
 // Reverse instrument map using the full key:
-static std::map<int, String> reverseInstrumentMap = {
+static std::map<InstrumentID, String> reverseInstrumentMap = {
 	{getInstrumentKey(Family::Strings, Strings::Violin), ViolinName},			{getInstrumentKey(Family::Strings, Strings::Viola), ViolaName},
 	{getInstrumentKey(Family::Strings, Strings::Violoncello), VioloncelloName}, {getInstrumentKey(Family::Strings, Strings::DoubleBass), DoubleBassName},
 	{getInstrumentKey(Family::Woodwinds, Woodwinds::Piccolo), PiccoloName},		{getInstrumentKey(Family::Woodwinds, Woodwinds::Flute), FluteName},
@@ -120,13 +120,13 @@ static std::map<int, String> reverseInstrumentMap = {
 
 
 
-static std::string getInstrumentNameFromKey(int key)
+static std::string getInstrumentNameFromKey(InstrumentID key)
 {
 	return reverseInstrumentMap.at(key).toStdString();
 }
 
 
-static std::string getFamilyNameFromKey(int key)
+static std::string getFamilyNameFromKey(InstrumentID key)
 {
 	int familyVal = key / 100;
 	return reverseFamilyMap.at(static_cast<Family>(familyVal)).toStdString();

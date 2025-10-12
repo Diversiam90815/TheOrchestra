@@ -28,7 +28,7 @@ void SamplesManagement::init()
 }
 
 
-File SamplesManagement::getInstrumentSamplesPath(const int &instrumentKey)
+File SamplesManagement::getInstrumentSamplesPath(const InstrumentID &instrumentKey)
 {
 	for (const auto &section : mSamplesFolder.findChildFiles(File::findDirectories, false))
 	{
@@ -148,7 +148,7 @@ void SamplesManagement::parseInstrumentSamples(const File &instrumentFolder, Str
 }
 
 
-void SamplesManagement::addPercussionSamples(const File &file, const int &key, Articulation articulation)
+void SamplesManagement::addPercussionSamples(const File &file, const InstrumentID &key, Articulation articulation)
 {
 	String		filename = file.getFileNameWithoutExtension();
 	StringArray parts	 = StringArray::fromTokens(filename, "_", "");
@@ -205,7 +205,7 @@ void SamplesManagement::addPercussionSamples(const File &file, const int &key, A
 }
 
 
-void SamplesManagement::addSample(const File &file, const int &key, Articulation articulation)
+void SamplesManagement::addSample(const File &file, const InstrumentID &key, Articulation articulation)
 {
 	String		filename = file.getFileNameWithoutExtension();
 	StringArray parts	 = StringArray::fromTokens(filename, "_", "");
@@ -264,7 +264,7 @@ int SamplesManagement::getIndexOfDynamics(const String &dynamicString)
 }
 
 
-std::vector<Sample> SamplesManagement::getSamplesForInstrument(const int &instrumentKey) const
+std::vector<Sample> SamplesManagement::getSamplesForInstrument(const InstrumentID &instrumentKey) const
 {
 	auto it = mInstrumentSamples.find(instrumentKey);
 	if (it != mInstrumentSamples.end())
