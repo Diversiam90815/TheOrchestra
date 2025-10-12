@@ -37,24 +37,17 @@ public:
 	~InstrumentInfo() = default;
 
 	String		getName() const { return mName; }
-
 	String		getRange() const { return mRange; }
-
 	StringArray getQualities() const { return mQualities; }
-
 	StringArray getInformation() const { return mUsefulInformation; }
-
 	StringArray getFamousWorks() const { return mFamousWorks; }
-
 	String		getTransposition() const { return mTransposition; }
-
 	StringArray getTechniques() const { return mPlayingTechniques; }
-
 	int			getKey() const { return mKey; }
-
 	String		getDisplayedRange() const { return mDisplayedRange; }
-
 	bool		isRhythmicPercussion() const { return mIsRhythmicPercussion; }
+
+	bool		isValid() { return !mName.isEmpty() && mKey != 0; }
 
 private:
 	String		mName;						   // Name of the instrument
