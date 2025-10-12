@@ -22,9 +22,9 @@ public:
 
 	void				   init(InstrumentController &controller);
 
-	std::set<Articulation> getAvailableArticulationsForInstrument(const int key);
+	std::set<Articulation> getAvailableArticulationsForInstrument(const InstrumentID key);
 
-	void				   addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed);
+	void				   addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed);
 
 	void				   process(AudioBuffer<float> &buffer, MidiBuffer &midiMessages);
 	void				   prepare(double sampleRate, int samplesPerBlock);
@@ -44,7 +44,7 @@ private:
 
 	std::map<int, std::pair<int, int>>					  createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap, const int key);
 
-	std::pair<int, int>									  getRangesOfInstrument(const int key);
+	std::pair<int, int>									  getRangesOfInstrument(const InstrumentID key);
 
 
 	Synthesiser											  mSampler;

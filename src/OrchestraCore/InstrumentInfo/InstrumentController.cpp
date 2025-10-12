@@ -19,7 +19,7 @@ void InstrumentController::init()
 
 void InstrumentController::addInstrument(const InstrumentInfo &info)
 {
-	int key			 = info.getKey();
+	InstrumentID key = info.getKey();
 	instruments[key] = info;
 	LOG_INFO("Instrument {} loaded!", info.getName().toStdString().c_str());
 }
@@ -148,7 +148,7 @@ StringArray InstrumentController::readFamousWorksFromJSON(DynamicObject *obj)
 }
 
 
-InstrumentInfo InstrumentController::getInstrument(int key)
+InstrumentInfo InstrumentController::getInstrument(InstrumentID key)
 {
 	auto it = instruments.find(key);
 

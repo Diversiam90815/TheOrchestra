@@ -34,7 +34,7 @@ void Sampler::init(InstrumentController &controller)
 }
 
 
-std::set<Articulation> Sampler::getAvailableArticulationsForInstrument(const int key)
+std::set<Articulation> Sampler::getAvailableArticulationsForInstrument(const InstrumentID key)
 {
 	auto				   samples = mSamplesManager->getSamplesForInstrument(key);
 
@@ -49,7 +49,7 @@ std::set<Articulation> Sampler::getAvailableArticulationsForInstrument(const int
 }
 
 
-void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed)
+void Sampler::addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed)
 {
 	std::vector<SamplerSound> sounds;
 	reset();
@@ -216,7 +216,7 @@ std::map<int, std::pair<int, int>> Sampler::createNoteRangeMap(std::map<int, std
 }
 
 
-std::pair<int, int> Sampler::getRangesOfInstrument(const int key)
+std::pair<int, int> Sampler::getRangesOfInstrument(const InstrumentID key)
 {
 	if (mInstrumentController == nullptr)
 		return {};
