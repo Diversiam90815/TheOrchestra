@@ -23,13 +23,12 @@ class OrchestraSound : public juce::SynthesiserSound
 {
 public:
 	OrchestraSound(int noteRangeStart, int noteRangeEnd, int rootNote);
-
 	~OrchestraSound() = default;
 
 	void						   addDynamicLayer(Dynamics dynamicValue, juce::OwnedArray<juce::AudioBuffer<float>> &&rrSamples);
 
 	bool						   appliesToNote(int midiNoteNumber) override;
-	bool						   appliesToChannel(int midiChannel) override;
+	bool						   appliesToChannel(int midiChannel) override; // TODO: Create settings to store value
 
 	int							   getRootNote() const;
 

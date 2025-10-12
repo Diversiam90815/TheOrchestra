@@ -12,32 +12,23 @@
 
 
 OrchestraProcessor::OrchestraProcessor()
-#ifndef JucePlugin_PreferredChannelConfigurations
-	: AudioProcessor(BusesProperties()
-#if !JucePlugin_IsMidiEffect
-#if !JucePlugin_IsSynth
-						 .withInput("Input", AudioChannelSet::stereo(), true)
-#endif
-						 .withOutput("Output", AudioChannelSet::stereo(), true)
-#endif
-	  )
-#endif
+	: AudioProcessor(BusesProperties().withInput("Input", juce::AudioChannelSet::stereo(), true).withOutput("Output", juce::AudioChannelSet::stereo(), true)),
+	  mCoreManager(std::make_unique<CoreManager>())
 {
-	init();
+	mCoreManager->init();
 }
 
 
-void OrchestraProcessor::init()
+CoreManager &OrchestraProcessor::getCoreManager()
 {
-	mInstrumentController.init();
-	mOrchestraSampler.init(&mInstrumentController);
+	return *mCoreManager;
 }
 
 
 void OrchestraProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
 	LOG_INFO("Prepare to play called with Samplerate = {} and SamplesPerBlock = {}.", sampleRate, samplesPerBlock);
-	mOrchestraSampler.mSampler.setCurrentPlaybackSampleRate(sampleRate);
+	mCoreManager->prepareAudio(sampleRate, samplesPerBlock);
 }
 
 
@@ -58,21 +49,10 @@ void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &mi
 	auto			  totalNumInputChannels	 = getTotalNumInputChannels();
 	auto			  totalNumOutputChannels = getTotalNumOutputChannels();
 
-	mKeyboardState.processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
-
 	for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
 		buffer.clear(i, 0, buffer.getNumSamples());
 
-	if (!mOrchestraSampler.getSamplesAreReady())
-		return;
-
-	mOrchestraSampler.mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-}
-
-
-void OrchestraProcessor::setCurrentInstrument(int key, Articulation articulationUsed)
-{
-	mOrchestraSampler.addSoundsFromInstrumentToSampler(key, articulationUsed);
+	mCoreManager->processAudioBlock(buffer, midiMessages);
 }
 
 

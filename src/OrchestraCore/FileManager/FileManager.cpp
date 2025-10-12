@@ -28,7 +28,7 @@ std::string FileManager::getInstrumentDataJSONPath()
 }
 
 
-std::vector<std::string> FileManager::getInstrumentsImages(int instrumentKey)
+std::vector<std::string> FileManager::getInstrumentsImages(InstrumentID instrumentKey)
 {
 	std::string familyName	   = getFamilyNameFromKey(instrumentKey);
 	std::string instrumentName = getInstrumentNameFromKey(instrumentKey);
@@ -37,7 +37,7 @@ std::vector<std::string> FileManager::getInstrumentsImages(int instrumentKey)
 }
 
 
-File FileManager::getInstrumentImage(TypeOfImage type, int instrumentKey)
+File FileManager::getInstrumentImage(TypeOfImage type, InstrumentID instrumentKey)
 {
 	auto   images = getInstrumentsImages(instrumentKey);
 
@@ -126,7 +126,7 @@ std::filesystem::path FileManager::getLoggingPath()
 std::filesystem::path FileManager::getProjectDirectory()
 {
 	std::filesystem::path cwd		 = std::filesystem::current_path();
-	std::filesystem::path projectDir = cwd.parent_path().parent_path().parent_path();
+	std::filesystem::path projectDir = cwd.parent_path().parent_path().parent_path(); // TODO: Use built folder instead of project folder for assets
 	return projectDir;
 }
 
