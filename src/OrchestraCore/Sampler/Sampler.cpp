@@ -18,7 +18,7 @@ Sampler::~Sampler()
 
 void Sampler::init(InstrumentController &controller)
 {
-	mInstrumentController = controller;
+	mInstrumentController = &controller;
 
 	mSamplesManager		  = std::make_unique<SamplesManagement>();
 	mSamplesManager->init();

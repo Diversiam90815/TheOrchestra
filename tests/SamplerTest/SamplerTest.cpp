@@ -28,6 +28,8 @@ protected:
 		mController->init();
 	}
 
+	void init() { mSampler->init(*mController.get()); }
+
 	void TearDown() override
 	{
 		mSampler.reset();
@@ -39,7 +41,7 @@ protected:
 TEST_F(SamplerTest, InitializationSucceeds)
 {
 	// Initialize sampler with controller
-	EXPECT_NO_THROW(mSampler->init(mController.get()));
+	EXPECT_NO_THROW(init());
 
 	// Verify initial state
 	EXPECT_FALSE(mSampler->getSamplesAreReady()) << "Samples should not be ready immediately after init";
@@ -48,7 +50,7 @@ TEST_F(SamplerTest, InitializationSucceeds)
 
 TEST_F(SamplerTest, GetAvailableArticulationsForValidInstrument)
 {
-	mSampler->init(mController.get());
+	init();
 
 	// Test with violin (key = 301)
 	int					   violinKey	 = 301;
@@ -62,7 +64,7 @@ TEST_F(SamplerTest, GetAvailableArticulationsForValidInstrument)
 
 TEST_F(SamplerTest, GetAvailableArticulationsForInvalidInstrument)
 {
-	mSampler->init(mController.get());
+	init();
 
 	// Test with invalid instrument key
 	int					   invalidKey	 = 999;
@@ -75,7 +77,7 @@ TEST_F(SamplerTest, GetAvailableArticulationsForInvalidInstrument)
 
 TEST_F(SamplerTest, SamplesReadyStateToggling)
 {
-	mSampler->init(mController.get());
+	init();
 
 	// Initially false
 	EXPECT_FALSE(mSampler->getSamplesAreReady());
@@ -92,7 +94,7 @@ TEST_F(SamplerTest, SamplesReadyStateToggling)
 
 TEST_F(SamplerTest, AddSoundsFromInstrumentWithValidData)
 {
-	mSampler->init(mController.get());
+	init();
 
 	// Attempt to add sounds (may succeed or fail depending on sample availability)
 	int violinKey = 301;
@@ -102,7 +104,7 @@ TEST_F(SamplerTest, AddSoundsFromInstrumentWithValidData)
 
 TEST_F(SamplerTest, AddSoundsWithInvalidInstrumentKey)
 {
-	mSampler->init(mController.get());
+	init();
 
 	int invalidKey = 999;
 	EXPECT_NO_THROW(mSampler->addSoundsFromInstrumentToSampler(invalidKey, Articulation::sustain));
@@ -114,7 +116,7 @@ TEST_F(SamplerTest, AddSoundsWithInvalidInstrumentKey)
 
 TEST_F(SamplerTest, MultipleArticulationSwitching)
 {
-	mSampler->init(mController.get());
+	init();
 
 	int violinKey = 301;
 

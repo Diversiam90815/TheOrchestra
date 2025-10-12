@@ -26,7 +26,7 @@ protected:
 		mSampler	= std::make_unique<Sampler>();
 		mController = std::make_unique<InstrumentController>();
 		mController->init();
-		mSampler->init(mController.get());
+		mSampler->init(*mController.get());
 	}
 
 	void TearDown() override
