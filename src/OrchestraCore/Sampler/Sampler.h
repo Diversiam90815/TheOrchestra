@@ -12,7 +12,7 @@
 #include "Logging.h"
 #include "OrchestraVoice.h"
 #include "Helper.h"
-
+#include "InstrumentController.h"
 
 class Sampler
 {
@@ -20,7 +20,7 @@ public:
 	Sampler() = default;
 	~Sampler();
 
-	void				   init(InstrumentController *controller);
+	void				   init(InstrumentController &controller);
 
 	std::set<Articulation> getAvailableArticulationsForInstrument(const int key);
 

@@ -19,7 +19,7 @@ public:
 	OrchestraProcessor();
 	~OrchestraProcessor() = default;
 
-	std::shared_ptr<CoreManager> getCoreManager();
+	CoreManager &getCoreManager();
 
 private:
 	void						 prepareToPlay(double sampleRate, int samplesPerBlock) override;
@@ -45,7 +45,7 @@ private:
 	void						 setStateInformation(const void *data, int sizeInBytes) override {}
 
 
-	std::shared_ptr<CoreManager> mCoreManager;
+	std::unique_ptr<CoreManager> mCoreManager;
 
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OrchestraProcessor)
 };

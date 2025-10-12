@@ -13,15 +13,15 @@
 
 OrchestraProcessor::OrchestraProcessor()
 	: AudioProcessor(BusesProperties().withInput("Input", juce::AudioChannelSet::stereo(), true).withOutput("Output", juce::AudioChannelSet::stereo(), true)),
-	  mCoreManager(std::make_shared<CoreManager>())
+	  mCoreManager(std::make_unique<CoreManager>())
 {
 	mCoreManager->init();
 }
 
 
-std::shared_ptr<CoreManager> OrchestraProcessor::getCoreManager()
+CoreManager &OrchestraProcessor::getCoreManager()
 {
-	return mCoreManager;
+	return *mCoreManager;
 }
 
 
