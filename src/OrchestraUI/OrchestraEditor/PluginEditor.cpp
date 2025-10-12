@@ -13,7 +13,7 @@
 
 OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : AudioProcessorEditor(&proc), audioProcessor(proc)
 {
-	mCoreManager = proc.getCoreManager();
+	mCoreManager = &proc.getCoreManager();
 	init();
 	showUI();
 	setLookAndFeel(&mCustomLookAndFeel);

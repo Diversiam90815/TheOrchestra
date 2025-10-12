@@ -9,7 +9,7 @@
 
 
 CoreManager::CoreManager()
-	: mInstrumentController(std::make_shared<InstrumentController>()), mSampler(std::make_shared<Sampler>()), mMidiKeyboardState(std::make_shared<juce::MidiKeyboardState>())
+	: mInstrumentController(std::make_unique<InstrumentController>()), mSampler(std::make_unique<Sampler>()), mMidiKeyboardState(std::make_unique<juce::MidiKeyboardState>())
 {
 }
 
@@ -33,9 +33,9 @@ void CoreManager::prepareAudio(double sampleRate, int samplesPerblock)
 }
 
 
-std::shared_ptr<juce::MidiKeyboardState> CoreManager::getMidiKeyboardState()
+juce::MidiKeyboardState &CoreManager::getMidiKeyboardState()
 {
-	return mMidiKeyboardState;
+	return *mMidiKeyboardState;
 }
 
 
