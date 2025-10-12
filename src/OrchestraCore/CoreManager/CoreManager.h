@@ -21,27 +21,27 @@ public:
 	CoreManager();
 	~CoreManager() = default;
 
-	void									 init();
-	void									 prepareAudio(double sampleRate, int samplesPerblock);
+	void					 init();
+	void					 prepareAudio(double sampleRate, int samplesPerblock);
 
-	std::shared_ptr<juce::MidiKeyboardState> getMidiKeyboardState();
+	juce::MidiKeyboardState &getMidiKeyboardState();
 
-	void									 changeInstrument(int key);
-	void									 changeArticulation(int key, Articulation articulation);
-	InstrumentInfo							 getInstrument(int key);
+	void					 changeInstrument(int key);
+	void					 changeArticulation(int key, Articulation articulation);
+	InstrumentInfo			 getInstrument(int key);
 
-	std::set<Articulation>					 getAvailableArticulations(int instrumentKey);
+	std::set<Articulation>	 getAvailableArticulations(int instrumentKey);
 
-	void									 processAudioBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
+	void					 processAudioBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
 
 private:
 	void									 logProjectInfo();
 
 	Logging									 mLogger;
 
-	std::shared_ptr<InstrumentController>	 mInstrumentController;
-	std::shared_ptr<Sampler>				 mSampler;
-	std::shared_ptr<juce::MidiKeyboardState> mMidiKeyboardState;
+	std::unique_ptr<InstrumentController>	 mInstrumentController;
+	std::unique_ptr<Sampler>				 mSampler;
+	std::unique_ptr<juce::MidiKeyboardState> mMidiKeyboardState;
 
 	int										 mCurrentInstrumentKey{0};
 };

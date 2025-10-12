@@ -16,7 +16,7 @@ Sampler::~Sampler()
 }
 
 
-void Sampler::init(InstrumentController *controller)
+void Sampler::init(InstrumentController &controller)
 {
 	mInstrumentController = controller;
 

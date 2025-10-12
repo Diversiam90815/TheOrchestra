@@ -17,24 +17,24 @@
 class PianoRoll : public Component, private MidiKeyboardState::Listener, public MidiInputCallback
 {
 public:
-	PianoRoll(std::shared_ptr<MidiKeyboardState> state);
+	PianoRoll(MidiKeyboardState &state);
 	~PianoRoll();
 
 	void displayInstrumentRanges(InstrumentInfo &info);
 
 private:
-	void							   showPianoRoll();
+	void							 showPianoRoll();
 
-	void							   resized() override;
+	void							 resized() override;
 
-	void							   handleIncomingMidiMessage(MidiInput *source, const MidiMessage &message) override;
+	void							 handleIncomingMidiMessage(MidiInput *source, const MidiMessage &message) override;
 
-	void							   handleNoteOn(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override;
+	void							 handleNoteOn(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override;
 
-	void							   handleNoteOff(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override;
+	void							 handleNoteOff(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override;
 
 
-	std::unique_ptr<CustomPianoRoll>   mPianoRoll;
+	std::unique_ptr<CustomPianoRoll> mPianoRoll;
 
-	std::shared_ptr<MidiKeyboardState> pianoState;
+	MidiKeyboardState				*mPianoState;
 };
