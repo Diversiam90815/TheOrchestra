@@ -39,7 +39,7 @@ juce::MidiKeyboardState &CoreManager::getMidiKeyboardState()
 }
 
 
-void CoreManager::changeInstrument(int key)
+void CoreManager::changeInstrument(InstrumentID key)
 {
 	LOG_INFO("Changing instrument to {}", key);
 
@@ -60,20 +60,20 @@ void CoreManager::changeInstrument(int key)
 }
 
 
-void CoreManager::changeArticulation(int key, Articulation articulation)
+void CoreManager::changeArticulation(InstrumentID key, Articulation articulation)
 {
 	mSampler->addSoundsFromInstrumentToSampler(key, articulation);
 	LOG_INFO("Instrument key {} changed to articulation {}", key, static_cast<int>(articulation));
 }
 
 
-InstrumentInfo CoreManager::getInstrument(int key)
+InstrumentInfo CoreManager::getInstrument(InstrumentID key)
 {
 	return mInstrumentController->getInstrument(key);
 }
 
 
-std::set<Articulation> CoreManager::getAvailableArticulations(int instrumentKey)
+std::set<Articulation> CoreManager::getAvailableArticulations(InstrumentID instrumentKey)
 {
 	return mSampler->getAvailableArticulationsForInstrument(instrumentKey);
 }
