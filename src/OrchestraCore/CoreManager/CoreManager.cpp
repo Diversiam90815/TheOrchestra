@@ -16,8 +16,14 @@ CoreManager::CoreManager()
 
 void CoreManager::init()
 {
-	mLogger.initLogging();
-	logProjectInfo();
+	// Use call_once to ensure logging is only initialized once globally
+	static std::once_flag loggingInitFlag;
+	std::call_once(loggingInitFlag,
+				   [this]()
+				   {
+					   mLogger.initLogging();
+					   logProjectInfo();
+				   });
 
 	mInstrumentController->init();
 	mSampler->init(*mInstrumentController.get());
