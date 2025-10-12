@@ -26,6 +26,11 @@ public:
 
 	void				   addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed);
 
+	void				   process(AudioBuffer<float> &buffer, MidiBuffer &midiMessages);
+	void				   prepare(double sampleRate, int samplesPerBlock);
+
+	void				   reset();
+
 	bool				   getSamplesAreReady();
 	void				   setSamplesAreReady(bool value); // TODO: Make visible to UI
 
@@ -51,6 +56,4 @@ private:
 	std::atomic<bool>									  mSamplesAreReady		= false;
 
 	InstrumentController								 *mInstrumentController = nullptr;
-
-	friend class OrchestraProcessor;
 };

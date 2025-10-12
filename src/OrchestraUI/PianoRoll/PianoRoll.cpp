@@ -10,7 +10,7 @@
 #include "PianoRoll.h"
 
 
-PianoRoll::PianoRoll(MidiKeyboardState *state)
+PianoRoll::PianoRoll(std::shared_ptr<MidiKeyboardState> state)
 {
 	pianoState = state;
 
@@ -38,7 +38,6 @@ void PianoRoll::resized()
 
 void PianoRoll::handleIncomingMidiMessage(MidiInput *source, const MidiMessage &message)
 {
-
 	pianoState->processNextMidiEvent(message);
 
 	if (message.isNoteOn())
