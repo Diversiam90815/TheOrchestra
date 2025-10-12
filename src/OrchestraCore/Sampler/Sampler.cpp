@@ -52,9 +52,7 @@ std::set<Articulation> Sampler::getAvailableArticulationsForInstrument(const int
 void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed)
 {
 	std::vector<SamplerSound> sounds;
-	setSamplesAreReady(false);
-
-	mSampler.clearSounds();
+	reset();
 
 	auto samples = mSamplesManager->getSamplesForInstrument(key);
 
@@ -115,6 +113,28 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 		setSamplesAreReady(true);
 		LOG_INFO("Samples for instrument (Key : {}) are loaded! (NumSounds = {})", key, mSampler.getNumSounds());
 	}
+}
+
+
+void Sampler::process(AudioBuffer<float> &buffer, MidiBuffer &midiMessages)
+{
+	if (!getSamplesAreReady())
+		return;
+
+	mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+}
+
+
+void Sampler::prepare(double sampleRate, int samplesPerBlock)
+{
+	mSampler.setCurrentPlaybackSampleRate(sampleRate);
+}
+
+
+void Sampler::reset()
+{
+	setSamplesAreReady(false);
+	mSampler.clearSounds();
 }
 
 

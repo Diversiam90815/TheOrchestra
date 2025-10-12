@@ -11,7 +11,6 @@
 #include "JuceIncludes.h"
 #include "PluginProcessor.h"
 #include "PianoRoll.h"
-#include "InstrumentController.h"
 
 #include "CustomMenuBar.h"
 #include "InstrumentRangesView.h"
@@ -38,61 +37,61 @@ public:
 	void init();
 
 private:
-	void					   changeInstrument(int key);
+	void						 changeInstrument(int key);
 
-	void					   changeArticulation(int key, Articulation articulation);
+	std::shared_ptr<CoreManager> mCoreManager;
 
-	OrchestraProcessor		  &audioProcessor;
+	OrchestraProcessor			&audioProcessor;
 
-	std::unique_ptr<PianoRoll> mPianoRollView;
+	std::unique_ptr<PianoRoll>	 mPianoRollView;
 
-	CustomMenuBar			   mCustomMenuBarModel;
+	CustomMenuBar				 mCustomMenuBarModel;
 
-	MenuBarComponent		   mMenuBar;
+	MenuBarComponent			 mMenuBar;
 
-	CustomLookAndFeel		   mCustomLookAndFeel;
+	CustomLookAndFeel			 mCustomLookAndFeel;
 
-	InstrumentView			   mInstrumentView;
-	InstrumentRangesView	   mRangesView;
-	QualitiesView			   mQualitiesView;
-	TechniquesView			   mTechniquesView;
-	InformationView			   mInfoView;
-	FamousWorksView			   mFamousWorksView;
-	SamplerView				   mSamplerView;
+	InstrumentView				 mInstrumentView;
+	InstrumentRangesView		 mRangesView;
+	QualitiesView				 mQualitiesView;
+	TechniquesView				 mTechniquesView;
+	InformationView				 mInfoView;
+	FamousWorksView				 mFamousWorksView;
+	SamplerView					 mSamplerView;
 
-	const int				   mInstrumentViewX	 = 443;
-	const int				   mInstrumentViewY	 = 49;
+	const int					 mInstrumentViewX  = 443;
+	const int					 mInstrumentViewY  = 49;
 
-	const int				   mRangesViewX		 = 16;
-	const int				   mRangesViewY		 = 145;
+	const int					 mRangesViewX	   = 16;
+	const int					 mRangesViewY	   = 145;
 
-	const int				   mQualitiesViewX	 = 325;
-	const int				   mQualitiesViewY	 = 145;
+	const int					 mQualitiesViewX   = 325;
+	const int					 mQualitiesViewY   = 145;
 
-	const int				   mTechniquesViewX	 = 650;
-	const int				   mTechniquesViewY	 = 145;
+	const int					 mTechniquesViewX  = 650;
+	const int					 mTechniquesViewY  = 145;
 
-	const int				   mInfoViewX		 = 654;
-	const int				   mInfoViewY		 = 389;
+	const int					 mInfoViewX		   = 654;
+	const int					 mInfoViewY		   = 389;
 
-	const int				   mFamousWorksViewX = 962;
-	const int				   mFamousWorksViewY = 145;
+	const int					 mFamousWorksViewX = 962;
+	const int					 mFamousWorksViewY = 145;
 
-	const int				   mSamplerViewX	 = 335;
-	const int				   mSamplerViewY	 = 459;
+	const int					 mSamplerViewX	   = 335;
+	const int					 mSamplerViewY	   = 459;
 
-	const int				   mPianoRollX		 = 0;
-	const int				   mPianoRollY		 = 586;
-	const int				   mPianoRollHeight	 = 114;
+	const int					 mPianoRollX	   = 0;
+	const int					 mPianoRollY	   = 586;
+	const int					 mPianoRollHeight  = 114;
 
-	const int				   mMenuBarX		 = 0;
-	const int				   mMenuBarY		 = 0;
-	const int				   mMenuBarHeight	 = 30;
+	const int					 mMenuBarX		   = 0;
+	const int					 mMenuBarY		   = 0;
+	const int					 mMenuBarHeight	   = 30;
 
-	const int				   mWidth			 = 1200;
-	const int				   mHeight			 = 700;
+	const int					 mWidth			   = 1200;
+	const int					 mHeight		   = 700;
 
-	int						   mCurrentKey		 = 0;
+	int							 mCurrentKey	   = 0;
 
 
 	friend class MainWindow;
