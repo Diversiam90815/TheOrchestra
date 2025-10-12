@@ -13,6 +13,7 @@
 
 OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : AudioProcessorEditor(&proc), audioProcessor(proc)
 {
+	mCoreManager = &proc.getCoreManager();
 	init();
 	showUI();
 	setLookAndFeel(&mCustomLookAndFeel);
@@ -46,7 +47,7 @@ void OrchestraEditor::showUI()
 
 void OrchestraEditor::init()
 {
-	mPianoRollView = std::make_unique<PianoRoll>(audioProcessor.getMidiKeyboardState());
+	mPianoRollView = std::make_unique<PianoRoll>(mCoreManager->getMidiKeyboardState());
 
 	mInstrumentView.init();
 	mRangesView.init();
@@ -57,16 +58,16 @@ void OrchestraEditor::init()
 	mSamplerView.init();
 
 	mCustomMenuBarModel.setInstrumentSelectedCallback([this](int key) { changeInstrument(key); });
-	mSamplerView.setArticulationChangedCallback([this](Articulation articulation) { changeArticulation(mCurrentKey, articulation); });
+	mSamplerView.setArticulationChangedCallback([this](Articulation articulation) { mCoreManager->changeArticulation(mCurrentKey, articulation); });
 }
 
 
 void OrchestraEditor::changeInstrument(int key)
 {
 	mCurrentKey			  = key;
-	auto instrument		  = this->audioProcessor.mInstrumentController.getInstrument(key);
+	auto instrument		  = mCoreManager->getInstrument(key);
 
-	auto availableSamples = audioProcessor.mOrchestraSampler.getAvailableArticulationsForInstrument(key);
+	auto availableSamples = mCoreManager->getAvailableArticulations(key);
 	mSamplerView.displayInstrument(availableSamples);
 
 	mInstrumentView.displayInstrument(instrument);
@@ -79,13 +80,6 @@ void OrchestraEditor::changeInstrument(int key)
 	mPianoRollView->displayInstrumentRanges(instrument);
 
 	resized();
-}
-
-
-void OrchestraEditor::changeArticulation(int key, Articulation articulation)
-{
-	audioProcessor.mOrchestraSampler.addSoundsFromInstrumentToSampler(key, articulation);
-	LOG_INFO("Current selected instrument (Key = {}) selected articulation {}", key, static_cast<int>(articulation));
 }
 
 

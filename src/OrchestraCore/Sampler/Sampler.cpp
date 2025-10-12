@@ -16,9 +16,9 @@ Sampler::~Sampler()
 }
 
 
-void Sampler::init(InstrumentController *controller)
+void Sampler::init(InstrumentController &controller)
 {
-	mInstrumentController = controller;
+	mInstrumentController = &controller;
 
 	mSamplesManager		  = std::make_unique<SamplesManagement>();
 	mSamplesManager->init();
@@ -34,7 +34,7 @@ void Sampler::init(InstrumentController *controller)
 }
 
 
-std::set<Articulation> Sampler::getAvailableArticulationsForInstrument(const int key)
+std::set<Articulation> Sampler::getAvailableArticulationsForInstrument(const InstrumentID key)
 {
 	auto				   samples = mSamplesManager->getSamplesForInstrument(key);
 
@@ -49,12 +49,10 @@ std::set<Articulation> Sampler::getAvailableArticulationsForInstrument(const int
 }
 
 
-void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed)
+void Sampler::addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed)
 {
 	std::vector<SamplerSound> sounds;
-	setSamplesAreReady(false);
-
-	mSampler.clearSounds();
+	reset();
 
 	auto samples = mSamplesManager->getSamplesForInstrument(key);
 
@@ -115,6 +113,28 @@ void Sampler::addSoundsFromInstrumentToSampler(const int key, Articulation artic
 		setSamplesAreReady(true);
 		LOG_INFO("Samples for instrument (Key : {}) are loaded! (NumSounds = {})", key, mSampler.getNumSounds());
 	}
+}
+
+
+void Sampler::process(AudioBuffer<float> &buffer, MidiBuffer &midiMessages)
+{
+	if (!getSamplesAreReady())
+		return;
+
+	mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
+}
+
+
+void Sampler::prepare(double sampleRate, int samplesPerBlock)
+{
+	mSampler.setCurrentPlaybackSampleRate(sampleRate);
+}
+
+
+void Sampler::reset()
+{
+	setSamplesAreReady(false);
+	mSampler.clearSounds();
 }
 
 
@@ -196,7 +216,7 @@ std::map<int, std::pair<int, int>> Sampler::createNoteRangeMap(std::map<int, std
 }
 
 
-std::pair<int, int> Sampler::getRangesOfInstrument(const int key)
+std::pair<int, int> Sampler::getRangesOfInstrument(const InstrumentID key)
 {
 	if (mInstrumentController == nullptr)
 		return {};

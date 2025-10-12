@@ -12,7 +12,7 @@
 #include "Logging.h"
 #include "OrchestraVoice.h"
 #include "Helper.h"
-
+#include "InstrumentController.h"
 
 class Sampler
 {
@@ -20,14 +20,19 @@ public:
 	Sampler() = default;
 	~Sampler();
 
-	void				   init(InstrumentController *controller);
+	void				   init(InstrumentController &controller);
 
-	std::set<Articulation> getAvailableArticulationsForInstrument(const int key);
+	std::set<Articulation> getAvailableArticulationsForInstrument(const InstrumentID key);
 
-	void				   addSoundsFromInstrumentToSampler(const int key, Articulation articulationUsed);
+	void				   addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed);
+
+	void				   process(AudioBuffer<float> &buffer, MidiBuffer &midiMessages);
+	void				   prepare(double sampleRate, int samplesPerBlock);
+
+	void				   reset();
 
 	bool				   getSamplesAreReady();
-	void				   setSamplesAreReady(bool value);
+	void				   setSamplesAreReady(bool value); // TODO: Make visible to UI
 
 
 private:
@@ -39,7 +44,7 @@ private:
 
 	std::map<int, std::pair<int, int>>					  createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap, const int key);
 
-	std::pair<int, int>									  getRangesOfInstrument(const int key);
+	std::pair<int, int>									  getRangesOfInstrument(const InstrumentID key);
 
 
 	Synthesiser											  mSampler;
@@ -51,6 +56,4 @@ private:
 	std::atomic<bool>									  mSamplesAreReady		= false;
 
 	InstrumentController								 *mInstrumentController = nullptr;
-
-	friend class OrchestraProcessor;
 };

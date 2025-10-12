@@ -11,7 +11,6 @@
 #include "JuceIncludes.h"
 #include "PluginProcessor.h"
 #include "PianoRoll.h"
-#include "InstrumentController.h"
 
 #include "CustomMenuBar.h"
 #include "InstrumentRangesView.h"
@@ -40,7 +39,7 @@ public:
 private:
 	void					   changeInstrument(int key);
 
-	void					   changeArticulation(int key, Articulation articulation);
+	CoreManager				  *mCoreManager;
 
 	OrchestraProcessor		  &audioProcessor;
 
