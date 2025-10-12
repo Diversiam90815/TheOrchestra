@@ -152,8 +152,6 @@ InstrumentInfo InstrumentController::getInstrument(InstrumentID key)
 {
 	auto it = instruments.find(key);
 
-	assert(it != instruments.end());
-
 	if (it != instruments.end())
 		return it->second;
 
