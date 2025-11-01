@@ -22,7 +22,7 @@ void PianoRoll::resized()
 }
 
 
-void PianoRoll::handleIncomingMidiMessage(MidiInput *source, const MidiMessage &message)
+void PianoRoll::handleIncomingMidiMessage(juce::MidiInput *source, const juce::MidiMessage &message)
 {
 	mPianoState->processNextMidiEvent(message);
 
@@ -43,7 +43,7 @@ void PianoRoll::init()
 	if (!mPianoState)
 		assert(false); // PianoState should be set before call init!
 
-	mPianoRoll = std::make_unique<CustomPianoRoll>(*mPianoState, MidiKeyboardComponent::horizontalKeyboard);
+	mPianoRoll = std::make_unique<CustomPianoRoll>(*mPianoState, juce::MidiKeyboardComponent::horizontalKeyboard);
 	showPianoRoll();
 }
 
@@ -67,7 +67,7 @@ void PianoRoll::displayInstrument(InstrumentInfo &info)
 }
 
 
-void PianoRoll::setKeyboardState(MidiKeyboardState &state)
+void PianoRoll::setKeyboardState(juce::MidiKeyboardState &state)
 {
 	mPianoState = &state;
 	mPianoState->addListener(this);

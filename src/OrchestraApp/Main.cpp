@@ -21,7 +21,6 @@ public:
 		mDeviceManager.addMidiInputCallback({}, &mPlayer);
 
 		processor.reset(new OrchestraProcessor());
-
 		editor.reset(new OrchestraEditor(*processor));
 
 		mPlayer.setProcessor(processor.get());
@@ -56,7 +55,6 @@ private:
 	AudioProcessorPlayer				mPlayer;
 	AudioDeviceManager					mDeviceManager;
 };
-
 
 
 class Application : public JUCEApplication

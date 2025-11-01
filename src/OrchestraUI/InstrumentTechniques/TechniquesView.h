@@ -19,21 +19,21 @@ public:
 	void displayInstrument(InstrumentInfo &instrument) override;
 
 private:
-	Label		  mTitle;
+	juce::Label		  mTitle;
 
-	TooltipWindow tooltipWindow{this};
+	juce::TooltipWindow tooltipWindow{this};
 
 	// Techniques displays using text buttons with tooltips in 3 rows a 3-3-2
-	TextButton	  mTech1;
-	TextButton	  mTech2;
-	TextButton	  mTech3;
+	juce::TextButton	mTech1;
+	juce::TextButton	mTech2;
+	juce::TextButton	mTech3;
 
-	TextButton	  mTech4;
-	TextButton	  mTech5;
-	TextButton	  mTech6;
+	juce::TextButton	mTech4;
+	juce::TextButton	mTech5;
+	juce::TextButton	mTech6;
 
-	TextButton	  mTech7;
-	TextButton	  mTech8;
+	juce::TextButton	mTech7;
+	juce::TextButton	mTech8;
 
 	const int	  mTechTitleX			= 48;
 	const int	  mTechTitleY			= 8;

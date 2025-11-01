@@ -38,47 +38,34 @@ void QualitiesView::init()
 
 void QualitiesView::displayInstrument(InstrumentInfo &instrument)
 {
-	StringArray										qualities = instrument.getQualities();
+	const auto														  qualities = instrument.getQualities();
 
-	std::vector<std::tuple<String, String, String>> parsedQualities;
+	std::vector<std::tuple<juce::String, juce::String, juce::String>> parsedQualities;
 
 	// Dividing the qualities and the ranges into separate parts
 	for (auto &quality : qualities)
 	{
-		String lowerNote, higherNote, qualityText, range;
+		std::string	 lowerNote	 = quality.getLowerRange();
+		std::string	 higherNote	 = quality.getHigherRange();
+		std::string	 description = quality.getDescription();
 
-		range		= splitColonizedStrings(quality, true);
-		qualityText = splitColonizedStrings(quality, false);
-
-		if (range.contains("-")) // Ranges are divided with a '-'
-		{
-			lowerNote  = getLowerOrHigherNote(range, true);
-			higherNote = getLowerOrHigherNote(range, false);
-		}
-		else
-		{
-			// Single note case: Use the single note as both lower and higher note
-			lowerNote  = range.trim();
-			higherNote = range.trim();
-		}
-
-		parsedQualities.emplace_back(lowerNote, higherNote, qualityText);
+		parsedQualities.emplace_back(lowerNote, higherNote, description);
 	}
 
-	TextButton *lowerNotes[]	 = {&mFirstLowerNote, &mSecondLowerNote, &mThirdLowerNote, &mFourthLowerNote};
-	TextButton *higherNotes[]	 = {&mFirstHigherNote, &mSecondHigherNote, &mThirdHigherNote, &mFourthHigherNote};
-	TextEditor *qualitiesTexts[] = {&mFirstQuality, &mSecondQuality, &mThirdQuality, &mFourthQuality};
+	juce::TextButton *lowerNotes[]	   = {&mFirstLowerNote, &mSecondLowerNote, &mThirdLowerNote, &mFourthLowerNote};
+	juce::TextButton *higherNotes[]	   = {&mFirstHigherNote, &mSecondHigherNote, &mThirdHigherNote, &mFourthHigherNote};
+	juce::TextEditor *qualitiesTexts[] = {&mFirstQuality, &mSecondQuality, &mThirdQuality, &mFourthQuality};
 
-	auto		configureEditor	 = [](TextEditor &editor, const String &text)
+	auto			  configureEditor  = [](juce::TextEditor &editor, const juce::String &text)
 	{
 		editor.setReadOnly(false);
 		editor.setVisible(!text.isEmpty());
-		editor.setText(text, dontSendNotification);
+		editor.setText(text, juce::dontSendNotification);
 		editor.setMultiLine(true);
 		editor.setReadOnly(true);
 	};
 
-	auto configureButton = [](TextButton &button, const String &text)
+	auto configureButton = [](juce::TextButton &button, const juce::String &text)
 	{
 		button.setVisible(!text.isEmpty());
 		button.setButtonText(text);
@@ -88,11 +75,11 @@ void QualitiesView::displayInstrument(InstrumentInfo &instrument)
 	{
 		if (i < parsedQualities.size())
 		{
-			const auto &[lowerNote, higherNote, qualityText] = parsedQualities[i];
+			const auto &[lowerNote, higherNote, description] = parsedQualities[i];
 
 			configureButton(*lowerNotes[i], lowerNote);
 			configureButton(*higherNotes[i], higherNote);
-			configureEditor(*qualitiesTexts[i], qualityText);
+			configureEditor(*qualitiesTexts[i], description);
 		}
 		else
 		{
