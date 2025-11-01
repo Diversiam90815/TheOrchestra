@@ -1,12 +1,9 @@
 /*
   ==============================================================================
-
 	Module			CustomLookAndFeel
 	Description		Customizing the LookNFeel class used by the Editor
-
   ==============================================================================
 */
-
 
 #pragma once
 
@@ -18,14 +15,11 @@ class CustomLookAndFeel : public LookAndFeel_V4
 {
 public:
 	CustomLookAndFeel();
-	~CustomLookAndFeel();
+	~CustomLookAndFeel() = default;
 
 	Colour				getBoxBackgroundColour() const;
-
 	float				getCornerRadius() const;
-
 	Font				getTextEditorFont();
-
 	std::vector<Colour> getQualityColours();
 
 private:
@@ -34,9 +28,7 @@ private:
 	void		  setFont();
 
 	void		  drawLabel(Graphics &g, Label &label) override;
-
 	void		  drawMenuBarBackground(Graphics &g, int width, int height, bool isMouseOverBar, MenuBarComponent &menuBar) override;
-
 	void		  drawPopupMenuItem(Graphics				   &g,
 									const juce::Rectangle<int> &area,
 									const bool					isSeparator,
@@ -48,21 +40,13 @@ private:
 									const String			   &shortcutKeyText,
 									const Drawable			   *icon,
 									const Colour			   *textColour) override;
-
-
 	void		  drawButtonBackground(Graphics &g, Button &button, const Colour &backgroundColour, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override;
 
-
 	void		  drawTooltip(Graphics &, const String &text, int width, int height) override;
-
 	TextLayout	  layoutTooltipText(const String &text) const noexcept;
 
-
 	void		  drawTextEditorOutline(Graphics &g, int width, int height, TextEditor &textEditor) override;
-
 	void		  fillTextEditorBackground(Graphics &g, int width, int height, TextEditor &textEditor) override;
-
-
 
 	// Fonts
 	Typeface::Ptr instrumentTypeface;
@@ -71,7 +55,7 @@ private:
 	Font		  noteNameFonts;
 	Font		  menuFont;
 	Font		  infoTextFont;
-	Font		  qualityTextFont;
+	Font		  textEditorFont;
 	Font		  tooltipFont;
 
 	// Font Colours

@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			SamplerView
 	Description		View box containing sampler information
-
   ==============================================================================
 */
 
@@ -20,11 +18,10 @@ using ArticulationChangedCallback = std::function<void(Articulation)>;
 class SamplerView : public CustomComponent
 {
 public:
-	SamplerView();
-	~SamplerView();
+	SamplerView()  = default;
+	~SamplerView() = default;
 
-	void init();
-
+	void init() override;
 	void displayInstrument(InstrumentInfo &instrument) override {}
 
 	void displayInstrument(std::set<Articulation> availableArticulations);

@@ -1,25 +1,11 @@
 /*
   ==============================================================================
-
 	Module			PianoRoll
 	Description		Creating and managing piano roll and midi input
-
   ==============================================================================
 */
 
 #include "PianoRoll.h"
-
-
-PianoRoll::PianoRoll(MidiKeyboardState &state)
-{
-	mPianoState = &state;
-
-	mPianoState->addListener(this);
-
-	mPianoRoll = std::make_unique<CustomPianoRoll>(*mPianoState, MidiKeyboardComponent::horizontalKeyboard);
-
-	showPianoRoll();
-}
 
 
 PianoRoll::~PianoRoll()
@@ -52,7 +38,17 @@ void PianoRoll::handleIncomingMidiMessage(MidiInput *source, const MidiMessage &
 }
 
 
-void PianoRoll::displayInstrumentRanges(InstrumentInfo &info)
+void PianoRoll::init()
+{
+	if (!mPianoState)
+		assert(false); // PianoState should be set before call init!
+
+	mPianoRoll = std::make_unique<CustomPianoRoll>(*mPianoState, MidiKeyboardComponent::horizontalKeyboard);
+	showPianoRoll();
+}
+
+
+void PianoRoll::displayInstrument(InstrumentInfo &info)
 {
 	if (info.isRhythmicPercussion())
 	{
@@ -71,14 +67,15 @@ void PianoRoll::displayInstrumentRanges(InstrumentInfo &info)
 }
 
 
+void PianoRoll::setKeyboardState(MidiKeyboardState &state)
+{
+	mPianoState = &state;
+	mPianoState->addListener(this);
+}
+
+
 void PianoRoll::showPianoRoll()
 {
 	mPianoRoll->setName("Piano Roll");
 	addAndMakeVisible(mPianoRoll.get());
 }
-
-
-void PianoRoll::handleNoteOn(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) {}
-
-
-void PianoRoll::handleNoteOff(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) {}

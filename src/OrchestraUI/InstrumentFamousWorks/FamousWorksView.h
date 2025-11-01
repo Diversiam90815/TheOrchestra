@@ -1,25 +1,22 @@
 /*
   ==============================================================================
-
 	Module			FamousWoksView
 	Description		View box containing famous works featuring the instrument
-
   ==============================================================================
 */
 
 #pragma once
 #include "CustomComponent.h"
 
+
 class FamousWorksView : public CustomComponent
 {
 public:
-	FamousWorksView();
-	~FamousWorksView();
+	FamousWorksView()  = default;
+	~FamousWorksView() = default;
 
-	void init();
-
+	void init() override;
 	void displayInstrument(InstrumentInfo &instrument) override;
-
 
 private:
 	Label	   mTitle;

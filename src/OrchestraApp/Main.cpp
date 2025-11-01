@@ -33,7 +33,7 @@ public:
 		centreWithSize(getWidth(), getHeight());
 		setVisible(true);
 
-		mDeviceManager.addMidiInputCallback({}, editor->mPianoRollView.get());
+		mDeviceManager.addMidiInputCallback({}, &editor->mPianoRollView);
 
 		LOG_INFO("Mainwindow setup finished!");
 	}

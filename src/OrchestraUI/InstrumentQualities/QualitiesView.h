@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			QualitiesView
 	Description		View box containing the qualities of the different ranges of the instrument
-
   ==============================================================================
 */
 
@@ -14,11 +12,10 @@
 class QualitiesView : public CustomComponent
 {
 public:
-	QualitiesView();
-	~QualitiesView();
+	QualitiesView()	 = default;
+	~QualitiesView() = default;
 
-	void init();
-
+	void init() override;
 	void displayInstrument(InstrumentInfo &instrument) override;
 
 private:

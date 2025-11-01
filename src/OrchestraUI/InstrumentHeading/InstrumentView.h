@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			InstrumentView
 	Description		View box containing the name and an image of the instrument
-
   ==============================================================================
 */
 
@@ -15,11 +13,10 @@
 class InstrumentView : public CustomComponent
 {
 public:
-	InstrumentView();
-	~InstrumentView();
+	InstrumentView()  = default;
+	~InstrumentView() = default;
 
-	void init();
-
+	void init() override;
 	void displayInstrument(InstrumentInfo &instrument) override;
 
 private:
