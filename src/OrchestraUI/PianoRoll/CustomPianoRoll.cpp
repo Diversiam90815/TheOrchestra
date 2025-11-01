@@ -1,13 +1,12 @@
 /*
   ==============================================================================
-
 	Module			CustomPianoRoll
 	Description		Creating our own custom piano roll, which displays the instrument's individual ranges
-
   ==============================================================================
 */
 
 #include "CustomPianoRoll.h"
+
 
 CustomPianoRoll::CustomPianoRoll(MidiKeyboardState &state, Orientation orientation) : MidiKeyboardComponent(state, orientation)
 {
@@ -17,7 +16,7 @@ CustomPianoRoll::CustomPianoRoll(MidiKeyboardState &state, Orientation orientati
 
 void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour lineColour, Colour textColour)
 {
-	mCurrentKeyType = key::whiteKey;
+	mCurrentKeyType = PianoKey::whiteKey;
 
 	if (!mRangesSet.get())
 	{
@@ -97,7 +96,7 @@ void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, Graphics &g, Rectangle<f
 
 void CustomPianoRoll::drawBlackNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour noteFillColour)
 {
-	mCurrentKeyType			 = key::blackKey;
+	mCurrentKeyType			 = PianoKey::blackKey;
 
 	Colour baseColour		 = Colours::black;
 	Colour noteOverlayColour = getNoteColour(midiNoteNumber).withAlpha(0.4f);
@@ -166,11 +165,11 @@ Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
 	if (mMidiRanges.size() > qualityColours.size())				  // Ensure there is a color for each range
 	{
 		jassertfalse;											  // More ranges than colors provided
-		if (mCurrentKeyType.get() == key::whiteKey)
+		if (mCurrentKeyType.get() == PianoKey::whiteKey)
 		{
 			return Colours::transparentWhite;
 		}
-		if (mCurrentKeyType.get() == key::blackKey)
+		if (mCurrentKeyType.get() == PianoKey::blackKey)
 		{
 			return Colours::black;
 		}
@@ -187,11 +186,11 @@ Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
 	}
 
 	// If no range matches, return a default color
-	if (mCurrentKeyType.get() == key::whiteKey)
+	if (mCurrentKeyType.get() == PianoKey::whiteKey)
 	{
 		return Colours::transparentWhite;
 	}
-	if (mCurrentKeyType.get() == key::blackKey)
+	if (mCurrentKeyType.get() == PianoKey::blackKey)
 	{
 		return Colours::black;
 	}

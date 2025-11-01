@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			InstrumentRangesView
 	Description		View box containing the range and transposition of the instrument
-
   ==============================================================================
 */
 
@@ -16,11 +14,10 @@
 class InstrumentRangesView : public CustomComponent
 {
 public:
-	InstrumentRangesView();
-	~InstrumentRangesView();
+	InstrumentRangesView()	= default;
+	~InstrumentRangesView() = default;
 
-	void init();
-
+	void init() override;
 	void displayInstrument(InstrumentInfo &instrument) override;
 
 private:

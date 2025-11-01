@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			InformationView
 	Description		View box containing the useful additional information of the instrument
-
   ==============================================================================
 */
 
@@ -14,13 +12,11 @@
 class InformationView : public CustomComponent
 {
 public:
-	InformationView();
-	~InformationView();
+	InformationView()  = default;
+	~InformationView() = default;
 
-	void init();
-
+	void init() override;
 	void displayInstrument(InstrumentInfo &instrument) override;
-
 
 private:
 	Label	   mTitle;

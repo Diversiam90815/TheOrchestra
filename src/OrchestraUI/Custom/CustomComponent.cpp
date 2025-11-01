@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			CustomComponent
 	Description		Customizing the Component class used by all sub-components
-
   ==============================================================================
 */
 
