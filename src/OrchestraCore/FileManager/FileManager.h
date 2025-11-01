@@ -36,7 +36,7 @@ public:
 
 	std::string			  getInstrumentDataJSONPath();
 
-	File				  getInstrumentImage(TypeOfImage type, InstrumentID instrumentKey);
+	juce::File			  getInstrumentImage(TypeOfImage type, InstrumentID instrumentKey);
 
 	std::filesystem::path getProjectsAppDataPath();
 

@@ -30,29 +30,29 @@ void InstrumentRangesView::init()
 
 void InstrumentRangesView::displayInstrument(InstrumentInfo &instrument)
 {
-	const String &range		 = instrument.getRange();
+	const auto &range	   = instrument.getRange();
 
-	String		  lowerNote	 = getLowerOrHigherNote(range, true);
-	String		  higherNote = getLowerOrHigherNote(range, false);
+	std::string lowerNote  = range.getLowerRange();
+	std::string higherNote = range.getHigherRange();
 
-	mLowerRangeNoteName.setText(lowerNote, dontSendNotification);
-	mHigherRangeNoteName.setText(higherNote, dontSendNotification);
+	mLowerRangeNoteName.setText(lowerNote, juce::dontSendNotification);
+	mHigherRangeNoteName.setText(higherNote, juce::dontSendNotification);
 
-	const String &transposition = instrument.getTransposition();
+	const auto &transposition = range.getTransposition();
 
-	mTranspositionNoteName.setText(transposition, dontSendNotification);
+	mTranspositionNoteName.setText(transposition, juce::dontSendNotification);
 
 	// Set images
 	InstrumentID key				 = instrument.getKey();
-	File		 lowerRangeImagePath = mFileManager.getInstrumentImage(TypeOfImage::LowerRangeNotation, key);
+	juce::File	 lowerRangeImagePath = mFileManager.getInstrumentImage(TypeOfImage::LowerRangeNotation, key);
 	setAndRescaleImage(mLowerRangeNoteImage, lowerRangeImagePath, mLowerNoteImageX, mLowerNoteImageY, mImageBoxWidth, mImageBoxHeight);
 
-	File upperRangeImagePath = mFileManager.getInstrumentImage(TypeOfImage::UpperRangeNotation, key);
+	juce::File upperRangeImagePath = mFileManager.getInstrumentImage(TypeOfImage::UpperRangeNotation, key);
 	setAndRescaleImage(mHigherRangeNoteImage, upperRangeImagePath, mHigherNoteImageX, mHigherNoteImageY, mImageBoxWidth, mImageBoxHeight);
 
-	File upperTranspositionPath = mFileManager.getInstrumentImage(TypeOfImage::TranspositionHigherNotation, key);
+	juce::File upperTranspositionPath = mFileManager.getInstrumentImage(TypeOfImage::TranspositionHigherNotation, key);
 	setAndRescaleImage(mTranspositionHigherNoteImage, upperTranspositionPath, mHigherNoteImageX, mTranspositionImageY, mImageBoxWidth, mImageBoxHeight);
 
-	File lowerTranspositionPath = mFileManager.getInstrumentImage(TypeOfImage::TranspositionLowerNotation, key);
+	juce::File lowerTranspositionPath = mFileManager.getInstrumentImage(TypeOfImage::TranspositionLowerNotation, key);
 	setAndRescaleImage(mTranspositionLowerNoteImage, lowerTranspositionPath, mLowerNoteImageX, mTranspositionImageY, mImageBoxWidth, mImageBoxHeight);
 }

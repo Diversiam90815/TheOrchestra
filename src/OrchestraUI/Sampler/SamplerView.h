@@ -30,8 +30,8 @@ public:
 
 
 private:
-	Label						mTitle;
-	ComboBox					mArticulations;
+	juce::Label					mTitle;
+	juce::ComboBox				mArticulations;
 
 	const int					mWidth					 = 269;
 	const int					mHeight					 = 107;

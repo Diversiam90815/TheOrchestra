@@ -32,34 +32,24 @@ void TechniquesView::init()
 
 void TechniquesView::displayInstrument(InstrumentInfo &instrument)
 {
-	StringArray							   techniques = instrument.getTechniques();
-
-	std::vector<std::pair<String, String>> technique;
-
-	for (auto &tech : techniques)
-	{
-		String left	 = splitColonizedStrings(tech, true);
-		String right = splitColonizedStrings(tech, false);
-
-		technique.emplace_back(left, right);
-	}
+	const auto &techniques		= instrument.getTechniques();
 
 	// Set up a lambda to configure buttons
-	auto configureButton = [](Button &button, const std::pair<String, String> &tech)
+	auto		configureButton = [](juce::Button &button, std::string &name, std::string &description)
 	{
-		button.setButtonText(tech.first);
-		button.setTooltip(tech.second);
+		button.setButtonText(name);
+		button.setTooltip(description);
 		button.setVisible(true);
 	};
 
-	Button *buttons[] = {&mTech1, &mTech2, &mTech3, &mTech4, &mTech5, &mTech6, &mTech7, &mTech8};
+	juce::Button *buttons[] = {&mTech1, &mTech2, &mTech3, &mTech4, &mTech5, &mTech6, &mTech7, &mTech8};
 
 	// Iterate and configure available techniques, hide extra buttons
 	for (size_t i = 0; i < std::size(buttons); ++i)
 	{
-		if (i < technique.size())
+		if (i < techniques.size())
 		{
-			configureButton(*buttons[i], technique[i]);
+			configureButton(*buttons[i], techniques.at(i).getName(), techniques.at(i).getDescription());
 		}
 		else
 		{

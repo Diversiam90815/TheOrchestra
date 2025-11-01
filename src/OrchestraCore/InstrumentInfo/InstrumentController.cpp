@@ -21,23 +21,23 @@ void InstrumentController::addInstrument(const InstrumentInfo &info)
 {
 	InstrumentID key = info.getKey();
 	instruments[key] = info;
-	LOG_INFO("Instrument {} loaded!", info.getName().toStdString().c_str());
+	LOG_INFO("Instrument {} loaded!", info.getName().c_str());
 }
 
 
-StringArray InstrumentController::readPlayingTechniquesFromJSON(DynamicObject *obj)
+Techniques InstrumentController::readPlayingTechniquesFromJSON(juce::DynamicObject *obj)
 {
-	StringArray playingTechniques;
+	Techniques playingTechniques;
 	if (obj->hasProperty("playingTechniques"))
 	{
-		var techniquesVar = obj->getProperty("playingTechniques");
+		juce::var techniquesVar = obj->getProperty("playingTechniques");
 		if (techniquesVar.isArray())
 		{
 			for (int i = 0; i < techniquesVar.size(); ++i)
 			{
-				var techniqueVar = techniquesVar[i];
+				juce::var techniqueVar = techniquesVar[i];
 				if (techniqueVar.isString())
-					playingTechniques.add(techniqueVar.toString());
+					playingTechniques.push_back(PlayingTechnique(techniquesVar.toString().toStdString()));
 			}
 		}
 	}
@@ -45,18 +45,18 @@ StringArray InstrumentController::readPlayingTechniquesFromJSON(DynamicObject *o
 }
 
 
-StringArray InstrumentController::readQualitiesFromJSON(DynamicObject *obj)
+Qualities InstrumentController::readQualitiesFromJSON(juce::DynamicObject *obj)
 {
-	StringArray qualities;
+	juce::StringArray qualities;
 
 	if (obj->hasProperty("qualities"))
 	{
-		var qualitiesVar = obj->getProperty("qualities");
+		juce::var qualitiesVar = obj->getProperty("qualities");
 		if (qualitiesVar.isArray())
 		{
 			for (int q = 0; q < qualitiesVar.size(); ++q)
 			{
-				var qualityVar = qualitiesVar[q];
+				juce::var qualityVar = qualitiesVar[q];
 				if (qualityVar.isString())
 					qualities.add(qualityVar.toString());
 			}
@@ -66,33 +66,28 @@ StringArray InstrumentController::readQualitiesFromJSON(DynamicObject *obj)
 }
 
 
-String InstrumentController::readNameFromJSON(DynamicObject *obj)
+std::string InstrumentController::readNameFromJSON(juce::DynamicObject *obj)
 {
-	String name = obj->getProperty("name").toString();
+	juce::String name = obj->getProperty("name").toString();
 	return name;
 }
 
 
-String InstrumentController::readRangeFromJSON(DynamicObject *obj)
+Range InstrumentController::readRangeFromJSON(juce::DynamicObject *obj)
 {
-	String range = obj->getProperty("range").toString();
+	juce::String range		   = obj->getProperty("range").toString();
+	juce::String range		   = obj->getProperty("displayedRange").toString();
+	juce::String transposition = obj->getProperty("transposition").toString();
 	return range;
 }
 
 
-String InstrumentController::readDisplayedRangeFromJSON(DynamicObject *obj)
-{
-	String range = obj->getProperty("displayedRange").toString();
-	return range;
-}
-
-
-bool InstrumentController::readIsRhythmicPercussionFromJSON(DynamicObject *obj)
+bool InstrumentController::readIsRhythmicPercussionFromJSON(juce::DynamicObject *obj)
 {
 	bool isRhythmicPercussion = false;
 	if (obj->hasProperty("isRhythmicPercussion"))
 	{
-		var rhythmicPercussionVar = obj->getProperty("isRhythmicPercussion");
+		juce::var rhythmicPercussionVar = obj->getProperty("isRhythmicPercussion");
 		if (rhythmicPercussionVar.isBool())
 			isRhythmicPercussion = rhythmicPercussionVar;
 	}
@@ -100,24 +95,17 @@ bool InstrumentController::readIsRhythmicPercussionFromJSON(DynamicObject *obj)
 }
 
 
-String InstrumentController::readTranspositionFromJSON(DynamicObject *obj)
+Roles InstrumentController::readInformationFromJSON(juce::DynamicObject *obj)
 {
-	String transposition = obj->getProperty("transposition").toString();
-	return transposition;
-}
-
-
-StringArray InstrumentController::readInformationFromJSON(DynamicObject *obj)
-{
-	StringArray roles;
+	juce::StringArray roles;
 	if (obj->hasProperty("roles"))
 	{
-		var rolesVar = obj->getProperty("roles");
+		juce::var rolesVar = obj->getProperty("roles");
 		if (rolesVar.isArray())
 		{
 			for (int r = 0; r < rolesVar.size(); ++r)
 			{
-				var roleVar = rolesVar[r];
+				juce::var roleVar = rolesVar[r];
 				if (roleVar.isString())
 					roles.add(roleVar.toString());
 			}
@@ -127,18 +115,18 @@ StringArray InstrumentController::readInformationFromJSON(DynamicObject *obj)
 }
 
 
-StringArray InstrumentController::readFamousWorksFromJSON(DynamicObject *obj)
+FamousWorks InstrumentController::readFamousWorksFromJSON(juce::DynamicObject *obj)
 {
 	StringArray famousWorks;
 
 	if (obj->hasProperty("famousWorks"))
 	{
-		var worksVar = obj->getProperty("famousWorks");
+		juce::var worksVar = obj->getProperty("famousWorks");
 		if (worksVar.isArray())
 		{
 			for (int w = 0; w < worksVar.size(); ++w)
 			{
-				var workVar = worksVar[w];
+				juce::var workVar = worksVar[w];
 				if (workVar.isString())
 					famousWorks.add(workVar.toString());
 			}

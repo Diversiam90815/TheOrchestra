@@ -20,9 +20,9 @@ public:
 	void displayInstrument(InstrumentInfo &instrument) override;
 
 private:
-	Label		  mName;  // Name of the instrument
+	juce::Label	  mName;  // Name of the instrument
 
-	DrawableImage mImage; // Image of the instrument
+	juce::DrawableImage mImage; // Image of the instrument
 
 	FileManager	  mFileManager;
 

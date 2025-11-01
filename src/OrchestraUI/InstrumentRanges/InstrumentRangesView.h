@@ -21,17 +21,17 @@ public:
 	void displayInstrument(InstrumentInfo &instrument) override;
 
 private:
-	Label		  mRangesTitle;
-	Label		  mTranspositionTitle;
-
-	Label		  mLowerRangeNoteName;
-	Label		  mHigherRangeNoteName;
-	Label		  mTranspositionNoteName;
-
-	DrawableImage mLowerRangeNoteImage;
-	DrawableImage mHigherRangeNoteImage;
-	DrawableImage mTranspositionHigherNoteImage;
-	DrawableImage mTranspositionLowerNoteImage;
+	juce::Label		  mRangesTitle;
+	juce::Label		  mTranspositionTitle;
+	
+	juce::Label		  mLowerRangeNoteName;
+	juce::Label		  mHigherRangeNoteName;
+	juce::Label		  mTranspositionNoteName;
+	
+	juce::DrawableImage mLowerRangeNoteImage;
+	juce::DrawableImage mHigherRangeNoteImage;
+	juce::DrawableImage mTranspositionHigherNoteImage;
+	juce::DrawableImage mTranspositionLowerNoteImage;
 
 	FileManager	  mFileManager;
 
