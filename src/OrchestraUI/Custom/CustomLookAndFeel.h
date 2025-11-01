@@ -11,76 +11,76 @@
 #include "BinaryData.h"
 
 
-class CustomLookAndFeel : public LookAndFeel_V4
+class CustomLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
 	CustomLookAndFeel();
 	~CustomLookAndFeel() = default;
 
-	Colour				getBoxBackgroundColour() const;
-	float				getCornerRadius() const;
-	Font				getTextEditorFont();
-	std::vector<Colour> getQualityColours();
+	juce::Colour			  getBoxBackgroundColour() const;
+	float					  getCornerRadius() const;
+	juce::Font				  getTextEditorFont();
+	std::vector<juce::Colour> getQualityColours();
 
 private:
-	void		  init();
+	void init();
 
-	void		  setFont();
+	void setFont();
 
-	void		  drawLabel(Graphics &g, Label &label) override;
-	void		  drawMenuBarBackground(Graphics &g, int width, int height, bool isMouseOverBar, MenuBarComponent &menuBar) override;
-	void		  drawPopupMenuItem(Graphics				   &g,
-									const juce::Rectangle<int> &area,
-									const bool					isSeparator,
-									const bool					isActive,
-									const bool					isHighlighted,
-									const bool					isTicked,
-									const bool					hasSubMenu,
-									const String			   &text,
-									const String			   &shortcutKeyText,
-									const Drawable			   *icon,
-									const Colour			   *textColour) override;
-	void		  drawButtonBackground(Graphics &g, Button &button, const Colour &backgroundColour, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override;
+	void drawLabel(juce::Graphics &g, juce::Label &label) override;
+	void drawMenuBarBackground(juce::Graphics &g, int width, int height, bool isMouseOverBar, juce::MenuBarComponent &menuBar) override;
+	void drawPopupMenuItem(juce::Graphics			  &g,
+						   const juce::Rectangle<int> &area,
+						   const bool				   isSeparator,
+						   const bool				   isActive,
+						   const bool				   isHighlighted,
+						   const bool				   isTicked,
+						   const bool				   hasSubMenu,
+						   const juce::String		  &text,
+						   const juce::String		  &shortcutKeyText,
+						   const juce::Drawable		  *icon,
+						   const juce::Colour		  *textColour) override;
+	void drawButtonBackground(
+		juce::Graphics &g, juce::Button &button, const juce::Colour &backgroundColour, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override;
 
-	void		  drawTooltip(Graphics &, const String &text, int width, int height) override;
-	TextLayout	  layoutTooltipText(const String &text) const noexcept;
+	void				drawTooltip(juce::Graphics &, const juce::String &text, int width, int height) override;
+	juce::TextLayout	layoutTooltipText(const juce::String &text) const noexcept;
 
-	void		  drawTextEditorOutline(Graphics &g, int width, int height, TextEditor &textEditor) override;
-	void		  fillTextEditorBackground(Graphics &g, int width, int height, TextEditor &textEditor) override;
+	void				drawTextEditorOutline(juce::Graphics &g, int width, int height, juce::TextEditor &textEditor) override;
+	void				fillTextEditorBackground(juce::Graphics &g, int width, int height, juce::TextEditor &textEditor) override;
 
 	// Fonts
-	Typeface::Ptr instrumentTypeface;
+	juce::Typeface::Ptr instrumentTypeface;
 
-	Font		  headerFont;
-	Font		  noteNameFonts;
-	Font		  menuFont;
-	Font		  infoTextFont;
-	Font		  textEditorFont;
-	Font		  tooltipFont;
+	juce::Font			headerFont;
+	juce::Font			noteNameFonts;
+	juce::Font			menuFont;
+	juce::Font			infoTextFont;
+	juce::Font			textEditorFont;
+	juce::Font			tooltipFont;
 
 	// Font Colours
-	const Colour  fontColor				  = Colour::fromRGB(238, 233, 218);
-	const Colour  whiteFontColour		  = Colour::fromRGB(255, 255, 255);
-	const Colour  tooltipFontColour		  = Colour::fromRGB(0, 0, 0);
+	const juce::Colour	fontColor				= juce::Colour::fromRGB(238, 233, 218);
+	const juce::Colour	whiteFontColour			= juce::Colour::fromRGB(255, 255, 255);
+	const juce::Colour	tooltipFontColour		= juce::Colour::fromRGB(0, 0, 0);
 
-	// Button Colours
-	const Colour  techniqueButtonColour	  = Colour::fromRGB(158, 104, 61);
 
-	// Background Colours
-	const Colour  menuBarBackground		  = Colour::fromRGB(44, 44, 44);   // Menubar background colour
-	const Colour  background			  = Colour::fromRGB(16, 14, 21);   // Colour used for the background of the app window
-	const Colour  buttonColor			  = Colour::fromRGB(158, 104, 61); // Colour used for the buttons in "Playing Techniques"
-	const Colour  boxesBackground		  = background.brighter(0.02f);	   // Colours used for the background of the different UI elements
-	const Colour  tooltipWindowBackground = Colour::fromRGB(81, 133, 246);
-	const Colour  comboBoxBackground	  = Colour::fromRGB(17, 19, 31);
+	const juce::Colour	techniqueButtonColour	= juce::Colour::fromRGB(158, 104, 61);
 
-	const float	  mCornerRadius			  = 8;
+	const juce::Colour	menuBarBackground		= juce::Colour::fromRGB(44, 44, 44);   // Menubar background colour
+	const juce::Colour	background				= juce::Colour::fromRGB(16, 14, 21);   // Colour used for the background of the app window
+	const juce::Colour	buttonColor				= juce::Colour::fromRGB(158, 104, 61); // Colour used for the buttons in "Playing Techniques"
+	const juce::Colour	boxesBackground			= background.brighter(0.02f);		   // Colours used for the background of the different UI elements
+	const juce::Colour	tooltipWindowBackground = juce::Colour::fromRGB(81, 133, 246);
+	const juce::Colour	comboBoxBackground		= juce::Colour::fromRGB(17, 19, 31);
 
-	const int	  tooltipWidth			  = 450;
-	const int	  tooltipHeight			  = 20;
+	const float			mCornerRadius			= 8;
 
-	const Colour  firstQualityColour	  = Colour::fromRGB(8, 28, 128); // Blue
-	const Colour  secondQualityColour	  = Colour::fromRGB(130, 84, 0); // Gold
-	const Colour  thirdQualityColour	  = Colour::fromRGB(24, 82, 10); // Green
-	const Colour  fourthQualityColour	  = Colour::fromRGB(84, 18, 19); // Red
+	const int			tooltipWidth			= 450;
+	const int			tooltipHeight			= 20;
+
+	const juce::Colour	firstQualityColour		= juce::Colour::fromRGB(8, 28, 128); // Blue
+	const juce::Colour	secondQualityColour		= juce::Colour::fromRGB(130, 84, 0); // Gold
+	const juce::Colour	thirdQualityColour		= juce::Colour::fromRGB(24, 82, 10); // Green
+	const juce::Colour	fourthQualityColour		= juce::Colour::fromRGB(84, 18, 19); // Red
 };

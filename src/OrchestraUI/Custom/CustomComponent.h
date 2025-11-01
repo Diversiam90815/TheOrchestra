@@ -13,33 +13,39 @@
 #include "Helper.h"
 
 
-class CustomComponent : public Component
+class CustomComponent : public juce::Component
 {
 public:
 	CustomComponent();
 	~CustomComponent();
 
-	void		 paint(Graphics &g) override;
+	void		 paint(juce::Graphics &g) override;
 
 	virtual void init()										   = 0;
 	virtual void displayInstrument(InstrumentInfo &instrument) = 0;
 
 protected:
-	void addAndConfigureTextEditor(TextEditor &editor, int x, int y, int width, int height);
+	void addAndConfigureTextEditor(juce::TextEditor &editor, int x, int y, int width, int height);
 
-	void addAndConfigureComboBox(ComboBox &box, int x, int y, int width, int height);
+	void addAndConfigureComboBox(juce::ComboBox &box, int x, int y, int width, int height);
 
-	void addAndConfigureButton(TextButton &button, const String &componentName, int x, int y, int width, int height, bool initiallyVisible = true);
+	void addAndConfigureButton(juce::TextButton &button, const juce::String &componentName, int x, int y, int width, int height, bool initiallyVisible = true);
 
-	void addAndConfigureLabel(
-		Label &label, const String &componentName, const String &text, int x, int y, int width, int height, Justification justification = Justification::centred);
+	void addAndConfigureLabel(juce::Label		 &label,
+							  const juce::String &componentName,
+							  const juce::String &text,
+							  int				  x,
+							  int				  y,
+							  int				  width,
+							  int				  height,
+							  juce::Justification justification = juce::Justification::centred);
 
-	void addAndConfigureImage(DrawableImage &image, int x, int y, int width, int height);
+	void addAndConfigureImage(juce::DrawableImage &image, int x, int y, int width, int height);
 
-	void setAndRescaleImage(DrawableImage &imageToBeSet, File &imagePath, int x, int y, int width, int height);
+	void setAndRescaleImage(juce::DrawableImage &imageToBeSet, juce::File &imagePath, int x, int y, int width, int height);
 
 private:
 	CustomLookAndFeel mCustomLookNFeel;
 
-	Path			  p; // used for drawing the corner radius
+	juce::Path		  p; // used for drawing the corner radius
 };

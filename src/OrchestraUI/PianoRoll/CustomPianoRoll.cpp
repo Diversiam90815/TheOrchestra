@@ -8,19 +8,19 @@
 #include "CustomPianoRoll.h"
 
 
-CustomPianoRoll::CustomPianoRoll(MidiKeyboardState &state, Orientation orientation) : MidiKeyboardComponent(state, orientation)
+CustomPianoRoll::CustomPianoRoll(juce::MidiKeyboardState &state, juce::KeyboardComponentBase::Orientation orientation) : juce::MidiKeyboardComponent(state, orientation)
 {
 	setOctaveForMiddleC(4);
 }
 
 
-void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour lineColour, Colour textColour)
+void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour lineColour, juce::Colour textColour)
 {
 	mCurrentKeyType = PianoKey::whiteKey;
 
-	if (!mRangesSet.get())
+	if (!mRangesSet.load())
 	{
-		auto c = Colours::transparentWhite;
+		auto c = juce::Colours::transparentWhite;
 
 		if (isDown)
 			c = findColour(keyDownOverlayColourId);
@@ -31,7 +31,7 @@ void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, Graphics &g, Rectangle<f
 	}
 	else
 	{
-		Colour noteColour = getNoteColour(midiNoteNumber);
+		juce::Colour noteColour = getNoteColour(midiNoteNumber);
 
 		if (isDown)
 			noteColour = noteColour.interpolatedWith(findColour(keyDownOverlayColourId), 0.8f);
@@ -54,16 +54,16 @@ void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, Graphics &g, Rectangle<f
 
 	if (text.isNotEmpty())
 	{
-		auto fontHeight = jmin(12.0f, getKeyWidth() * 0.9f);
+		auto fontHeight = juce::jmin(12.0f, getKeyWidth() * 0.9f);
 
 		g.setColour(textColour);
-		g.setFont(Font(fontHeight).withHorizontalScale(0.8f));
+		g.setFont(juce::Font(fontHeight).withHorizontalScale(0.8f));
 
 		switch (currentOrientation)
 		{
-		case horizontalKeyboard: g.drawText(text, area.withTrimmedLeft(1.0f).withTrimmedBottom(2.0f), Justification::centredBottom, false); break;
-		case verticalKeyboardFacingLeft: g.drawText(text, area.reduced(2.0f), Justification::centredLeft, false); break;
-		case verticalKeyboardFacingRight: g.drawText(text, area.reduced(2.0f), Justification::centredRight, false); break;
+		case horizontalKeyboard: g.drawText(text, area.withTrimmedLeft(1.0f).withTrimmedBottom(2.0f), juce::Justification::centredBottom, false); break;
+		case verticalKeyboardFacingLeft: g.drawText(text, area.reduced(2.0f), juce::Justification::centredLeft, false); break;
+		case verticalKeyboardFacingRight: g.drawText(text, area.reduced(2.0f), juce::Justification::centredRight, false); break;
 		default: break;
 		}
 	}
@@ -94,14 +94,14 @@ void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, Graphics &g, Rectangle<f
 }
 
 
-void CustomPianoRoll::drawBlackNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour noteFillColour)
+void CustomPianoRoll::drawBlackNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour noteFillColour)
 {
 	mCurrentKeyType			 = PianoKey::blackKey;
 
-	Colour baseColour		 = Colours::black;
-	Colour noteOverlayColour = getNoteColour(midiNoteNumber).withAlpha(0.4f);
+	juce::Colour baseColour		   = juce::Colours::black;
+	juce::Colour noteOverlayColour = getNoteColour(midiNoteNumber).withAlpha(0.4f);
 
-	if (mRangesSet.get())
+	if (mRangesSet.load())
 	{
 		if (isDown)
 		{
@@ -158,20 +158,20 @@ void CustomPianoRoll::drawBlackNote(int midiNoteNumber, Graphics &g, Rectangle<f
 }
 
 
-Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
+juce::Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
 {
 	auto qualityColours = mCustomLookAndFeel.getQualityColours(); // Get the colours for the note ranges
 
 	if (mMidiRanges.size() > qualityColours.size())				  // Ensure there is a color for each range
 	{
 		jassertfalse;											  // More ranges than colors provided
-		if (mCurrentKeyType.get() == PianoKey::whiteKey)
+		if (mCurrentKeyType.load() == PianoKey::whiteKey)
 		{
-			return Colours::transparentWhite;
+			return juce::Colours::transparentWhite;
 		}
-		if (mCurrentKeyType.get() == PianoKey::blackKey)
+		if (mCurrentKeyType.load() == PianoKey::blackKey)
 		{
-			return Colours::black;
+			return juce::Colours::black;
 		}
 	}
 
@@ -186,19 +186,19 @@ Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
 	}
 
 	// If no range matches, return a default color
-	if (mCurrentKeyType.get() == PianoKey::whiteKey)
+	if (mCurrentKeyType.load() == PianoKey::whiteKey)
 	{
-		return Colours::transparentWhite;
+		return juce::Colours::transparentWhite;
 	}
-	if (mCurrentKeyType.get() == PianoKey::blackKey)
+	if (mCurrentKeyType.load() == PianoKey::blackKey)
 	{
-		return Colours::black;
+		return juce::Colours::black;
 	}
 	return {};
 }
 
 
-bool CustomPianoRoll::setMidiRanges(const StringArray &qualities)
+bool CustomPianoRoll::setMidiRanges(const juce::StringArray &qualities)
 {
 	mRangesSet = false;
 	mMidiRanges.clear();
@@ -209,14 +209,14 @@ bool CustomPianoRoll::setMidiRanges(const StringArray &qualities)
 		int colonPos = quality.indexOf(":");
 		if (colonPos != -1)
 		{
-			String range   = quality.substring(0, colonPos).trim();
+			juce::String range	 = quality.substring(0, colonPos).trim();
 
 			// Find the dash separating the start and end notes
 			int	   dashPos = range.indexOf("-");
 			if (dashPos != -1)
 			{
-				String startNote = range.substring(0, dashPos).trim();
-				String endNote	 = range.substring(dashPos + 1).trim();
+				juce::String startNote = range.substring(0, dashPos).trim();
+				juce::String endNote   = range.substring(dashPos + 1).trim();
 
 				// Convert start and end notes to MIDI numbers
 				int	   startMidi = turnNotenameIntoMidinumber(startNote);
@@ -234,7 +234,7 @@ bool CustomPianoRoll::setMidiRanges(const StringArray &qualities)
 }
 
 
-bool CustomPianoRoll::setMidiRanges(const String &range)
+bool CustomPianoRoll::setMidiRanges(const juce::String &range)
 {
 	mMidiRanges.clear();
 	mRangesSet	= false;
@@ -243,8 +243,8 @@ bool CustomPianoRoll::setMidiRanges(const String &range)
 	int dashPos = range.indexOf("-");
 	if (dashPos != -1)
 	{
-		String startNote = range.substring(0, dashPos).trim();
-		String endNote	 = range.substring(dashPos + 1).trim();
+		juce::String startNote = range.substring(0, dashPos).trim();
+		juce::String endNote   = range.substring(dashPos + 1).trim();
 
 		// Convert start and end notes to MIDI numbers
 		int	   startMidi = turnNotenameIntoMidinumber(startNote);

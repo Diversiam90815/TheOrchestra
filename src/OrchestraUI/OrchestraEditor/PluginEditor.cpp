@@ -9,7 +9,7 @@
 #include "PluginEditor.h"
 
 
-OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : AudioProcessorEditor(&proc), audioProcessor(proc)
+OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : juce::AudioProcessorEditor(&proc), audioProcessor(proc)
 {
 	mCoreManager = &proc.getCoreManager();
 
@@ -56,7 +56,7 @@ void OrchestraEditor::init()
 	mFamousWorksView.init();
 	mSamplerView.init();
 
-	mMenuBar.setInstrumentSelectedCallback([this](int key) { changeInstrument(key); });
+	mMenuBar.setInstrumentSelectedCallback([this](InstrumentID key) { changeInstrument(key); });
 	mSamplerView.setArticulationChangedCallback([this](Articulation articulation) { mCoreManager->changeArticulation(mCurrentInstrument, articulation); });
 }
 
@@ -81,9 +81,9 @@ void OrchestraEditor::changeInstrument(InstrumentID key)
 }
 
 
-void OrchestraEditor::paint(Graphics &g)
+void OrchestraEditor::paint(juce::Graphics &g)
 {
-	g.fillAll(getLookAndFeel().findColour(ResizableWindow::backgroundColourId));
+	g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
 }
 
 

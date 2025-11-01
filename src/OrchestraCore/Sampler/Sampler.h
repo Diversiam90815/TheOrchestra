@@ -14,6 +14,7 @@
 #include "Helper.h"
 #include "InstrumentController.h"
 
+
 class Sampler
 {
 public:
@@ -26,7 +27,7 @@ public:
 
 	void				   addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed);
 
-	void				   process(AudioBuffer<float> &buffer, MidiBuffer &midiMessages);
+	void				   process(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
 	void				   prepare(double sampleRate, int samplesPerBlock);
 
 	void				   reset();
@@ -47,9 +48,9 @@ private:
 	std::pair<int, int>									  getRangesOfInstrument(const InstrumentID key);
 
 
-	Synthesiser											  mSampler;
+	juce::Synthesiser									  mSampler;
 
-	AudioFormatManager									  mFormatManager;
+	juce::AudioFormatManager							  mFormatManager;
 
 	std::unique_ptr<SamplesManagement>					  mSamplesManager;
 

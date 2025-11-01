@@ -14,7 +14,7 @@ CustomLookAndFeel::CustomLookAndFeel()
 }
 
 
-Colour CustomLookAndFeel::getBoxBackgroundColour() const
+juce::Colour CustomLookAndFeel::getBoxBackgroundColour() const
 {
 	return boxesBackground;
 }
@@ -29,15 +29,15 @@ float CustomLookAndFeel::getCornerRadius() const
 void CustomLookAndFeel::init()
 {
 	// Set different colours
-	setColour(ResizableWindow::backgroundColourId, background);
-	setColour(Label::textColourId, fontColor);
+	setColour(juce::ResizableWindow::backgroundColourId, background);
+	setColour(juce::Label::textColourId, fontColor);
 
-	setColour(PopupMenu::backgroundColourId, Colours::black);
-	setColour(PopupMenu::highlightedBackgroundColourId, menuBarBackground);
-	setColour(PopupMenu::highlightedTextColourId, whiteFontColour);
-	setColour(PopupMenu::textColourId, fontColor);
+	setColour(juce::PopupMenu::backgroundColourId, juce::Colours::black);
+	setColour(juce::PopupMenu::highlightedBackgroundColourId, menuBarBackground);
+	setColour(juce::PopupMenu::highlightedTextColourId, whiteFontColour);
+	setColour(juce::PopupMenu::textColourId, fontColor);
 
-	setColour(ComboBox::backgroundColourId, comboBoxBackground);
+	setColour(juce::ComboBox::backgroundColourId, comboBoxBackground);
 
 	setFont();
 }
@@ -46,15 +46,15 @@ void CustomLookAndFeel::init()
 void CustomLookAndFeel::setFont()
 {
 	// Load the custom typeface from BinaryData
-	instrumentTypeface = Typeface::createSystemTypefaceFor(BinaryData::InstrumentSerifRegular_ttf, BinaryData::InstrumentSerifRegular_ttfSize);
+	instrumentTypeface = juce::Typeface::createSystemTypefaceFor(BinaryData::InstrumentSerifRegular_ttf, BinaryData::InstrumentSerifRegular_ttfSize);
 
 	// Set the font
-	headerFont		   = Font(instrumentTypeface).withHeight(27.0f);
-	noteNameFonts	   = Font(instrumentTypeface).withHeight(25.0f);
-	menuFont		   = Font(instrumentTypeface).withHeight(27.0f);
-	infoTextFont	   = Font(instrumentTypeface).withHeight(22.0f);
-	textEditorFont	   = Font(instrumentTypeface).withHeight(20.0f);
-	tooltipFont		   = Font(instrumentTypeface).withHeight(20.0f);
+	headerFont		   = juce::Font(instrumentTypeface).withHeight(27.0f);
+	noteNameFonts	   = juce::Font(instrumentTypeface).withHeight(25.0f);
+	menuFont		   = juce::Font(instrumentTypeface).withHeight(27.0f);
+	infoTextFont	   = juce::Font(instrumentTypeface).withHeight(22.0f);
+	textEditorFont	   = juce::Font(instrumentTypeface).withHeight(20.0f);
+	tooltipFont		   = juce::Font(instrumentTypeface).withHeight(20.0f);
 
 	headerFont.setExtraKerningFactor(0.003f);
 	noteNameFonts.setExtraKerningFactor(0.003f);
@@ -65,64 +65,65 @@ void CustomLookAndFeel::setFont()
 }
 
 
-void CustomLookAndFeel::drawLabel(Graphics &g, Label &label)
+void CustomLookAndFeel::drawLabel(juce::Graphics &g, juce::Label &label)
 {
-	String labelName = label.getName();
+	juce::String labelName = label.getName();
 
 	if (labelName.contains("Title") || labelName.contains("NoteName"))
 	{
-		g.fillAll(label.findColour(Label::backgroundColourId));
-		g.setColour(label.findColour(Label::textColourId));
+		g.fillAll(label.findColour(juce::Label::backgroundColourId));
+		g.setColour(label.findColour(juce::Label::textColourId));
 		g.setFont(headerFont);
-		g.drawText(label.getText(), label.getLocalBounds(), Justification::centred, true);
+		g.drawText(label.getText(), label.getLocalBounds(), juce::Justification::centred, true);
 	}
 	else
 	{
-		g.fillAll(label.findColour(Label::backgroundColourId));
-		g.setColour(label.findColour(Label::textColourId));
+		g.fillAll(label.findColour(juce::Label::backgroundColourId));
+		g.setColour(label.findColour(juce::Label::textColourId));
 		g.setFont(infoTextFont);
-		g.drawText(label.getText(), label.getLocalBounds(), Justification::centredLeft, false);
+		g.drawText(label.getText(), label.getLocalBounds(), juce::Justification::centredLeft, false);
 	}
 }
 
 
-void CustomLookAndFeel::drawMenuBarBackground(Graphics &g, int width, int height, bool isMouseOverBar, MenuBarComponent &menuBar)
+void CustomLookAndFeel::drawMenuBarBackground(juce::Graphics &g, int width, int height, bool isMouseOverBar, juce::MenuBarComponent &menuBar)
 {
 	g.fillAll(menuBarBackground);
 	g.fillRect(0, 0, width, height);
 }
 
 
-void CustomLookAndFeel::drawPopupMenuItem(Graphics			   &g,
-										  const Rectangle<int> &area,
-										  const bool			isSeparator,
-										  const bool			isActive,
-										  const bool			isHighlighted,
-										  const bool			isTicked,
-										  const bool			hasSubMenu,
-										  const String		   &text,
-										  const String		   &shortcutKeyText,
-										  const Drawable	   *icon,
-										  const Colour		   *textColour)
+void CustomLookAndFeel::drawPopupMenuItem(juce::Graphics			 &g,
+										  const juce::Rectangle<int> &area,
+										  const bool				  isSeparator,
+										  const bool				  isActive,
+										  const bool				  isHighlighted,
+										  const bool				  isTicked,
+										  const bool				  hasSubMenu,
+										  const juce::String		 &text,
+										  const juce::String		 &shortcutKeyText,
+										  const juce::Drawable		 *icon,
+										  const juce::Colour		 *textColour)
 {
-	Colour		   baseColour = findColour(PopupMenu::backgroundColourId);
-	ColourGradient gradient(baseColour, 0, 0, baseColour.darker(0.1f), 0, float(area.getHeight()), false);
+	juce::Colour		 baseColour = findColour(juce::PopupMenu::backgroundColourId);
+	juce::ColourGradient gradient(baseColour, 0, 0, baseColour.darker(0.1f), 0, float(area.getHeight()), false);
 
 	if (isHighlighted)
 	{
-		gradient = ColourGradient(findColour(PopupMenu::highlightedBackgroundColourId), 0, 0, findColour(PopupMenu::highlightedBackgroundColourId).darker(0.2f), 0,
-								  float(area.getHeight()), false);
+		gradient = juce::ColourGradient(findColour(juce::PopupMenu::highlightedBackgroundColourId), 0, 0, findColour(juce::PopupMenu::highlightedBackgroundColourId).darker(0.2f),
+										0, float(area.getHeight()), false);
 	}
 	g.setGradientFill(gradient);
 	g.fillRect(area);
 
-	g.setColour(isHighlighted ? findColour(PopupMenu::highlightedTextColourId) : findColour(PopupMenu::textColourId));
+	g.setColour(isHighlighted ? findColour(juce::PopupMenu::highlightedTextColourId) : findColour(juce::PopupMenu::textColourId));
 	g.setFont(getPopupMenuFont());
-	g.drawText(text, area.reduced(10, 0), Justification::centred, true);
+	g.drawText(text, area.reduced(10, 0), juce::Justification::centred, true);
 }
 
 
-void CustomLookAndFeel::drawButtonBackground(Graphics &g, Button &button, const Colour &backgroundColour, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
+void CustomLookAndFeel::drawButtonBackground(
+	juce::Graphics &g, juce::Button &button, const juce::Colour &backgroundColour, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
 {
 	auto cornerSize = 6.0f;
 	auto bounds		= button.getLocalBounds().toFloat().reduced(0.5f, 0.5f);
@@ -159,71 +160,71 @@ void CustomLookAndFeel::drawButtonBackground(Graphics &g, Button &button, const 
 
 	if (flatOnLeft || flatOnRight || flatOnTop || flatOnBottom)
 	{
-		Path path;
+		juce::Path path;
 		path.addRoundedRectangle(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight(), cornerSize, cornerSize, !(flatOnLeft || flatOnTop),
-								 !(flatOnRight || flatOnTop), !(flatOnLeft || flatOnBottom), !(flatOnRight || flatOnBottom));
+									   !(flatOnRight || flatOnTop), !(flatOnLeft || flatOnBottom), !(flatOnRight || flatOnBottom));
 
 		g.fillPath(path);
 
-		g.setColour(button.findColour(ComboBox::outlineColourId));
-		g.strokePath(path, PathStrokeType(1.0f));
+		g.setColour(button.findColour(juce::ComboBox::outlineColourId));
+		g.strokePath(path, juce::PathStrokeType(1.0f));
 	}
 	else
 	{
 		g.fillRoundedRectangle(bounds, cornerSize);
 
-		g.setColour(button.findColour(ComboBox::outlineColourId));
+		g.setColour(button.findColour(juce::ComboBox::outlineColourId));
 		g.drawRoundedRectangle(bounds, cornerSize, 1.0f);
 	}
 }
 
 
-void CustomLookAndFeel::drawTooltip(Graphics &g, const String &text, int width, int height)
+void CustomLookAndFeel::drawTooltip(juce::Graphics &g, const juce::String &text, int width, int height)
 {
 	g.setColour(tooltipWindowBackground);
 	g.fillRoundedRectangle(0, 0, (float)tooltipWidth, (float)tooltipHeight, mCornerRadius);
 
-	TextLayout tl = layoutTooltipText(text);
-	tl.draw(g, Rectangle<float>(5.0f, 0.0f, (float)tooltipWidth - 10.0f, (float)tooltipHeight - 6.0f));
+	juce::TextLayout tl = layoutTooltipText(text);
+	tl.draw(g, juce::Rectangle<float>(5.0f, 0.0f, (float)tooltipWidth - 10.0f, (float)tooltipHeight - 6.0f));
 }
 
 
-TextLayout CustomLookAndFeel::layoutTooltipText(const String &text) const noexcept
+juce::TextLayout CustomLookAndFeel::layoutTooltipText(const juce::String &text) const noexcept
 {
-	AttributedString s;
-	s.setJustification(Justification::centredLeft);
+	juce::AttributedString s;
+	s.setJustification(juce::Justification::centredLeft);
 	s.append(text, tooltipFont, tooltipFontColour);
 	s.setLineSpacing(1.05);
 
-	TextLayout tl;
+	juce::TextLayout tl;
 	tl.createLayout(s, (float)tooltipWidth - 10.0f);
 	return tl;
 }
 
 
-void CustomLookAndFeel::drawTextEditorOutline(Graphics &g, int width, int height, TextEditor &textEditor)
+void CustomLookAndFeel::drawTextEditorOutline(juce::Graphics &g, int width, int height, juce::TextEditor &textEditor)
 {
-	g.setColour(Colours::transparentBlack);
+	g.setColour(juce::Colours::transparentBlack);
 	g.drawRect(0, 0, width, height);
 }
 
 
-void CustomLookAndFeel::fillTextEditorBackground(Graphics &g, int width, int height, TextEditor &textEditor)
+void CustomLookAndFeel::fillTextEditorBackground(juce::Graphics &g, int width, int height, juce::TextEditor &textEditor)
 {
-	g.setColour(Colours::transparentBlack);
+	g.setColour(juce::Colours::transparentBlack);
 	g.fillRect(0, 0, width, height);
 }
 
 
-Font CustomLookAndFeel::getTextEditorFont()
+juce::Font CustomLookAndFeel::getTextEditorFont()
 {
 	return textEditorFont;
 }
 
 
-std::vector<Colour> CustomLookAndFeel::getQualityColours()
+std::vector<juce::Colour> CustomLookAndFeel::getQualityColours()
 {
-	std::vector<Colour> qualityColours;
+	std::vector<juce::Colour> qualityColours;
 	qualityColours.reserve(4);
 
 	// Add brighter versions for the colours for the piano roll

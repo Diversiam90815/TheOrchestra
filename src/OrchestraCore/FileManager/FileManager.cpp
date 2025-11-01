@@ -37,11 +37,11 @@ std::vector<std::string> FileManager::getInstrumentsImages(InstrumentID instrume
 }
 
 
-File FileManager::getInstrumentImage(TypeOfImage type, InstrumentID instrumentKey)
+juce::File FileManager::getInstrumentImage(TypeOfImage type, InstrumentID instrumentKey)
 {
 	auto   images = getInstrumentsImages(instrumentKey);
 
-	String filter = "";
+	std::string filter = "";
 	switch (type)
 	{
 	case (TypeOfImage::InstrumentImage):
@@ -69,20 +69,20 @@ File FileManager::getInstrumentImage(TypeOfImage type, InstrumentID instrumentKe
 		filter = "transposition_high";
 		break;
 	}
-	default: return File();
+	default: return juce::File();
 	}
 
 	// Find an image within the folder that has the name "instrument"
-	auto it = std::find_if(images.begin(), images.end(), [&filter](const String &imagePath) { return imagePath.containsIgnoreCase(filter); });
+	auto it = std::find_if(images.begin(), images.end(), [&filter](const juce::String &imagePath) { return imagePath.containsIgnoreCase(filter); });
 
 	// Check if it was found
 	if (it != images.end())
 	{
-		File path = File(*it);
+		juce::File path = juce::File(*it);
 		return path;
 	}
 
-	return File(); // return empty file it not found
+	return juce::File(); // return empty file it not found
 }
 
 

@@ -8,15 +8,15 @@
 #include "MenuBar.h"
 
 
-StringArray MenuBar::getMenuBarNames()
+juce::StringArray MenuBar::getMenuBarNames()
 {
 	return {"Woodwinds", "Brass", "Strings", "Percussion"};
 }
 
 
-PopupMenu MenuBar::getMenuForIndex(int topLevelMenuIndex, const String &menuName)
+juce::PopupMenu MenuBar::getMenuForIndex(int topLevelMenuIndex, const juce::String &menuName)
 {
-	PopupMenu menu;
+	juce::PopupMenu menu;
 
 	if (topLevelMenuIndex == 0) // Woodwinds
 	{

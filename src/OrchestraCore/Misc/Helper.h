@@ -11,50 +11,59 @@
 #include "Parameters.h"
 
 
-static std::map<String, Family> familyMap = {{StringsName, Family::Strings}, {WoodwindsName, Family::Woodwinds}, {BrassName, Family::Brass}, {PercussionName, Family::Percussion}};
+static std::map<std::string, Family>	   familyMap	   = {{std::string(StringsName), Family::Strings},
+															  {std::string(WoodwindsName), Family::Woodwinds},
+															  {std::string(BrassName), Family::Brass},
+															  {std::string(PercussionName), Family::Percussion}};
 
 
-static std::map<String, int>	instrumentMap		  = {{ViolinName, static_cast<int>(Strings::Violin)},
-														 {ViolaName, static_cast<int>(Strings::Viola)},
-														 {VioloncelloName, static_cast<int>(Strings::Violoncello)},
-														 {DoubleBassName, static_cast<int>(Strings::DoubleBass)},
-														 {FrenchHornName, static_cast<int>(Brass::FrenchHorn)},
-														 {TenorTromboneName, static_cast<int>(Brass::TenorTrombone)},
-														 {BassTromboneName, static_cast<int>(Brass::BassTrombone)},
-														 {CimbassoName, static_cast<int>(Brass::Cimbasso)},
-														 {TrumpetName, static_cast<int>(Brass::Trumpet)},
-														 {TubaName, static_cast<int>(Brass::Tuba)},
-														 {FluteName, static_cast<int>(Woodwinds::Flute)},
-														 {ClarinetName, static_cast<int>(Woodwinds::Clarinet)},
-														 {OboeName, static_cast<int>(Woodwinds::Oboe)},
-														 {BassClarinetName, static_cast<int>(Woodwinds::BassClarinet)},
-														 {PiccoloName, static_cast<int>(Woodwinds::Piccolo)},
-														 {CorAnglaisName, static_cast<int>(Woodwinds::CorAnglais)},
-														 {BassoonName, static_cast<int>(Woodwinds::Bassoon)},
-														 {ContrabassoonName, static_cast<int>(Woodwinds::Contrabassoon)},
-														 {TimpaniName, static_cast<int>(Percussion::Timpani)},
-														 {CelesteName, static_cast<int>(Percussion::Celeste)},
-														 {MarimbaName, static_cast<int>(Percussion::Marimba)},
-														 {HarpName, static_cast<int>(Percussion::Harp)}};
+static std::map<std::string, int>		   instrumentMap   = {{std::string(ViolinName), static_cast<int>(Strings::Violin)},
+															  {std::string(ViolaName), static_cast<int>(Strings::Viola)},
+															  {std::string(VioloncelloName), static_cast<int>(Strings::Violoncello)},
+															  {std::string(DoubleBassName), static_cast<int>(Strings::DoubleBass)},
+															  {std::string(FrenchHornName), static_cast<int>(Brass::FrenchHorn)},
+															  {std::string(TenorTromboneName), static_cast<int>(Brass::TenorTrombone)},
+															  {std::string(BassTromboneName), static_cast<int>(Brass::BassTrombone)},
+															  {std::string(CimbassoName), static_cast<int>(Brass::Cimbasso)},
+															  {std::string(TrumpetName), static_cast<int>(Brass::Trumpet)},
+															  {std::string(TubaName), static_cast<int>(Brass::Tuba)},
+															  {std::string(FluteName), static_cast<int>(Woodwinds::Flute)},
+															  {std::string(ClarinetName), static_cast<int>(Woodwinds::Clarinet)},
+															  {std::string(OboeName), static_cast<int>(Woodwinds::Oboe)},
+															  {std::string(BassClarinetName), static_cast<int>(Woodwinds::BassClarinet)},
+															  {std::string(PiccoloName), static_cast<int>(Woodwinds::Piccolo)},
+															  {std::string(CorAnglaisName), static_cast<int>(Woodwinds::CorAnglais)},
+															  {std::string(BassoonName), static_cast<int>(Woodwinds::Bassoon)},
+															  {std::string(ContrabassoonName), static_cast<int>(Woodwinds::Contrabassoon)},
+															  {std::string(TimpaniName), static_cast<int>(Percussion::Timpani)},
+															  {std::string(CelesteName), static_cast<int>(Percussion::Celeste)},
+															  {std::string(MarimbaName), static_cast<int>(Percussion::Marimba)},
+															  {std::string(HarpName), static_cast<int>(Percussion::Harp)}};
 
 
-static std::map<String, Articulation> articulationMap = {
-	{SustainArticulation, Articulation::sustain},	  {StaccatoArticulation, Articulation::staccato}, {SpiccatoArticulation, Articulation::spiccato},
-	{PizzicatoArticulation, Articulation::pizzicato}, {MutedArticulation, Articulation::mute},		  {VibratoArticulation, Articulation::vibrato},
-	{TremoloArticulation, Articulation::tremolo},	  {HitsArticulation, Articulation::hits},		  {RollsArticulation, Articulation::rolls}};
+static std::map<std::string, Articulation> articulationMap = {
+	{std::string(SustainArticulation), Articulation::sustain},	 {std::string(StaccatoArticulation), Articulation::staccato},
+	{std::string(SpiccatoArticulation), Articulation::spiccato}, {std::string(PizzicatoArticulation), Articulation::pizzicato},
+	{std::string(MutedArticulation), Articulation::mute},		 {std::string(VibratoArticulation), Articulation::vibrato},
+	{std::string(TremoloArticulation), Articulation::tremolo},	 {std::string(HitsArticulation), Articulation::hits},
+	{std::string(RollsArticulation), Articulation::rolls}};
 
-static std::map<Articulation, String> articulationReverseMap = {
-	{Articulation::sustain, SustainArticulation},	  {Articulation::staccato, StaccatoArticulation}, {Articulation::spiccato, SpiccatoArticulation},
-	{Articulation::pizzicato, PizzicatoArticulation}, {Articulation::mute, MutedArticulation},		  {Articulation::vibrato, VibratoArticulation},
-	{Articulation::tremolo, TremoloArticulation},	  {Articulation::hits, HitsArticulation},		  {Articulation::rolls, RollsArticulation}};
+static std::map<Articulation, std::string> articulationReverseMap = {
+	{Articulation::sustain, std::string(SustainArticulation)},	 {Articulation::staccato, std::string(StaccatoArticulation)},
+	{Articulation::spiccato, std::string(SpiccatoArticulation)}, {Articulation::pizzicato, std::string(PizzicatoArticulation)},
+	{Articulation::mute, std::string(MutedArticulation)},		 {Articulation::vibrato, std::string(VibratoArticulation)},
+	{Articulation::tremolo, std::string(TremoloArticulation)},	 {Articulation::hits, std::string(HitsArticulation)},
+	{Articulation::rolls, std::string(RollsArticulation)}};
 
 
-static std::map<String, Dynamics> dynamicMap	   = {{PianissimoDynamic, Dynamics::pianissimo}, {PianoDynamic, Dynamics::piano}, {MezzoPianoDynamic, Dynamics::mezzoPiano},
-													  {MezzoForteDynamic, Dynamics::mezzoForte}, {ForteDynamic, Dynamics::forte}, {FortissimoDynamic, Dynamics::fortissimo}};
+static std::map<std::string, Dynamics> dynamicMap		= {{std::string(PianissimoDynamic), Dynamics::pianissimo}, {std::string(PianoDynamic), Dynamics::piano},
+														   {std::string(MezzoPianoDynamic), Dynamics::mezzoPiano}, {std::string(MezzoForteDynamic), Dynamics::mezzoForte},
+														   {std::string(ForteDynamic), Dynamics::forte},		   {std::string(FortissimoDynamic), Dynamics::fortissimo}};
 
 
 // Some samples have the velocity layer in their name instead of the dynamic value, so we set them to default values
-static std::map<String, Dynamics> velocityLayerMap = {{"v1", Dynamics::mezzoPiano}, {"v2", Dynamics::mezzoForte}, {"v3", Dynamics::forte}, {"v4", Dynamics::fortissimo}};
+static std::map<std::string, Dynamics> velocityLayerMap = {
+	{std::string("v1"), Dynamics::mezzoPiano}, {std::string("v2"), Dynamics::mezzoForte}, {std::string("v3"), Dynamics::forte}, {std::string("v4"), Dynamics::fortissimo}};
 
 
 /*
@@ -79,7 +88,7 @@ static InstrumentID getInstrumentKey(Family family, InstrumentEnum instrument)
 	@param                 [IN] String of the instrument
 	@return                int value of the 3 digit key
 */
-static InstrumentID getInstrumentKey(String &family, String &instrument)
+static InstrumentID getInstrumentKey(std::string &family, std::string &instrument)
 {
 	Family familyKey;
 	int	   instrumentKey{0};
@@ -99,37 +108,47 @@ static InstrumentID getInstrumentKey(String &family, String &instrument)
 }
 
 
-static std::map<Family, String> reverseFamilyMap = {
+static std::map<Family, std::string> reverseFamilyMap = {
 	{Family::Strings, StringsName}, {Family::Woodwinds, WoodwindsName}, {Family::Brass, BrassName}, {Family::Percussion, PercussionName}};
 
 
 
 // Reverse instrument map using the full key:
-static std::map<InstrumentID, String> reverseInstrumentMap = {
-	{getInstrumentKey(Family::Strings, Strings::Violin), ViolinName},			{getInstrumentKey(Family::Strings, Strings::Viola), ViolaName},
-	{getInstrumentKey(Family::Strings, Strings::Violoncello), VioloncelloName}, {getInstrumentKey(Family::Strings, Strings::DoubleBass), DoubleBassName},
-	{getInstrumentKey(Family::Woodwinds, Woodwinds::Piccolo), PiccoloName},		{getInstrumentKey(Family::Woodwinds, Woodwinds::Flute), FluteName},
-	{getInstrumentKey(Family::Woodwinds, Woodwinds::Oboe), OboeName},			{getInstrumentKey(Family::Woodwinds, Woodwinds::CorAnglais), CorAnglaisName},
-	{getInstrumentKey(Family::Woodwinds, Woodwinds::Clarinet), ClarinetName},	{getInstrumentKey(Family::Woodwinds, Woodwinds::BassClarinet), BassClarinetName},
-	{getInstrumentKey(Family::Woodwinds, Woodwinds::Bassoon), BassoonName},		{getInstrumentKey(Family::Woodwinds, Woodwinds::Contrabassoon), ContrabassoonName},
-	{getInstrumentKey(Family::Brass, Brass::FrenchHorn), FrenchHornName},		{getInstrumentKey(Family::Brass, Brass::Trumpet), TrumpetName},
-	{getInstrumentKey(Family::Brass, Brass::TenorTrombone), TenorTromboneName}, {getInstrumentKey(Family::Brass, Brass::BassTrombone), BassTromboneName},
-	{getInstrumentKey(Family::Brass, Brass::Cimbasso), CimbassoName},			{getInstrumentKey(Family::Brass, Brass::Tuba), TubaName},
-	{getInstrumentKey(Family::Percussion, Percussion::Harp), HarpName},			{getInstrumentKey(Family::Percussion, Percussion::Celeste), CelesteName},
-	{getInstrumentKey(Family::Percussion, Percussion::Timpani), TimpaniName},	{getInstrumentKey(Family::Percussion, Percussion::Marimba), MarimbaName}};
+static std::map<InstrumentID, std::string> reverseInstrumentMap = {{getInstrumentKey(Family::Strings, Strings::Violin), std::string(ViolinName)},
+																   {getInstrumentKey(Family::Strings, Strings::Viola), std::string(ViolaName)},
+																   {getInstrumentKey(Family::Strings, Strings::Violoncello), std::string(VioloncelloName)},
+																   {getInstrumentKey(Family::Strings, Strings::DoubleBass), std::string(DoubleBassName)},
+																   {getInstrumentKey(Family::Woodwinds, Woodwinds::Piccolo), std::string(PiccoloName)},
+																   {getInstrumentKey(Family::Woodwinds, Woodwinds::Flute), std::string(FluteName)},
+																   {getInstrumentKey(Family::Woodwinds, Woodwinds::Oboe), std::string(OboeName)},
+																   {getInstrumentKey(Family::Woodwinds, Woodwinds::CorAnglais), std::string(CorAnglaisName)},
+																   {getInstrumentKey(Family::Woodwinds, Woodwinds::Clarinet), std::string(ClarinetName)},
+																   {getInstrumentKey(Family::Woodwinds, Woodwinds::BassClarinet), std::string(BassClarinetName)},
+																   {getInstrumentKey(Family::Woodwinds, Woodwinds::Bassoon), std::string(BassoonName)},
+																   {getInstrumentKey(Family::Woodwinds, Woodwinds::Contrabassoon), std::string(ContrabassoonName)},
+																   {getInstrumentKey(Family::Brass, Brass::FrenchHorn), std::string(FrenchHornName)},
+																   {getInstrumentKey(Family::Brass, Brass::Trumpet), std::string(TrumpetName)},
+																   {getInstrumentKey(Family::Brass, Brass::TenorTrombone), std::string(TenorTromboneName)},
+																   {getInstrumentKey(Family::Brass, Brass::BassTrombone), std::string(BassTromboneName)},
+																   {getInstrumentKey(Family::Brass, Brass::Cimbasso), std::string(CimbassoName)},
+																   {getInstrumentKey(Family::Brass, Brass::Tuba), std::string(TubaName)},
+																   {getInstrumentKey(Family::Percussion, Percussion::Harp), std::string(HarpName)},
+																   {getInstrumentKey(Family::Percussion, Percussion::Celeste), std::string(CelesteName)},
+																   {getInstrumentKey(Family::Percussion, Percussion::Timpani), std::string(TimpaniName)},
+																   {getInstrumentKey(Family::Percussion, Percussion::Marimba), std::string(MarimbaName)}};
 
 
 
-static std::string getInstrumentNameFromKey(InstrumentID key)
+static std::string						   getInstrumentNameFromKey(InstrumentID key)
 {
-	return reverseInstrumentMap.at(key).toStdString();
+	return reverseInstrumentMap.at(key);
 }
 
 
 static std::string getFamilyNameFromKey(InstrumentID key)
 {
 	int familyVal = key / 100;
-	return reverseFamilyMap.at(static_cast<Family>(familyVal)).toStdString();
+	return reverseFamilyMap.at(static_cast<Family>(familyVal));
 }
 
 
@@ -139,17 +158,17 @@ static std::string getFamilyNameFromKey(InstrumentID key)
 	@param                 [IN] getLower -> if true, the lower note will be returned, false otherwise
 	@return                Note Value as a String
 */
-static String getLowerOrHigherNote(const String &range, bool getLower)
+static std::string getLowerOrHigherNote(const std::string &range, bool getLower)
 {
 	// Split range into two parts (lower and higher note)
-	StringArray rangeParts = StringArray::fromTokens(range, "-", "");
+	juce::StringArray rangeParts = juce::StringArray::fromTokens(range, "-", "");
 
 	if (rangeParts.size() != 2)
 		return {};
 
 	// Trim whitespaces
-	String lowerNote  = rangeParts[0].trim();
-	String higherNote = rangeParts[1].trim();
+	std::string lowerNote  = rangeParts[0].trim().toStdString();
+	std::string higherNote = rangeParts[1].trim().toStdString();
 
 	return getLower ? lowerNote : higherNote;
 }
@@ -161,17 +180,17 @@ static String getLowerOrHigherNote(const String &range, bool getLower)
 	@param                 [IN] firstPart -> if true, the left part will be returned, false otherwise
 	@return                Left or right value as a String
 */
-static String splitColonizedStrings(String &colonizedString, bool firstPart)
+static std::string splitColonizedStrings(juce::String &colonizedString, bool firstPart)
 {
 	// Find the colon (:) and split the string
-	StringArray parts = StringArray::fromTokens(colonizedString, ":", "");
+	juce::StringArray parts = juce::StringArray::fromTokens(colonizedString, ":", "");
 
 	if (parts.size() != 2)
 		return {};
 
 	// Trim whitespaces
-	String leftPart	 = parts[0].trim();
-	String rightPart = parts[1].trim();
+	std::string leftPart  = parts[0].trim().toStdString();
+	std::string rightPart = parts[1].trim().toStdString();
 
 	return firstPart ? leftPart : rightPart;
 }
@@ -183,17 +202,18 @@ of 60.
 @param                 [IN] notename -> The name of the note and the octave -> E4, C6, C#2, Gb3,...
 @return                Midi note value as an int of the note given. If there an error occured, it returns -1.
 */
-static int turnNotenameIntoMidinumber(String notename)
+static int turnNotenameIntoMidinumber(juce::String notename)
 {
-	wchar_t				  wOctave			= notename.getLastCharacter();
-	int					  octave			= wOctave - '0';
+	wchar_t					   wOctave				 = notename.getLastCharacter();
+	int						   octave				 = wOctave - '0';
 
-	String				  noteWithoutOctave = notename.dropLastCharacters(1);
+	juce::String			   juceNoteWithoutOctave = notename.dropLastCharacters(1);
+	std::string				   noteWithoutOctave	 = juceNoteWithoutOctave.toStdString();
 
-	std::map<String, int> noteToMidi		= {{"C", 0},  {"C#", 1}, {"Db", 1}, {"D", 2},  {"D#", 3}, {"Eb", 3},  {"E", 4},	  {"F", 5}, {"F#", 6},
-											   {"Gb", 6}, {"G", 7},	 {"G#", 8}, {"Ab", 8}, {"A", 9},  {"A#", 10}, {"Bb", 10}, {"B", 11}};
+	std::map<std::string, int> noteToMidi			 = {{"C", 0},  {"C#", 1}, {"Db", 1}, {"D", 2},	{"D#", 3}, {"Eb", 3},  {"E", 4},   {"F", 5}, {"F#", 6},
+														{"Gb", 6}, {"G", 7},  {"G#", 8}, {"Ab", 8}, {"A", 9},  {"A#", 10}, {"Bb", 10}, {"B", 11}};
 
-	int					  noteValue			= 0;
+	int						   noteValue			 = 0;
 
 	if (noteToMidi.find(noteWithoutOctave) != noteToMidi.end())
 	{

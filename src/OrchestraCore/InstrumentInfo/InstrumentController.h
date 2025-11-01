@@ -33,24 +33,13 @@ public:
 private:
 	void								   addInstrument(const InstrumentInfo &info);
 
-	StringArray							   readPlayingTechniquesFromJSON(DynamicObject *obj);
-
-	StringArray							   readQualitiesFromJSON(DynamicObject *obj);
-
-	String								   readNameFromJSON(DynamicObject *obj);
-
-	String								   readRangeFromJSON(DynamicObject *obj);
-
-	String								   readDisplayedRangeFromJSON(DynamicObject *obj);
-
-	bool								   readIsRhythmicPercussionFromJSON(DynamicObject *obj);
-
-	String								   readTranspositionFromJSON(DynamicObject *obj);
-
-	StringArray							   readInformationFromJSON(DynamicObject *obj);
-
-	StringArray							   readFamousWorksFromJSON(DynamicObject *obj);
-
+	Techniques							   readPlayingTechniquesFromJSON(juce::DynamicObject *obj);
+	Qualities							   readQualitiesFromJSON(juce::DynamicObject *obj);
+	std::string							   readNameFromJSON(juce::DynamicObject *obj);
+	Range								   readRangeFromJSON(juce::DynamicObject *obj);
+	bool								   readIsRhythmicPercussionFromJSON(juce::DynamicObject *obj);
+	Roles								   readInformationFromJSON(juce::DynamicObject *obj);
+	FamousWorks							   readFamousWorksFromJSON(juce::DynamicObject *obj);
 
 	std::map<InstrumentID, InstrumentInfo> instruments; // Mapping the instrument's key to the corresponding InstrumentInfo object
 

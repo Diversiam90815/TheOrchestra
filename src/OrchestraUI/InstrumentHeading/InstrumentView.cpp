@@ -18,10 +18,10 @@ void InstrumentView::init()
 
 void InstrumentView::displayInstrument(InstrumentInfo &instrument)
 {
-	const String &name = instrument.getName();
-	mName.setText(name, dontSendNotification);
+	const auto &name = instrument.getName();
+	mName.setText(name, juce::dontSendNotification);
 
 	InstrumentID key	   = instrument.getKey();
-	File		 imagePath = mFileManager.getInstrumentImage(TypeOfImage::InstrumentImage, key);
+	juce::File	 imagePath = mFileManager.getInstrumentImage(TypeOfImage::InstrumentImage, key);
 	setAndRescaleImage(mImage, imagePath, mImageX, mImageY, mImageWidth, mImageHeight);
 }

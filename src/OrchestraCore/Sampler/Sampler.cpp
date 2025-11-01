@@ -51,7 +51,7 @@ std::set<Articulation> Sampler::getAvailableArticulationsForInstrument(const Ins
 
 void Sampler::addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed)
 {
-	std::vector<SamplerSound> sounds;
+	std::vector<juce::SamplerSound> sounds;
 	reset();
 
 	auto samples = mSamplesManager->getSamplesForInstrument(key);
@@ -116,7 +116,7 @@ void Sampler::addSoundsFromInstrumentToSampler(const InstrumentID key, Articulat
 }
 
 
-void Sampler::process(AudioBuffer<float> &buffer, MidiBuffer &midiMessages)
+void Sampler::process(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
 {
 	if (!getSamplesAreReady())
 		return;
@@ -221,17 +221,13 @@ std::pair<int, int> Sampler::getRangesOfInstrument(const InstrumentID key)
 	if (mInstrumentController == nullptr)
 		return {};
 
-	auto   instrument = mInstrumentController->getInstrument(key);
-	String range	  = instrument.getRange();
+	auto instrument		 = mInstrumentController->getInstrument(key);
+	auto range			 = instrument.getRange();
+	auto higherNote		 = range.getHigherRange();
+	auto lowerNote		 = range.getLowerRange();
 
-	if (instrument.isRhythmicPercussion())
-		range = instrument.getDisplayedRange();
-
-	String lowerNote	   = getLowerOrHigherNote(range, true);
-	String higherNote	   = getLowerOrHigherNote(range, false);
-
-	int	   lowerNoteValue  = turnNotenameIntoMidinumber(lowerNote);
-	int	   higherNoteValue = turnNotenameIntoMidinumber(higherNote);
+	int	 lowerNoteValue	 = turnNotenameIntoMidinumber(lowerNote);
+	int	 higherNoteValue = turnNotenameIntoMidinumber(higherNote);
 
 	return std::pair<int, int>(lowerNoteValue, higherNoteValue);
 }

@@ -34,7 +34,7 @@ void SamplerView::displayInstrument(std::set<Articulation> availableArticulation
 
 	for (auto &articulation : availableArticulations)
 	{
-		String articulationString = articulationReverseMap.at(articulation);
+		std::string articulationString = articulationReverseMap.at(articulation);
 		mArticulations.addItem(articulationString, static_cast<int>(articulation));
 	}
 }

@@ -12,7 +12,7 @@
 #include "CustomComponent.h"
 
 
-class PianoRoll : public CustomComponent, private MidiKeyboardState::Listener, public MidiInputCallback
+class PianoRoll : public CustomComponent, private juce::MidiKeyboardState::Listener, public juce::MidiInputCallback
 {
 public:
 	PianoRoll() = default;
@@ -21,20 +21,20 @@ public:
 	void init() override;
 	void displayInstrument(InstrumentInfo &info) override;
 
-	void setKeyboardState(MidiKeyboardState &state);
+	void setKeyboardState(juce::MidiKeyboardState &state);
 
 private:
 	void							 showPianoRoll();
 
 	void							 resized() override;
 
-	void							 handleIncomingMidiMessage(MidiInput *source, const MidiMessage &message) override;
+	void							 handleIncomingMidiMessage(juce::MidiInput *source, const juce::MidiMessage &message) override;
 
-	void							 handleNoteOn(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override {}
+	void							 handleNoteOn(juce::MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override {}
 
-	void							 handleNoteOff(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override {}
+	void							 handleNoteOff(juce::MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override {}
 
 
 	std::unique_ptr<CustomPianoRoll> mPianoRoll;
-	MidiKeyboardState				*mPianoState = nullptr;
+	juce::MidiKeyboardState			*mPianoState = nullptr;
 };

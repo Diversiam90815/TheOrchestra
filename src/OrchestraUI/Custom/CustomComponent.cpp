@@ -20,7 +20,7 @@ CustomComponent::~CustomComponent()
 }
 
 
-void CustomComponent::paint(Graphics &g)
+void CustomComponent::paint(juce::Graphics &g)
 {
 	float cornerRadius = mCustomLookNFeel.getCornerRadius();
 
@@ -31,18 +31,18 @@ void CustomComponent::paint(Graphics &g)
 }
 
 
-void CustomComponent::addAndConfigureTextEditor(TextEditor &editor, int x, int y, int width, int height)
+void CustomComponent::addAndConfigureTextEditor(juce::TextEditor &editor, int x, int y, int width, int height)
 {
 	addAndMakeVisible(editor);
 	editor.setBounds(x, y, width, height);
 	editor.setFont(mCustomLookNFeel.getTextEditorFont());
 	editor.setReadOnly(true);
 	editor.setMultiLine(true);
-	editor.setJustification(Justification::centred);
+	editor.setJustification(juce::Justification::centred);
 }
 
 
-void CustomComponent::addAndConfigureComboBox(ComboBox &box, int x, int y, int width, int height)
+void CustomComponent::addAndConfigureComboBox(juce::ComboBox &box, int x, int y, int width, int height)
 {
 	addAndMakeVisible(box);
 	box.setBounds(x, y, width, height);
@@ -50,18 +50,18 @@ void CustomComponent::addAndConfigureComboBox(ComboBox &box, int x, int y, int w
 }
 
 
-void CustomComponent::addAndConfigureButton(TextButton &button, const String &componentName, int x, int y, int width, int height, bool initiallyVisible)
+void CustomComponent::addAndConfigureButton(juce::TextButton &button, const juce::String &componentName, int x, int y, int width, int height, bool initiallyVisible)
 {
 	button.setName(componentName);
 
 	if (componentName.contains("QualityHigher"))
 	{
-		button.setConnectedEdges(Button::ConnectedEdgeFlags::ConnectedOnLeft);
+		button.setConnectedEdges(juce::Button::ConnectedEdgeFlags::ConnectedOnLeft);
 	}
 
 	else if (componentName.contains("QualityLower"))
 	{
-		button.setConnectedEdges(Button::ConnectedEdgeFlags::ConnectedOnRight);
+		button.setConnectedEdges(juce::Button::ConnectedEdgeFlags::ConnectedOnRight);
 	}
 
 	addAndMakeVisible(button);
@@ -70,26 +70,27 @@ void CustomComponent::addAndConfigureButton(TextButton &button, const String &co
 }
 
 
-void CustomComponent::addAndConfigureLabel(Label &label, const String &componentName, const String &text, int x, int y, int width, int height, Justification justification)
+void CustomComponent::addAndConfigureLabel(
+	juce::Label &label, const juce::String &componentName, const juce::String &text, int x, int y, int width, int height, juce::Justification justification)
 {
 	label.setName(componentName);
-	label.setText(text, dontSendNotification);
+	label.setText(text, juce::dontSendNotification);
 	addAndMakeVisible(label);
 	label.setBounds(x, y, width, height);
 	label.setJustificationType(justification);
 }
 
 
-void CustomComponent::addAndConfigureImage(DrawableImage &image, int x, int y, int width, int height)
+void CustomComponent::addAndConfigureImage(juce::DrawableImage &image, int x, int y, int width, int height)
 {
 	addAndMakeVisible(&image);
 	image.setBounds(x, y, width, height);
 }
 
 
-void CustomComponent::setAndRescaleImage(DrawableImage &imageToBeSet, File &imagePath, int x, int y, int width, int height)
+void CustomComponent::setAndRescaleImage(juce::DrawableImage &imageToBeSet, juce::File &imagePath, int x, int y, int width, int height)
 {
-	Image image = ImageFileFormat::loadFrom(imagePath);
+	juce::Image image = juce::ImageFileFormat::loadFrom(imagePath);
 	image		= image.rescaled(width, height);
 
 	imageToBeSet.setImage(image);

@@ -19,11 +19,11 @@ public:
 	void displayInstrument(InstrumentInfo &instrument) override;
 
 private:
-	Label	   mTitle;
+	juce::Label mTitle;
 
-	TextEditor mFirstWork;
-	TextEditor mSecondWork;
-	TextEditor mThirdWork;
+	juce::TextEditor mFirstWork;
+	juce::TextEditor mSecondWork;
+	juce::TextEditor mThirdWork;
 
 	const int  mTitleX		= 19;
 	const int  mTitleY		= 8;

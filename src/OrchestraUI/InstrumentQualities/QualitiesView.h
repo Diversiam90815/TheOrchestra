@@ -19,23 +19,23 @@ public:
 	void displayInstrument(InstrumentInfo &instrument) override;
 
 private:
-	Label	   mTitle;
+	juce::Label	   mTitle;
 
-	TextButton mFirstLowerNote;
-	TextButton mFirstHigherNote;
-	TextEditor mFirstQuality;
-
-	TextButton mSecondLowerNote;
-	TextButton mSecondHigherNote;
-	TextEditor mSecondQuality;
-
-	TextButton mThirdLowerNote;
-	TextButton mThirdHigherNote;
-	TextEditor mThirdQuality;
-
-	TextButton mFourthLowerNote;
-	TextButton mFourthHigherNote;
-	TextEditor mFourthQuality;
+	juce::TextButton mFirstLowerNote;
+	juce::TextButton mFirstHigherNote;
+	juce::TextEditor mFirstQuality;
+	
+	juce::TextButton mSecondLowerNote;
+	juce::TextButton mSecondHigherNote;
+	juce::TextEditor mSecondQuality;
+	
+	juce::TextButton mThirdLowerNote;
+	juce::TextButton mThirdHigherNote;
+	juce::TextEditor mThirdQuality;
+	
+	juce::TextButton mFourthLowerNote;
+	juce::TextButton mFourthHigherNote;
+	juce::TextEditor mFourthQuality;
 
 	const int  mQualitiesTitleX			 = 79;
 	const int  mQualitiesTitleY			 = 15;
