@@ -3,10 +3,9 @@ set(TARGET_NAME TheOrchestraUI)
 set (ASSETS_DIR             ${PROJECT_SOURCE_DIR}/Assets)
 set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets")
 
-set (CustomComponent_Dir        ${CMAKE_CURRENT_SOURCE_DIR}/CustomComponent )
+set (Custom_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/Custom )
 set (PianoRoll_Dir              ${CMAKE_CURRENT_SOURCE_DIR}/PianoRoll )
-set (CustomLookAndFeel_Dir      ${CMAKE_CURRENT_SOURCE_DIR}/CustomLookAndFeel )
-set (CustomMenuBar_Dir          ${CMAKE_CURRENT_SOURCE_DIR}/CustomMenuBar )
+set (MenuBar_Dir                ${CMAKE_CURRENT_SOURCE_DIR}/MenuBar )
 set (InstrumentFamousWorks_Dir  ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentFamousWorks )
 set (InstrumentInfo_Dir         ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentInfo )
 set (InstrumentQualities_Dir    ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentQualities )
@@ -19,10 +18,9 @@ set (Helper_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/Helper)
 
 
 set(ALL_PROJECT_DIRS
-    ${CustomComponent_Dir}
+    ${Custom_Dir}
     ${PianoRoll_Dir}
-    ${CustomLookAndFeel_Dir}
-    ${CustomMenuBar_Dir}
+    ${MenuBar_Dir}
     ${InstrumentFamousWorks_Dir}
     ${InstrumentInfo_Dir}
     ${InstrumentQualities_Dir}
@@ -34,21 +32,18 @@ set(ALL_PROJECT_DIRS
     ${Helper_Dir}
 )
 
-set(CustomComponent_Files
-    ${CustomComponent_Dir}/CustomComponent.h         ${CustomComponent_Dir}/CustomComponent.cpp
+set(Custom_Files
+    ${Custom_Dir}/CustomComponent.h         ${Custom_Dir}/CustomComponent.cpp
+    ${Custom_Dir}/CustomLookAndFeel.h       ${Custom_Dir}/CustomLookAndFeel.cpp
 )
 
 set(PianoRoll_Files
     ${PianoRoll_Dir}/PianoRoll.h            ${PianoRoll_Dir}/PianoRoll.cpp
-    ${PianoRoll_Dir}/CustomPianoRoll.h            ${PianoRoll_Dir}/CustomPianoRoll.cpp
+    ${PianoRoll_Dir}/CustomPianoRoll.h      ${PianoRoll_Dir}/CustomPianoRoll.cpp
 )
 
-set(CustomLookAndFeel_Files
-    ${CustomLookAndFeel_Dir}/CustomLookAndFeel.h       ${CustomLookAndFeel_Dir}/CustomLookAndFeel.cpp
-)
-
-set(CustomMenuBar_Dir
-    ${CustomMenuBar_Dir}/CustomMenuBar.h            ${CustomMenuBar_Dir}/CustomMenuBar.cpp
+set(MenuBar_Dir
+    ${MenuBar_Dir}/MenuBar.h            ${MenuBar_Dir}/MenuBar.cpp
 )
 
 set(InstrumentFamousWorks_Files
@@ -88,10 +83,9 @@ set(Helper_Files
 )
 
 set(UI_PROJECT_FILES
-    ${CustomComponent_Files}
+    ${Custom_Files}
     ${PianoRoll_Files}
-    ${CustomLookAndFeel_Files}
-    ${CustomMenuBar_Dir}
+    ${MenuBar_Dir}
     ${InstrumentFamousWorks_Files}
     ${InstrumentInfo_Files}
     ${InstrumentQualities_Files}

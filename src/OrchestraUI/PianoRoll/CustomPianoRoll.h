@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			CustomPianoRoll
 	Description		Creating our own custom piano roll, which displays the instrument's individual ranges
-
   ==============================================================================
 */
 
@@ -16,7 +14,7 @@
 
 
 // Enum to identify the key used
-enum key
+enum PianoKey
 {
 	defaultKey = 0,
 	blackKey,
@@ -31,7 +29,6 @@ class CustomPianoRoll : public MidiKeyboardComponent
 {
 public:
 	CustomPianoRoll(MidiKeyboardState &state, Orientation orientation);
-
 	~CustomPianoRoll() = default;
 
 	/*
@@ -56,11 +53,11 @@ private:
 
 	void							 drawBlackNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour noteFillColour) override;
 
-	std::vector<std::pair<int, int>> mMidiRanges;						// Vector of the ranges (stored as pairs of int). This is used to draw different colours of notes
+	std::vector<std::pair<int, int>> mMidiRanges;							 // Vector of the ranges (stored as pairs of int). This is used to draw different colours of notes
 
-	Atomic<bool>					 mRangesSet		 = false;			// If true, the custom piano roll is being applied. This is set to true, if mMidiRanges will be filled
+	Atomic<bool>					 mRangesSet		 = false;				 // If true, the custom piano roll is being applied. This is set to true, if mMidiRanges will be filled
 
-	Atomic<int>						 mCurrentKeyType = key::defaultKey; // Indicating the current key type for drawing
+	Atomic<int>						 mCurrentKeyType = PianoKey::defaultKey; // Indicating the current key type for drawing
 
 	CustomLookAndFeel				 mCustomLookAndFeel;
 };

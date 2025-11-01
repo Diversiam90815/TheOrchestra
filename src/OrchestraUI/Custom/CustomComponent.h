@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			CustomComponent
 	Description		Customizing the Component class used by all sub-components
-
   ==============================================================================
 */
 
@@ -23,6 +21,7 @@ public:
 
 	void		 paint(Graphics &g) override;
 
+	virtual void init()										   = 0;
 	virtual void displayInstrument(InstrumentInfo &instrument) = 0;
 
 protected:

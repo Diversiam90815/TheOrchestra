@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			TechniquesView
 	Description		View box containing the various playing techniques of the instrument
-
   ==============================================================================
 */
 
@@ -14,11 +12,10 @@
 class TechniquesView : public CustomComponent
 {
 public:
-	TechniquesView();
-	~TechniquesView();
+	TechniquesView()  = default;
+	~TechniquesView() = default;
 
-	void init();
-
+	void init() override;
 	void displayInstrument(InstrumentInfo &instrument) override;
 
 private:

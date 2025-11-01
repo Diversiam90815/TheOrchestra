@@ -1,21 +1,17 @@
 /*
   ==============================================================================
-
 	Module			CustomLookAndFeel
 	Description		Customizing the LookNFeel class used by the Editor
-
   ==============================================================================
 */
 
 #include "CustomLookAndFeel.h"
 
+
 CustomLookAndFeel::CustomLookAndFeel()
 {
 	init();
 }
-
-
-CustomLookAndFeel::~CustomLookAndFeel() {}
 
 
 Colour CustomLookAndFeel::getBoxBackgroundColour() const
@@ -57,7 +53,7 @@ void CustomLookAndFeel::setFont()
 	noteNameFonts	   = Font(instrumentTypeface).withHeight(25.0f);
 	menuFont		   = Font(instrumentTypeface).withHeight(27.0f);
 	infoTextFont	   = Font(instrumentTypeface).withHeight(22.0f);
-	qualityTextFont	   = Font(instrumentTypeface).withHeight(20.0f);
+	textEditorFont	   = Font(instrumentTypeface).withHeight(20.0f);
 	tooltipFont		   = Font(instrumentTypeface).withHeight(20.0f);
 
 	headerFont.setExtraKerningFactor(0.003f);
@@ -65,7 +61,7 @@ void CustomLookAndFeel::setFont()
 	menuFont.setExtraKerningFactor(0.003f);
 	infoTextFont.setExtraKerningFactor(0.003f);
 	tooltipFont.setExtraKerningFactor(0.003f);
-	qualityTextFont.setExtraKerningFactor(0.003f);
+	textEditorFont.setExtraKerningFactor(0.003f);
 }
 
 
@@ -221,7 +217,7 @@ void CustomLookAndFeel::fillTextEditorBackground(Graphics &g, int width, int hei
 
 Font CustomLookAndFeel::getTextEditorFont()
 {
-	return qualityTextFont;
+	return textEditorFont;
 }
 
 

@@ -1,19 +1,11 @@
 /*
   ==============================================================================
-
 	Module			SamplerView
 	Description		View box containing sampler information
-
   ==============================================================================
 */
 
 #include "SamplerView.h"
-
-
-SamplerView::SamplerView() {}
-
-
-SamplerView::~SamplerView() {}
 
 
 void SamplerView::init()

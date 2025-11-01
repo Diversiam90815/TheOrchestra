@@ -1,19 +1,11 @@
 /*
   ==============================================================================
-
 	Module			InstrumentRangesView
 	Description		View box containing the range and transposition of the instrument
-
   ==============================================================================
 */
 
 #include "InstrumentRangesView.h"
-
-
-InstrumentRangesView::InstrumentRangesView() {}
-
-
-InstrumentRangesView::~InstrumentRangesView() {}
 
 
 void InstrumentRangesView::init()
@@ -51,8 +43,8 @@ void InstrumentRangesView::displayInstrument(InstrumentInfo &instrument)
 	mTranspositionNoteName.setText(transposition, dontSendNotification);
 
 	// Set images
-	int	 key				 = instrument.getKey();
-	File lowerRangeImagePath = mFileManager.getInstrumentImage(TypeOfImage::LowerRangeNotation, key);
+	InstrumentID key				 = instrument.getKey();
+	File		 lowerRangeImagePath = mFileManager.getInstrumentImage(TypeOfImage::LowerRangeNotation, key);
 	setAndRescaleImage(mLowerRangeNoteImage, lowerRangeImagePath, mLowerNoteImageX, mLowerNoteImageY, mImageBoxWidth, mImageBoxHeight);
 
 	File upperRangeImagePath = mFileManager.getInstrumentImage(TypeOfImage::UpperRangeNotation, key);

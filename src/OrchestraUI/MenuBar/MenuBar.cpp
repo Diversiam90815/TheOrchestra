@@ -1,27 +1,20 @@
 /*
   ==============================================================================
-
-	Module			CustomMenuBar
+	Module			MenuBar
 	Description		Menu bar used for selecting the instruments
-
   ==============================================================================
 */
 
-#include "CustomMenuBar.h"
+#include "MenuBar.h"
 
 
-CustomMenuBar::CustomMenuBar() {}
-
-CustomMenuBar::~CustomMenuBar() {}
-
-
-StringArray CustomMenuBar::getMenuBarNames()
+StringArray MenuBar::getMenuBarNames()
 {
 	return {"Woodwinds", "Brass", "Strings", "Percussion"};
 }
 
 
-PopupMenu CustomMenuBar::getMenuForIndex(int topLevelMenuIndex, const String &menuName)
+PopupMenu MenuBar::getMenuForIndex(int topLevelMenuIndex, const String &menuName)
 {
 	PopupMenu menu;
 
@@ -64,9 +57,9 @@ PopupMenu CustomMenuBar::getMenuForIndex(int topLevelMenuIndex, const String &me
 }
 
 
-void CustomMenuBar::menuItemSelected(int menuItemID, int topLevelMenuIndex)
+void MenuBar::menuItemSelected(int menuItemID, int topLevelMenuIndex)
 {
-	int key = (topLevelMenuIndex + 1) * 100 + menuItemID;
+	InstrumentID key = (topLevelMenuIndex + 1) * 100 + menuItemID;
 	LOG_INFO("Selected instrument with key {}", key);
 
 	if (mInstrumentSelectedCallback)
@@ -76,7 +69,7 @@ void CustomMenuBar::menuItemSelected(int menuItemID, int topLevelMenuIndex)
 }
 
 
-void CustomMenuBar::setInstrumentSelectedCallback(InstrumentSelectedCallback callback)
+void MenuBar::setInstrumentSelectedCallback(InstrumentSelectedCallback callback)
 {
 	mInstrumentSelectedCallback = callback;
 }

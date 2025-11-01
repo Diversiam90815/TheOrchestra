@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			PluginEditor
 	Description		User Interface
-
   ==============================================================================
 */
 
@@ -14,6 +12,7 @@
 OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : AudioProcessorEditor(&proc), audioProcessor(proc)
 {
 	mCoreManager = &proc.getCoreManager();
+
 	init();
 	showUI();
 	setLookAndFeel(&mCustomLookAndFeel);
@@ -28,11 +27,10 @@ OrchestraEditor::~OrchestraEditor()
 
 void OrchestraEditor::showUI()
 {
-	addAndMakeVisible(*mPianoRollView);
+	mMenuBarComponent.setModel(&mMenuBar);
+	addAndMakeVisible(mMenuBarComponent);
 
-	mMenuBar.setModel(&mCustomMenuBarModel);
-	addAndMakeVisible(mMenuBar);
-
+	addAndMakeVisible(mPianoRollView);
 	addAndMakeVisible(mInstrumentView);
 	addAndMakeVisible(mRangesView);
 	addAndMakeVisible(mQualitiesView);
@@ -47,8 +45,9 @@ void OrchestraEditor::showUI()
 
 void OrchestraEditor::init()
 {
-	mPianoRollView = std::make_unique<PianoRoll>(mCoreManager->getMidiKeyboardState());
+	mPianoRollView.setKeyboardState(mCoreManager->getMidiKeyboardState());
 
+	mPianoRollView.init();
 	mInstrumentView.init();
 	mRangesView.init();
 	mQualitiesView.init();
@@ -57,14 +56,14 @@ void OrchestraEditor::init()
 	mFamousWorksView.init();
 	mSamplerView.init();
 
-	mCustomMenuBarModel.setInstrumentSelectedCallback([this](int key) { changeInstrument(key); });
-	mSamplerView.setArticulationChangedCallback([this](Articulation articulation) { mCoreManager->changeArticulation(mCurrentKey, articulation); });
+	mMenuBar.setInstrumentSelectedCallback([this](int key) { changeInstrument(key); });
+	mSamplerView.setArticulationChangedCallback([this](Articulation articulation) { mCoreManager->changeArticulation(mCurrentInstrument, articulation); });
 }
 
 
-void OrchestraEditor::changeInstrument(int key)
+void OrchestraEditor::changeInstrument(InstrumentID key)
 {
-	mCurrentKey			  = key;
+	mCurrentInstrument	  = key;
 	auto instrument		  = mCoreManager->getInstrument(key);
 
 	auto availableSamples = mCoreManager->getAvailableArticulations(key);
@@ -76,8 +75,7 @@ void OrchestraEditor::changeInstrument(int key)
 	mTechniquesView.displayInstrument(instrument);
 	mFamousWorksView.displayInstrument(instrument);
 	mInfoView.displayInstrument(instrument);
-
-	mPianoRollView->displayInstrumentRanges(instrument);
+	mPianoRollView.displayInstrument(instrument);
 
 	resized();
 }
@@ -98,7 +96,6 @@ void OrchestraEditor::resized()
 	mInfoView.setBounds(mInfoViewX, mInfoViewY, mInfoView.getWidth(), mInfoView.getHeight());
 	mFamousWorksView.setBounds(mFamousWorksViewX, mFamousWorksViewY, mFamousWorksView.getWidth(), mFamousWorksView.getHeight());
 	mSamplerView.setBounds(mSamplerViewX, mSamplerViewY, mSamplerView.getWidth(), mSamplerView.getHeight());
-
-	mPianoRollView->setBounds(mPianoRollX, mPianoRollY, mWidth, mPianoRollHeight);
-	mMenuBar.setBounds(mMenuBarX, mMenuBarY, mWidth, mMenuBarHeight);
+	mPianoRollView.setBounds(mPianoRollX, mPianoRollY, mWidth, mPianoRollHeight);
+	mMenuBarComponent.setBounds(mMenuBarX, mMenuBarY, mWidth, mMenuBarHeight);
 }
