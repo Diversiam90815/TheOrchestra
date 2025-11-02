@@ -91,7 +91,7 @@ void CustomComponent::addAndConfigureImage(juce::DrawableImage &image, int x, in
 void CustomComponent::setAndRescaleImage(juce::DrawableImage &imageToBeSet, juce::File &imagePath, int x, int y, int width, int height)
 {
 	juce::Image image = juce::ImageFileFormat::loadFrom(imagePath);
-	image		= image.rescaled(width, height);
+	image			  = image.rescaled(width, height);
 
 	imageToBeSet.setImage(image);
 

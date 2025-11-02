@@ -9,12 +9,15 @@
 
 #pragma once
 
-#include "JuceIncludes.h"
 #include <map>
+#include <fstream>
+
+#include "JuceIncludes.h"
 #include "InstrumentInfo.h"
-#include "Helper.h"
 #include "FileManager.h"
 #include "Logging.h"
+
+using json = nlohmann::json;
 
 
 class InstrumentController
@@ -29,17 +32,8 @@ public:
 
 	bool		   loadFromJSON();
 
-
 private:
 	void								   addInstrument(const InstrumentInfo &info);
-
-	Techniques							   readPlayingTechniquesFromJSON(juce::DynamicObject *obj);
-	Qualities							   readQualitiesFromJSON(juce::DynamicObject *obj);
-	std::string							   readNameFromJSON(juce::DynamicObject *obj);
-	Range								   readRangeFromJSON(juce::DynamicObject *obj);
-	bool								   readIsRhythmicPercussionFromJSON(juce::DynamicObject *obj);
-	Roles								   readInformationFromJSON(juce::DynamicObject *obj);
-	FamousWorks							   readFamousWorksFromJSON(juce::DynamicObject *obj);
 
 	std::map<InstrumentID, InstrumentInfo> instruments; // Mapping the instrument's key to the corresponding InstrumentInfo object
 

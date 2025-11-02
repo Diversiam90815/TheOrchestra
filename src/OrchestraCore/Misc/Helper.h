@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "InstrumentInfo.h"
+#include "JuceIncludes.h"
 #include "Parameters.h"
 
 
@@ -180,7 +180,7 @@ static std::string getLowerOrHigherNote(const std::string &range, bool getLower)
 	@param                 [IN] firstPart -> if true, the left part will be returned, false otherwise
 	@return                Left or right value as a String
 */
-static std::string splitColonizedStrings(juce::String &colonizedString, bool firstPart)
+static std::string splitColonizedStrings(const std::string &colonizedString, bool firstPart)
 {
 	// Find the colon (:) and split the string
 	juce::StringArray parts = juce::StringArray::fromTokens(colonizedString, ":", "");
