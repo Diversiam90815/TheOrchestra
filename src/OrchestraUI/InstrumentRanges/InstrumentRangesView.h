@@ -21,53 +21,53 @@ public:
 	void displayInstrument(InstrumentInfo &instrument) override;
 
 private:
-	juce::Label		  mRangesTitle;
-	juce::Label		  mTranspositionTitle;
-	
-	juce::Label		  mLowerRangeNoteName;
-	juce::Label		  mHigherRangeNoteName;
-	juce::Label		  mTranspositionNoteName;
-	
+	juce::Label			mRangesTitle;
+	juce::Label			mTranspositionTitle;
+
+	juce::Label			mLowerRangeNoteName;
+	juce::Label			mHigherRangeNoteName;
+	juce::Label			mTranspositionNoteName;
+
 	juce::DrawableImage mLowerRangeNoteImage;
 	juce::DrawableImage mHigherRangeNoteImage;
 	juce::DrawableImage mTranspositionHigherNoteImage;
 	juce::DrawableImage mTranspositionLowerNoteImage;
 
-	FileManager	  mFileManager;
+	FileManager			mFileManager;
 
 
-	const int	  mWidth					= 269;
-	const int	  mHeight					= 328;
+	const int			mWidth					  = 269;
+	const int			mHeight					  = 328;
 
-	const int	  mRangesTitleX				= 79;
-	const int	  mRangesTitleY				= 15;
-	const int	  mRangesTitleWidth			= 110;
-	const int	  mRangesTitleHeight		= 19;
+	const int			mRangesTitleX			  = 79;
+	const int			mRangesTitleY			  = 15;
+	const int			mRangesTitleWidth		  = 110;
+	const int			mRangesTitleHeight		  = 19;
 
-	const int	  mTranspositionTitleX		= 69;
-	const int	  mTranspositionTitleY		= 176;
-	const int	  mTranspositionTitleWidth	= 130;
-	const int	  mTranspositionTitleHeight = 19;
+	const int			mTranspositionTitleX	  = 69;
+	const int			mTranspositionTitleY	  = 176;
+	const int			mTranspositionTitleWidth  = 130;
+	const int			mTranspositionTitleHeight = 19;
 
-	const int	  mNoteNameWidth			= 30;
-	const int	  mNoteNameHeight			= 17;
+	const int			mNoteNameWidth			  = 30;
+	const int			mNoteNameHeight			  = 17;
 
-	const int	  mLowerNoteImageX			= 38;
-	const int	  mLowerNoteImageY			= 55;
-	const int	  mLowerNoteNameX			= 66;
-	const int	  mLowerNoteNameY			= 124;
+	const int			mLowerNoteImageX		  = 38;
+	const int			mLowerNoteImageY		  = 55;
+	const int			mLowerNoteNameX			  = 66;
+	const int			mLowerNoteNameY			  = 124;
 
-	const int	  mHigherNoteImageX			= 146;
-	const int	  mHigherNoteImageY			= 55;
-	const int	  mHigherNoteNameX			= 178;
-	const int	  mHigherNoteNameY			= 124;
+	const int			mHigherNoteImageX		  = 146;
+	const int			mHigherNoteImageY		  = 55;
+	const int			mHigherNoteNameX		  = 178;
+	const int			mHigherNoteNameY		  = 124;
 
-	const int	  mTranspositionImageY		= 206;
-	const int	  mTranspositionNoteX		= 0;
-	const int	  mTranspositionNoteY		= 281;
-	const int	  mTranspositionNoteWidth	= 269;
-	const int	  mTranspositionNoteHeight	= 17;
+	const int			mTranspositionImageY	  = 206;
+	const int			mTranspositionNoteX		  = 0;
+	const int			mTranspositionNoteY		  = 281;
+	const int			mTranspositionNoteWidth	  = 269;
+	const int			mTranspositionNoteHeight  = 17;
 
-	const int	  mImageBoxWidth			= 87;
-	const int	  mImageBoxHeight			= 64;
+	const int			mImageBoxWidth			  = 87;
+	const int			mImageBoxHeight			  = 64;
 };

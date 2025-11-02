@@ -45,9 +45,9 @@ void QualitiesView::displayInstrument(InstrumentInfo &instrument)
 	// Dividing the qualities and the ranges into separate parts
 	for (auto &quality : qualities)
 	{
-		std::string	 lowerNote	 = quality.getLowerRange();
-		std::string	 higherNote	 = quality.getHigherRange();
-		std::string	 description = quality.getDescription();
+		std::string lowerNote	= quality.getLowerRange();
+		std::string higherNote	= quality.getHigherRange();
+		std::string description = quality.getDescription();
 
 		parsedQualities.emplace_back(lowerNote, higherNote, description);
 	}

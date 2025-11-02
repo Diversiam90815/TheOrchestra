@@ -19,7 +19,7 @@ public:
 	void displayInstrument(InstrumentInfo &instrument) override;
 
 private:
-	juce::Label		  mTitle;
+	juce::Label			mTitle;
 
 	juce::TooltipWindow tooltipWindow{this};
 
@@ -35,25 +35,25 @@ private:
 	juce::TextButton	mTech7;
 	juce::TextButton	mTech8;
 
-	const int	  mTechTitleX			= 48;
-	const int	  mTechTitleY			= 8;
-	const int	  mTechTitleWidth		= 172;
-	const int	  mTechTitleHeight		= 33;
+	const int			mTechTitleX			  = 48;
+	const int			mTechTitleY			  = 8;
+	const int			mTechTitleWidth		  = 172;
+	const int			mTechTitleHeight	  = 33;
 
-	const int	  mButtonWidth			= 72;
-	const int	  mButtonHeight			= 31;
+	const int			mButtonWidth		  = 72;
+	const int			mButtonHeight		  = 31;
 
-	const int	  mFirstRowY			= 59;
-	const int	  mSecondRowY			= 108;
-	const int	  mThirdRowY			= 157;
+	const int			mFirstRowY			  = 59;
+	const int			mSecondRowY			  = 108;
+	const int			mThirdRowY			  = 157;
 
-	const int	  mFirstColumnX			= 10;
-	const int	  mSecondColumnX		= 100;
-	const int	  mThirdColumnX			= 190;
+	const int			mFirstColumnX		  = 10;
+	const int			mSecondColumnX		  = 100;
+	const int			mThirdColumnX		  = 190;
 
-	const int	  mLastRowFirstColumnX	= 46;
-	const int	  mLastRowSecondColumnX = 154;
+	const int			mLastRowFirstColumnX  = 46;
+	const int			mLastRowSecondColumnX = 154;
 
-	const int	  mWidth				= 272;
-	const int	  mHeight				= 204;
+	const int			mWidth				  = 272;
+	const int			mHeight				  = 204;
 };

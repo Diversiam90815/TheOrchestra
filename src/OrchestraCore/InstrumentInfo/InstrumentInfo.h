@@ -10,27 +10,73 @@
 #include "JuceIncludes.h"
 
 #include "Parameters.h"
+#include "nlohmann/json.hpp"
+#include "Helper.h"
 
 
 struct Range
 {
 	Range() = default;
-	explicit Range(const std::string &range) : range(range), transposition("") {}
-	explicit Range(const std::string &range, const std::string displayedRange) : range(range), displayedRange(displayedRange) {}
-	explicit Range(const std::string &range, const std::string displayedRange, const std::string &transposition)
-		: range(range), displayedRange(displayedRange), transposition(transposition)
+	explicit Range(const std::string &range) : range(range), transposition("") { setRanges(range); }
+
+	explicit Range(const std::string &range, const std::string &displayedRange) : range(range), displayedRange(displayedRange)
 	{
+		setRanges(range);
+		setDisplayedRanges(displayedRange);
 	}
 
-	std::string getHigherRange() const { return range; } // TODO: split
-	std::string getLowerRange() const { return range; }	 // TODO: split
-	std::string getDisplayRange() const { return displayedRange; }
+	explicit Range(const std::string &range, const std::string &displayedRange, const std::string &transposition)
+		: range(range), displayedRange(displayedRange), transposition(transposition)
+	{
+		setRanges(range);
+		setDisplayedRanges(displayedRange);
+	}
+
+	std::string getHigherRange() const { return higherRange; }
+	std::string getLowerRange() const { return lowerRange; }
+	const int	getHigherRangeNoteValue() const { return higherNoteRange; }
+	const int	getLowerRangeNoteValue() const { return lowerNoteRange; }
+
+	std::string getDisplayedHigherRange() const { return higherDisplay; }
+	std::string getDisplayedLowerRange() const { return lowerDisplay; }
+	const int	getDisplayedHigherRangeNoteValue() const { return higherDisplayedRange; }
+	const int	getDisplayedLowerRangeNoteValue() const { return lowerDisplayedRange; }
+
 	std::string getTransposition() const { return transposition; }
 
 private:
+	void setRanges(const std::string &range)
+	{
+		higherRange		= splitColonizedStrings(range, false);
+		lowerRange		= splitColonizedStrings(range, true);
+		higherNoteRange = turnNotenameIntoMidinumber(higherRange);
+		lowerNoteRange	= turnNotenameIntoMidinumber(lowerRange);
+	}
+
+	void setDisplayedRanges(const std::string &displayedRange)
+	{
+
+		higherDisplay		 = splitColonizedStrings(displayedRange, false);
+		lowerDisplay		 = splitColonizedStrings(displayedRange, true);
+		higherDisplayedRange = turnNotenameIntoMidinumber(higherDisplay);
+		lowerDisplayedRange	 = turnNotenameIntoMidinumber(lowerDisplay);
+	}
+
 	std::string range;
 	std::string displayedRange; // The range that is displayed if it differs from the actual range such as for rhythmic percussion
 	std::string transposition;
+
+	std::string higherRange{""};
+	std::string lowerRange{""};
+	int			higherNoteRange{0};
+	int			lowerNoteRange{0};
+
+	std::string higherDisplay{""};
+	std::string lowerDisplay{""};
+	int			higherDisplayedRange{0};
+	int			lowerDisplayedRange{0};
+
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(Range, range, displayedRange, transposition)
 };
 
 
@@ -43,6 +89,8 @@ struct FamousWork
 
 private:
 	std::string work;
+
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(FamousWork, work)
 };
 
 
@@ -51,25 +99,18 @@ struct PlayingTechnique
 	PlayingTechnique() = default;
 	explicit PlayingTechnique(const std::string &technique)
 	{
-		int colonPos = technique.find(":");
-		if (colonPos == std::string::npos)
-		{
-			name = technique;
-			return;
-		}
-		name		= technique.substr(0, colonPos);
-		description = technique.substr(colonPos + 1);
+		name		= splitColonizedStrings(technique, true);
+		description = splitColonizedStrings(technique, false);
 	}
 
 	std::string getName() const { return name; }
 	std::string getDescription() const { return description; }
 
-	//		String		left  = splitColonizedStrings(tech, true);
-	//String		right = splitColonizedStrings(tech, false);
-
 private:
 	std::string name;
 	std::string description;
+
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(PlayingTechnique, name, description)
 };
 
 
@@ -79,33 +120,38 @@ struct Quality
 
 	explicit Quality(const std::string &quality)
 	{
-		int colonPos = quality.find(":");
-		if (colonPos > 0)
+		rangeNotation = splitColonizedStrings(quality, true);
+		description	  = splitColonizedStrings(quality, false);
+
+		lowerNote	  = getLowerOrHigherNote(rangeNotation, true);
+		higherNote	  = getLowerOrHigherNote(rangeNotation, false);
+
+		if (lowerNote.empty() || higherNote.empty())
 		{
-			rangeNotation = quality.substr(0, colonPos);
-			description	  = quality.substr(colonPos + 1);
+			// Single note case: Use the single note as both lower and higher note
+			lowerNote  = rangeNotation;
+			higherNote = rangeNotation;
 		}
 	}
 
-	std::string getLowerRange() const { return rangeNotation; }	 // TODO: split
-	std::string getHigherRange() const { return rangeNotation; } // TODO: split
-	std::string getDescription() const { return description; }
+	std::string getLowerRange() const { return higherNote; }
+	std::string getHigherRange() const { return lowerNote; }
+	int			getHigherNoteValue() const { return higherNoteValue; }
+	int			getLowerNoteValue() const { return lowerNoteValue; }
 
-	//		if (range.contains("-"))									 // Ranges are divided with a '-'
-	//{
-	//	lowerNote  = getLowerOrHigherNote(range, true);
-	//	higherNote = getLowerOrHigherNote(range, false);
-	//}
-	//else
-	//{
-	//	// Single note case: Use the single note as both lower and higher note
-	//	lowerNote  = range.trim();
-	//	higherNote = range.trim();
-	//}
+	std::string getDescription() const { return description; }
 
 private:
 	std::string rangeNotation;
+
+	std::string higherNote{""};
+	std::string lowerNote{""};
+	int			higherNoteValue{0};
+	int			lowerNoteValue{0};
+
 	std::string description;
+
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(Quality, rangeNotation, description)
 };
 
 
@@ -118,6 +164,8 @@ struct Role
 
 private:
 	std::string role;
+
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(Role, role)
 };
 
 
@@ -137,15 +185,14 @@ public:
 	~InstrumentInfo() = default;
 
 	InstrumentInfo(const std::string &name,
+				   InstrumentID		  key,
 				   const Range		 &range,
 				   const Qualities	 &qualities,
 				   const Roles		 &roles,
 				   const FamousWorks &works,
 				   const Techniques	 &techniques,
-				   InstrumentID		  key,
-				   bool				  isRhythmicPercussion = false,
-				   std::string		  displayedRange	   = std::string(""))
-		: mName(name), mRange(range), mQualities(qualities), mUsefulInformation(roles), mFamousWorks(works), mPlayingTechniques(techniques), mKey(key),
+				   bool				  isRhythmicPercussion = false)
+		: mName(name), mRange(range), mQualities(qualities), mRoles(roles), mFamousWorks(works), mPlayingTechniques(techniques), mKey(key),
 		  mIsRhythmicPercussion(isRhythmicPercussion)
 	{
 	}
@@ -153,7 +200,7 @@ public:
 	std::string	 getName() const { return mName; }
 	Range		 getRange() const { return mRange; }
 	Qualities	 getQualities() const { return mQualities; }
-	Roles		 getRoles() const { return mUsefulInformation; }
+	Roles		 getRoles() const { return mRoles; }
 	FamousWorks	 getFamousWorks() const { return mFamousWorks; }
 	Techniques	 getTechniques() const { return mPlayingTechniques; }
 	InstrumentID getKey() const { return mKey; }
@@ -165,13 +212,12 @@ private:
 	std::string	 mName;							// Name of the instrument
 	Range		 mRange;						// Range of notes (lowest to highest playable note)
 	Qualities	 mQualities;					// Sound characteristics of each section within the range
-	Roles		 mUsefulInformation;			// Any useful information of the instrument
+	Roles		 mRoles;						// Any useful information of the instrument
 	FamousWorks	 mFamousWorks;					// Famous works presenting the qualitiy of the instrument
 	Techniques	 mPlayingTechniques;			// Different playing techniques featured within the instrument's family
 	bool		 mIsRhythmicPercussion = false; // If the instrument is a rhythmic percussion instrument, it will be set to true
 
 	InstrumentID mKey				   = 0;		// 3 digit key defining the instrument (see Helper.h)
 
-	friend class InstrumentController;
-	friend class InstrumentInfoView;
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(InstrumentInfo, mName, mRange, mQualities, mRoles, mFamousWorks, mPlayingTechniques, mIsRhythmicPercussion, mKey)
 };

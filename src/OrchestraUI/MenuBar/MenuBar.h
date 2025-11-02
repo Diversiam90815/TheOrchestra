@@ -23,9 +23,9 @@ public:
 
 	juce::StringArray getMenuBarNames() override;
 	juce::PopupMenu	  getMenuForIndex(int topLevelMenuIndex, const juce::String &menuName) override;
-	void		menuItemSelected(int menuItemID, int topLevelMenuIndex) override;
+	void			  menuItemSelected(int menuItemID, int topLevelMenuIndex) override;
 
-	void		setInstrumentSelectedCallback(InstrumentSelectedCallback callback);
+	void			  setInstrumentSelectedCallback(InstrumentSelectedCallback callback);
 
 private:
 	juce::MenuBarComponent	   menuBar; // Menubar instance

@@ -50,19 +50,24 @@ void PianoRoll::init()
 
 void PianoRoll::displayInstrument(InstrumentInfo &info)
 {
+	// Strategy 1: Rhythmic percussion uses displayedRange
 	if (info.isRhythmicPercussion())
 	{
-		mPianoRoll->setMidiRanges(info.getDisplayedRange());
-	}
-	else
-	{
-		bool result = mPianoRoll->setMidiRanges(info.getQualities());
-		if (!result)
-		{
-			mPianoRoll->setMidiRanges(info.getRange());
-		}
+		mPianoRoll->setMidiRanges(info.getRange());
+		repaint();
+		return;
 	}
 
+	// Strategy 2: Try to use qualities for color-coded ranges
+	if (!info.getQualities().empty())
+	{
+		mPianoRoll->setMidiRanges(info.getQualities());
+		repaint();
+		return;
+	}
+
+	// Strategy 3: Fallback to full range (e.g., for strings)
+	mPianoRoll->setMidiRanges(info.getRange());
 	repaint();
 }
 
