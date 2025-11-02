@@ -39,7 +39,7 @@ std::vector<std::string> FileManager::getInstrumentsImages(InstrumentID instrume
 
 juce::File FileManager::getInstrumentImage(TypeOfImage type, InstrumentID instrumentKey)
 {
-	auto   images = getInstrumentsImages(instrumentKey);
+	auto		images = getInstrumentsImages(instrumentKey);
 
 	std::string filter = "";
 	switch (type)

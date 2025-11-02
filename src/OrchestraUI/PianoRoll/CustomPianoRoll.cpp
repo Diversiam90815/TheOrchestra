@@ -96,7 +96,7 @@ void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, juce::Graphics &g, juce:
 
 void CustomPianoRoll::drawBlackNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour noteFillColour)
 {
-	mCurrentKeyType			 = PianoKey::blackKey;
+	mCurrentKeyType				   = PianoKey::blackKey;
 
 	juce::Colour baseColour		   = juce::Colours::black;
 	juce::Colour noteOverlayColour = getNoteColour(midiNoteNumber).withAlpha(0.4f);
@@ -198,34 +198,16 @@ juce::Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
 }
 
 
-bool CustomPianoRoll::setMidiRanges(const juce::StringArray &qualities)
+bool CustomPianoRoll::setMidiRanges(const Qualities &qualities)
 {
 	mRangesSet = false;
 	mMidiRanges.clear();
 
 	for (const auto &quality : qualities)
 	{
-		// Tokenize the string around the colon to separate the note range from the description
-		int colonPos = quality.indexOf(":");
-		if (colonPos != -1)
-		{
-			juce::String range	 = quality.substring(0, colonPos).trim();
-
-			// Find the dash separating the start and end notes
-			int	   dashPos = range.indexOf("-");
-			if (dashPos != -1)
-			{
-				juce::String startNote = range.substring(0, dashPos).trim();
-				juce::String endNote   = range.substring(dashPos + 1).trim();
-
-				// Convert start and end notes to MIDI numbers
-				int	   startMidi = turnNotenameIntoMidinumber(startNote);
-				int	   endMidi	 = turnNotenameIntoMidinumber(endNote);
-
-				// Store the range as a pair of MIDI numbers
-				mMidiRanges.push_back(std::make_pair(startMidi, endMidi));
-			}
-		}
+		int startMidi = quality.getLowerNoteValue();
+		int endMidi	  = quality.getHigherNoteValue();
+		mMidiRanges.push_back(std::make_pair(startMidi, endMidi));
 	}
 
 	bool result = !mMidiRanges.empty();
@@ -234,25 +216,16 @@ bool CustomPianoRoll::setMidiRanges(const juce::StringArray &qualities)
 }
 
 
-bool CustomPianoRoll::setMidiRanges(const juce::String &range)
+bool CustomPianoRoll::setMidiRanges(const Range &range)
 {
 	mMidiRanges.clear();
-	mRangesSet	= false;
+	mRangesSet	  = false;
 
-	// Find the dash separating the start and end notes
-	int dashPos = range.indexOf("-");
-	if (dashPos != -1)
-	{
-		juce::String startNote = range.substring(0, dashPos).trim();
-		juce::String endNote   = range.substring(dashPos + 1).trim();
+	int startMidi = range.getDisplayedLowerRange().empty() ? range.getLowerRangeNoteValue() : range.getDisplayedLowerRangeNoteValue();
+	int endMidi	  = range.getDisplayedHigherRange().empty() ? range.getHigherRangeNoteValue() : range.getDisplayedHigherRangeNoteValue();
 
-		// Convert start and end notes to MIDI numbers
-		int	   startMidi = turnNotenameIntoMidinumber(startNote);
-		int	   endMidi	 = turnNotenameIntoMidinumber(endNote);
 
-		// Store the range as a pair of MIDI numbers
-		mMidiRanges.push_back(std::make_pair(startMidi, endMidi));
-	}
+	mMidiRanges.push_back(std::make_pair(startMidi, endMidi));
 
 	bool result = !mMidiRanges.empty();
 	mRangesSet	= result;

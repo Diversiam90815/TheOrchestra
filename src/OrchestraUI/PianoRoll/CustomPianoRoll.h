@@ -36,18 +36,18 @@ public:
 	 @param                 [IN] qualities as an StringArray.
 	 @return                Boolean indicating success/failure
 	*/
-	bool setMidiRanges(const juce::StringArray &qualities);
+	bool setMidiRanges(const Qualities &qualities);
 
 	/*
 	 @brief                 Fills the vector 'mMidiRanges' with the note ranges information from a String
 	 @param                 [IN] ranges as an String.
 	 @return                Boolean indicating success/failure
 	*/
-	bool setMidiRanges(const juce::String &ranges);
+	bool setMidiRanges(const Range &ranges);
 
 
 private:
-	juce::Colour					 getNoteColour(int midiNoteNumber);
+	juce::Colour getNoteColour(int midiNoteNumber);
 
 	void drawWhiteNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour lineColour, juce::Colour textColour) override;
 
