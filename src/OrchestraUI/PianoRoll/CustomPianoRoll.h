@@ -11,6 +11,7 @@
 #include "Parameters.h"
 #include "CustomLookAndFeel.h"
 #include "Helper.h"
+#include "InstrumentInfo.h"
 
 
 // Enum to identify the key used
@@ -43,7 +44,7 @@ public:
 	 @param                 [IN] ranges as an String.
 	 @return                Boolean indicating success/failure
 	*/
-	bool setMidiRanges(const Range &ranges);
+	bool setMidiRanges(const InstrumentRange &ranges);
 
 
 private:

@@ -35,7 +35,7 @@ void TechniquesView::displayInstrument(InstrumentInfo &instrument)
 	const auto &techniques		= instrument.getTechniques();
 
 	// Set up a lambda to configure buttons
-	auto		configureButton = [](juce::Button &button, std::string &name, std::string &description)
+	auto		configureButton = [](juce::Button &button, const std::string &name, const std::string &description)
 	{
 		button.setButtonText(name);
 		button.setTooltip(description);

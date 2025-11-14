@@ -12,7 +12,7 @@ void InformationView::init()
 {
 	setSize(mWidth, mHeight);
 
-	addAndConfigureLabel(mTitle, "InformationTitle", "Useful Information", mTitleX, mTitleY, mTitleWidth, mTitleHeight, Justification::centred);
+	addAndConfigureLabel(mTitle, "InformationTitle", "Useful Information", mTitleX, mTitleY, mTitleWidth, mTitleHeight, juce::Justification::centred);
 
 	addAndConfigureTextEditor(mFirstInformation, mFirstColumX, mFirstRowY, mInfoWidth, mInfoHeight);
 	addAndConfigureTextEditor(mSecondInformation, mSecondColumx, mFirstRowY, mInfoWidth, mInfoHeight);

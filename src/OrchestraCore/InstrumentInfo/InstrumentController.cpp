@@ -89,12 +89,12 @@ bool InstrumentController::loadFromJSON()
 				if (instrumentJson.contains("displayedRange"))
 					displayedRange = instrumentJson["displayedRange"];
 
-				Range	  range				   = Range(instrumentRange, displayedRange, transposition);
+				InstrumentRange range				 = InstrumentRange(instrumentRange, displayedRange, transposition);
 
-				bool	  isRhythmicPercussion = instrumentJson.value("isRhythmicPercussion", false);
+				bool			isRhythmicPercussion = instrumentJson.value("isRhythmicPercussion", false);
 
 				// Parse qualities
-				Qualities qualities;
+				Qualities		qualities;
 				if (instrumentJson.contains("qualities"))
 				{
 					for (const auto &qualityStr : instrumentJson["qualities"])
