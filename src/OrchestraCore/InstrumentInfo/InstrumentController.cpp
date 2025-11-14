@@ -107,7 +107,10 @@ bool InstrumentController::loadFromJSON()
 				Roles roles;
 				if (instrumentJson.contains("roles"))
 				{
-					roles = instrumentJson["roles"].get<std::vector<Role>>();
+					for (const auto &roleStr : instrumentJson["roles"])
+					{
+						roles.push_back(Role(roleStr.get<std::string>()));
+					}
 				}
 
 				// Parse FamousWorks
