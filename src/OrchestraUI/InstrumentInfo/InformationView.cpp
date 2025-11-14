@@ -32,12 +32,12 @@ void InformationView::displayInstrument(InstrumentInfo &instrument)
 
 	mFirstInformation.setText(roles.at(0).getRole(), juce::dontSendNotification);
 
-	if (size >= 1)
+	if (size > 1)
 		mSecondInformation.setText(roles.at(1).getRole(), juce::dontSendNotification);
 
-	if (size >= 2)
+	if (size > 2)
 		mThirdInformation.setText(roles.at(2).getRole(), juce::dontSendNotification);
 
-	if (size >= 3)
+	if (size > 3)
 		mFourthInformation.setText(roles.at(3).getRole(), juce::dontSendNotification);
 }
