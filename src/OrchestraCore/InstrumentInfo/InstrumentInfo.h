@@ -14,18 +14,18 @@
 #include "Helper.h"
 
 
-struct Range
+struct InstrumentRange
 {
-	Range() = default;
-	explicit Range(const std::string &range) : range(range), transposition("") { setRanges(range); }
+	InstrumentRange() = default;
+	explicit InstrumentRange(const std::string &range) : range(range), transposition("") { setRanges(range); }
 
-	explicit Range(const std::string &range, const std::string &displayedRange) : range(range), displayedRange(displayedRange)
+	explicit InstrumentRange(const std::string &range, const std::string &displayedRange) : range(range), displayedRange(displayedRange)
 	{
 		setRanges(range);
 		setDisplayedRanges(displayedRange);
 	}
 
-	explicit Range(const std::string &range, const std::string &displayedRange, const std::string &transposition)
+	explicit InstrumentRange(const std::string &range, const std::string &displayedRange, const std::string &transposition)
 		: range(range), displayedRange(displayedRange), transposition(transposition)
 	{
 		setRanges(range);
@@ -43,6 +43,8 @@ struct Range
 	const int	getDisplayedLowerRangeNoteValue() const { return lowerDisplayedRange; }
 
 	std::string getTransposition() const { return transposition; }
+
+	bool		operator==(const InstrumentRange &other) const { return this->range == other.range; }
 
 private:
 	void setRanges(const std::string &range)
@@ -76,7 +78,8 @@ private:
 	int			higherDisplayedRange{0};
 	int			lowerDisplayedRange{0};
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(Range, range, displayedRange, transposition)
+
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(InstrumentRange, range, displayedRange, transposition)
 };
 
 
@@ -184,40 +187,40 @@ public:
 	InstrumentInfo()  = default;
 	~InstrumentInfo() = default;
 
-	InstrumentInfo(const std::string &name,
-				   InstrumentID		  key,
-				   const Range		 &range,
-				   const Qualities	 &qualities,
-				   const Roles		 &roles,
-				   const FamousWorks &works,
-				   const Techniques	 &techniques,
-				   bool				  isRhythmicPercussion = false)
+	InstrumentInfo(const std::string	 &name,
+				   InstrumentID			  key,
+				   const InstrumentRange &range,
+				   const Qualities		 &qualities,
+				   const Roles			 &roles,
+				   const FamousWorks	 &works,
+				   const Techniques		 &techniques,
+				   bool					  isRhythmicPercussion = false)
 		: mName(name), mRange(range), mQualities(qualities), mRoles(roles), mFamousWorks(works), mPlayingTechniques(techniques), mKey(key),
 		  mIsRhythmicPercussion(isRhythmicPercussion)
 	{
 	}
 
-	std::string	 getName() const { return mName; }
-	Range		 getRange() const { return mRange; }
-	Qualities	 getQualities() const { return mQualities; }
-	Roles		 getRoles() const { return mRoles; }
-	FamousWorks	 getFamousWorks() const { return mFamousWorks; }
-	Techniques	 getTechniques() const { return mPlayingTechniques; }
-	InstrumentID getKey() const { return mKey; }
-	bool		 isRhythmicPercussion() const { return mIsRhythmicPercussion; }
+	std::string		getName() const { return mName; }
+	InstrumentRange getRange() const { return mRange; }
+	Qualities		getQualities() const { return mQualities; }
+	Roles			getRoles() const { return mRoles; }
+	FamousWorks		getFamousWorks() const { return mFamousWorks; }
+	Techniques		getTechniques() const { return mPlayingTechniques; }
+	InstrumentID	getKey() const { return mKey; }
+	bool			isRhythmicPercussion() const { return mIsRhythmicPercussion; }
 
-	bool		 isValid() { return !mName.empty() && mKey != 0; }
+	bool			isValid() { return !mName.empty() && mKey != 0; }
 
 private:
-	std::string	 mName;							// Name of the instrument
-	Range		 mRange;						// Range of notes (lowest to highest playable note)
-	Qualities	 mQualities;					// Sound characteristics of each section within the range
-	Roles		 mRoles;						// Any useful information of the instrument
-	FamousWorks	 mFamousWorks;					// Famous works presenting the qualitiy of the instrument
-	Techniques	 mPlayingTechniques;			// Different playing techniques featured within the instrument's family
-	bool		 mIsRhythmicPercussion = false; // If the instrument is a rhythmic percussion instrument, it will be set to true
+	std::string		mName;						   // Name of the instrument
+	InstrumentRange mRange;						   // Range of notes (lowest to highest playable note)
+	Qualities		mQualities;					   // Sound characteristics of each section within the range
+	Roles			mRoles;						   // Any useful information of the instrument
+	FamousWorks		mFamousWorks;				   // Famous works presenting the qualitiy of the instrument
+	Techniques		mPlayingTechniques;			   // Different playing techniques featured within the instrument's family
+	bool			mIsRhythmicPercussion = false; // If the instrument is a rhythmic percussion instrument, it will be set to true
 
-	InstrumentID mKey				   = 0;		// 3 digit key defining the instrument (see Helper.h)
+	InstrumentID	mKey				  = 0;	   // 3 digit key defining the instrument (see Helper.h)
 
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE(InstrumentInfo, mName, mRange, mQualities, mRoles, mFamousWorks, mPlayingTechniques, mIsRhythmicPercussion, mKey)
 };

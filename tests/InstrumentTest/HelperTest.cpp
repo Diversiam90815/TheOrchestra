@@ -45,16 +45,16 @@ TEST_F(HelperTest, GetInstrumentKeyWithEnums)
 
 TEST_F(HelperTest, GetInstrumentKeyWithStrings)
 {
-	String violinFamily		= StringsName;
-	String violinInstrument = ViolinName;
+	std::string violinFamily	 = StringsName;
+	std::string violinInstrument = ViolinName;
 
-	int	   key				= getInstrumentKey(violinFamily, violinInstrument);
+	int			key				 = getInstrumentKey(violinFamily, violinInstrument);
 	EXPECT_EQ(key, 301) << "String-based key generation should match enum-based";
 
-	String brassFamily		 = BrassName;
-	String trumpetInstrument = TrumpetName;
+	std::string brassFamily		  = BrassName;
+	std::string trumpetInstrument = TrumpetName;
 
-	key						 = getInstrumentKey(brassFamily, trumpetInstrument);
+	key							  = getInstrumentKey(brassFamily, trumpetInstrument);
 	EXPECT_EQ(key, 202) << "Brass trumpet key should be 202";
 }
 
@@ -78,10 +78,10 @@ TEST_F(HelperTest, GetFamilyNameFromKey)
 
 TEST_F(HelperTest, GetLowerOrHigherNoteValidRange)
 {
-	String range	  = "C3 - E6";
+	std::string range	   = "C3 - E6";
 
-	String lowerNote  = getLowerOrHigherNote(range, true);
-	String higherNote = getLowerOrHigherNote(range, false);
+	std::string lowerNote  = getLowerOrHigherNote(range, true);
+	std::string higherNote = getLowerOrHigherNote(range, false);
 
 	EXPECT_EQ(lowerNote, "C3") << "Should extract lower note correctly";
 	EXPECT_EQ(higherNote, "E6") << "Should extract higher note correctly";
@@ -90,10 +90,10 @@ TEST_F(HelperTest, GetLowerOrHigherNoteValidRange)
 
 TEST_F(HelperTest, GetLowerOrHigherNoteWithSpaces)
 {
-	String range	  = "  G4  -  A7  ";
+	std::string range	   = "  G4  -  A7  ";
 
-	String lowerNote  = getLowerOrHigherNote(range, true);
-	String higherNote = getLowerOrHigherNote(range, false);
+	std::string lowerNote  = getLowerOrHigherNote(range, true);
+	std::string higherNote = getLowerOrHigherNote(range, false);
 
 	EXPECT_EQ(lowerNote, "G4") << "Should trim whitespace from lower note";
 	EXPECT_EQ(higherNote, "A7") << "Should trim whitespace from higher note";
@@ -102,19 +102,19 @@ TEST_F(HelperTest, GetLowerOrHigherNoteWithSpaces)
 
 TEST_F(HelperTest, GetLowerOrHigherNoteInvalidRange)
 {
-	String invalidRange = "InvalidRange";
+	std::string invalidRange = "InvalidRange";
 
-	String result		= getLowerOrHigherNote(invalidRange, true);
-	EXPECT_TRUE(result.isEmpty()) << "Should return empty string for invalid range";
+	std::string result		 = getLowerOrHigherNote(invalidRange, true);
+	EXPECT_TRUE(result.empty()) << "Should return empty string for invalid range";
 }
 
 
 TEST_F(HelperTest, SplitColonizedStrings)
 {
-	String colonized = "Left Part : Right Part";
+	std::string colonized = "Left Part : Right Part";
 
-	String leftPart	 = splitColonizedStrings(colonized, true);
-	String rightPart = splitColonizedStrings(colonized, false);
+	std::string leftPart  = splitColonizedStrings(colonized, true);
+	std::string rightPart = splitColonizedStrings(colonized, false);
 
 	EXPECT_EQ(leftPart, "Left Part") << "Should extract left part correctly";
 	EXPECT_EQ(rightPart, "Right Part") << "Should extract right part correctly";
@@ -123,10 +123,10 @@ TEST_F(HelperTest, SplitColonizedStrings)
 
 TEST_F(HelperTest, SplitColonizedStringsWithSpaces)
 {
-	String colonized = "  First  :  Second  ";
+	std::string colonized = "  First  :  Second  ";
 
-	String leftPart	 = splitColonizedStrings(colonized, true);
-	String rightPart = splitColonizedStrings(colonized, false);
+	std::string leftPart  = splitColonizedStrings(colonized, true);
+	std::string rightPart = splitColonizedStrings(colonized, false);
 
 	EXPECT_EQ(leftPart, "First") << "Should trim whitespace from left part";
 	EXPECT_EQ(rightPart, "Second") << "Should trim whitespace from right part";
@@ -135,10 +135,10 @@ TEST_F(HelperTest, SplitColonizedStringsWithSpaces)
 
 TEST_F(HelperTest, SplitColonizedStringsInvalid)
 {
-	String invalid = "NoColonHere";
+	std::string invalid = "NoColonHere";
 
-	String result  = splitColonizedStrings(invalid, true);
-	EXPECT_TRUE(result.isEmpty()) << "Should return empty for strings without colon";
+	std::string result	= splitColonizedStrings(invalid, true);
+	EXPECT_TRUE(result.empty()) << "Should return empty for strings without colon";
 }
 
 
@@ -180,12 +180,12 @@ TEST_F(HelperTest, ArticulationMapsConsistency)
 	for (const auto &pair : articulationMap)
 	{
 		Articulation articulation = pair.second;
-		String		 originalName = pair.first;
+		std::string	 originalName = pair.first;
 
 		auto		 reverseIt	  = articulationReverseMap.find(articulation);
-		ASSERT_NE(reverseIt, articulationReverseMap.end()) << "Articulation " << originalName.toStdString() << " missing from reverse map";
+		ASSERT_NE(reverseIt, articulationReverseMap.end()) << "Articulation " << originalName << " missing from reverse map";
 
-		EXPECT_EQ(reverseIt->second, originalName) << "Reverse mapping inconsistent for " << originalName.toStdString();
+		EXPECT_EQ(reverseIt->second, originalName) << "Reverse mapping inconsistent for " << originalName;
 	}
 }
 
@@ -207,11 +207,11 @@ TEST_F(HelperTest, FamilyMapsConsistency)
 	// Test forward and reverse family mapping
 	for (const auto &pair : familyMap)
 	{
-		Family family	  = pair.second;
-		String familyName = pair.first;
+		Family		family	   = pair.second;
+		std::string familyName = pair.first;
 
-		auto   reverseIt  = reverseFamilyMap.find(family);
-		ASSERT_NE(reverseIt, reverseFamilyMap.end()) << "Family " << familyName.toStdString() << " missing from reverse map";
+		auto		reverseIt  = reverseFamilyMap.find(family);
+		ASSERT_NE(reverseIt, reverseFamilyMap.end()) << "Family " << familyName << " missing from reverse map";
 
 		EXPECT_EQ(reverseIt->second, familyName) << "Reverse family mapping inconsistent";
 	}

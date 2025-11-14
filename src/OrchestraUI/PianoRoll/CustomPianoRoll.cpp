@@ -216,7 +216,7 @@ bool CustomPianoRoll::setMidiRanges(const Qualities &qualities)
 }
 
 
-bool CustomPianoRoll::setMidiRanges(const Range &range)
+bool CustomPianoRoll::setMidiRanges(const InstrumentRange &range)
 {
 	mMidiRanges.clear();
 	mRangesSet	  = false;
