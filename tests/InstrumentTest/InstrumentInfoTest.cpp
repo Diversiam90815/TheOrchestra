@@ -12,211 +12,452 @@
 namespace InstrumentTests
 {
 
+// ============================================================================
+// Range Tests
+// ============================================================================
+
+TEST(RangeTest, DefaultConstructorInitializesEmptyState)
+{
+	InstrumentRange range;
+
+	EXPECT_EQ(range.getHigherRange(), "");
+	EXPECT_EQ(range.getLowerRange(), "");
+	EXPECT_EQ(range.getHigherRangeNoteValue(), 0);
+	EXPECT_EQ(range.getLowerRangeNoteValue(), 0);
+	EXPECT_EQ(range.getTransposition(), "");
+}
+
+TEST(RangeTest, SingleArgumentConstructorParsesRange)
+{
+	InstrumentRange range("G3:A7");
+
+	EXPECT_NE(range.getLowerRange(), "");
+	EXPECT_NE(range.getHigherRange(), "");
+	EXPECT_GT(range.getHigherRangeNoteValue(), range.getLowerRangeNoteValue());
+	EXPECT_EQ(range.getTransposition(), "");
+}
+
+TEST(RangeTest, TwoArgumentConstructorHandlesDisplayedRange)
+{
+	InstrumentRange range("G3:A7", "G2:A6");
+
+	EXPECT_NE(range.getLowerRange(), "");
+	EXPECT_NE(range.getHigherRange(), "");
+	EXPECT_NE(range.getDisplayedLowerRange(), "");
+	EXPECT_NE(range.getDisplayedHigherRange(), "");
+}
+
+TEST(RangeTest, ThreeArgumentConstructorIncludesTransposition)
+{
+	std::string transposition = "Bb: Sounds a major 2nd lower";
+	InstrumentRange range("G3:A7", "G3:A7", transposition);
+
+	EXPECT_EQ(range.getTransposition(), transposition);
+}
+
+TEST(RangeTest, EqualityOperatorComparesRanges)
+{
+	InstrumentRange range1("G3:A7");
+	InstrumentRange range2("G3:A7");
+	InstrumentRange range3("C4:C6");
+
+	EXPECT_EQ(range1, range2);
+	EXPECT_FALSE(range1 == range3);
+}
+
+TEST(RangeTest, DisplayedRangeCanDifferFromActualRange)
+{
+	InstrumentRange range("C2:C4", "C1:C3");
+
+	EXPECT_NE(range.getDisplayedLowerRange(), range.getLowerRange());
+	EXPECT_NE(range.getDisplayedHigherRange(), range.getHigherRange());
+}
+
+// ============================================================================
+// FamousWork Tests
+// ============================================================================
+
+TEST(FamousWorkTest, DefaultConstructorInitializesEmpty)
+{
+	FamousWork work;
+
+	EXPECT_EQ(work.getWork(), "");
+}
+
+TEST(FamousWorkTest, ConstructorStoresWorkString)
+{
+	std::string workName = "Test Symphony";
+	FamousWork	work(workName);
+
+	EXPECT_EQ(work.getWork(), workName);
+}
+
+// ============================================================================
+// PlayingTechnique Tests
+// ============================================================================
+
+TEST(PlayingTechniqueTest, DefaultConstructorInitializesEmpty)
+{
+	PlayingTechnique technique;
+
+	EXPECT_EQ(technique.getName(), "");
+	EXPECT_EQ(technique.getDescription(), "");
+}
+
+TEST(PlayingTechniqueTest, ConstructorParsesColonizedString)
+{
+	PlayingTechnique technique("TechniqueName:Technique description");
+
+	EXPECT_EQ(technique.getName(), "TechniqueName");
+	EXPECT_EQ(technique.getDescription(), "Technique description");
+}
+
+TEST(PlayingTechniqueTest, HandlesMultipleColons)
+{
+	PlayingTechnique technique("Name:Description: with: colons");
+
+	EXPECT_EQ(technique.getName(), "Name");
+	EXPECT_FALSE(technique.getDescription().empty());
+}
+
+// ============================================================================
+// Quality Tests
+// ============================================================================
+
+TEST(QualityTest, DefaultConstructorInitializesEmpty)
+{
+	Quality quality;
+
+	EXPECT_EQ(quality.getLowerRange(), "");
+	EXPECT_EQ(quality.getHigherRange(), "");
+	EXPECT_EQ(quality.getDescription(), "");
+}
+
+TEST(QualityTest, ConstructorParsesRangeAndDescription)
+{
+	Quality quality("C3-G4:Test quality description");
+
+	EXPECT_FALSE(quality.getLowerRange().empty());
+	EXPECT_FALSE(quality.getHigherRange().empty());
+	EXPECT_FALSE(quality.getDescription().empty());
+}
+
+TEST(QualityTest, HandlesSingleNoteRange)
+{
+	Quality quality("C4:Single note description");
+
+	EXPECT_EQ(quality.getLowerRange(), quality.getHigherRange());
+	EXPECT_FALSE(quality.getDescription().empty());
+}
+
+// ============================================================================
+// Role Tests
+// ============================================================================
+
+TEST(RoleTest, DefaultConstructorInitializesEmpty)
+{
+	Role role;
+
+	EXPECT_EQ(role.getRole(), "");
+}
+
+TEST(RoleTest, ConstructorStoresRoleString)
+{
+	std::string roleText = "Test role";
+	Role		role(roleText);
+
+	EXPECT_EQ(role.getRole(), roleText);
+}
+
+// ============================================================================
+// InstrumentInfo Tests - Structure and API
+// ============================================================================
+
 TEST(InstrumentInfoTest, DefaultConstructorInitializesEmptyState)
 {
 	InstrumentInfo info;
 
-	EXPECT_TRUE(info.getName().isEmpty());
-	EXPECT_TRUE(info.getRange().isEmpty());
+	EXPECT_EQ(info.getName(), "");
 	EXPECT_EQ(info.getKey(), 0);
 	EXPECT_FALSE(info.isRhythmicPercussion());
-	EXPECT_TRUE(info.getDisplayedRange().isEmpty());
 	EXPECT_EQ(info.getQualities().size(), 0);
-	EXPECT_EQ(info.getInformation().size(), 0);
+	EXPECT_EQ(info.getRoles().size(), 0);
 	EXPECT_EQ(info.getFamousWorks().size(), 0);
 	EXPECT_EQ(info.getTechniques().size(), 0);
-	EXPECT_TRUE(info.getTransposition().isEmpty());
 }
 
-
-TEST(InstrumentInfoTest, ParameterizedConstructorSetsAllFields)
+TEST(InstrumentInfoTest, ParameterizedConstructorSetsName)
 {
-	String		name  = "Violin";
-	String		range = "G3 - A7";
-	StringArray qualities;
-	qualities.add("Bright");
-	qualities.add("Expressive");
-	StringArray roles;
-	roles.add("Melody");
-	roles.add("Harmony");
-	StringArray famous;
-	famous.add("Concerto in D");
-	famous.add("Symphony Feature");
-	String		transposition = "Non-transposing";
-	StringArray techniques;
-	techniques.add("Legato");
-	techniques.add("Pizzicato");
-	int			   key			  = 301;
-	bool		   rhythmic		  = false;
-	String		   displayedRange = String(); // not used for non-percussion
+	std::string	   name = "TestInstrument";
+	InstrumentID   key	= 100;
+	InstrumentRange range("C3:C5");
+	Qualities	   qualities;
+	Roles		   roles;
+	FamousWorks	   works;
+	Techniques	   techniques;
 
-	InstrumentInfo info(name, range, qualities, roles, famous, transposition, techniques, key, rhythmic, displayedRange);
+	InstrumentInfo info(name, key, range, qualities, roles, works, techniques, false);
 
 	EXPECT_EQ(info.getName(), name);
-	EXPECT_EQ(info.getRange(), range);
-	EXPECT_EQ(info.getKey(), key);
-	EXPECT_FALSE(info.isRhythmicPercussion());
-	EXPECT_EQ(info.getDisplayedRange(), displayedRange);
-	EXPECT_EQ(info.getQualities().size(), 2);
-	EXPECT_EQ(info.getInformation().size(), 2);
-	EXPECT_EQ(info.getFamousWorks().size(), 2);
-	EXPECT_EQ(info.getTechniques().size(), 2);
-	EXPECT_EQ(info.getTransposition(), transposition);
 }
 
-
-TEST(InstrumentInfoTest, ParameterizedConstructorWithRhythmicPercussion)
+TEST(InstrumentInfoTest, ParameterizedConstructorSetsKey)
 {
-	String		name  = "Timpani";
-	String		range = "D2 - C4";
-	StringArray qualities;
-	qualities.add("Deep");
-	qualities.add("Resonant");
-	StringArray roles;
-	roles.add("Rhythmic foundation");
-	StringArray famous;
-	famous.add("Beethoven Symphony No. 9");
-	String		transposition = "-";
-	StringArray techniques;
-	techniques.add("Rolls");
-	techniques.add("Muffling");
-	int			   key			  = 403;
-	bool		   rhythmic		  = true;
-	String		   displayedRange = "D1 - A1";
+	InstrumentID   key = 301;
+	InstrumentRange range("C3:C5");
+	Qualities	   qualities;
+	Roles		   roles;
+	FamousWorks	   works;
+	Techniques	   techniques;
 
-	InstrumentInfo info(name, range, qualities, roles, famous, transposition, techniques, key, rhythmic, displayedRange);
+	InstrumentInfo info("Test", key, range, qualities, roles, works, techniques, false);
+
+	EXPECT_EQ(info.getKey(), key);
+}
+
+TEST(InstrumentInfoTest, ParameterizedConstructorSetsRange)
+{
+	InstrumentRange range("G3:A7");
+	Qualities	   qualities;
+	Roles		   roles;
+	FamousWorks	   works;
+	Techniques	   techniques;
+
+	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+
+	EXPECT_EQ(info.getRange().getLowerRange(), range.getLowerRange());
+	EXPECT_EQ(info.getRange().getHigherRange(), range.getHigherRange());
+}
+
+TEST(InstrumentInfoTest, ParameterizedConstructorSetsQualities)
+{
+	InstrumentRange range("C3:C5");
+	Qualities qualities;
+	qualities.push_back(Quality("C3-E3:Low"));
+	qualities.push_back(Quality("F3-C5:High"));
+	Roles		   roles;
+	FamousWorks	   works;
+	Techniques	   techniques;
+
+	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+
+	EXPECT_EQ(info.getQualities().size(), 2);
+}
+
+TEST(InstrumentInfoTest, ParameterizedConstructorSetsRoles)
+{
+	InstrumentRange range("C3:C5");
+	Qualities qualities;
+	Roles	  roles;
+	roles.push_back(Role("Role 1"));
+	roles.push_back(Role("Role 2"));
+	FamousWorks	   works;
+	Techniques	   techniques;
+
+	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+
+	EXPECT_EQ(info.getRoles().size(), 2);
+}
+
+TEST(InstrumentInfoTest, ParameterizedConstructorSetsFamousWorks)
+{
+	InstrumentRange range("C3:C5");
+	Qualities	qualities;
+	Roles		roles;
+	FamousWorks works;
+	works.push_back(FamousWork("Work 1"));
+	works.push_back(FamousWork("Work 2"));
+	works.push_back(FamousWork("Work 3"));
+	Techniques	   techniques;
+
+	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+
+	EXPECT_EQ(info.getFamousWorks().size(), 3);
+}
+
+TEST(InstrumentInfoTest, ParameterizedConstructorSetsTechniques)
+{
+	InstrumentRange range("C3:C5");
+	Qualities	qualities;
+	Roles		roles;
+	FamousWorks works;
+	Techniques	techniques;
+	techniques.push_back(PlayingTechnique("Tech1:Description 1"));
+	techniques.push_back(PlayingTechnique("Tech2:Description 2"));
+
+	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+
+	EXPECT_EQ(info.getTechniques().size(), 2);
+}
+
+TEST(InstrumentInfoTest, RhythmicPercussionFlagDefaultsToFalse)
+{
+	InstrumentRange range("C3:C5");
+	Qualities	   qualities;
+	Roles		   roles;
+	FamousWorks	   works;
+	Techniques	   techniques;
+
+	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques);
+
+	EXPECT_FALSE(info.isRhythmicPercussion());
+}
+
+TEST(InstrumentInfoTest, RhythmicPercussionFlagCanBeSetTrue)
+{
+	InstrumentRange range("C3:C5");
+	Qualities	   qualities;
+	Roles		   roles;
+	FamousWorks	   works;
+	Techniques	   techniques;
+
+	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, true);
 
 	EXPECT_TRUE(info.isRhythmicPercussion());
-	EXPECT_EQ(info.getDisplayedRange(), displayedRange);
-	EXPECT_NE(info.getDisplayedRange(), info.getRange()) << "Displayed range should differ from actual range for rhythmic percussion";
 }
 
-
-TEST(InstrumentInfoTest, TransposingInstrumentData)
+TEST(InstrumentInfoTest, IsValidReturnsTrueForValidInstrument)
 {
-	String		name		  = "French Horn";
-	String		range		  = "F2 - C6";
-	String		transposition = "F: Sounds a perfect 5th lower";
-	StringArray qualities;
-	qualities.add("Dark and mysterious");
-	qualities.add("Heroic");
-	StringArray roles;
-	roles.add("Heroic themes");
-	StringArray famous;
-	famous.add("Mozart Horn Concerto");
-	StringArray techniques;
-	techniques.add("Stopped Horn");
-	int			   key			  = 201;
-	bool		   rhythmic		  = false;
-	String		   displayedRange = String();
+	InstrumentRange range("C3:C5");
+	Qualities	   qualities;
+	Roles		   roles;
+	FamousWorks	   works;
+	Techniques	   techniques;
 
-	InstrumentInfo info(name, range, qualities, roles, famous, transposition, techniques, key, rhythmic, displayedRange);
+	InstrumentInfo info("ValidName", 301, range, qualities, roles, works, techniques, false);
 
-	EXPECT_FALSE(info.getTransposition().isEmpty()) << "Transposing instruments should have transposition info";
-	EXPECT_TRUE(info.getTransposition().contains("5th")) << "French Horn transposition should mention interval";
+	EXPECT_TRUE(info.isValid());
 }
 
-
-TEST(InstrumentInfoTest, NonTransposingInstrumentData)
+TEST(InstrumentInfoTest, IsValidReturnsFalseForEmptyName)
 {
-	String		name		  = "Violin";
-	String		range		  = "G3 - A7";
-	String		transposition = "-";
-	StringArray qualities;
-	qualities.add("Bright");
-	StringArray roles;
-	roles.add("Melody");
-	StringArray famous;
-	famous.add("Beethoven Violin Concerto");
-	StringArray techniques;
-	techniques.add("Pizzicato");
-	int			   key			  = 301;
-	bool		   rhythmic		  = false;
-	String		   displayedRange = String();
+	InstrumentRange range("C3:C5");
+	Qualities	   qualities;
+	Roles		   roles;
+	FamousWorks	   works;
+	Techniques	   techniques;
 
-	InstrumentInfo info(name, range, qualities, roles, famous, transposition, techniques, key, rhythmic, displayedRange);
+	InstrumentInfo info("", 301, range, qualities, roles, works, techniques, false);
 
-	EXPECT_EQ(info.getTransposition(), "-") << "Non-transposing instruments should have '-' for transposition";
+	EXPECT_FALSE(info.isValid());
 }
 
-
-TEST(InstrumentInfoTest, QualitiesArrayPopulated)
+TEST(InstrumentInfoTest, IsValidReturnsFalseForZeroKey)
 {
-	String		name  = "Clarinet";
-	String		range = "E3 - C7";
-	StringArray qualities;
-	qualities.add("E3 - F#4: Chalumeau Register (deep, rich)");
-	qualities.add("G4 - A#4: Throat Tones (rather pale)");
-	qualities.add("B4 - C#6: Clarino Register (bright, incisive, expressive)");
-	qualities.add("D6 - C7: Shrill, piercing");
-	StringArray roles;
-	roles.add("Lyrical passages");
-	StringArray famous;
-	famous.add("Mozart Clarinet Concerto");
-	String		transposition = "Bb: Major 2nd lower";
-	StringArray techniques;
-	techniques.add("Flutter tonguing");
-	int			   key			  = 105;
-	bool		   rhythmic		  = false;
-	String		   displayedRange = String();
+	InstrumentRange range("C3:C5");
+	Qualities	   qualities;
+	Roles		   roles;
+	FamousWorks	   works;
+	Techniques	   techniques;
 
-	InstrumentInfo info(name, range, qualities, roles, famous, transposition, techniques, key, rhythmic, displayedRange);
+	InstrumentInfo info("ValidName", 0, range, qualities, roles, works, techniques, false);
 
-	EXPECT_EQ(info.getQualities().size(), 4) << "Clarinet should have 4 quality descriptions";
-	EXPECT_TRUE(info.getQualities()[0].contains("Chalumeau")) << "First quality should describe Chalumeau register";
+	EXPECT_FALSE(info.isValid());
 }
 
-
-TEST(InstrumentInfoTest, FamousWorksArrayPopulated)
+TEST(InstrumentInfoTest, IsValidReturnsFalseForDefaultConstructed)
 {
-	String		name  = "Violin";
-	String		range = "G3 - A7";
-	StringArray qualities;
-	qualities.add("Expressive");
-	StringArray roles;
-	roles.add("Melody");
-	StringArray famous;
-	famous.add("Beethoven - Violin Concerto in D major, Op. 61");
-	famous.add("Tchaikovsky - Violin Concerto in D major, Op. 35");
-	famous.add("Mendelssohn - Violin Concerto in E minor, Op. 64");
-	String		transposition = "-";
-	StringArray techniques;
-	techniques.add("Vibrato");
-	int			   key			  = 301;
-	bool		   rhythmic		  = false;
-	String		   displayedRange = String();
+	InstrumentInfo info;
 
-	InstrumentInfo info(name, range, qualities, roles, famous, transposition, techniques, key, rhythmic, displayedRange);
-
-	EXPECT_EQ(info.getFamousWorks().size(), 3) << "Violin should have 3 famous works listed";
-	EXPECT_TRUE(info.getFamousWorks()[0].contains("Beethoven")) << "First work should be Beethoven";
+	EXPECT_FALSE(info.isValid());
 }
 
-
-TEST(InstrumentInfoTest, PlayingTechniquesPopulated)
+TEST(InstrumentInfoTest, CanStoreEmptyCollections)
 {
-	String		name  = "Violin";
-	String		range = "G3 - A7";
-	StringArray qualities;
-	qualities.add("Bright");
-	StringArray roles;
-	roles.add("Melody");
-	StringArray famous;
-	famous.add("Beethoven Concerto");
-	String		transposition = "-";
-	StringArray techniques;
-	techniques.add("Pizzicato: Plucking the strings with fingers");
-	techniques.add("Arco: Using the bow to produce sound");
-	techniques.add("Sul ponticello: Playing near the bridge for a tense sound");
-	techniques.add("Tremolo: Rapid back-and-forth bowing");
-	int			   key			  = 301;
-	bool		   rhythmic		  = false;
-	String		   displayedRange = String();
+	InstrumentRange range("C3:C5");
+	Qualities	   qualities;  // empty
+	Roles		   roles;	   // empty
+	FamousWorks	   works;	   // empty
+	Techniques	   techniques; // empty
 
-	InstrumentInfo info(name, range, qualities, roles, famous, transposition, techniques, key, rhythmic, displayedRange);
+	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
 
-	EXPECT_GE(info.getTechniques().size(), 4) << "Violin should have at least 4 playing techniques";
-	EXPECT_TRUE(info.getTechniques()[0].contains("Pizzicato")) << "First technique should be Pizzicato";
+	EXPECT_EQ(info.getQualities().size(), 0);
+	EXPECT_EQ(info.getRoles().size(), 0);
+	EXPECT_EQ(info.getFamousWorks().size(), 0);
+	EXPECT_EQ(info.getTechniques().size(), 0);
 }
+
+TEST(InstrumentInfoTest, CanStoreLargeCollections)
+{
+	InstrumentRange range("C3:C5");
+
+	Qualities qualities;
+	for (int i = 0; i < 10; ++i)
+		qualities.push_back(Quality("C3-C4:Quality " + std::to_string(i)));
+
+	Roles roles;
+	for (int i = 0; i < 5; ++i)
+		roles.push_back(Role("Role " + std::to_string(i)));
+
+	FamousWorks works;
+	for (int i = 0; i < 15; ++i)
+		works.push_back(FamousWork("Work " + std::to_string(i)));
+
+	Techniques techniques;
+	for (int i = 0; i < 8; ++i)
+		techniques.push_back(PlayingTechnique("Tech" + std::to_string(i) + ":Description"));
+
+	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+
+	EXPECT_EQ(info.getQualities().size(), 10);
+	EXPECT_EQ(info.getRoles().size(), 5);
+	EXPECT_EQ(info.getFamousWorks().size(), 15);
+	EXPECT_EQ(info.getTechniques().size(), 8);
+}
+
+// ============================================================================
+// Integration Tests - Verify data integrity
+// ============================================================================
+
+TEST(InstrumentInfoTest, RetrievedQualitiesMatchInput)
+{
+	InstrumentRange range("C3:C5");
+	Qualities qualities;
+	qualities.push_back(Quality("C3-E3:Lower register"));
+	qualities.push_back(Quality("F3-C5:Upper register"));
+	Roles		   roles;
+	FamousWorks	   works;
+	Techniques	   techniques;
+
+	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+
+	auto		   retrieved = info.getQualities();
+	ASSERT_EQ(retrieved.size(), 2);
+	EXPECT_FALSE(retrieved[0].getDescription().empty());
+	EXPECT_FALSE(retrieved[1].getDescription().empty());
+}
+
+TEST(InstrumentInfoTest, RetrievedTechniquesMatchInput)
+{
+	InstrumentRange range("C3:C5");
+	Qualities	qualities;
+	Roles		roles;
+	FamousWorks works;
+	Techniques	techniques;
+	techniques.push_back(PlayingTechnique("Legato:Smooth connection"));
+	techniques.push_back(PlayingTechnique("Staccato:Short and detached"));
+
+	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+
+	auto		   retrieved = info.getTechniques();
+	ASSERT_EQ(retrieved.size(), 2);
+	EXPECT_EQ(retrieved[0].getName(), "Legato");
+	EXPECT_EQ(retrieved[1].getName(), "Staccato");
+}
+
+TEST(InstrumentInfoTest, RangeWithTranspositionPreservesTransposition)
+{
+	InstrumentRange range("C3:C5", "C3:C5", "Bb: Sounds a major 2nd lower");
+	Qualities	   qualities;
+	Roles		   roles;
+	FamousWorks	   works;
+	Techniques	   techniques;
+
+	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+
+	EXPECT_EQ(info.getRange().getTransposition(), "Bb: Sounds a major 2nd lower");
+}
+
 
 } // namespace InstrumentTests

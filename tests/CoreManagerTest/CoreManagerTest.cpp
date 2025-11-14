@@ -85,7 +85,7 @@ TEST_F(CoreManagerTest, GetInstrumentWithValidKey)
 
 	// Violin should be a valid instrument
 	EXPECT_TRUE(instrument.isValid()) << "Violin instrument should be valid";
-	EXPECT_FALSE(instrument.getName().isEmpty()) << "Violin should have a name";
+	EXPECT_FALSE(instrument.getName().empty()) << "Violin should have a name";
 }
 
 
