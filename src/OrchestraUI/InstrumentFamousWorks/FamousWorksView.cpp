@@ -24,16 +24,16 @@ void FamousWorksView::displayInstrument(InstrumentInfo &instrument)
 {
 	const auto &works = instrument.getFamousWorks();
 
-	if (!works.empty())
+	if (works.empty())
 		return;
 
 	size_t size = works.size();
 
 	mFirstWork.setText(works.at(0).getWork(), juce::dontSendNotification);
 
-	if (size >= 1)
+	if (size > 1)
 		mSecondWork.setText(works.at(1).getWork(), juce::dontSendNotification);
 
-	if (size >= 2)
+	if (size > 2)
 		mThirdWork.setText(works.at(2).getWork(), juce::dontSendNotification);
 }

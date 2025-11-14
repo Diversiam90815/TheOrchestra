@@ -135,6 +135,9 @@ struct Quality
 			lowerNote  = rangeNotation;
 			higherNote = rangeNotation;
 		}
+
+		higherNoteValue = turnNotenameIntoMidinumber(higherNote);
+		lowerNoteValue	= turnNotenameIntoMidinumber(lowerNote);
 	}
 
 	std::string getLowerRange() const { return higherNote; }
