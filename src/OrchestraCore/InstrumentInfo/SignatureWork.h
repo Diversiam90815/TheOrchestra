@@ -9,6 +9,9 @@
 
 #include "nlohmann/json.hpp"
 
+constexpr auto SIG_WORK_COMPOSER = "composer";
+constexpr auto SIG_WORK_TITLE	 = "title";
+
 
 struct SignatureWork
 {
@@ -31,12 +34,12 @@ private:
 
 inline void from_json(const nlohmann::json &j, SignatureWork &work)
 {
-	work.composer = j["composer"].get<std::string>();
-	work.title	  = j["title"].get<std::string>();
+	work.composer = j[SIG_WORK_COMPOSER].get<std::string>();
+	work.title	  = j[SIG_WORK_TITLE].get<std::string>();
 }
 
 inline void to_json(nlohmann::json &j, const SignatureWork &work)
 {
-	j["composer"] = work.getComposer();
-	j["title"]	  = work.getTitle();
+	j[SIG_WORK_COMPOSER] = work.getComposer();
+	j[SIG_WORK_TITLE]	 = work.getTitle();
 }
