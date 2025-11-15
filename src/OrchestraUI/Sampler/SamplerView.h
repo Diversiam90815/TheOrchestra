@@ -22,7 +22,7 @@ public:
 	~SamplerView() = default;
 
 	void init() override;
-	void displayInstrument(InstrumentInfo &instrument) override {}
+	void displayInstrument(InstrumentProfile &instrument) override {}
 
 	void displayInstrument(std::set<Articulation> availableArticulations);
 

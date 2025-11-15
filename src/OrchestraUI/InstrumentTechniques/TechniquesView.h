@@ -16,14 +16,14 @@ public:
 	~TechniquesView() = default;
 
 	void init() override;
-	void displayInstrument(InstrumentInfo &instrument) override;
+	void displayInstrument(InstrumentProfile &instrument) override;
 
 private:
 	juce::Label			mTitle;
 
 	juce::TooltipWindow tooltipWindow{this};
 
-	// Techniques displays using text buttons with tooltips in 3 rows a 3-3-2
+	// PlayingTechniques displays using text buttons with tooltips in 3 rows a 3-3-2
 	juce::TextButton	mTech1;
 	juce::TextButton	mTech2;
 	juce::TextButton	mTech3;

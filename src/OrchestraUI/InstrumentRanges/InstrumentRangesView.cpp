@@ -28,7 +28,7 @@ void InstrumentRangesView::init()
 }
 
 
-void InstrumentRangesView::displayInstrument(InstrumentInfo &instrument)
+void InstrumentRangesView::displayInstrument(InstrumentProfile &instrument)
 {
 	const auto &range	   = instrument.getRange();
 

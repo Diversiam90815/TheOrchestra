@@ -21,7 +21,7 @@ void InformationView::init()
 }
 
 
-void InformationView::displayInstrument(InstrumentInfo &instrument)
+void InformationView::displayInstrument(InstrumentProfile &instrument)
 {
 	const auto &roles = instrument.getRoles();
 

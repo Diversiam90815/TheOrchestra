@@ -1,6 +1,6 @@
 /*
   ==============================================================================
-	Module			InstrumentInfo
+	Module			InstrumentProfile
 	Description		Class storing information about each instrument
   ==============================================================================
 */
@@ -83,17 +83,17 @@ private:
 };
 
 
-struct FamousWork
+struct SignatureWork
 {
-	FamousWork() = default;
-	explicit FamousWork(const std::string &t) : work(t) {}
+	SignatureWork() = default;
+	explicit SignatureWork(const std::string &t) : work(t) {}
 
 	std::string getWork() const { return work; }
 
 private:
 	std::string work;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(FamousWork, work)
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(SignatureWork, work)
 };
 
 
@@ -117,11 +117,11 @@ private:
 };
 
 
-struct Quality
+struct RegisterQuality
 {
-	Quality() = default;
+	RegisterQuality() = default;
 
-	explicit Quality(const std::string &quality)
+	explicit RegisterQuality(const std::string &quality)
 	{
 		rangeNotation = splitColonizedStrings(quality, true);
 		description	  = splitColonizedStrings(quality, false);
@@ -157,73 +157,73 @@ private:
 
 	std::string description;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(Quality, rangeNotation, description)
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(RegisterQuality, rangeNotation, description)
 };
 
 
-struct Role
+struct OrchestrationRole
 {
-	Role() = default;
-	explicit Role(const std::string role) : role(role) {}
+	OrchestrationRole() = default;
+	explicit OrchestrationRole(const std::string role) : role(role) {}
 
 	std::string getRole() const { return role; }
 
 private:
 	std::string role;
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(Role, role)
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(OrchestrationRole, role)
 };
 
 
-using Qualities	  = std::vector<Quality>;
-using Techniques  = std::vector<PlayingTechnique>;
-using Roles		  = std::vector<Role>;
-using FamousWorks = std::vector<FamousWork>;
+using RegisterQualities	 = std::vector<RegisterQuality>;
+using PlayingTechniques	 = std::vector<PlayingTechnique>;
+using OrchestrationRoles = std::vector<OrchestrationRole>;
+using SignatureWorks	 = std::vector<SignatureWork>;
 
 
 /*
  @brief             Struct defining an instrument and it's information (info can be found in InstrumentData.h)
 */
-struct InstrumentInfo
+struct InstrumentProfile
 {
 public:
-	InstrumentInfo()  = default;
-	~InstrumentInfo() = default;
+	InstrumentProfile()	 = default;
+	~InstrumentProfile() = default;
 
-	InstrumentInfo(const std::string	 &name,
-				   InstrumentID			  key,
-				   const InstrumentRange &range,
-				   const Qualities		 &qualities,
-				   const Roles			 &roles,
-				   const FamousWorks	 &works,
-				   const Techniques		 &techniques,
-				   bool					  isRhythmicPercussion = false)
+	InstrumentProfile(const std::string		   &name,
+					  InstrumentID				key,
+					  const InstrumentRange	   &range,
+					  const RegisterQualities  &qualities,
+					  const OrchestrationRoles &roles,
+					  const SignatureWorks	   &works,
+					  const PlayingTechniques  &techniques,
+					  bool						isRhythmicPercussion = false)
 		: mName(name), mRange(range), mQualities(qualities), mRoles(roles), mFamousWorks(works), mPlayingTechniques(techniques), mKey(key),
 		  mIsRhythmicPercussion(isRhythmicPercussion)
 	{
 	}
 
-	std::string		getName() const { return mName; }
-	InstrumentRange getRange() const { return mRange; }
-	Qualities		getQualities() const { return mQualities; }
-	Roles			getRoles() const { return mRoles; }
-	FamousWorks		getFamousWorks() const { return mFamousWorks; }
-	Techniques		getTechniques() const { return mPlayingTechniques; }
-	InstrumentID	getKey() const { return mKey; }
-	bool			isRhythmicPercussion() const { return mIsRhythmicPercussion; }
+	std::string		   getName() const { return mName; }
+	InstrumentRange	   getRange() const { return mRange; }
+	RegisterQualities  getQualities() const { return mQualities; }
+	OrchestrationRoles getRoles() const { return mRoles; }
+	SignatureWorks	   getFamousWorks() const { return mFamousWorks; }
+	PlayingTechniques  getTechniques() const { return mPlayingTechniques; }
+	InstrumentID	   getKey() const { return mKey; }
+	bool			   isRhythmicPercussion() const { return mIsRhythmicPercussion; }
 
-	bool			isValid() { return !mName.empty() && mKey != 0; }
+	bool			   isValid() { return !mName.empty() && mKey != 0; }
 
 private:
-	std::string		mName;						   // Name of the instrument
-	InstrumentRange mRange;						   // Range of notes (lowest to highest playable note)
-	Qualities		mQualities;					   // Sound characteristics of each section within the range
-	Roles			mRoles;						   // Any useful information of the instrument
-	FamousWorks		mFamousWorks;				   // Famous works presenting the qualitiy of the instrument
-	Techniques		mPlayingTechniques;			   // Different playing techniques featured within the instrument's family
-	bool			mIsRhythmicPercussion = false; // If the instrument is a rhythmic percussion instrument, it will be set to true
+	std::string		   mName;						  // Name of the instrument
+	InstrumentRange	   mRange;						  // Range of notes (lowest to highest playable note)
+	RegisterQualities  mQualities;					  // Sound characteristics of each section within the range
+	OrchestrationRoles mRoles;						  // Any useful information of the instrument
+	SignatureWorks	   mFamousWorks;				  // Famous works presenting the qualitiy of the instrument
+	PlayingTechniques  mPlayingTechniques;			  // Different playing techniques featured within the instrument's family
+	bool			   mIsRhythmicPercussion = false; // If the instrument is a rhythmic percussion instrument, it will be set to true
 
-	InstrumentID	mKey				  = 0;	   // 3 digit key defining the instrument (see Helper.h)
+	InstrumentID	   mKey					 = 0;	  // 3 digit key defining the instrument (see Helper.h)
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(InstrumentInfo, mName, mRange, mQualities, mRoles, mFamousWorks, mPlayingTechniques, mIsRhythmicPercussion, mKey)
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(InstrumentProfile, mName, mRange, mQualities, mRoles, mFamousWorks, mPlayingTechniques, mIsRhythmicPercussion, mKey)
 };

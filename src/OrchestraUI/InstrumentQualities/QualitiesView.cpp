@@ -13,7 +13,7 @@ void QualitiesView::init()
 	setSize(mWidth, mHeight);
 
 	// Title
-	addAndConfigureLabel(mTitle, "QualitiesTitle", "Qualities", mQualitiesTitleX, mQualitiesTitleY, mQualitiesTitleWidth, mQualitiesTitleHeight);
+	addAndConfigureLabel(mTitle, "QualitiesTitle", "RegisterQualities", mQualitiesTitleX, mQualitiesTitleY, mQualitiesTitleWidth, mQualitiesTitleHeight);
 
 	// Note buttons
 	addAndConfigureButton(mFirstLowerNote, "FirstQualityLower", mLowerNoteX, mFirstRowY, mNoteButtonWidth, mNoteButtonHeight, false);
@@ -28,7 +28,7 @@ void QualitiesView::init()
 	addAndConfigureButton(mFourthLowerNote, "FourthQualityLower", mLowerNoteX, mFourthRowY, mNoteButtonWidth, mNoteButtonHeight, false);
 	addAndConfigureButton(mFourthHigherNote, "FourthQualityHigher", mHigherNoteX, mFourthRowY, mNoteButtonWidth, mNoteButtonHeight, false);
 
-	// Qualities TextEditors
+	// RegisterQualities TextEditors
 	addAndConfigureTextEditor(mFirstQuality, mQualityX, mFirstRowY, mQualityWidth, mQualityHeight);
 	addAndConfigureTextEditor(mSecondQuality, mQualityX, mSecondRowY, mQualityWidth, mQualityHeight);
 	addAndConfigureTextEditor(mThirdQuality, mQualityX, mThirdRowY, mQualityWidth, mQualityHeight);
@@ -36,7 +36,7 @@ void QualitiesView::init()
 }
 
 
-void QualitiesView::displayInstrument(InstrumentInfo &instrument)
+void QualitiesView::displayInstrument(InstrumentProfile &instrument)
 {
 	const auto														  qualities = instrument.getQualities();
 

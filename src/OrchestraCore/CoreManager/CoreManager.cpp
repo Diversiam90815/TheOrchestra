@@ -73,7 +73,7 @@ void CoreManager::changeArticulation(InstrumentID key, Articulation articulation
 }
 
 
-InstrumentInfo CoreManager::getInstrument(InstrumentID key)
+InstrumentProfile CoreManager::getInstrument(InstrumentID key)
 {
 	return mInstrumentController->getInstrument(key);
 }

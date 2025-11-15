@@ -70,7 +70,7 @@ static std::map<std::string, Dynamics> velocityLayerMap = {
 	@brief                 Returns the key identifying an instrument given by the family and instrument. The key is 3 digit int where the first digit represents the family and the
    other 2 digits represent the instrument. Usually, if the instrument digit remains below 10, the middle digit remains 0.
 	@param                 [IN] family -> enum: Family::Woodwinds (1), Family::Brass (2), Family::Strings (3), Family::Percussion (4)
-	@param                 [IN] instrument -> enum values of the different instruments found in 'InstrumentInfo.h'
+	@param                 [IN] instrument -> enum values of the different instruments found in 'InstrumentProfile.h'
 	@return                int value of the 3 digit key
 */
 template <typename InstrumentEnum>
