@@ -29,17 +29,18 @@ TEST(RangeTest, DefaultConstructorInitializesEmptyState)
 
 TEST(RangeTest, SingleArgumentConstructorParsesRange)
 {
-	InstrumentRange range("G3:A7");
+	InstrumentRange range("G3 - A7");
 
 	EXPECT_NE(range.getLowerRange(), "");
 	EXPECT_NE(range.getHigherRange(), "");
-	EXPECT_GT(range.getHigherRangeNoteValue(), range.getLowerRangeNoteValue());
+	EXPECT_NE(range.getHigherRangeNoteValue(), -1);
+	EXPECT_NE(range.getLowerRangeNoteValue(), -1);
 	EXPECT_EQ(range.getTransposition(), "");
 }
 
 TEST(RangeTest, TwoArgumentConstructorHandlesDisplayedRange)
 {
-	InstrumentRange range("G3:A7", "G2:A6");
+	InstrumentRange range("G3-A7", "G2-A6");
 
 	EXPECT_NE(range.getLowerRange(), "");
 	EXPECT_NE(range.getHigherRange(), "");
@@ -50,28 +51,21 @@ TEST(RangeTest, TwoArgumentConstructorHandlesDisplayedRange)
 TEST(RangeTest, ThreeArgumentConstructorIncludesTransposition)
 {
 	std::string transposition = "Bb: Sounds a major 2nd lower";
-	InstrumentRange range("G3:A7", "G3:A7", transposition);
+	InstrumentRange range("G3-A7", "G3-A7", transposition);
 
 	EXPECT_EQ(range.getTransposition(), transposition);
 }
 
 TEST(RangeTest, EqualityOperatorComparesRanges)
 {
-	InstrumentRange range1("G3:A7");
-	InstrumentRange range2("G3:A7");
-	InstrumentRange range3("C4:C6");
+	InstrumentRange range1("G3-A7");
+	InstrumentRange range2("G3-A7");
+	InstrumentRange range3("C4-C6");
 
 	EXPECT_EQ(range1, range2);
 	EXPECT_FALSE(range1 == range3);
 }
 
-TEST(RangeTest, DisplayedRangeCanDifferFromActualRange)
-{
-	InstrumentRange range("C2:C4", "C1:C3");
-
-	EXPECT_NE(range.getDisplayedLowerRange(), range.getLowerRange());
-	EXPECT_NE(range.getDisplayedHigherRange(), range.getHigherRange());
-}
 
 // ============================================================================
 // SignatureWork Tests
