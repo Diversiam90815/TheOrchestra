@@ -1,22 +1,31 @@
 /*
   ==============================================================================
 	Module          InstrumentProfile Tests
-	Description     Testing the InstrumentProfile value-type semantics
+	Description     Testing the InstrumentProfile and related structs
   ==============================================================================
 */
 
 #include <gtest/gtest.h>
 #include "InstrumentInfo.h"
+#include "nlohmann/json.hpp"
 
+using json = nlohmann::json;
 
 namespace InstrumentTests
 {
 
 // ============================================================================
-// Range Tests
+// InstrumentRange Tests
 // ============================================================================
 
-TEST(RangeTest, DefaultConstructorInitializesEmptyState)
+class InstrumentRangeTest : public ::testing::Test
+{
+protected:
+	void SetUp() override {}
+	void TearDown() override {}
+};
+
+TEST_F(InstrumentRangeTest, DefaultConstructorInitializesEmptyState)
 {
 	InstrumentRange range;
 
@@ -27,70 +36,207 @@ TEST(RangeTest, DefaultConstructorInitializesEmptyState)
 	EXPECT_EQ(range.getTransposition(), "");
 }
 
-TEST(RangeTest, SingleArgumentConstructorParsesRange)
+TEST_F(InstrumentRangeTest, DeserializesWrittenRangeFromJSON)
 {
-	InstrumentRange range("G3 - A7");
+	json			j	  = R"({
+		"written": {
+			"low": "C3",
+			"high": "C6"
+		}
+	})"_json;
 
-	EXPECT_NE(range.getLowerRange(), "");
-	EXPECT_NE(range.getHigherRange(), "");
-	EXPECT_NE(range.getHigherRangeNoteValue(), -1);
-	EXPECT_NE(range.getLowerRangeNoteValue(), -1);
-	EXPECT_EQ(range.getTransposition(), "");
+	InstrumentRange range = j.get<InstrumentRange>();
+
+	EXPECT_EQ(range.getLowerRange(), "C3");
+	EXPECT_EQ(range.getHigherRange(), "C6");
+	EXPECT_EQ(range.getLowerRangeNoteValue(), 48);	// C3 MIDI note
+	EXPECT_EQ(range.getHigherRangeNoteValue(), 84); // C6 MIDI note
 }
 
-TEST(RangeTest, TwoArgumentConstructorHandlesDisplayedRange)
+TEST_F(InstrumentRangeTest, DeserializesWithTransposition)
 {
-	InstrumentRange range("G3-A7", "G2-A6");
+	json			j	  = R"({
+		"written": {
+			"low": "F2",
+			"high": "C6"
+		},
+		"transposition": "F: Sounds a perfect 5th lower"
+	})"_json;
 
-	EXPECT_NE(range.getLowerRange(), "");
-	EXPECT_NE(range.getHigherRange(), "");
-	EXPECT_NE(range.getDisplayedLowerRange(), "");
-	EXPECT_NE(range.getDisplayedHigherRange(), "");
+	InstrumentRange range = j.get<InstrumentRange>();
+
+	EXPECT_EQ(range.getTransposition(), "F: Sounds a perfect 5th lower");
 }
 
-TEST(RangeTest, ThreeArgumentConstructorIncludesTransposition)
+TEST_F(InstrumentRangeTest, DeserializesWithDisplayedRange)
 {
-	std::string transposition = "Bb: Sounds a major 2nd lower";
-	InstrumentRange range("G3-A7", "G3-A7", transposition);
+	json			j	  = R"({
+		"written": {
+			"low": "D2",
+			"high": "C4"
+		},
+		"displayed": {
+			"low": "D1",
+			"high": "A1"
+		}
+	})"_json;
 
-	EXPECT_EQ(range.getTransposition(), transposition);
+	InstrumentRange range = j.get<InstrumentRange>();
+
+	EXPECT_EQ(range.getLowerRange(), "D2");
+	EXPECT_EQ(range.getHigherRange(), "C4");
+	EXPECT_EQ(range.getDisplayedLowerRange(), "D1");
+	EXPECT_EQ(range.getDisplayedHigherRange(), "A1");
 }
 
-TEST(RangeTest, EqualityOperatorComparesRanges)
+TEST_F(InstrumentRangeTest, DefaultsDisplayedRangeToWritten)
 {
-	InstrumentRange range1("G3-A7");
-	InstrumentRange range2("G3-A7");
-	InstrumentRange range3("C4-C6");
+	json			j	  = R"({
+		"written": {
+			"low": "G3",
+			"high": "A7"
+		}
+	})"_json;
+
+	InstrumentRange range = j.get<InstrumentRange>();
+
+	EXPECT_EQ(range.getDisplayedLowerRange(), range.getLowerRange());
+	EXPECT_EQ(range.getDisplayedHigherRange(), range.getHigherRange());
+}
+
+TEST_F(InstrumentRangeTest, EqualityOperatorComparesCorrectly)
+{
+	json			j1	   = R"({"written": {"low": "C3", "high": "C6"}})"_json;
+	json			j2	   = R"({"written": {"low": "C3", "high": "C6"}})"_json;
+	json			j3	   = R"({"written": {"low": "G3", "high": "A7"}})"_json;
+
+	InstrumentRange range1 = j1.get<InstrumentRange>();
+	InstrumentRange range2 = j2.get<InstrumentRange>();
+	InstrumentRange range3 = j3.get<InstrumentRange>();
 
 	EXPECT_EQ(range1, range2);
 	EXPECT_FALSE(range1 == range3);
 }
 
-
-// ============================================================================
-// SignatureWork Tests
-// ============================================================================
-
-TEST(FamousWorkTest, DefaultConstructorInitializesEmpty)
+TEST_F(InstrumentRangeTest, SerializesToJSON)
 {
-	SignatureWork work;
+	json			j	  = R"({
+		"written": {
+			"low": "C3",
+			"high": "C6"
+		},
+		"transposition": "Bb: Major 2nd lower"
+	})"_json;
 
-	EXPECT_EQ(work.getWork(), "");
+	InstrumentRange range = j.get<InstrumentRange>();
+	json			output;
+	to_json(output, range);
+
+	EXPECT_EQ(output["written"]["low"], "C3");
+	EXPECT_EQ(output["written"]["high"], "C6");
+	EXPECT_EQ(output["transposition"], "Bb: Major 2nd lower");
 }
 
-TEST(FamousWorkTest, ConstructorStoresWorkString)
-{
-	std::string workName = "Test Symphony";
-	SignatureWork	work(workName);
+// ============================================================================
+// RegisterQuality Tests
+// ============================================================================
 
-	EXPECT_EQ(work.getWork(), workName);
+class RegisterQualityTest : public ::testing::Test
+{
+protected:
+	void SetUp() override {}
+	void TearDown() override {}
+};
+
+TEST_F(RegisterQualityTest, DefaultConstructorInitializesEmptyState)
+{
+	RegisterQuality quality;
+
+	EXPECT_EQ(quality.getLowerRange(), "");
+	EXPECT_EQ(quality.getHigherRange(), "");
+	EXPECT_EQ(quality.getDescription(), "");
+	EXPECT_EQ(quality.getLowerNoteValue(), 0);
+	EXPECT_EQ(quality.getHigherNoteValue(), 0);
+}
+
+TEST_F(RegisterQualityTest, DeserializesFromJSON)
+{
+	json			j		= R"({
+		"range": {
+			"low": "C3",
+			"high": "E3"
+		},
+		"description": "Rich and resonant"
+	})"_json;
+
+	RegisterQuality quality = j.get<RegisterQuality>();
+
+	EXPECT_EQ(quality.getLowerRange(), "C3");
+	EXPECT_EQ(quality.getHigherRange(), "E3");
+	EXPECT_EQ(quality.getDescription(), "Rich and resonant");
+	EXPECT_EQ(quality.getLowerNoteValue(), 48);	 // C3 MIDI
+	EXPECT_EQ(quality.getHigherNoteValue(), 52); // E3 MIDI
+}
+
+TEST_F(RegisterQualityTest, HandlesSingleNoteRange)
+{
+	json			j		= R"({
+		"range": {
+			"low": "G3",
+			"high": "G3"
+		},
+		"description": "Warm and dark"
+	})"_json;
+
+	RegisterQuality quality = j.get<RegisterQuality>();
+
+	EXPECT_EQ(quality.getLowerRange(), "G3");
+	EXPECT_EQ(quality.getHigherRange(), "G3");
+	EXPECT_EQ(quality.getLowerNoteValue(), quality.getHigherNoteValue());
+}
+
+TEST_F(RegisterQualityTest, EqualityOperatorWorks)
+{
+	json			j1 = R"({"range": {"low": "C3", "high": "E3"}, "description": "Test"})"_json;
+	json			j2 = R"({"range": {"low": "C3", "high": "E3"}, "description": "Test"})"_json;
+	json			j3 = R"({"range": {"low": "F3", "high": "A3"}, "description": "Different"})"_json;
+
+	RegisterQuality q1 = j1.get<RegisterQuality>();
+	RegisterQuality q2 = j2.get<RegisterQuality>();
+	RegisterQuality q3 = j3.get<RegisterQuality>();
+
+	EXPECT_EQ(q1, q2);
+	EXPECT_FALSE(q1 == q3);
+}
+
+TEST_F(RegisterQualityTest, SerializesToJSON)
+{
+	json			j		= R"({
+		"range": {"low": "C3", "high": "E3"},
+		"description": "Rich and resonant"
+	})"_json;
+
+	RegisterQuality quality = j.get<RegisterQuality>();
+	json			output;
+	to_json(output, quality);
+
+	EXPECT_EQ(output["range"]["low"], "C3");
+	EXPECT_EQ(output["range"]["high"], "E3");
+	EXPECT_EQ(output["description"], "Rich and resonant");
 }
 
 // ============================================================================
 // PlayingTechnique Tests
 // ============================================================================
 
-TEST(PlayingTechniqueTest, DefaultConstructorInitializesEmpty)
+class PlayingTechniqueTest : public ::testing::Test
+{
+protected:
+	void SetUp() override {}
+	void TearDown() override {}
+};
+
+TEST_F(PlayingTechniqueTest, DefaultConstructorInitializesEmpty)
 {
 	PlayingTechnique technique;
 
@@ -98,360 +244,469 @@ TEST(PlayingTechniqueTest, DefaultConstructorInitializesEmpty)
 	EXPECT_EQ(technique.getDescription(), "");
 }
 
-TEST(PlayingTechniqueTest, ConstructorParsesColonizedString)
+TEST_F(PlayingTechniqueTest, DeserializesFromJSON)
 {
-	PlayingTechnique technique("TechniqueName:Technique description");
+	json			 j		   = R"({
+		"name": "Pizzicato",
+		"description": "Plucking the strings with fingers"
+	})"_json;
 
-	EXPECT_EQ(technique.getName(), "TechniqueName");
-	EXPECT_EQ(technique.getDescription(), "Technique description");
+	PlayingTechnique technique = j.get<PlayingTechnique>();
+
+	EXPECT_EQ(technique.getName(), "Pizzicato");
+	EXPECT_EQ(technique.getDescription(), "Plucking the strings with fingers");
 }
 
-TEST(PlayingTechniqueTest, HandlesMultipleColons)
+TEST_F(PlayingTechniqueTest, EqualityOperatorWorks)
 {
-	PlayingTechnique technique("Name:Description: with: colons");
+	json			 j1 = R"({"name": "Pizzicato", "description": "Plucking"})"_json;
+	json			 j2 = R"({"name": "Pizzicato", "description": "Plucking"})"_json;
+	json			 j3 = R"({"name": "Arco", "description": "Using the bow"})"_json;
 
-	EXPECT_EQ(technique.getName(), "Name");
-	EXPECT_FALSE(technique.getDescription().empty());
+	PlayingTechnique t1 = j1.get<PlayingTechnique>();
+	PlayingTechnique t2 = j2.get<PlayingTechnique>();
+	PlayingTechnique t3 = j3.get<PlayingTechnique>();
+
+	EXPECT_EQ(t1, t2);
+	EXPECT_FALSE(t1 == t3);
+}
+
+TEST_F(PlayingTechniqueTest, SerializesToJSON)
+{
+	json			 j		   = R"({
+		"name": "Tremolo",
+		"description": "Rapid back-and-forth bowing"
+	})"_json;
+
+	PlayingTechnique technique = j.get<PlayingTechnique>();
+	json			 output;
+	to_json(output, technique);
+
+	EXPECT_EQ(output["name"], "Tremolo");
+	EXPECT_EQ(output["description"], "Rapid back-and-forth bowing");
 }
 
 // ============================================================================
-// RegisterQuality Tests
+// SignatureWork Tests
 // ============================================================================
 
-TEST(QualityTest, DefaultConstructorInitializesEmpty)
+class SignatureWorkTest : public ::testing::Test
 {
-	RegisterQuality quality;
+protected:
+	void SetUp() override {}
+	void TearDown() override {}
+};
 
-	EXPECT_EQ(quality.getLowerRange(), "");
-	EXPECT_EQ(quality.getHigherRange(), "");
-	EXPECT_EQ(quality.getDescription(), "");
+TEST_F(SignatureWorkTest, DefaultConstructorInitializesEmpty)
+{
+	SignatureWork work;
+
+	EXPECT_EQ(work.getComposer(), "");
+	EXPECT_EQ(work.getTitle(), "");
+	EXPECT_EQ(work.getWork(), " - "); // composer + " - " + title
 }
 
-TEST(QualityTest, ConstructorParsesRangeAndDescription)
+TEST_F(SignatureWorkTest, DeserializesFromJSON)
 {
-	RegisterQuality quality("C3-G4:Test quality description");
+	json		  j	   = R"({
+		"composer": "Beethoven",
+		"title": "Symphony No. 9"
+	})"_json;
 
-	EXPECT_FALSE(quality.getLowerRange().empty());
-	EXPECT_FALSE(quality.getHigherRange().empty());
-	EXPECT_FALSE(quality.getDescription().empty());
+	SignatureWork work = j.get<SignatureWork>();
+
+	EXPECT_EQ(work.getComposer(), "Beethoven");
+	EXPECT_EQ(work.getTitle(), "Symphony No. 9");
+	EXPECT_EQ(work.getWork(), "Beethoven - Symphony No. 9");
 }
 
-TEST(QualityTest, HandlesSingleNoteRange)
+TEST_F(SignatureWorkTest, EqualityOperatorWorks)
 {
-	RegisterQuality quality("C4:Single note description");
+	json		  j1 = R"({"composer": "Mozart", "title": "Requiem"})"_json;
+	json		  j2 = R"({"composer": "Mozart", "title": "Requiem"})"_json;
+	json		  j3 = R"({"composer": "Bach", "title": "Mass in B minor"})"_json;
 
-	EXPECT_EQ(quality.getLowerRange(), quality.getHigherRange());
-	EXPECT_FALSE(quality.getDescription().empty());
+	SignatureWork w1 = j1.get<SignatureWork>();
+	SignatureWork w2 = j2.get<SignatureWork>();
+	SignatureWork w3 = j3.get<SignatureWork>();
+
+	EXPECT_EQ(w1, w2);
+	EXPECT_FALSE(w1 == w3);
+}
+
+TEST_F(SignatureWorkTest, SerializesToJSON)
+{
+	json		  j	   = R"({
+		"composer": "Tchaikovsky",
+		"title": "1812 Overture"
+	})"_json;
+
+	SignatureWork work = j.get<SignatureWork>();
+	json		  output;
+	to_json(output, work);
+
+	EXPECT_EQ(output["composer"], "Tchaikovsky");
+	EXPECT_EQ(output["title"], "1812 Overture");
 }
 
 // ============================================================================
 // OrchestrationRole Tests
 // ============================================================================
 
-TEST(RoleTest, DefaultConstructorInitializesEmpty)
+class OrchestrationRoleTest : public ::testing::Test
+{
+protected:
+	void SetUp() override {}
+	void TearDown() override {}
+};
+
+TEST_F(OrchestrationRoleTest, DefaultConstructorInitializesEmpty)
 {
 	OrchestrationRole role;
 
 	EXPECT_EQ(role.getRole(), "");
 }
 
-TEST(RoleTest, ConstructorStoresRoleString)
+TEST_F(OrchestrationRoleTest, ParameterizedConstructor)
 {
-	std::string roleText = "Test role";
-	OrchestrationRole		role(roleText);
+	OrchestrationRole role("Leads with melody");
 
-	EXPECT_EQ(role.getRole(), roleText);
+	EXPECT_EQ(role.getRole(), "Leads with melody");
+}
+
+TEST_F(OrchestrationRoleTest, DeserializesFromJSONString)
+{
+	json			  j	   = "Provides harmonic support";
+
+	OrchestrationRole role = j.get<OrchestrationRole>();
+
+	EXPECT_EQ(role.getRole(), "Provides harmonic support");
+}
+
+TEST_F(OrchestrationRoleTest, EqualityOperatorWorks)
+{
+	OrchestrationRole r1("Same role");
+	OrchestrationRole r2("Same role");
+	OrchestrationRole r3("Different role");
+
+	EXPECT_EQ(r1, r2);
+	EXPECT_FALSE(r1 == r3);
 }
 
 // ============================================================================
-// InstrumentProfile Tests - Structure and API
+// InstrumentProfile Tests
 // ============================================================================
 
-TEST(InstrumentInfoTest, DefaultConstructorInitializesEmptyState)
+class InstrumentProfileTest : public ::testing::Test
 {
-	InstrumentProfile info;
+protected:
+	void			  SetUp() override {}
+	void			  TearDown() override {}
 
-	EXPECT_EQ(info.getName(), "");
-	EXPECT_EQ(info.getKey(), 0);
-	EXPECT_FALSE(info.isRhythmicPercussion());
-	EXPECT_EQ(info.getQualities().size(), 0);
-	EXPECT_EQ(info.getRoles().size(), 0);
-	EXPECT_EQ(info.getFamousWorks().size(), 0);
-	EXPECT_EQ(info.getTechniques().size(), 0);
+	InstrumentProfile createTestInstrument()
+	{
+		json			   rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
+		InstrumentRange	   range	 = rangeJson.get<InstrumentRange>();
+
+		RegisterQualities  qualities;
+		OrchestrationRoles roles;
+		roles.push_back(OrchestrationRole("Test role"));
+		SignatureWorks	  works;
+		PlayingTechniques techniques;
+
+		return InstrumentProfile("TestInstrument", 301, range, qualities, roles, works, techniques, false);
+	}
+};
+
+TEST_F(InstrumentProfileTest, DefaultConstructorInitializesEmpty)
+{
+	InstrumentProfile profile;
+
+	EXPECT_EQ(profile.getName(), "");
+	EXPECT_EQ(profile.getInstrumentID(), 0);
+	EXPECT_FALSE(profile.isRhythmicPercussion());
+	EXPECT_FALSE(profile.isValid());
 }
 
-TEST(InstrumentInfoTest, ParameterizedConstructorSetsName)
+TEST_F(InstrumentProfileTest, ParameterizedConstructorSetsAllFields)
 {
-	std::string	   name = "TestInstrument";
-	InstrumentID   key	= 100;
-	InstrumentRange range("C3:C5");
-	RegisterQualities	   qualities;
-	OrchestrationRoles		   roles;
-	SignatureWorks	   works;
-	PlayingTechniques	   techniques;
+	auto profile = createTestInstrument();
 
-	InstrumentProfile info(name, key, range, qualities, roles, works, techniques, false);
-
-	EXPECT_EQ(info.getName(), name);
+	EXPECT_EQ(profile.getName(), "TestInstrument");
+	EXPECT_EQ(profile.getInstrumentID(), 301);
+	EXPECT_FALSE(profile.isRhythmicPercussion());
+	EXPECT_TRUE(profile.isValid());
 }
 
-TEST(InstrumentInfoTest, ParameterizedConstructorSetsKey)
+TEST_F(InstrumentProfileTest, IsValidReturnsTrueForValidInstrument)
 {
-	InstrumentID   key = 301;
-	InstrumentRange range("C3:C5");
-	RegisterQualities	   qualities;
-	OrchestrationRoles		   roles;
-	SignatureWorks	   works;
-	PlayingTechniques	   techniques;
+	auto profile = createTestInstrument();
 
-	InstrumentProfile info("Test", key, range, qualities, roles, works, techniques, false);
-
-	EXPECT_EQ(info.getKey(), key);
+	EXPECT_TRUE(profile.isValid());
 }
 
-TEST(InstrumentInfoTest, ParameterizedConstructorSetsRange)
+TEST_F(InstrumentProfileTest, IsValidReturnsFalseForEmptyName)
 {
-	InstrumentRange range("G3:A7");
-	RegisterQualities	   qualities;
-	OrchestrationRoles		   roles;
-	SignatureWorks	   works;
-	PlayingTechniques	   techniques;
+	json			  rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
+	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
 
-	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile profile("", 301, range, {}, {}, {}, {}, false);
 
-	EXPECT_EQ(info.getRange().getLowerRange(), range.getLowerRange());
-	EXPECT_EQ(info.getRange().getHigherRange(), range.getHigherRange());
+	EXPECT_FALSE(profile.isValid());
 }
 
-TEST(InstrumentInfoTest, ParameterizedConstructorSetsQualities)
+TEST_F(InstrumentProfileTest, IsValidReturnsFalseForZeroKey)
 {
-	InstrumentRange range("C3:C5");
+	json			  rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
+	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
+
+	InstrumentProfile profile("ValidName", 0, range, {}, {}, {}, {}, false);
+
+	EXPECT_FALSE(profile.isValid());
+}
+
+TEST_F(InstrumentProfileTest, RhythmicPercussionFlagWorks)
+{
+	json			  rangeJson = R"({"written": {"low": "D2", "high": "C4"}})"_json;
+	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
+
+	InstrumentProfile profile("Timpani", 403, range, {}, {}, {}, {}, true);
+
+	EXPECT_TRUE(profile.isRhythmicPercussion());
+}
+
+TEST_F(InstrumentProfileTest, GettersReturnCorrectValues)
+{
+	json			  rangeJson	  = R"({"written": {"low": "G3", "high": "A7"}})"_json;
+	InstrumentRange	  range		  = rangeJson.get<InstrumentRange>();
+
+	json			  qualityJson = R"({"range": {"low": "G3", "high": "G3"}, "description": "Rich"})"_json;
 	RegisterQualities qualities;
-	qualities.push_back(RegisterQuality("C3-E3:Low"));
-	qualities.push_back(RegisterQuality("F3-C5:High"));
-	OrchestrationRoles		   roles;
-	SignatureWorks	   works;
-	PlayingTechniques	   techniques;
+	qualities.push_back(qualityJson.get<RegisterQuality>());
 
-	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
+	OrchestrationRoles roles;
+	roles.push_back(OrchestrationRole("Leads melody"));
 
-	EXPECT_EQ(info.getQualities().size(), 2);
-}
-
-TEST(InstrumentInfoTest, ParameterizedConstructorSetsRoles)
-{
-	InstrumentRange range("C3:C5");
-	RegisterQualities qualities;
-	OrchestrationRoles	  roles;
-	roles.push_back(OrchestrationRole("OrchestrationRole 1"));
-	roles.push_back(OrchestrationRole("OrchestrationRole 2"));
-	SignatureWorks	   works;
-	PlayingTechniques	   techniques;
-
-	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
-
-	EXPECT_EQ(info.getRoles().size(), 2);
-}
-
-TEST(InstrumentInfoTest, ParameterizedConstructorSetsFamousWorks)
-{
-	InstrumentRange range("C3:C5");
-	RegisterQualities	qualities;
-	OrchestrationRoles		roles;
+	json		   workJson = R"({"composer": "Beethoven", "title": "Violin Concerto"})"_json;
 	SignatureWorks works;
-	works.push_back(SignatureWork("Work 1"));
-	works.push_back(SignatureWork("Work 2"));
-	works.push_back(SignatureWork("Work 3"));
-	PlayingTechniques	   techniques;
+	works.push_back(workJson.get<SignatureWork>());
 
-	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
+	json			  techJson = R"({"name": "Pizzicato", "description": "Plucking"})"_json;
+	PlayingTechniques techniques;
+	techniques.push_back(techJson.get<PlayingTechnique>());
 
-	EXPECT_EQ(info.getFamousWorks().size(), 3);
+	InstrumentProfile profile("Violin", 301, range, qualities, roles, works, techniques, false);
+
+	EXPECT_EQ(profile.getName(), "Violin");
+	EXPECT_EQ(profile.getInstrumentID(), 301);
+	EXPECT_EQ(profile.getQualities().size(), 1);
+	EXPECT_EQ(profile.getRoles().size(), 1);
+	EXPECT_EQ(profile.getFamousWorks().size(), 1);
+	EXPECT_EQ(profile.getTechniques().size(), 1);
 }
 
-TEST(InstrumentInfoTest, ParameterizedConstructorSetsTechniques)
+TEST_F(InstrumentProfileTest, EqualityOperatorComparesKeyAndName)
 {
-	InstrumentRange range("C3:C5");
-	RegisterQualities	qualities;
-	OrchestrationRoles		roles;
-	SignatureWorks works;
-	PlayingTechniques	techniques;
-	techniques.push_back(PlayingTechnique("Tech1:Description 1"));
-	techniques.push_back(PlayingTechnique("Tech2:Description 2"));
+	auto			  p1		= createTestInstrument();
+	auto			  p2		= createTestInstrument();
 
-	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
+	json			  rangeJson = R"({"written": {"low": "C3", "high": "E6"}})"_json;
+	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
+	InstrumentProfile p3("DifferentInstrument", 302, range, {}, {}, {}, {}, false);
 
-	EXPECT_EQ(info.getTechniques().size(), 2);
+	EXPECT_EQ(p1, p2);
+	EXPECT_FALSE(p1 == p3);
 }
 
-TEST(InstrumentInfoTest, RhythmicPercussionFlagDefaultsToFalse)
+TEST_F(InstrumentProfileTest, CanStoreEmptyCollections)
 {
-	InstrumentRange range("C3:C5");
-	RegisterQualities	   qualities;
-	OrchestrationRoles		   roles;
-	SignatureWorks	   works;
-	PlayingTechniques	   techniques;
+	json			  rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
+	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
 
-	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques);
+	InstrumentProfile profile("Test", 100, range, {}, {}, {}, {}, false);
 
-	EXPECT_FALSE(info.isRhythmicPercussion());
+	EXPECT_EQ(profile.getQualities().size(), 0);
+	EXPECT_EQ(profile.getRoles().size(), 0);
+	EXPECT_EQ(profile.getFamousWorks().size(), 0);
+	EXPECT_EQ(profile.getTechniques().size(), 0);
 }
 
-TEST(InstrumentInfoTest, RhythmicPercussionFlagCanBeSetTrue)
+TEST_F(InstrumentProfileTest, CanStoreLargeCollections)
 {
-	InstrumentRange range("C3:C5");
-	RegisterQualities	   qualities;
-	OrchestrationRoles		   roles;
-	SignatureWorks	   works;
-	PlayingTechniques	   techniques;
-
-	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, true);
-
-	EXPECT_TRUE(info.isRhythmicPercussion());
-}
-
-TEST(InstrumentInfoTest, IsValidReturnsTrueForValidInstrument)
-{
-	InstrumentRange range("C3:C5");
-	RegisterQualities	   qualities;
-	OrchestrationRoles		   roles;
-	SignatureWorks	   works;
-	PlayingTechniques	   techniques;
-
-	InstrumentProfile info("ValidName", 301, range, qualities, roles, works, techniques, false);
-
-	EXPECT_TRUE(info.isValid());
-}
-
-TEST(InstrumentInfoTest, IsValidReturnsFalseForEmptyName)
-{
-	InstrumentRange range("C3:C5");
-	RegisterQualities	   qualities;
-	OrchestrationRoles		   roles;
-	SignatureWorks	   works;
-	PlayingTechniques	   techniques;
-
-	InstrumentProfile info("", 301, range, qualities, roles, works, techniques, false);
-
-	EXPECT_FALSE(info.isValid());
-}
-
-TEST(InstrumentInfoTest, IsValidReturnsFalseForZeroKey)
-{
-	InstrumentRange range("C3:C5");
-	RegisterQualities	   qualities;
-	OrchestrationRoles		   roles;
-	SignatureWorks	   works;
-	PlayingTechniques	   techniques;
-
-	InstrumentProfile info("ValidName", 0, range, qualities, roles, works, techniques, false);
-
-	EXPECT_FALSE(info.isValid());
-}
-
-TEST(InstrumentInfoTest, IsValidReturnsFalseForDefaultConstructed)
-{
-	InstrumentProfile info;
-
-	EXPECT_FALSE(info.isValid());
-}
-
-TEST(InstrumentInfoTest, CanStoreEmptyCollections)
-{
-	InstrumentRange range("C3:C5");
-	RegisterQualities	   qualities;  // empty
-	OrchestrationRoles		   roles;	   // empty
-	SignatureWorks	   works;	   // empty
-	PlayingTechniques	   techniques; // empty
-
-	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
-
-	EXPECT_EQ(info.getQualities().size(), 0);
-	EXPECT_EQ(info.getRoles().size(), 0);
-	EXPECT_EQ(info.getFamousWorks().size(), 0);
-	EXPECT_EQ(info.getTechniques().size(), 0);
-}
-
-TEST(InstrumentInfoTest, CanStoreLargeCollections)
-{
-	InstrumentRange range("C3:C5");
+	json			  rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
+	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
 
 	RegisterQualities qualities;
 	for (int i = 0; i < 10; ++i)
-		qualities.push_back(RegisterQuality("C3-C4:Quality " + std::to_string(i)));
+	{
+		json j = nlohmann::json::parse(R"({"range": {"low": "C3", "high": "E3"}, "description": "Quality )" + std::to_string(i) + R"("})");
+		qualities.push_back(j.get<RegisterQuality>());
+	}
 
 	OrchestrationRoles roles;
 	for (int i = 0; i < 5; ++i)
-		roles.push_back(OrchestrationRole("OrchestrationRole " + std::to_string(i)));
+		roles.push_back(OrchestrationRole("Role " + std::to_string(i)));
 
 	SignatureWorks works;
 	for (int i = 0; i < 15; ++i)
-		works.push_back(SignatureWork("Work " + std::to_string(i)));
+	{
+		json j = nlohmann::json::parse(R"({"composer": "Composer )" + std::to_string(i) + R"(", "title": "Work )" + std::to_string(i) + R"("})");
+		works.push_back(j.get<SignatureWork>());
+	}
 
 	PlayingTechniques techniques;
 	for (int i = 0; i < 8; ++i)
-		techniques.push_back(PlayingTechnique("Tech" + std::to_string(i) + ":Description"));
+	{
+		json j = nlohmann::json::parse(R"({"name": "Tech)" + std::to_string(i) + R"(", "description": "Description )" + std::to_string(i) + R"("})");
+		techniques.push_back(j.get<PlayingTechnique>());
+	}
 
-	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile profile("Test", 100, range, qualities, roles, works, techniques, false);
 
-	EXPECT_EQ(info.getQualities().size(), 10);
-	EXPECT_EQ(info.getRoles().size(), 5);
-	EXPECT_EQ(info.getFamousWorks().size(), 15);
-	EXPECT_EQ(info.getTechniques().size(), 8);
+	EXPECT_EQ(profile.getQualities().size(), 10);
+	EXPECT_EQ(profile.getRoles().size(), 5);
+	EXPECT_EQ(profile.getFamousWorks().size(), 15);
+	EXPECT_EQ(profile.getTechniques().size(), 8);
 }
 
 // ============================================================================
-// Integration Tests - Verify data integrity
+// Integration Tests - Full JSON Deserialization
 // ============================================================================
 
-TEST(InstrumentInfoTest, RetrievedQualitiesMatchInput)
+class IntegrationTest : public ::testing::Test
 {
-	InstrumentRange range("C3:C5");
+protected:
+	void SetUp() override {}
+	void TearDown() override {}
+};
+
+TEST_F(IntegrationTest, DeserializesCompleteViolinProfileFromJSON)
+{
+	json			  j		= R"({
+		"name": "Violin",
+		"range": {
+			"written": {
+				"low": "G3",
+				"high": "A7"
+			}
+		},
+		"qualities": [
+			{
+				"range": {"low": "G3", "high": "G3"},
+				"description": "Rich and resonant"
+			},
+			{
+				"range": {"low": "D4", "high": "D4"},
+				"description": "Subtly vibrant"
+			}
+		],
+		"roles": [
+			"Leads with melody",
+			"Provides harmonic support"
+		],
+		"famousWorks": [
+			{
+				"composer": "Beethoven",
+				"title": "Violin Concerto in D major, Op. 61"
+			}
+		],
+		"techniques": [
+			{
+				"name": "Pizzicato",
+				"description": "Plucking the strings with fingers"
+			}
+		],
+		"isRhythmicPercussion": false
+	})"_json;
+
+	// Manually construct from parsed JSON (simulating InstrumentController logic)
+	std::string		  name	= j["name"];
+	InstrumentRange	  range = j["range"].get<InstrumentRange>();
+
 	RegisterQualities qualities;
-	qualities.push_back(RegisterQuality("C3-E3:Lower register"));
-	qualities.push_back(RegisterQuality("F3-C5:Upper register"));
-	OrchestrationRoles		   roles;
-	SignatureWorks	   works;
-	PlayingTechniques	   techniques;
+	for (const auto &q : j["qualities"])
+		qualities.push_back(q.get<RegisterQuality>());
 
-	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
+	OrchestrationRoles roles;
+	for (const auto &r : j["roles"])
+		roles.push_back(r.get<OrchestrationRole>());
 
-	auto		   retrieved = info.getQualities();
-	ASSERT_EQ(retrieved.size(), 2);
-	EXPECT_FALSE(retrieved[0].getDescription().empty());
-	EXPECT_FALSE(retrieved[1].getDescription().empty());
-}
-
-TEST(InstrumentInfoTest, RetrievedTechniquesMatchInput)
-{
-	InstrumentRange range("C3:C5");
-	RegisterQualities	qualities;
-	OrchestrationRoles		roles;
 	SignatureWorks works;
-	PlayingTechniques	techniques;
-	techniques.push_back(PlayingTechnique("Legato:Smooth connection"));
-	techniques.push_back(PlayingTechnique("Staccato:Short and detached"));
+	for (const auto &w : j["famousWorks"])
+		works.push_back(w.get<SignatureWork>());
 
-	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
+	PlayingTechniques techniques;
+	for (const auto &t : j["techniques"])
+		techniques.push_back(t.get<PlayingTechnique>());
 
-	auto		   retrieved = info.getTechniques();
-	ASSERT_EQ(retrieved.size(), 2);
-	EXPECT_EQ(retrieved[0].getName(), "Legato");
-	EXPECT_EQ(retrieved[1].getName(), "Staccato");
+	bool			  isRhythmic = j["isRhythmicPercussion"];
+
+	InstrumentProfile profile(name, 301, range, qualities, roles, works, techniques, isRhythmic);
+
+	EXPECT_EQ(profile.getName(), "Violin");
+	EXPECT_EQ(profile.getInstrumentID(), 301);
+	EXPECT_EQ(profile.getQualities().size(), 2);
+	EXPECT_EQ(profile.getRoles().size(), 2);
+	EXPECT_EQ(profile.getFamousWorks().size(), 1);
+	EXPECT_EQ(profile.getTechniques().size(), 1);
+	EXPECT_FALSE(profile.isRhythmicPercussion());
+	EXPECT_TRUE(profile.isValid());
 }
 
-TEST(InstrumentInfoTest, RangeWithTranspositionPreservesTransposition)
+TEST_F(IntegrationTest, DeserializesTimpaniWithDisplayedRange)
 {
-	InstrumentRange range("C3:C5", "C3:C5", "Bb: Sounds a major 2nd lower");
-	RegisterQualities	   qualities;
-	OrchestrationRoles		   roles;
-	SignatureWorks	   works;
-	PlayingTechniques	   techniques;
+	json			  j		= R"({
+		"name": "Timpani",
+		"range": {
+			"written": {
+				"low": "D2",
+				"high": "C4"
+			},
+			"displayed": {
+				"low": "D1",
+				"high": "A1"
+			}
+		},
+		"qualities": [
+			{
+				"range": {"low": "D1", "high": "A1"},
+				"description": "Deep and thunderous"
+			}
+		],
+		"roles": ["Provides rhythmic foundation"],
+		"famousWorks": [
+			{
+				"composer": "Beethoven",
+				"title": "Symphony No. 9"
+			}
+		],
+		"techniques": [],
+		"isRhythmicPercussion": true
+	})"_json;
 
-	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
+	std::string		  name	= j["name"];
+	InstrumentRange	  range = j["range"].get<InstrumentRange>();
 
-	EXPECT_EQ(info.getRange().getTransposition(), "Bb: Sounds a major 2nd lower");
+	RegisterQualities qualities;
+	for (const auto &q : j["qualities"])
+		qualities.push_back(q.get<RegisterQuality>());
+
+	OrchestrationRoles roles;
+	for (const auto &r : j["roles"])
+		roles.push_back(r.get<OrchestrationRole>());
+
+	SignatureWorks works;
+	for (const auto &w : j["famousWorks"])
+		works.push_back(w.get<SignatureWork>());
+
+	PlayingTechniques techniques;
+
+	InstrumentProfile profile(name, 403, range, qualities, roles, works, techniques, true);
+
+	EXPECT_EQ(profile.getName(), "Timpani");
+	EXPECT_TRUE(profile.isRhythmicPercussion());
+	EXPECT_NE(range.getDisplayedLowerRange(), range.getLowerRange());
+	EXPECT_EQ(range.getDisplayedLowerRange(), "D1");
 }
-
 
 } // namespace InstrumentTests

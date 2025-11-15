@@ -43,7 +43,7 @@ TEST_F(InstrumentControllerTest, RetrieveKnownInstrumentByKey)
 	int			   violinKey = 301;
 	InstrumentProfile violin	 = controller->getInstrument(violinKey);
 
-	EXPECT_EQ(violin.getKey(), violinKey);
+	EXPECT_EQ(violin.getInstrumentID(), violinKey);
 	EXPECT_FALSE(violin.getName().empty()) << "Violin name should not be empty";
 	EXPECT_FALSE(violin.getRange().getHigherRange().empty()) << "Violin higher range should be populated";
 	EXPECT_FALSE(violin.getRange().getLowerRange().empty()) << "Violin lower range should be populated";
@@ -58,7 +58,7 @@ TEST_F(InstrumentControllerTest, RhythmicPercussionInstrumentProperties)
 	int			   timpaniKey = 403;
 	InstrumentProfile timpani	  = controller->getInstrument(timpaniKey);
 
-	EXPECT_EQ(timpani.getKey(), timpaniKey);
+	EXPECT_EQ(timpani.getInstrumentID(), timpaniKey);
 	EXPECT_TRUE(timpani.isRhythmicPercussion()) << "Timpani should be flagged as rhythmic percussion";
 
 	// Displayed range may differ from actual range; at least accessible
@@ -72,7 +72,7 @@ TEST_F(InstrumentControllerTest, NonRhythmicPercussionInstrument)
 	int			   harpKey = 401;
 	InstrumentProfile harp	   = controller->getInstrument(harpKey);
 
-	EXPECT_EQ(harp.getKey(), harpKey);
+	EXPECT_EQ(harp.getInstrumentID(), harpKey);
 	EXPECT_FALSE(harp.isRhythmicPercussion()) << "Harp should NOT be flagged as rhythmic percussion";
 	EXPECT_EQ(harp.getName(), "Harp");
 }

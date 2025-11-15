@@ -43,7 +43,7 @@ void InstrumentRangesView::displayInstrument(InstrumentProfile &instrument)
 	mTranspositionNoteName.setText(transposition, juce::dontSendNotification);
 
 	// Set images
-	InstrumentID key				 = instrument.getKey();
+	InstrumentID key				 = instrument.getInstrumentID();
 	juce::File	 lowerRangeImagePath = mFileManager.getInstrumentImage(TypeOfImage::LowerRangeNotation, key);
 	setAndRescaleImage(mLowerRangeNoteImage, lowerRangeImagePath, mLowerNoteImageX, mLowerNoteImageY, mImageBoxWidth, mImageBoxHeight);
 

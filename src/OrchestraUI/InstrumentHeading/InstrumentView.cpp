@@ -21,7 +21,7 @@ void InstrumentView::displayInstrument(InstrumentProfile &instrument)
 	const auto &name = instrument.getName();
 	mName.setText(name, juce::dontSendNotification);
 
-	InstrumentID key	   = instrument.getKey();
+	InstrumentID key	   = instrument.getInstrumentID();
 	juce::File	 imagePath = mFileManager.getInstrumentImage(TypeOfImage::InstrumentImage, key);
 	setAndRescaleImage(mImage, imagePath, mImageX, mImageY, mImageWidth, mImageHeight);
 }
