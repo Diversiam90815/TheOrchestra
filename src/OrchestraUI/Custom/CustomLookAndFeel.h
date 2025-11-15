@@ -69,7 +69,7 @@ private:
 
 	const juce::Colour	menuBarBackground		= juce::Colour::fromRGB(44, 44, 44);   // Menubar background colour
 	const juce::Colour	background				= juce::Colour::fromRGB(16, 14, 21);   // Colour used for the background of the app window
-	const juce::Colour	buttonColor				= juce::Colour::fromRGB(158, 104, 61); // Colour used for the buttons in "Playing Techniques"
+	const juce::Colour	buttonColor				= juce::Colour::fromRGB(158, 104, 61); // Colour used for the buttons in "Playing PlayingTechniques"
 	const juce::Colour	boxesBackground			= background.brighter(0.02f);		   // Colours used for the background of the different UI elements
 	const juce::Colour	tooltipWindowBackground = juce::Colour::fromRGB(81, 133, 246);
 	const juce::Colour	comboBoxBackground		= juce::Colour::fromRGB(17, 19, 31);

@@ -26,16 +26,17 @@ public:
 	InstrumentController()	= default;
 	~InstrumentController() = default;
 
-	void		   init();
+	void			  init();
 
-	InstrumentInfo getInstrument(InstrumentID key);
+	InstrumentProfile getInstrument(InstrumentID key);
 
-	bool		   loadFromJSON();
 
 private:
-	void								   addInstrument(const InstrumentInfo &info);
+	bool									  loadFromJSON();
 
-	std::map<InstrumentID, InstrumentInfo> instruments; // Mapping the instrument's key to the corresponding InstrumentInfo object
+	void									  addInstrument(const InstrumentProfile &info);
 
-	FileManager							   mFileManager;
+	std::map<InstrumentID, InstrumentProfile> instruments; // Mapping the instrument's key to the corresponding InstrumentProfile object
+
+	FileManager								  mFileManager;
 };
