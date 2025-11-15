@@ -19,7 +19,7 @@ public:
 	~PianoRoll();
 
 	void init() override;
-	void displayInstrument(InstrumentInfo &info) override;
+	void displayInstrument(InstrumentProfile &info) override;
 
 	void setKeyboardState(juce::MidiKeyboardState &state);
 

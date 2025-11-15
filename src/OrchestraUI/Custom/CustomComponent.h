@@ -21,8 +21,8 @@ public:
 
 	void		 paint(juce::Graphics &g) override;
 
-	virtual void init()										   = 0;
-	virtual void displayInstrument(InstrumentInfo &instrument) = 0;
+	virtual void init()											  = 0;
+	virtual void displayInstrument(InstrumentProfile &instrument) = 0;
 
 protected:
 	void addAndConfigureTextEditor(juce::TextEditor &editor, int x, int y, int width, int height);

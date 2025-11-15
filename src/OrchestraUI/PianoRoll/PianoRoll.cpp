@@ -48,7 +48,7 @@ void PianoRoll::init()
 }
 
 
-void PianoRoll::displayInstrument(InstrumentInfo &info)
+void PianoRoll::displayInstrument(InstrumentProfile &info)
 {
 	// Strategy 1: Rhythmic percussion uses displayedRange
 	if (info.isRhythmicPercussion())

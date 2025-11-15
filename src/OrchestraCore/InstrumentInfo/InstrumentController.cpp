@@ -17,7 +17,7 @@ void InstrumentController::init()
 }
 
 
-void InstrumentController::addInstrument(const InstrumentInfo &info)
+void InstrumentController::addInstrument(const InstrumentProfile &info)
 {
 	InstrumentID key = info.getKey();
 	instruments[key] = info;
@@ -25,14 +25,14 @@ void InstrumentController::addInstrument(const InstrumentInfo &info)
 }
 
 
-InstrumentInfo InstrumentController::getInstrument(InstrumentID key)
+InstrumentProfile InstrumentController::getInstrument(InstrumentID key)
 {
 	auto it = instruments.find(key);
 
 	if (it != instruments.end())
 		return it->second;
 
-	return InstrumentInfo();
+	return InstrumentProfile();
 }
 
 
@@ -55,10 +55,10 @@ bool InstrumentController::loadFromJSON()
 		// Iterate through families
 		for (auto &[familyName, familyData] : j.items())
 		{
-			Family	   familyEnum = familyMap[familyName];
+			Family			  familyEnum = familyMap[familyName];
 
 			// Read family-level playing techniques
-			Techniques familyTechniques;
+			PlayingTechniques familyTechniques;
 			if (familyData.contains("playingTechniques"))
 			{
 				for (const auto &techStr : familyData["playingTechniques"])
@@ -89,42 +89,42 @@ bool InstrumentController::loadFromJSON()
 				if (instrumentJson.contains("displayedRange"))
 					displayedRange = instrumentJson["displayedRange"];
 
-				InstrumentRange range				 = InstrumentRange(instrumentRange, displayedRange, transposition);
+				InstrumentRange	  range				   = InstrumentRange(instrumentRange, displayedRange, transposition);
 
-				bool			isRhythmicPercussion = instrumentJson.value("isRhythmicPercussion", false);
+				bool			  isRhythmicPercussion = instrumentJson.value("isRhythmicPercussion", false);
 
 				// Parse qualities
-				Qualities		qualities;
+				RegisterQualities qualities;
 				if (instrumentJson.contains("qualities"))
 				{
 					for (const auto &qualityStr : instrumentJson["qualities"])
 					{
-						qualities.push_back(Quality(qualityStr.get<std::string>()));
+						qualities.push_back(RegisterQuality(qualityStr.get<std::string>()));
 					}
 				}
 
 				// Parse roles
-				Roles roles;
+				OrchestrationRoles roles;
 				if (instrumentJson.contains("roles"))
 				{
 					for (const auto &roleStr : instrumentJson["roles"])
 					{
-						roles.push_back(Role(roleStr.get<std::string>()));
+						roles.push_back(OrchestrationRole(roleStr.get<std::string>()));
 					}
 				}
 
-				// Parse FamousWorks
-				FamousWorks famousWorks;
+				// Parse SignatureWorks
+				SignatureWorks famousWorks;
 				if (instrumentJson.contains("famousWorks"))
 				{
 					for (const auto &workJson : instrumentJson["famousWorks"])
 					{
-						famousWorks.push_back(FamousWork(workJson.get<std::string>())); // current format is just a string
+						famousWorks.push_back(SignatureWork(workJson.get<std::string>())); // current format is just a string
 					}
 				}
 
 				// Parse playing techniques (instrument-specific or family-level)
-				Techniques techniques;
+				PlayingTechniques techniques;
 				if (instrumentJson.contains("playingTechniques"))
 				{
 					for (const auto &techStr : instrumentJson["playingTechniques"])
@@ -138,7 +138,7 @@ bool InstrumentController::loadFromJSON()
 				}
 
 				// Create and add instrument
-				InstrumentInfo info(name, key, range, qualities, roles, famousWorks, techniques, isRhythmicPercussion);
+				InstrumentProfile info(name, key, range, qualities, roles, famousWorks, techniques, isRhythmicPercussion);
 
 				addInstrument(info);
 			}

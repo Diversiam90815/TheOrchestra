@@ -96,7 +96,7 @@ TEST_F(CoreManagerTest, GetInstrumentWithInvalidKey)
 	auto		 instrument = coreManager->getInstrument(invalidKey);
 
 	// Invalid instrument should not be valid
-	EXPECT_FALSE(instrument.isValid()) << "Invalid instrument should return invalid InstrumentInfo";
+	EXPECT_FALSE(instrument.isValid()) << "Invalid instrument should return invalid InstrumentProfile";
 }
 
 

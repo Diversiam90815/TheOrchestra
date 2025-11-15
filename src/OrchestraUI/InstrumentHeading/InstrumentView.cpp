@@ -16,7 +16,7 @@ void InstrumentView::init()
 }
 
 
-void InstrumentView::displayInstrument(InstrumentInfo &instrument)
+void InstrumentView::displayInstrument(InstrumentProfile &instrument)
 {
 	const auto &name = instrument.getName();
 	mName.setText(name, juce::dontSendNotification);

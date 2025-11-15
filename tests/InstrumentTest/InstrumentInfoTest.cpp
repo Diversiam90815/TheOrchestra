@@ -1,7 +1,7 @@
 /*
   ==============================================================================
-	Module          InstrumentInfo Tests
-	Description     Testing the InstrumentInfo value-type semantics
+	Module          InstrumentProfile Tests
+	Description     Testing the InstrumentProfile value-type semantics
   ==============================================================================
 */
 
@@ -74,12 +74,12 @@ TEST(RangeTest, DisplayedRangeCanDifferFromActualRange)
 }
 
 // ============================================================================
-// FamousWork Tests
+// SignatureWork Tests
 // ============================================================================
 
 TEST(FamousWorkTest, DefaultConstructorInitializesEmpty)
 {
-	FamousWork work;
+	SignatureWork work;
 
 	EXPECT_EQ(work.getWork(), "");
 }
@@ -87,7 +87,7 @@ TEST(FamousWorkTest, DefaultConstructorInitializesEmpty)
 TEST(FamousWorkTest, ConstructorStoresWorkString)
 {
 	std::string workName = "Test Symphony";
-	FamousWork	work(workName);
+	SignatureWork	work(workName);
 
 	EXPECT_EQ(work.getWork(), workName);
 }
@@ -121,12 +121,12 @@ TEST(PlayingTechniqueTest, HandlesMultipleColons)
 }
 
 // ============================================================================
-// Quality Tests
+// RegisterQuality Tests
 // ============================================================================
 
 TEST(QualityTest, DefaultConstructorInitializesEmpty)
 {
-	Quality quality;
+	RegisterQuality quality;
 
 	EXPECT_EQ(quality.getLowerRange(), "");
 	EXPECT_EQ(quality.getHigherRange(), "");
@@ -135,7 +135,7 @@ TEST(QualityTest, DefaultConstructorInitializesEmpty)
 
 TEST(QualityTest, ConstructorParsesRangeAndDescription)
 {
-	Quality quality("C3-G4:Test quality description");
+	RegisterQuality quality("C3-G4:Test quality description");
 
 	EXPECT_FALSE(quality.getLowerRange().empty());
 	EXPECT_FALSE(quality.getHigherRange().empty());
@@ -144,19 +144,19 @@ TEST(QualityTest, ConstructorParsesRangeAndDescription)
 
 TEST(QualityTest, HandlesSingleNoteRange)
 {
-	Quality quality("C4:Single note description");
+	RegisterQuality quality("C4:Single note description");
 
 	EXPECT_EQ(quality.getLowerRange(), quality.getHigherRange());
 	EXPECT_FALSE(quality.getDescription().empty());
 }
 
 // ============================================================================
-// Role Tests
+// OrchestrationRole Tests
 // ============================================================================
 
 TEST(RoleTest, DefaultConstructorInitializesEmpty)
 {
-	Role role;
+	OrchestrationRole role;
 
 	EXPECT_EQ(role.getRole(), "");
 }
@@ -164,18 +164,18 @@ TEST(RoleTest, DefaultConstructorInitializesEmpty)
 TEST(RoleTest, ConstructorStoresRoleString)
 {
 	std::string roleText = "Test role";
-	Role		role(roleText);
+	OrchestrationRole		role(roleText);
 
 	EXPECT_EQ(role.getRole(), roleText);
 }
 
 // ============================================================================
-// InstrumentInfo Tests - Structure and API
+// InstrumentProfile Tests - Structure and API
 // ============================================================================
 
 TEST(InstrumentInfoTest, DefaultConstructorInitializesEmptyState)
 {
-	InstrumentInfo info;
+	InstrumentProfile info;
 
 	EXPECT_EQ(info.getName(), "");
 	EXPECT_EQ(info.getKey(), 0);
@@ -191,12 +191,12 @@ TEST(InstrumentInfoTest, ParameterizedConstructorSetsName)
 	std::string	   name = "TestInstrument";
 	InstrumentID   key	= 100;
 	InstrumentRange range("C3:C5");
-	Qualities	   qualities;
-	Roles		   roles;
-	FamousWorks	   works;
-	Techniques	   techniques;
+	RegisterQualities	   qualities;
+	OrchestrationRoles		   roles;
+	SignatureWorks	   works;
+	PlayingTechniques	   techniques;
 
-	InstrumentInfo info(name, key, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info(name, key, range, qualities, roles, works, techniques, false);
 
 	EXPECT_EQ(info.getName(), name);
 }
@@ -205,12 +205,12 @@ TEST(InstrumentInfoTest, ParameterizedConstructorSetsKey)
 {
 	InstrumentID   key = 301;
 	InstrumentRange range("C3:C5");
-	Qualities	   qualities;
-	Roles		   roles;
-	FamousWorks	   works;
-	Techniques	   techniques;
+	RegisterQualities	   qualities;
+	OrchestrationRoles		   roles;
+	SignatureWorks	   works;
+	PlayingTechniques	   techniques;
 
-	InstrumentInfo info("Test", key, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("Test", key, range, qualities, roles, works, techniques, false);
 
 	EXPECT_EQ(info.getKey(), key);
 }
@@ -218,12 +218,12 @@ TEST(InstrumentInfoTest, ParameterizedConstructorSetsKey)
 TEST(InstrumentInfoTest, ParameterizedConstructorSetsRange)
 {
 	InstrumentRange range("G3:A7");
-	Qualities	   qualities;
-	Roles		   roles;
-	FamousWorks	   works;
-	Techniques	   techniques;
+	RegisterQualities	   qualities;
+	OrchestrationRoles		   roles;
+	SignatureWorks	   works;
+	PlayingTechniques	   techniques;
 
-	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
 
 	EXPECT_EQ(info.getRange().getLowerRange(), range.getLowerRange());
 	EXPECT_EQ(info.getRange().getHigherRange(), range.getHigherRange());
@@ -232,14 +232,14 @@ TEST(InstrumentInfoTest, ParameterizedConstructorSetsRange)
 TEST(InstrumentInfoTest, ParameterizedConstructorSetsQualities)
 {
 	InstrumentRange range("C3:C5");
-	Qualities qualities;
-	qualities.push_back(Quality("C3-E3:Low"));
-	qualities.push_back(Quality("F3-C5:High"));
-	Roles		   roles;
-	FamousWorks	   works;
-	Techniques	   techniques;
+	RegisterQualities qualities;
+	qualities.push_back(RegisterQuality("C3-E3:Low"));
+	qualities.push_back(RegisterQuality("F3-C5:High"));
+	OrchestrationRoles		   roles;
+	SignatureWorks	   works;
+	PlayingTechniques	   techniques;
 
-	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
 
 	EXPECT_EQ(info.getQualities().size(), 2);
 }
@@ -247,14 +247,14 @@ TEST(InstrumentInfoTest, ParameterizedConstructorSetsQualities)
 TEST(InstrumentInfoTest, ParameterizedConstructorSetsRoles)
 {
 	InstrumentRange range("C3:C5");
-	Qualities qualities;
-	Roles	  roles;
-	roles.push_back(Role("Role 1"));
-	roles.push_back(Role("Role 2"));
-	FamousWorks	   works;
-	Techniques	   techniques;
+	RegisterQualities qualities;
+	OrchestrationRoles	  roles;
+	roles.push_back(OrchestrationRole("OrchestrationRole 1"));
+	roles.push_back(OrchestrationRole("OrchestrationRole 2"));
+	SignatureWorks	   works;
+	PlayingTechniques	   techniques;
 
-	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
 
 	EXPECT_EQ(info.getRoles().size(), 2);
 }
@@ -262,15 +262,15 @@ TEST(InstrumentInfoTest, ParameterizedConstructorSetsRoles)
 TEST(InstrumentInfoTest, ParameterizedConstructorSetsFamousWorks)
 {
 	InstrumentRange range("C3:C5");
-	Qualities	qualities;
-	Roles		roles;
-	FamousWorks works;
-	works.push_back(FamousWork("Work 1"));
-	works.push_back(FamousWork("Work 2"));
-	works.push_back(FamousWork("Work 3"));
-	Techniques	   techniques;
+	RegisterQualities	qualities;
+	OrchestrationRoles		roles;
+	SignatureWorks works;
+	works.push_back(SignatureWork("Work 1"));
+	works.push_back(SignatureWork("Work 2"));
+	works.push_back(SignatureWork("Work 3"));
+	PlayingTechniques	   techniques;
 
-	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
 
 	EXPECT_EQ(info.getFamousWorks().size(), 3);
 }
@@ -278,14 +278,14 @@ TEST(InstrumentInfoTest, ParameterizedConstructorSetsFamousWorks)
 TEST(InstrumentInfoTest, ParameterizedConstructorSetsTechniques)
 {
 	InstrumentRange range("C3:C5");
-	Qualities	qualities;
-	Roles		roles;
-	FamousWorks works;
-	Techniques	techniques;
+	RegisterQualities	qualities;
+	OrchestrationRoles		roles;
+	SignatureWorks works;
+	PlayingTechniques	techniques;
 	techniques.push_back(PlayingTechnique("Tech1:Description 1"));
 	techniques.push_back(PlayingTechnique("Tech2:Description 2"));
 
-	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
 
 	EXPECT_EQ(info.getTechniques().size(), 2);
 }
@@ -293,12 +293,12 @@ TEST(InstrumentInfoTest, ParameterizedConstructorSetsTechniques)
 TEST(InstrumentInfoTest, RhythmicPercussionFlagDefaultsToFalse)
 {
 	InstrumentRange range("C3:C5");
-	Qualities	   qualities;
-	Roles		   roles;
-	FamousWorks	   works;
-	Techniques	   techniques;
+	RegisterQualities	   qualities;
+	OrchestrationRoles		   roles;
+	SignatureWorks	   works;
+	PlayingTechniques	   techniques;
 
-	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques);
+	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques);
 
 	EXPECT_FALSE(info.isRhythmicPercussion());
 }
@@ -306,12 +306,12 @@ TEST(InstrumentInfoTest, RhythmicPercussionFlagDefaultsToFalse)
 TEST(InstrumentInfoTest, RhythmicPercussionFlagCanBeSetTrue)
 {
 	InstrumentRange range("C3:C5");
-	Qualities	   qualities;
-	Roles		   roles;
-	FamousWorks	   works;
-	Techniques	   techniques;
+	RegisterQualities	   qualities;
+	OrchestrationRoles		   roles;
+	SignatureWorks	   works;
+	PlayingTechniques	   techniques;
 
-	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, true);
+	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, true);
 
 	EXPECT_TRUE(info.isRhythmicPercussion());
 }
@@ -319,12 +319,12 @@ TEST(InstrumentInfoTest, RhythmicPercussionFlagCanBeSetTrue)
 TEST(InstrumentInfoTest, IsValidReturnsTrueForValidInstrument)
 {
 	InstrumentRange range("C3:C5");
-	Qualities	   qualities;
-	Roles		   roles;
-	FamousWorks	   works;
-	Techniques	   techniques;
+	RegisterQualities	   qualities;
+	OrchestrationRoles		   roles;
+	SignatureWorks	   works;
+	PlayingTechniques	   techniques;
 
-	InstrumentInfo info("ValidName", 301, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("ValidName", 301, range, qualities, roles, works, techniques, false);
 
 	EXPECT_TRUE(info.isValid());
 }
@@ -332,12 +332,12 @@ TEST(InstrumentInfoTest, IsValidReturnsTrueForValidInstrument)
 TEST(InstrumentInfoTest, IsValidReturnsFalseForEmptyName)
 {
 	InstrumentRange range("C3:C5");
-	Qualities	   qualities;
-	Roles		   roles;
-	FamousWorks	   works;
-	Techniques	   techniques;
+	RegisterQualities	   qualities;
+	OrchestrationRoles		   roles;
+	SignatureWorks	   works;
+	PlayingTechniques	   techniques;
 
-	InstrumentInfo info("", 301, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("", 301, range, qualities, roles, works, techniques, false);
 
 	EXPECT_FALSE(info.isValid());
 }
@@ -345,19 +345,19 @@ TEST(InstrumentInfoTest, IsValidReturnsFalseForEmptyName)
 TEST(InstrumentInfoTest, IsValidReturnsFalseForZeroKey)
 {
 	InstrumentRange range("C3:C5");
-	Qualities	   qualities;
-	Roles		   roles;
-	FamousWorks	   works;
-	Techniques	   techniques;
+	RegisterQualities	   qualities;
+	OrchestrationRoles		   roles;
+	SignatureWorks	   works;
+	PlayingTechniques	   techniques;
 
-	InstrumentInfo info("ValidName", 0, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("ValidName", 0, range, qualities, roles, works, techniques, false);
 
 	EXPECT_FALSE(info.isValid());
 }
 
 TEST(InstrumentInfoTest, IsValidReturnsFalseForDefaultConstructed)
 {
-	InstrumentInfo info;
+	InstrumentProfile info;
 
 	EXPECT_FALSE(info.isValid());
 }
@@ -365,12 +365,12 @@ TEST(InstrumentInfoTest, IsValidReturnsFalseForDefaultConstructed)
 TEST(InstrumentInfoTest, CanStoreEmptyCollections)
 {
 	InstrumentRange range("C3:C5");
-	Qualities	   qualities;  // empty
-	Roles		   roles;	   // empty
-	FamousWorks	   works;	   // empty
-	Techniques	   techniques; // empty
+	RegisterQualities	   qualities;  // empty
+	OrchestrationRoles		   roles;	   // empty
+	SignatureWorks	   works;	   // empty
+	PlayingTechniques	   techniques; // empty
 
-	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
 
 	EXPECT_EQ(info.getQualities().size(), 0);
 	EXPECT_EQ(info.getRoles().size(), 0);
@@ -382,23 +382,23 @@ TEST(InstrumentInfoTest, CanStoreLargeCollections)
 {
 	InstrumentRange range("C3:C5");
 
-	Qualities qualities;
+	RegisterQualities qualities;
 	for (int i = 0; i < 10; ++i)
-		qualities.push_back(Quality("C3-C4:Quality " + std::to_string(i)));
+		qualities.push_back(RegisterQuality("C3-C4:Quality " + std::to_string(i)));
 
-	Roles roles;
+	OrchestrationRoles roles;
 	for (int i = 0; i < 5; ++i)
-		roles.push_back(Role("Role " + std::to_string(i)));
+		roles.push_back(OrchestrationRole("OrchestrationRole " + std::to_string(i)));
 
-	FamousWorks works;
+	SignatureWorks works;
 	for (int i = 0; i < 15; ++i)
-		works.push_back(FamousWork("Work " + std::to_string(i)));
+		works.push_back(SignatureWork("Work " + std::to_string(i)));
 
-	Techniques techniques;
+	PlayingTechniques techniques;
 	for (int i = 0; i < 8; ++i)
 		techniques.push_back(PlayingTechnique("Tech" + std::to_string(i) + ":Description"));
 
-	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
 
 	EXPECT_EQ(info.getQualities().size(), 10);
 	EXPECT_EQ(info.getRoles().size(), 5);
@@ -413,14 +413,14 @@ TEST(InstrumentInfoTest, CanStoreLargeCollections)
 TEST(InstrumentInfoTest, RetrievedQualitiesMatchInput)
 {
 	InstrumentRange range("C3:C5");
-	Qualities qualities;
-	qualities.push_back(Quality("C3-E3:Lower register"));
-	qualities.push_back(Quality("F3-C5:Upper register"));
-	Roles		   roles;
-	FamousWorks	   works;
-	Techniques	   techniques;
+	RegisterQualities qualities;
+	qualities.push_back(RegisterQuality("C3-E3:Lower register"));
+	qualities.push_back(RegisterQuality("F3-C5:Upper register"));
+	OrchestrationRoles		   roles;
+	SignatureWorks	   works;
+	PlayingTechniques	   techniques;
 
-	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
 
 	auto		   retrieved = info.getQualities();
 	ASSERT_EQ(retrieved.size(), 2);
@@ -431,14 +431,14 @@ TEST(InstrumentInfoTest, RetrievedQualitiesMatchInput)
 TEST(InstrumentInfoTest, RetrievedTechniquesMatchInput)
 {
 	InstrumentRange range("C3:C5");
-	Qualities	qualities;
-	Roles		roles;
-	FamousWorks works;
-	Techniques	techniques;
+	RegisterQualities	qualities;
+	OrchestrationRoles		roles;
+	SignatureWorks works;
+	PlayingTechniques	techniques;
 	techniques.push_back(PlayingTechnique("Legato:Smooth connection"));
 	techniques.push_back(PlayingTechnique("Staccato:Short and detached"));
 
-	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
 
 	auto		   retrieved = info.getTechniques();
 	ASSERT_EQ(retrieved.size(), 2);
@@ -449,12 +449,12 @@ TEST(InstrumentInfoTest, RetrievedTechniquesMatchInput)
 TEST(InstrumentInfoTest, RangeWithTranspositionPreservesTransposition)
 {
 	InstrumentRange range("C3:C5", "C3:C5", "Bb: Sounds a major 2nd lower");
-	Qualities	   qualities;
-	Roles		   roles;
-	FamousWorks	   works;
-	Techniques	   techniques;
+	RegisterQualities	   qualities;
+	OrchestrationRoles		   roles;
+	SignatureWorks	   works;
+	PlayingTechniques	   techniques;
 
-	InstrumentInfo info("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile info("Test", 100, range, qualities, roles, works, techniques, false);
 
 	EXPECT_EQ(info.getRange().getTransposition(), "Bb: Sounds a major 2nd lower");
 }

@@ -28,7 +28,7 @@ public:
 
 	void					 changeInstrument(InstrumentID key);
 	void					 changeArticulation(InstrumentID key, Articulation articulation);
-	InstrumentInfo			 getInstrument(InstrumentID key);
+	InstrumentProfile		 getInstrument(InstrumentID key);
 
 	std::set<Articulation>	 getAvailableArticulations(InstrumentID instrumentKey);
 

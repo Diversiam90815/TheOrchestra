@@ -16,7 +16,7 @@ public:
 	~QualitiesView() = default;
 
 	void init() override;
-	void displayInstrument(InstrumentInfo &instrument) override;
+	void displayInstrument(InstrumentProfile &instrument) override;
 
 private:
 	juce::Label		 mTitle;

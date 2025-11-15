@@ -20,7 +20,7 @@ void FamousWorksView::init()
 }
 
 
-void FamousWorksView::displayInstrument(InstrumentInfo &instrument)
+void FamousWorksView::displayInstrument(InstrumentProfile &instrument)
 {
 	const auto &works = instrument.getFamousWorks();
 

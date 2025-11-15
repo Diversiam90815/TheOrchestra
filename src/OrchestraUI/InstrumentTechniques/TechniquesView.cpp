@@ -12,7 +12,7 @@ void TechniquesView::init()
 {
 	setSize(mWidth, mHeight);
 
-	addAndConfigureLabel(mTitle, "TechniqueTitle", "Playing Techniques", mTechTitleX, mTechTitleY, mTechTitleWidth, mTechTitleHeight);
+	addAndConfigureLabel(mTitle, "TechniqueTitle", "Playing PlayingTechniques", mTechTitleX, mTechTitleY, mTechTitleWidth, mTechTitleHeight);
 
 	// First row of buttons
 	addAndConfigureButton(mTech1, "Tech1", mFirstColumnX, mFirstRowY, mButtonWidth, mButtonHeight, false);
@@ -30,7 +30,7 @@ void TechniquesView::init()
 }
 
 
-void TechniquesView::displayInstrument(InstrumentInfo &instrument)
+void TechniquesView::displayInstrument(InstrumentProfile &instrument)
 {
 	const auto &techniques		= instrument.getTechniques();
 
