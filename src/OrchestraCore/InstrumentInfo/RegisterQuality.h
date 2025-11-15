@@ -10,6 +10,11 @@
 #include "nlohmann/json.hpp"
 #include "Helper.h"
 
+constexpr auto REG_QUAL_RANGE	   = "range";
+constexpr auto REG_QUAL_RANGE_LOW  = "low";
+constexpr auto REG_QUAL_RANGE_HIGH = "high";
+constexpr auto REG_QUAL_DESC	   = "description";
+
 
 struct RegisterQuality
 {
@@ -37,19 +42,20 @@ private:
 	std::string description{""};
 };
 
+
 inline void from_json(const nlohmann::json &j, RegisterQuality &quality)
 {
-	const auto &range		= j["range"];
-	quality.lowerNote		= range["low"].get<std::string>();
-	quality.higherNote		= range["high"].get<std::string>();
+	const auto &range		= j[REG_QUAL_RANGE];
+	quality.lowerNote		= range[REG_QUAL_RANGE_LOW].get<std::string>();
+	quality.higherNote		= range[REG_QUAL_RANGE_HIGH].get<std::string>();
 	quality.lowerNoteValue	= turnNotenameIntoMidinumber(quality.lowerNote);
 	quality.higherNoteValue = turnNotenameIntoMidinumber(quality.higherNote);
-	quality.description		= j["description"].get<std::string>();
+	quality.description		= j[REG_QUAL_DESC].get<std::string>();
 }
 
 inline void to_json(nlohmann::json &j, const RegisterQuality &quality)
 {
-	j["range"]["low"]  = quality.getLowerRange();
-	j["range"]["high"] = quality.getHigherRange();
-	j["description"]   = quality.getDescription();
+	j[REG_QUAL_RANGE][REG_QUAL_RANGE_LOW]  = quality.getLowerRange();
+	j[REG_QUAL_RANGE][REG_QUAL_RANGE_HIGH] = quality.getHigherRange();
+	j[REG_QUAL_DESC]					   = quality.getDescription();
 }

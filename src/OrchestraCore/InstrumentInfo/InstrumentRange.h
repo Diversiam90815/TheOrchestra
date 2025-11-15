@@ -10,6 +10,12 @@
 #include "Helper.h"
 #include "nlohmann/json.hpp"
 
+constexpr auto RANGE_WRITTEN	   = "written";
+constexpr auto RANGE_DISPLAYED	   = "displayed";
+constexpr auto RANGE_TRANSPOSITION = "transposition";
+constexpr auto RANGE_LOW		   = "low";
+constexpr auto RANGE_HIGH		   = "high";
+
 
 struct InstrumentRange
 {
@@ -50,21 +56,21 @@ private:
 inline void from_json(const nlohmann::json &j, InstrumentRange &range)
 {
 	// Parse written range (required)
-	if (j.contains("written"))
+	if (j.contains(RANGE_WRITTEN))
 	{
-		const auto &written	  = j["written"];
-		range.lowerRange	  = written["low"].get<std::string>();
-		range.higherRange	  = written["high"].get<std::string>();
+		const auto &written	  = j[RANGE_WRITTEN];
+		range.lowerRange	  = written[RANGE_LOW].get<std::string>();
+		range.higherRange	  = written[RANGE_HIGH].get<std::string>();
 		range.lowerNoteRange  = turnNotenameIntoMidinumber(range.lowerRange);
 		range.higherNoteRange = turnNotenameIntoMidinumber(range.higherRange);
 	}
 
 	// Parse displayed range (optional, for rhythmic percussion)
-	if (j.contains("displayed"))
+	if (j.contains(RANGE_DISPLAYED))
 	{
-		const auto &displayed	   = j["displayed"];
-		range.lowerDisplay		   = displayed["low"].get<std::string>();
-		range.higherDisplay		   = displayed["high"].get<std::string>();
+		const auto &displayed	   = j[RANGE_DISPLAYED];
+		range.lowerDisplay		   = displayed[RANGE_LOW].get<std::string>();
+		range.higherDisplay		   = displayed[RANGE_HIGH].get<std::string>();
 		range.lowerDisplayedRange  = turnNotenameIntoMidinumber(range.lowerDisplay);
 		range.higherDisplayedRange = turnNotenameIntoMidinumber(range.higherDisplay);
 	}
@@ -78,26 +84,26 @@ inline void from_json(const nlohmann::json &j, InstrumentRange &range)
 	}
 
 	// Parse transposition (optional)
-	if (j.contains("transposition"))
+	if (j.contains(RANGE_TRANSPOSITION))
 	{
-		range.transposition = j["transposition"].get<std::string>();
+		range.transposition = j[RANGE_TRANSPOSITION].get<std::string>();
 	}
 }
 
 inline void to_json(nlohmann::json &j, const InstrumentRange &range)
 {
-	j["written"]["low"]	 = range.getLowerRange();
-	j["written"]["high"] = range.getHigherRange();
+	j[RANGE_WRITTEN][RANGE_LOW]	 = range.getLowerRange();
+	j[RANGE_WRITTEN][RANGE_HIGH] = range.getHigherRange();
 
 	if (!range.getTransposition().empty())
 	{
-		j["transposition"] = range.getTransposition();
+		j[RANGE_TRANSPOSITION] = range.getTransposition();
 	}
 
 	// Only add displayed if different from written
 	if (range.getDisplayedLowerRange() != range.getLowerRange() || range.getDisplayedHigherRange() != range.getHigherRange())
 	{
-		j["displayed"]["low"]  = range.getDisplayedLowerRange();
-		j["displayed"]["high"] = range.getDisplayedHigherRange();
+		j[RANGE_DISPLAYED][RANGE_LOW]  = range.getDisplayedLowerRange();
+		j[RANGE_DISPLAYED][RANGE_HIGH] = range.getDisplayedHigherRange();
 	}
 }
