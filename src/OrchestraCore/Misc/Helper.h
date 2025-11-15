@@ -182,17 +182,24 @@ static std::string getLowerOrHigherNote(const std::string &range, bool getLower)
 */
 static std::string splitColonizedStrings(const std::string &colonizedString, bool firstPart)
 {
-	// Find the colon (:) and split the string
-	juce::StringArray parts = juce::StringArray::fromTokens(colonizedString, ":", "");
+	// Find the first colon position
+	size_t colonPos = colonizedString.find(':');
 
-	if (parts.size() != 2)
+	if (colonPos == std::string::npos)
 		return {};
 
-	// Trim whitespaces
-	std::string leftPart  = parts[0].trim().toStdString();
-	std::string rightPart = parts[1].trim().toStdString();
-
-	return firstPart ? leftPart : rightPart;
+	if (firstPart)
+	{
+		// Return the part before the first colon, trimmed
+		juce::String leftPart = colonizedString.substr(0, colonPos);
+		return leftPart.trim().toStdString();
+	}
+	else
+	{
+		// Return everything after the first colon, trimmed
+		juce::String rightPart = colonizedString.substr(colonPos + 1);
+		return rightPart.trim().toStdString();
+	}
 }
 
 

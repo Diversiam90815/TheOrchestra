@@ -17,7 +17,7 @@ def main():
     ''' Setting up environment '''
     os.chdir(ROOT_DIR)
 
-    build_dir = get_build_dir(str(args.configuration), str(args.architecture))
+    build_dir = get_build_dir(str(args.architecture))
     runner = BuildRunner(root_dir=ROOT_DIR, build_dir=build_dir, project_name="The Orchestra")
 
     runner.update_environment()

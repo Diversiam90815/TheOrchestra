@@ -15,7 +15,6 @@
         {
           "name": "Violin",
           "range": "G3 - A7",
-          "transposition": "-",
           "qualities": [
             "G3: Rich and resonant, foundational for warmth and depth",
             "D4: Subtly vibrant, a balance of warmth and lyrical expression",
@@ -37,7 +36,6 @@
         {
           "name": "Viola",
           "range": "C3 - E6",
-          "transposition": "-",
           "qualities": [
             "C3: Most characteristic viola sound; somber, austere, sometimes a bit forbidding",
             "G3: Rich and dark, capable of profound depth",
@@ -58,7 +56,6 @@
         {
           "name": "Violoncello",
           "range": "C2 - C6",
-          "transposition": "-",
           "qualities": [
             "C2: Richly sonorous bass, profound and enveloping",
             "G2: Subtler strength, carries warmth and expressiveness",
@@ -157,7 +154,6 @@
         {
           "name": "Tenor Trombone",
           "range": "E2 - Bb4",
-          "transposition": "-",
           "qualities": [
             "E2 - G#2: Dark, commanding, with a foundational depth",
             "A2 - F#4: Firm, powerful, resonant across its core range",
@@ -178,7 +174,6 @@
         {
           "name": "Bass Trombone",
           "range": "Bb1 - Bb4",
-          "transposition": "-",
           "qualities": [
             "Bb1 - F#2: Heavy, strong, with a profound bass foundation",
             "G2 - G#3: Deep, solid, adding weight to the ensemble",
@@ -198,7 +193,6 @@
         {
           "name": "Cimbasso",
           "range": "F1 - F4",
-          "transposition": "-",
           "qualities": [
             "F1 - G2: Full, clear, concise, with a robust foundation",
             "G#2 - G3: Soft, round, bright, adding a unique color",
@@ -217,7 +211,6 @@
         {
           "name": "Tuba",
           "range": "D1 - F4",
-          "transposition": "-",
           "qualities": [
             "D1 - Bb1: Deep, heavy, anchoring the orchestra",
             "B1 - E3: Strong, resonant, with a commanding presence",
@@ -271,7 +264,6 @@
         {
           "name": "Flute",
           "range": "C4 - D7",
-          "transposition": "-",
           "qualities": [
             "C4 - G#4: Weak, but luscious",
             "A4 - G#5: Sweet, with little power",
@@ -292,7 +284,6 @@
         {
           "name": "Oboe",
           "range": "Bb3 - A6",
-          "transposition": "-",
           "qualities": [
             "Bb3 - F4: Thick, heavy",
             "Gb4 - A5: Warm, prominent, reedy, poignant",
@@ -375,7 +366,6 @@
         {
           "name": "Bassoon",
           "range": "Bb1 - Eb5",
-          "transposition": "-",
           "qualities": [
             "Bb1 - G#2: Sonorous, dark, vibrant",
             "A2 - D#4: Sweet, subdued, but expressive",
@@ -434,7 +424,6 @@
           "range": "D2 - C4",
           "displayedRange" :"D1 - A1",
           "isRhythmicPercussion" : true,
-          "transposition": "-",
           "qualities": [
             "Can vary from dull to thunderous, deep, heavy, velvety, to dry",
             "Depending on mallet and technique used"
@@ -454,7 +443,6 @@
         {
           "name": "Harp",
           "range": "C1 - G7",
-          "transposition": "-",
           "isRhythmicPercussion":false,
           "qualities": [
             "B1 - B3: Deep and sonorous",
@@ -476,7 +464,6 @@
         {
           "name": "Celeste",
           "range": "C4 - C8",
-          "transposition": "-",
           "qualities": [
             "Silvery, glistening, ethereal, sweet, shimmering across its range",
             "Warmer and rounder than the glockenspiel",
@@ -497,7 +484,6 @@
         {
           "name": "Marimba",
           "range": "C2 - C7",
-          "transposition": "-",
           "qualities": [
             "Dark, mellow, gentle, melodious, resonant",
             "Sound character varies with mallet hardness: harder mallets emphasize higher partials"
