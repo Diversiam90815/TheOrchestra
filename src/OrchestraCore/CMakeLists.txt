@@ -24,6 +24,11 @@ set(ALL_PROJECT_DIRS
 
 set(INSTRUMENT_FILES
     ${INSTRUMENT_DIR}/InstrumentInfo.h
+    ${INSTRUMENT_DIR}/InstrumentRange.h
+    ${INSTRUMENT_DIR}/SignatureWork.h
+    ${INSTRUMENT_DIR}/PlayingTechnique.h
+    ${INSTRUMENT_DIR}/RegisterQuality.h
+    ${INSTRUMENT_DIR}/OrchestrationRole.h
     ${INSTRUMENT_DIR}/InstrumentController.h    ${INSTRUMENT_DIR}/InstrumentController.cpp
 )
 
