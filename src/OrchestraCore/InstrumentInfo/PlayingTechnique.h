@@ -5,10 +5,12 @@
   ==============================================================================
 */
 
-
 #pragma once
 
 #include "nlohmann/json.hpp"
+
+constexpr auto TECHNIQUE_NAME = "name";
+constexpr auto TECHNIQUE_DESC = "description";
 
 
 struct PlayingTechnique
@@ -31,12 +33,12 @@ private:
 
 inline void from_json(const nlohmann::json &j, PlayingTechnique &technique)
 {
-	technique.name		  = j["name"].get<std::string>();
-	technique.description = j["description"].get<std::string>();
+	technique.name		  = j[TECHNIQUE_NAME].get<std::string>();
+	technique.description = j[TECHNIQUE_DESC].get<std::string>();
 }
 
 inline void to_json(nlohmann::json &j, const PlayingTechnique &technique)
 {
-	j["name"]		 = technique.getName();
-	j["description"] = technique.getDescription();
+	j[TECHNIQUE_NAME] = technique.getName();
+	j[TECHNIQUE_DESC] = technique.getDescription();
 }
