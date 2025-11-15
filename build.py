@@ -43,6 +43,5 @@ def main():
         runner.run_cpp_unit_tests(configuration=args.configuration)
 
 
-
 if __name__ == "__main__":
     main()

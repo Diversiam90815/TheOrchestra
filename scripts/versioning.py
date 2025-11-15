@@ -13,7 +13,6 @@ class VersionManager:
 
     def get_build_number(self) -> int:
         commit_hashes = check_output(["git", "rev-list", "HEAD"]).rstrip()
-        # count lines (each commit hash) + 1
         return commit_hashes.count(b"\n") + 1
 
 

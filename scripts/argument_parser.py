@@ -24,7 +24,7 @@ def create_argument_parser() -> argparse.ArgumentParser:
         default=Platform.Ninja,
         type=Platform,
         choices=list(Platform),
-        help="Select your Platform/IDE. Defaults to Visual Studio 2022."
+        help="Select your Platform/IDE. Defaults to Ninja."
     )
 
     parser.add_argument(
