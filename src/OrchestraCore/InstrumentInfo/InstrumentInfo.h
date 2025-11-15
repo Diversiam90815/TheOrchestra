@@ -49,8 +49,8 @@ struct InstrumentRange
 private:
 	void setRanges(const std::string &range)
 	{
-		higherRange		= splitColonizedStrings(range, false);
-		lowerRange		= splitColonizedStrings(range, true);
+		higherRange		= getLowerOrHigherNote(range, false);
+		lowerRange		= getLowerOrHigherNote(range, true);
 		higherNoteRange = turnNotenameIntoMidinumber(higherRange);
 		lowerNoteRange	= turnNotenameIntoMidinumber(lowerRange);
 	}
@@ -58,8 +58,8 @@ private:
 	void setDisplayedRanges(const std::string &displayedRange)
 	{
 
-		higherDisplay		 = splitColonizedStrings(displayedRange, false);
-		lowerDisplay		 = splitColonizedStrings(displayedRange, true);
+		higherDisplay		 = getLowerOrHigherNote(displayedRange, false);
+		lowerDisplay		 = getLowerOrHigherNote(displayedRange, true);
 		higherDisplayedRange = turnNotenameIntoMidinumber(higherDisplay);
 		lowerDisplayedRange	 = turnNotenameIntoMidinumber(lowerDisplay);
 	}
