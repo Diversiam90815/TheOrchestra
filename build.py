@@ -24,13 +24,18 @@ def main():
     runner.update_app_version()
 
     print("==== The Orchestra Configuration ====")
-    print(f"Current Directory:   {ROOT_DIR}")
-    print(f"Build Directory:     {build_dir}")
-    print(f"Architecture:        {args.architecture}")
-    print(f"Configuration:       {args.configuration}")
-    print(f"Environment:         {runner.env}")
-    print(f"Version:             {runner.version}")
+    print(f"Current Directory:          {ROOT_DIR}")
+    print(f"Build Directory:            {build_dir}")
+    print(f"Test Build Directory:       {TEST_BUILD_DIR}")
+    print(f"Architecture:               {args.architecture}")
+    print(f"Configuration:              {args.configuration}")
+    print(f"Environment:                {runner.env}")
+    print(f"Version:                    {runner.version}")
     print("=====================================")
+
+    if(args.runtests):
+        runner.run_cpp_unit_tests(configuration=args.configuration, test_build_dir=TEST_BUILD_DIR, target="RUN_TESTS")
+        exit(0)
 
     runner.create_build_generator(
         platform=args.platform,
@@ -39,9 +44,7 @@ def main():
         configuration=args.configuration,
     )
 
-    if not args.prepare:
-        TEST_BUILD_DIR = build_dir / "tests"
-        runner.run_cpp_unit_tests(configuration=args.configuration, test_build_dir=TEST_BUILD_DIR, target="RUN_TESTS")
+    runner.run_cpp_unit_tests(configuration=args.configuration, test_build_dir=TEST_BUILD_DIR, target="RUN_TESTS")
 
 
 if __name__ == "__main__":
