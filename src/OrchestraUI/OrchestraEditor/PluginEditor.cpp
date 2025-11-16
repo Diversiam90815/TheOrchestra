@@ -63,8 +63,14 @@ void OrchestraEditor::init()
 
 void OrchestraEditor::changeInstrument(InstrumentID key)
 {
-	mCurrentInstrument	  = key;
-	auto instrument		  = mCoreManager->getInstrument(key);
+	mCurrentInstrument = key;
+	auto instrument	   = mCoreManager->getInstrument(key);
+
+	if (!instrument.isValid())
+	{
+		LOG_ERROR("Instrument is not valid! We won't change the instrument now..");
+		return;
+	}
 
 	auto availableSamples = mCoreManager->getAvailableArticulations(key);
 	mSamplerView.displayInstrument(availableSamples);
