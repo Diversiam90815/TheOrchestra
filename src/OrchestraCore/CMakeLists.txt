@@ -120,10 +120,30 @@ target_include_directories(${TARGET_NAME} PUBLIC
 include(ProjectOptions)
 set_common_target_options(${TARGET_NAME})
 
+juce_add_binary_data(InstrumentData
+    NAMESPACE InstrumentData
+    SOURCES ${ASSETS_DIR}/InstrumentData/Instruments.json
+)
+
 set (PROJECT_LIBS   juce::juce_audio_utils
                     juce::juce_audio_plugin_client
                     juce::juce_core
                     Logger
+                    InstrumentData
 )
 
 target_link_libraries(${TARGET_NAME} PUBLIC ${PROJECT_LIBS} )
+
+add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${ASSETS_DIR}/Samples
+    "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets/Samples"
+    COMMENT "Copying Samples to build directory..."
+)
+
+add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${ASSETS_DIR}/Images
+    "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets/Images"
+    COMMENT "Copying Images to build directory..."
+)

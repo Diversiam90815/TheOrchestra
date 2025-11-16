@@ -8,6 +8,7 @@
 
 #include "InstrumentController.h"
 #include <cassert>
+#include "BinaryData.h"
 
 
 void InstrumentController::init()
@@ -38,19 +39,33 @@ InstrumentProfile InstrumentController::getInstrument(InstrumentID key)
 
 bool InstrumentController::loadFromJSON()
 {
-	std::string	  jsonFilePath = mFileManager.getInstrumentDataJSONPath();
-	std::ifstream file(jsonFilePath);
+	// std::string	  jsonFilePath = mFileManager.getInstrumentDataJSONPath();
+	// std::ifstream file(jsonFilePath);
 
-	if (!file.is_open())
-	{
-		LOG_ERROR("Failed to open JSON file: {}", jsonFilePath);
-		return false;
-	}
+	// if (!file.is_open())
+	//{
+	//	LOG_ERROR("Failed to open JSON file: {}", jsonFilePath);
+	//	return false;
+	// }
 
 	try
 	{
-		json j;
-		file >> j;
+		// Get embedded JSON data
+		int			dataSize = 0;
+		const char *data	 = InstrumentData::getNamedResource("Instruments_json", dataSize);
+
+		if (data == nullptr || dataSize == 0)
+		{
+			LOG_ERROR("Embedded instrument data not found!");
+			return false;
+		}
+
+		LOG_INFO("Loading instruments from embedded data ({} bytes)", dataSize);
+
+		json j = json::parse(std::string(data, dataSize));
+
+		// json j;
+		// file >> j;
 
 		// Skip metadata section
 		if (!j.contains("families"))
