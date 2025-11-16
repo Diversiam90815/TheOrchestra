@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			InstrumentController
 	Description		Managing instrument data for the whole orchestra
-
   ==============================================================================
 */
 

@@ -40,7 +40,8 @@ def main():
     )
 
     if not args.prepare:
-        runner.run_cpp_unit_tests(configuration=args.configuration)
+        TEST_BUILD_DIR = build_dir / "tests"
+        runner.run_cpp_unit_tests(configuration=args.configuration, test_build_dir=TEST_BUILD_DIR, target="RUN_TESTS")
 
 
 if __name__ == "__main__":
