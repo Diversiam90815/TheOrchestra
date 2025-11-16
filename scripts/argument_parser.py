@@ -8,6 +8,18 @@ def create_argument_parser() -> argparse.ArgumentParser:
     )
 
     parser.add_argument(
+        "-p", "--prepare",
+        action="store_true",
+        help="Prepare the project for the IDE without building."
+    )
+
+    parser.add_argument(
+        "-b", "--build",
+        action="store_true",
+        help="Build the project after generating the build files."
+    )
+
+    parser.add_argument(
         "-pl", "--platform",
         default=Platform.Ninja,
         type=Platform,
@@ -30,12 +42,11 @@ def create_argument_parser() -> argparse.ArgumentParser:
         choices=list(Configuration),
         help="Select the build configuration. Defaults to Release."
     )
-
+    
     parser.add_argument(
         "-t", "--runtest",
         default=False,
         type=bool,
         help="Run only the CMake test suite. Defaults to False"
     )
-
     return parser
