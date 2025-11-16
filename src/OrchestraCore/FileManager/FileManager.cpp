@@ -10,9 +10,9 @@
 
 std::string FileManager::getSamplesFolder()
 {
-	std::filesystem::path projectDir = getProjectDirectory();
+	std::filesystem::path projectDir = findAssetsFolder();
 
-	std::filesystem::path samplesDir = projectDir / AssetsFolderName / SampleFolderName;
+	std::filesystem::path samplesDir = projectDir / SampleFolderName;
 
 	return samplesDir.string();
 }
@@ -20,9 +20,9 @@ std::string FileManager::getSamplesFolder()
 
 std::string FileManager::getInstrumentDataJSONPath()
 {
-	std::filesystem::path projectDir = getProjectDirectory();
+	std::filesystem::path projectDir = findAssetsFolder();
 
-	std::filesystem::path dataDir	 = projectDir / AssetsFolderName / InstrumentDataFolderName / InstrumentsDataFileName;
+	std::filesystem::path dataDir	 = projectDir / InstrumentDataFolderName / InstrumentsDataFileName;
 
 	return dataDir.string();
 }
@@ -123,6 +123,15 @@ std::filesystem::path FileManager::getLoggingPath()
 }
 
 
+void FileManager::setAssetsFolder(const std::filesystem::path &path)
+{
+	if (std::filesystem::exists(path) && std::filesystem::is_directory(path))
+	{
+		mAssetsFolderOverride = path;
+	}
+}
+
+
 std::filesystem::path FileManager::getProjectDirectory()
 {
 	std::filesystem::path cwd		 = std::filesystem::current_path();
@@ -131,10 +140,54 @@ std::filesystem::path FileManager::getProjectDirectory()
 }
 
 
+std::filesystem::path FileManager::getExecutableDirectory()
+{
+	auto exePath = juce::File::getSpecialLocation(juce::File::currentExecutableFile);
+	return std::filesystem::path(exePath.getParentDirectory().getFullPathName().toStdString());
+}
+
+
+std::filesystem::path FileManager::findAssetsFolder()
+{
+	// 1. Check if assets folder was set explicitly
+	if (mAssetsFolderOverride.has_value())
+		return mAssetsFolderOverride.value();
+
+	// 2. check next to executable (installed version)
+	std::filesystem::path exeDir		= getExecutableDirectory();
+	std::filesystem::path assetsNearExe = exeDir / AssetsFolderName;
+
+	if (std::filesystem::exists(assetsNearExe))
+		return exeDir;
+
+	// 3. Check in parent directory (development builds)
+	std::filesystem::path parentAssets = exeDir.parent_path() / AssetsFolderName;
+	if (std::filesystem::exists(parentAssets))
+		return exeDir.parent_path();
+
+	// 4. Walk up the directory tree looking for Assets folder
+	std::filesystem::path searchPath = exeDir;
+	for (int i = 0; i < 6; ++i) // Search up to 6 levels
+	{
+		std::filesystem::path candidate = searchPath / AssetsFolderName;
+		if (std::filesystem::exists(candidate))
+			return searchPath;
+
+		if (!searchPath.has_parent_path())
+			break;
+
+		searchPath = searchPath.parent_path();
+	}
+
+	// 5. Fallback to old behavior 
+	return getProjectDirectory() / AssetsFolderName;
+}
+
+
 std::vector<std::string> FileManager::getInstrumentImages(const std::string &family, const std::string &instrumentName)
 {
-	std::filesystem::path	 projectDir = getProjectDirectory();
-	std::filesystem::path	 imagesDir	= projectDir / AssetsFolderName / ImageFolderName / family / instrumentName;
+	std::filesystem::path	 projectDir = findAssetsFolder();
+	std::filesystem::path	 imagesDir	= projectDir / ImageFolderName / family / instrumentName;
 
 	std::vector<std::string> images;
 	images.reserve(4); // there should be 3-4 images in the folder
