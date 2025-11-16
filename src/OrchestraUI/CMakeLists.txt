@@ -100,6 +100,11 @@ set(UI_PROJECT_FILES
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${UI_PROJECT_FILES})
 
 
+juce_add_binary_data(FontBinaryData
+    NAMESPACE FontData
+    SOURCES ${ASSETS_DIR}/Font/Instrument-Serif/InstrumentSerif-Regular.ttf
+)
+
 add_library(${TARGET_NAME} STATIC ${UI_PROJECT_FILES})
 
 
@@ -114,11 +119,6 @@ endif()
 if(ENABLE_DOXYGEN)
 	Doxygen(Chess_Engine ${SOURCE_DIR})
 endif()
-
-
-juce_add_binary_data(FontBinaryData
-    SOURCES ${ASSETS_DIR}/Font/Instrument-Serif/InstrumentSerif-Regular.ttf
-)
 
 
 target_include_directories(${TARGET_NAME} PUBLIC
@@ -138,3 +138,7 @@ set (PROJECT_LIBS       TheOrchestraCore
 )
 
 target_link_libraries(${TARGET_NAME} PUBLIC ${PROJECT_LIBS} )
+
+target_include_directories(${TARGET_NAME} PRIVATE
+    $<TARGET_PROPERTY:FontBinaryData,INTERFACE_INCLUDE_DIRECTORIES>
+)

@@ -46,7 +46,7 @@ void CustomLookAndFeel::init()
 void CustomLookAndFeel::setFont()
 {
 	// Load the custom typeface from BinaryData
-	instrumentTypeface = juce::Typeface::createSystemTypefaceFor(BinaryData::InstrumentSerifRegular_ttf, BinaryData::InstrumentSerifRegular_ttfSize);
+	instrumentTypeface = juce::Typeface::createSystemTypefaceFor(FontData::InstrumentSerifRegular_ttf, FontData::InstrumentSerifRegular_ttfSize);
 
 	// Set the font
 	headerFont		   = juce::Font(instrumentTypeface).withHeight(27.0f);
