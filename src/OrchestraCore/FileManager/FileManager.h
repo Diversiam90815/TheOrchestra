@@ -15,7 +15,6 @@
 #include "Helper.h"
 #include "JuceIncludes.h"
 
-
 enum TypeOfImage
 {
 	InstrumentImage = 1,
@@ -42,17 +41,24 @@ public:
 
 	std::filesystem::path getLoggingPath();
 
+	void				  setAssetsFolder(const std::filesystem::path &path);
+
 private:
-	std::filesystem::path	 getProjectDirectory(); // Gets the project's directory
-
-	std::vector<std::string> getInstrumentsImages(InstrumentID instrumentKey);
-
-	std::vector<std::string> getInstrumentImages(const std::string &family, const std::string &instrumentName);
+	std::filesystem::path				 getProjectDirectory();	   // Gets the project's directory
+	std::filesystem::path				 getExecutableDirectory(); // Gets the directory containing the executable
+	std::filesystem::path				 findAssetsFolder();	   // Searches for Assets folder intelligently
 
 
-	std::string				 AssetsFolderName		  = "Assets";
-	std::string				 SampleFolderName		  = "Samples";
-	std::string				 ImageFolderName		  = "Images";
-	std::string				 InstrumentDataFolderName = "InstrumentData";
-	std::string				 InstrumentsDataFileName  = "Instruments.json";
+	std::vector<std::string>			 getInstrumentsImages(InstrumentID instrumentKey);
+
+	std::vector<std::string>			 getInstrumentImages(const std::string &family, const std::string &instrumentName);
+
+
+	std::string							 AssetsFolderName		  = "Assets";
+	std::string							 SampleFolderName		  = "Samples";
+	std::string							 ImageFolderName		  = "Images";
+	std::string							 InstrumentDataFolderName = "InstrumentData";
+	std::string							 InstrumentsDataFileName  = "Instruments.json";
+
+	std::optional<std::filesystem::path> mAssetsFolderOverride;
 };
