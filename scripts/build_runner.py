@@ -69,16 +69,15 @@ class BuildRunner:
                 f"CMake: Install {self.project_name}",
             )
 
-    def run_cpp_unit_tests(self, configuration: Configuration) -> None:
-        build_dir_tests = self.build_dir / "tests"
+    def run_cpp_unit_tests(self, configuration: Configuration, test_build_dir, target) -> None:
 
-        with working_directory(build_dir_tests):
+        with working_directory(test_build_dir):
             BuildUtils.execute_command(
                 [
                     "cmake",
-                    "--build", str(build_dir_tests),
+                    "--build", str(test_build_dir),
                     "--config", str(configuration),
-                    "--target", "TheOrchestra.Tests",
+                    "--target", str(target),
                 ],
                 "CMake: Build C++ unit tests",
             )
@@ -86,7 +85,7 @@ class BuildRunner:
             BuildUtils.execute_command(
                 [
                     "ctest",
-                    "--test-dir", str(build_dir_tests),
+                    "--test-dir", str(test_build_dir),
                     "-C", str(configuration),
                     "--output-on-failure",
                 ],
