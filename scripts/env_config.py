@@ -15,8 +15,8 @@ def update_environment_in_cmake(cmake_file: Path, environment_var : str = "BUILD
     else:
         env = Environment.Development
 
-    pattern = re.compile(r"set\(\s*" + environment_var + r"\s+(.*)\)")
-
+    pattern = re.compile(rf"set\(\s*{re.escape(environment_var)}\s+(.*)\)")
+    
     with cmake_file.open("r", encoding="utf-8") as f:
         lines = f.readlines()
 
