@@ -60,10 +60,13 @@ The project uses a modular Python-based build system located in `build.py`, with
 
 | Argument | Short | Description | Default |
 |---------|--------|-------------|---------|
+| `--prepare` | `-p` | Generate CMake build files only (no build). | `False` |
+| `--build` | `-b` | Generate and build the project (also runs tests). | `False` |
 | `--platform` | `-pl` | Select CMake generator (`VS2022`, `Ninja`, `Xcode`). | `Ninja` |
 | `--architecture` | `-a` | Target architecture (`x64`, `ARM64`). | `x64` |
 | `--configuration` | `-c` | Build configuration (`Debug`, `RelWithDebInfo`, `Release`). | `Release` |
 | `--runtest` | `-t` | Run only the CMake test suite | `False` |
+
 
 
 ### Build Environment
@@ -71,7 +74,7 @@ The project uses a modular Python-based build system located in `build.py`, with
 Generate CMake project files:
 
 ```bash
-python build.py
+python build.py -p
 ```
 
 #### Platforms
@@ -79,9 +82,9 @@ python build.py
 Select platform with the `--platform` (`-pl`) option:
 
 ```bash
-python build.py -pl VS2022
-python build.py -pl XCode
-python build.py -pl Ninja
+python build.py -b -pl VS2022
+python build.py -b -pl XCode
+python build.py -b -pl Ninja
 ```
 Default: Ninja
 
@@ -90,9 +93,9 @@ Default: Ninja
 Select configuration with the `--configuration` (`-c`) option:
 
 ```bash
-python build.py -c Debug
-python build.py -c RelWithDebInfo
-python build.py -c Release
+python build.py -b -c Debug
+python build.py -b -c RelWithDebInfo
+python build.py -b -c Release
 ```
 Default: Release
 
@@ -101,8 +104,8 @@ Default: Release
 Select configuration with the `--architecture` (`-a`) option:
 
 ```bash
-python build.py -c x64
-python build.py -c ARM64
+python build.py -b -c x64
+python build.py -b -c ARM64
 ```
 Default: x64
 

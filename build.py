@@ -33,7 +33,7 @@ def main():
     print(f"Version:                    {runner.version}")
     print("=====================================")
 
-    if(args.runtests):
+    if(args.runtest):
         runner.run_cpp_unit_tests(configuration=args.configuration, test_build_dir=TEST_BUILD_DIR, target="RUN_TESTS")
         exit(0)
 
@@ -44,7 +44,8 @@ def main():
         configuration=args.configuration,
     )
 
-    runner.run_cpp_unit_tests(configuration=args.configuration, test_build_dir=TEST_BUILD_DIR, target="RUN_TESTS")
+    if not args.prepare:
+        runner.run_cpp_unit_tests(configuration=args.configuration, test_build_dir=TEST_BUILD_DIR, target="RUN_TESTS")
 
 
 if __name__ == "__main__":
