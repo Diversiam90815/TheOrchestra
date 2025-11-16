@@ -104,7 +104,7 @@ if(ENABLE_CPPCHECK)
 endif()
 
 if(ENABLE_FORMAT)
-	Format(${TARGET_NAME} .)
+	Format(${TARGET_NAME} ${ALL_PROJECT_DIRS})
 endif()
 
 if(ENABLE_DOXYGEN)
@@ -117,48 +117,8 @@ target_include_directories(${TARGET_NAME} PUBLIC
         ${ALL_PROJECT_DIRS}
 )
 
-target_compile_definitions(${TARGET_NAME} PUBLIC
-        JUCE_WEB_BROWSER=0
-        JUCE_USE_CURL=0
-        JUCE_VST3_CAN_REPLACE_VST2=0
-	    JUCE_USE_WINDOWS_MEDIA_FORMAT=1
-        JUCE_LOAD_CURL_SYMBOLS_LAZILY=1
-        JUCE_WASAPI=1
-        JUCE_DIRECTSOUND=1
-        JUCE_ASIO=0
-        JUCE_USE_ANDROID_OBOE=1
-        JUCE_USE_OBOE_STABILIZED_CALLBACK=1
-        JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=1
-
-        -DENV_DEVELOPMENT
-        _CRT_SECURE_NO_WARNINGS
-
-        "$<$<CONFIG:Debug>:"
-                "_DEBUG"
-        ">"
-        "$<$<CONFIG:Release>:"
-                "NDEBUG"
-        ">"
-)
-
-target_compile_options(${TARGET_NAME} 
-    PRIVATE
-        $<$<CONFIG:Release>:
-                /Oi;
-                /Gy
-        >
-        $<$<CONFIG:Debug>:
-                /Od;
-                /Z7
-        >
-        /sdl
-        /MP
-        /WX-        # Don't treat warnings as errors
-        /wd4146     # Suppress warning C4146
-        /wd4996     # Suppress warning C4996
-        ${DEFAULT_CXX_DEBUG_INFORMATION_FORMAT};
-        ${DEFAULT_CXX_EXCEPTION_HANDLING}
-)
+include(ProjectOptions)
+set_common_target_options(${TARGET_NAME})
 
 set (PROJECT_LIBS   juce::juce_audio_utils
                     juce::juce_audio_plugin_client
