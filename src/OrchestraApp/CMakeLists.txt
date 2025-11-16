@@ -1,6 +1,6 @@
 set(TARGET_NAME TheOrchestraApp)
 
-set (ASSETS_DIR             ${PROJECT_SOURCE_DIR}/Assets)
+set(ASSETS_DIR             ${PROJECT_SOURCE_DIR}/Assets)
 
 set(APP_FILES    ${CMAKE_CURRENT_SOURCE_DIR}/Main.cpp)
 
@@ -49,3 +49,15 @@ set (PROJECT_LIBS   TheOrchestraCore
 )
 
 target_link_libraries(${TARGET_NAME} PRIVATE ${PROJECT_LIBS} )
+
+include(GNUInstallDirs)
+
+install(TARGETS ${TARGET_NAME}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}  
+    BUNDLE  DESTINATION .                        
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}  
+)
+
+install(DIRECTORY ${ASSETS_DIR}/
+    DESTINATION ${CMAKE_INSTALL_BINDIR}/Assets
+)
