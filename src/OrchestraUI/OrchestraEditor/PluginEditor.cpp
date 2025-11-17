@@ -57,6 +57,21 @@ void OrchestraEditor::init()
 	mSamplerView.init();
 
 	mMenuBar.setInstrumentSelectedCallback([this](InstrumentID key) { changeInstrument(key); });
+
+	mMenuBar.setSampleFolderChangedCallback(
+		[this](const juce::File &folder)
+		{
+			if (mCoreManager)
+			{
+				std::string directory = folder.getFullPathName().toStdString();
+				mCoreManager->changeSamplesFolder(directory);
+
+				// Show confirmation to user
+				juce::AlertWindow::showMessageBoxAsync(juce::MessageBoxIconType::InfoIcon, "Samples folder updated",
+													   "The samples folder has been set to:\n" + folder.getFullPathName(), "OK");
+			}
+		});
+
 	mSamplerView.setArticulationChangedCallback([this](Articulation articulation) { mCoreManager->changeArticulation(mCurrentInstrument, articulation); });
 }
 
