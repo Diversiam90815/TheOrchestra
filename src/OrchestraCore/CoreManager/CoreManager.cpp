@@ -9,7 +9,7 @@
 
 
 CoreManager::CoreManager()
-	: mInstrumentController(std::make_unique<InstrumentController>()), mSampler(std::make_unique<Sampler>()), mMidiKeyboardState(std::make_unique<juce::MidiKeyboardState>())
+	: mInstrumentController(std::make_unique<InstrumentController>()), mSampler(std::make_unique<OrchestraSampler>()), mMidiKeyboardState(std::make_unique<juce::MidiKeyboardState>())
 {
 }
 
