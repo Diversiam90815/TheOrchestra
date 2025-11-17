@@ -30,7 +30,7 @@ public:
 
 
 private:
-	bool									  loadFromJSON();
+	bool									  loadInstrumentData();
 
 	void									  addInstrument(const InstrumentProfile &info);
 
