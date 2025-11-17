@@ -57,7 +57,7 @@ struct PercussionSample : public Sample
 class SamplesManagement
 {
 public:
-	SamplesManagement();
+	SamplesManagement()	 = default;
 	~SamplesManagement() = default;
 
 	void				init();

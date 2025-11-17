@@ -13,8 +13,8 @@
 
 void InstrumentController::init()
 {
-	loadFromJSON();
-	LOG_INFO("Instruments loaded from JSON");
+	loadInstrumentData();
+	LOG_INFO("Instruments data loaded.");
 }
 
 
@@ -37,17 +37,8 @@ InstrumentProfile InstrumentController::getInstrument(InstrumentID key)
 }
 
 
-bool InstrumentController::loadFromJSON()
+bool InstrumentController::loadInstrumentData()
 {
-	// std::string	  jsonFilePath = mFileManager.getInstrumentDataJSONPath();
-	// std::ifstream file(jsonFilePath);
-
-	// if (!file.is_open())
-	//{
-	//	LOG_ERROR("Failed to open JSON file: {}", jsonFilePath);
-	//	return false;
-	// }
-
 	try
 	{
 		// Get embedded JSON data
@@ -63,9 +54,6 @@ bool InstrumentController::loadFromJSON()
 		LOG_INFO("Loading instruments from embedded data ({} bytes)", dataSize);
 
 		json j = json::parse(std::string(data, dataSize));
-
-		// json j;
-		// file >> j;
 
 		// Skip metadata section
 		if (!j.contains("families"))

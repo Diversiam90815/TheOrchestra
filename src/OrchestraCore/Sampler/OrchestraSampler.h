@@ -1,6 +1,6 @@
 /*
   ==============================================================================
-	Module			Sampler
+	Module			OrchestraSampler
 	Description		Sampling the instrument and making them ready for playback
   ==============================================================================
 */

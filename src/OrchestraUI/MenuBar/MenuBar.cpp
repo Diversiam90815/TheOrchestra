@@ -78,9 +78,7 @@ void MenuBar::menuItemSelected(int menuItemID, int topLevelMenuIndex)
 	LOG_INFO("Selected instrument with key {}", key);
 
 	if (mInstrumentSelectedCallback)
-	{
 		mInstrumentSelectedCallback(key);
-	}
 }
 
 

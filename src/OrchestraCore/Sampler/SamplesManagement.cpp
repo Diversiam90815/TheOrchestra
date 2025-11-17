@@ -12,9 +12,6 @@
 #include <filesystem>
 
 
-SamplesManagement::SamplesManagement() {}
-
-
 void SamplesManagement::init()
 {
 	mUserConfig.init();
@@ -244,7 +241,7 @@ void SamplesManagement::addSample(const juce::File &file, const InstrumentID &ke
 
 	mInstrumentSamples[key].emplace_back(sampleInfo);
 
-	LOG_INFO("Added sample for instrument {} (Dynamic = {}, Note = {})", instrumentName, dynamicString, note);
+	LOG_DEBUG("Added sample for instrument {} (Dynamic = {}, Note = {})", instrumentName, dynamicString, note);
 }
 
 
@@ -280,10 +277,10 @@ int SamplesManagement::getIndexOfDynamics(const std::string &dynamicString)
 std::vector<Sample> SamplesManagement::getSamplesForInstrument(const InstrumentID &instrumentKey) const
 {
 	auto it = mInstrumentSamples.find(instrumentKey);
+	
 	if (it != mInstrumentSamples.end())
-	{
 		return it->second;
-	}
+
 	LOG_WARNING("Could not find instrument's samples with the key {}", instrumentKey);
 	return {};
 }
