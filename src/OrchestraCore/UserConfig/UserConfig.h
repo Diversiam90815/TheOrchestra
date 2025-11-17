@@ -57,11 +57,46 @@ private:
 template <typename T>
 inline void UserConfig::saveToConfig(std::string key, T value)
 {
+	try
+	{
+		mConfigData[key] = value;
+
+		if (!saveToConfig())
+		{
+			LOG_ERROR("Failed to save config for key: {}", key);
+		}
+		catch (const json::exception &e)
+		{
+			LOG_ERROR("JSON error saving key '{}': {}", key, e.what());
+		}
+		catch (const std::exception &e)
+		{
+			LOG_ERROR("Error saving config key '{}': {}", key, e.what());
+		}
+	}
 }
 
 
 template <typename T>
 inline T UserConfig::readFromConfig(std::string key)
 {
-	return T();
+	try
+	{
+		if (!mConfigData.contains(key))
+		{
+			LOG_WARNING("Config key '{}' not found, returning default value", key);
+			return {};
+		}
+		return mConfigData[key].get<T>();
+	}
+	catch (const json::exception &e)
+	{
+		LOG_ERROR("JSON error reading key '{}': {}", key, e.what());
+		return T();
+	}
+	catch (const std::exception &e)
+	{
+		LOG_ERROR("Error reading config key '{}': {}", key, e.what());
+		return T();
+	}
 }
