@@ -10,6 +10,7 @@ set (MISC_DIR               ${CMAKE_CURRENT_SOURCE_DIR}/Misc )
 set (FILE_MANAGER_DIR       ${CMAKE_CURRENT_SOURCE_DIR}/FileManager)
 set (LOGGER_DIR             ${CMAKE_CURRENT_SOURCE_DIR}/Logger)
 set (CORE_MANAGER_DIR       ${CMAKE_CURRENT_SOURCE_DIR}/CoreManager)
+set (USER_CONFIG_DIR        ${CMAKE_CURRENT_SOURCE_DIR}/UserConfig)
 
 
 set(ALL_PROJECT_DIRS
@@ -20,6 +21,7 @@ set(ALL_PROJECT_DIRS
     ${FILE_MANAGER_DIR}
     ${LOGGER_DIR}
     ${CORE_MANAGER_DIR}
+    ${USER_CONFIG_DIR}
 )
 
 set(INSTRUMENT_FILES
@@ -61,6 +63,10 @@ set(LOGGER_FILES
     ${LOGGER_DIR}/Logging.h      ${LOGGER_DIR}/Logging.cpp
 )
 
+set(USER_CONFIG_FILES
+    ${USER_CONFIG_DIR}/UserConfig.h      ${USER_CONFIG_DIR}/UserConfig.cpp
+)
+
 set(CORE_PROJECT_FILES
     ${INSTRUMENT_FILES}
     ${SAMPLER_FILES}
@@ -68,6 +74,7 @@ set(CORE_PROJECT_FILES
     ${MISC_FILES}
     ${FILE_MANAGER_FILES}
     ${LOGGER_FILES}
+    ${USER_CONFIG_FILES}
     ${CORE_MANAGER_FILES}
 )
 
@@ -79,19 +86,20 @@ source_group("Misc"             FILES ${MISC_FILES})
 source_group("File Manager"     FILES ${FILE_MANAGER_FILES})
 source_group("Logger"           FILES ${LOGGER_FILES})
 source_group("Core Manager"     FILES ${CORE_MANAGER_FILES})
+source_group("User Config"      FILES ${USER_CONFIG_FILES})
 
 
 CPMAddPackage(
-  NAME Logger
-  GITHUB_REPOSITORY Diversiam90815/Logger
-  VERSION 1.3.81
+    NAME Logger
+    GITHUB_REPOSITORY Diversiam90815/Logger
+    VERSION 1.3.81
 )
 
 CPMAddPackage(
-        NAME JUCE
-        GITHUB_REPOSITORY juce-framework/JUCE
-        GIT_TAG 8.0.3
-        VERSION 8.0.3
+    NAME JUCE
+    GITHUB_REPOSITORY juce-framework/JUCE
+    GIT_TAG 8.0.3
+    VERSION 8.0.3
 )
 
 add_library(${TARGET_NAME} STATIC ${CORE_PROJECT_FILES})
@@ -133,6 +141,7 @@ set (PROJECT_LIBS   juce::juce_audio_utils
 )
 
 target_link_libraries(${TARGET_NAME} PUBLIC ${PROJECT_LIBS} )
+
 
 add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
