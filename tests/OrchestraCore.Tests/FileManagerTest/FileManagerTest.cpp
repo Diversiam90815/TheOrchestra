@@ -21,7 +21,7 @@ protected:
 
 TEST_F(FileManagerTest, SamplesFolderPathShape)
 {
-	std::string path = fm.getSamplesFolder();
+	std::string path = fm.getDefaultSamplesFolderPath();
 
 	// Expect path to contain Assets/Samples regardless of absolute root
 	EXPECT_NE(path.find("Assets"), std::string::npos) << "Path should contain Assets";
