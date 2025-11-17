@@ -8,9 +8,9 @@
 #include "FileManager.h"
 
 
-std::string FileManager::getSamplesFolder()
+std::string FileManager::getDefaultSamplesFolderPath()
 {
-	std::filesystem::path projectDir = findAssetsFolder();
+	std::filesystem::path projectDir = getAssetsFolder();
 
 	std::filesystem::path samplesDir = projectDir / SampleFolderName;
 
@@ -20,7 +20,7 @@ std::string FileManager::getSamplesFolder()
 
 std::string FileManager::getInstrumentDataJSONPath()
 {
-	std::filesystem::path projectDir = findAssetsFolder();
+	std::filesystem::path projectDir = getAssetsFolder();
 
 	std::filesystem::path dataDir	 = projectDir / InstrumentDataFolderName / InstrumentsDataFileName;
 
@@ -123,15 +123,6 @@ std::filesystem::path FileManager::getLoggingPath()
 }
 
 
-void FileManager::setAssetsFolder(const std::filesystem::path &path)
-{
-	if (std::filesystem::exists(path) && std::filesystem::is_directory(path))
-	{
-		mAssetsFolderOverride = path;
-	}
-}
-
-
 std::filesystem::path FileManager::getProjectDirectory()
 {
 	std::filesystem::path cwd		 = std::filesystem::current_path();
@@ -147,46 +138,30 @@ std::filesystem::path FileManager::getExecutableDirectory()
 }
 
 
-std::filesystem::path FileManager::findAssetsFolder()
+std::filesystem::path FileManager::getAssetsFolder()
 {
-	// 1. Check if assets folder was set explicitly
-	if (mAssetsFolderOverride.has_value())
-		return mAssetsFolderOverride.value();
+	return getProjectDirectory() / AssetsFolderName;
+}
 
-	// 2. check next to executable (installed version)
-	std::filesystem::path exeDir		= getExecutableDirectory();
-	std::filesystem::path assetsNearExe = exeDir / AssetsFolderName;
 
-	if (std::filesystem::exists(assetsNearExe))
-		return exeDir;
+std::filesystem::path FileManager::getConfigFilePath()
+{
+	std::filesystem::path projectAppDataPath = getProjectsAppDataPath();
 
-	// 3. Check in parent directory (development builds)
-	std::filesystem::path parentAssets = exeDir.parent_path() / AssetsFolderName;
-	if (std::filesystem::exists(parentAssets))
-		return exeDir.parent_path();
+	std::filesystem::path configFolder		 = projectAppDataPath / ConfigFolderName;
 
-	// 4. Walk up the directory tree looking for Assets folder
-	std::filesystem::path searchPath = exeDir;
-	for (int i = 0; i < 6; ++i) // Search up to 6 levels
+	if (!std::filesystem::exists(configFolder))
 	{
-		std::filesystem::path candidate = searchPath / AssetsFolderName;
-		if (std::filesystem::exists(candidate))
-			return searchPath;
-
-		if (!searchPath.has_parent_path())
-			break;
-
-		searchPath = searchPath.parent_path();
+		std::filesystem::create_directories(configFolder);
 	}
 
-	// 5. Fallback to old behavior 
-	return getProjectDirectory() / AssetsFolderName;
+	return configFolder;
 }
 
 
 std::vector<std::string> FileManager::getInstrumentImages(const std::string &family, const std::string &instrumentName)
 {
-	std::filesystem::path	 projectDir = findAssetsFolder();
+	std::filesystem::path	 projectDir = getAssetsFolder();
 	std::filesystem::path	 imagesDir	= projectDir / ImageFolderName / family / instrumentName;
 
 	std::vector<std::string> images;

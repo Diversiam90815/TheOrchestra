@@ -12,6 +12,7 @@
 #include "FileManager.h"
 #include "Parameters.h"
 #include "Helper.h"
+#include "UserConfig.h"
 
 
 struct Sample
@@ -63,8 +64,7 @@ public:
 
 	std::vector<Sample> getSamplesForInstrument(const InstrumentID &instrumentKey) const;
 
-	// If directory is set, the path will be overridden, otherwise the FileManager will chose the path
-	void				setSampleDirectory(std::string directory = "");
+	void				setSampleDirectory(std::string directory);
 
 	void				loadSamples(); // TODO: Make async
 	void				reloadSamples();
@@ -83,9 +83,11 @@ private:
 	int											getIndexOfDynamics(const std::string &dynamicsString);
 
 
-	juce::File									mSamplesFolder;		// Folder of the samples folder ( /Assets/Samples)
+	std::string									mSampleDirectory;	// Folder of the samples folder ( /Assets/Samples)
 
 	std::map<InstrumentID, std::vector<Sample>> mInstrumentSamples; // Map of the instrument and their assigned 'Sample'
 
 	FileManager									mFileManager;
+
+	UserConfig									mUserConfig;
 };
