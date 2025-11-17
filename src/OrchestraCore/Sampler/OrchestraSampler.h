@@ -1,6 +1,6 @@
 /*
   ==============================================================================
-	Module			Sampler
+	Module			OrchestraSampler
 	Description		Sampling the instrument and making them ready for playback
   ==============================================================================
 */
@@ -14,11 +14,12 @@
 #include "Helper.h"
 #include "InstrumentController.h"
 
-class Sampler
+
+class OrchestraSampler
 {
 public:
-	Sampler() = default;
-	~Sampler();
+	OrchestraSampler() = default;
+	~OrchestraSampler();
 
 	void				   init(InstrumentController &controller);
 
@@ -26,7 +27,7 @@ public:
 
 	void				   addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed);
 
-	void				   process(AudioBuffer<float> &buffer, MidiBuffer &midiMessages);
+	void				   process(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
 	void				   prepare(double sampleRate, int samplesPerBlock);
 
 	void				   reset();
@@ -34,6 +35,8 @@ public:
 	bool				   getSamplesAreReady();
 	void				   setSamplesAreReady(bool value); // TODO: Make visible to UI
 
+	bool				   loadSamples();
+	bool				   reloadSamples(std::string samplesDirectory);
 
 private:
 	std::map<int, std::map<int, std::vector<juce::File>>> createDynamicMap(std::vector<Sample> &samples);
@@ -47,9 +50,9 @@ private:
 	std::pair<int, int>									  getRangesOfInstrument(const InstrumentID key);
 
 
-	Synthesiser											  mSampler;
+	juce::Synthesiser									  mSampler;
 
-	AudioFormatManager									  mFormatManager;
+	juce::AudioFormatManager							  mFormatManager;
 
 	std::unique_ptr<SamplesManagement>					  mSamplesManager;
 

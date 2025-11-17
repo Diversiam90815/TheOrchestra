@@ -1,10 +1,10 @@
-CPMAddPackage(
-        NAME memcheck-cover
-        GIT_REPOSITORY https://github.com/Farigh/memcheck-cover.git
-        GIT_TAG        release-1.2
-        )
-        
 function(AddMemcheck target)
+    CPMAddPackage(
+            NAME memcheck-cover
+            GIT_REPOSITORY https://github.com/Farigh/memcheck-cover.git
+            GIT_TAG        release-1.2
+            )
+            
     set(MEMCHECK_PATH ${memcheck-cover_SOURCE_DIR}/bin)
     set(REPORT_PATH "${CMAKE_BINARY_DIR}/valgrind-${target}")
 

@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Sampler.h"
+#include "OrchestraSampler.h"
 #include "InstrumentController.h"
 
 
@@ -17,13 +17,13 @@ namespace SamplerTests
 class SamplerIntegrationTest : public ::testing::Test
 {
 protected:
-	std::unique_ptr<Sampler>			  mSampler;
+	std::unique_ptr<OrchestraSampler>			  mSampler;
 	std::unique_ptr<InstrumentController> mController;
 
 
 	void								  SetUp() override
 	{
-		mSampler	= std::make_unique<Sampler>();
+		mSampler	= std::make_unique<OrchestraSampler>();
 		mController = std::make_unique<InstrumentController>();
 		mController->init();
 		mSampler->init(*mController.get());

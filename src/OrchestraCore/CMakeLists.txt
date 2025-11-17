@@ -10,6 +10,7 @@ set (MISC_DIR               ${CMAKE_CURRENT_SOURCE_DIR}/Misc )
 set (FILE_MANAGER_DIR       ${CMAKE_CURRENT_SOURCE_DIR}/FileManager)
 set (LOGGER_DIR             ${CMAKE_CURRENT_SOURCE_DIR}/Logger)
 set (CORE_MANAGER_DIR       ${CMAKE_CURRENT_SOURCE_DIR}/CoreManager)
+set (USER_CONFIG_DIR        ${CMAKE_CURRENT_SOURCE_DIR}/UserConfig)
 
 
 set(ALL_PROJECT_DIRS
@@ -20,15 +21,21 @@ set(ALL_PROJECT_DIRS
     ${FILE_MANAGER_DIR}
     ${LOGGER_DIR}
     ${CORE_MANAGER_DIR}
+    ${USER_CONFIG_DIR}
 )
 
 set(INSTRUMENT_FILES
     ${INSTRUMENT_DIR}/InstrumentInfo.h
+    ${INSTRUMENT_DIR}/InstrumentRange.h
+    ${INSTRUMENT_DIR}/SignatureWork.h
+    ${INSTRUMENT_DIR}/PlayingTechnique.h
+    ${INSTRUMENT_DIR}/RegisterQuality.h
+    ${INSTRUMENT_DIR}/OrchestrationRole.h
     ${INSTRUMENT_DIR}/InstrumentController.h    ${INSTRUMENT_DIR}/InstrumentController.cpp
 )
 
 set(SAMPLER_FILES
-    ${SAMPLER_DIR}/Sampler.h                ${SAMPLER_DIR}/Sampler.cpp
+    ${SAMPLER_DIR}/OrchestraSampler.h       ${SAMPLER_DIR}/OrchestraSampler.cpp
     ${SAMPLER_DIR}/SamplesManagement.h      ${SAMPLER_DIR}/SamplesManagement.cpp
     ${SAMPLER_DIR}/OrchestraSound.h         ${SAMPLER_DIR}/OrchestraSound.cpp
     ${SAMPLER_DIR}/OrchestraVoice.h         ${SAMPLER_DIR}/OrchestraVoice.cpp
@@ -56,6 +63,10 @@ set(LOGGER_FILES
     ${LOGGER_DIR}/Logging.h      ${LOGGER_DIR}/Logging.cpp
 )
 
+set(USER_CONFIG_FILES
+    ${USER_CONFIG_DIR}/UserConfig.h      ${USER_CONFIG_DIR}/UserConfig.cpp
+)
+
 set(CORE_PROJECT_FILES
     ${INSTRUMENT_FILES}
     ${SAMPLER_FILES}
@@ -63,6 +74,7 @@ set(CORE_PROJECT_FILES
     ${MISC_FILES}
     ${FILE_MANAGER_FILES}
     ${LOGGER_FILES}
+    ${USER_CONFIG_FILES}
     ${CORE_MANAGER_FILES}
 )
 
@@ -74,19 +86,20 @@ source_group("Misc"             FILES ${MISC_FILES})
 source_group("File Manager"     FILES ${FILE_MANAGER_FILES})
 source_group("Logger"           FILES ${LOGGER_FILES})
 source_group("Core Manager"     FILES ${CORE_MANAGER_FILES})
+source_group("User Config"      FILES ${USER_CONFIG_FILES})
 
 
 CPMAddPackage(
-  NAME Logger
-  GITHUB_REPOSITORY Diversiam90815/Logger
-  VERSION 1.3.81
+    NAME Logger
+    GITHUB_REPOSITORY Diversiam90815/Logger
+    VERSION 1.3.81
 )
 
 CPMAddPackage(
-        NAME JUCE
-        GITHUB_REPOSITORY juce-framework/JUCE
-        GIT_TAG 8.0.3
-        VERSION 8.0.3
+    NAME JUCE
+    GITHUB_REPOSITORY juce-framework/JUCE
+    GIT_TAG 8.0.3
+    VERSION 8.0.3
 )
 
 add_library(${TARGET_NAME} STATIC ${CORE_PROJECT_FILES})
@@ -99,7 +112,7 @@ if(ENABLE_CPPCHECK)
 endif()
 
 if(ENABLE_FORMAT)
-	Format(${TARGET_NAME} .)
+	Format(${TARGET_NAME} ${ALL_PROJECT_DIRS})
 endif()
 
 if(ENABLE_DOXYGEN)
@@ -112,53 +125,34 @@ target_include_directories(${TARGET_NAME} PUBLIC
         ${ALL_PROJECT_DIRS}
 )
 
-target_compile_definitions(${TARGET_NAME} PUBLIC
-        JUCE_WEB_BROWSER=0
-        JUCE_USE_CURL=0
-        JUCE_VST3_CAN_REPLACE_VST2=0
-	    JUCE_USE_WINDOWS_MEDIA_FORMAT=1
-        JUCE_LOAD_CURL_SYMBOLS_LAZILY=1
-        JUCE_WASAPI=1
-        JUCE_DIRECTSOUND=1
-        JUCE_ASIO=0
-        JUCE_USE_ANDROID_OBOE=1
-        JUCE_USE_OBOE_STABILIZED_CALLBACK=1
-        JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=1
+include(ProjectOptions)
+set_common_target_options(${TARGET_NAME})
 
-        -DENV_DEVELOPMENT
-        _CRT_SECURE_NO_WARNINGS
-
-        "$<$<CONFIG:Debug>:"
-                "_DEBUG"
-        ">"
-        "$<$<CONFIG:Release>:"
-                "NDEBUG"
-        ">"
-)
-
-target_compile_options(${TARGET_NAME} 
-    PRIVATE
-        $<$<CONFIG:Release>:
-                /Oi;
-                /Gy
-        >
-        $<$<CONFIG:Debug>:
-                /Od;
-                /Z7
-        >
-        /sdl
-        /MP
-        /WX-        # Don't treat warnings as errors
-        /wd4146     # Suppress warning C4146
-        /wd4996     # Suppress warning C4996
-        ${DEFAULT_CXX_DEBUG_INFORMATION_FORMAT};
-        ${DEFAULT_CXX_EXCEPTION_HANDLING}
+juce_add_binary_data(InstrumentData
+    NAMESPACE InstrumentData
+    SOURCES ${ASSETS_DIR}/InstrumentData/Instruments.json
 )
 
 set (PROJECT_LIBS   juce::juce_audio_utils
                     juce::juce_audio_plugin_client
                     juce::juce_core
                     Logger
+                    InstrumentData
 )
 
 target_link_libraries(${TARGET_NAME} PUBLIC ${PROJECT_LIBS} )
+
+
+add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${ASSETS_DIR}/Samples
+    "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets/Samples"
+    COMMENT "Copying Samples to build directory..."
+)
+
+add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${ASSETS_DIR}/Images
+    "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets/Images"
+    COMMENT "Copying Images to build directory..."
+)

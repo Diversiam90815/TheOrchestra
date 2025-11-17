@@ -9,7 +9,8 @@
 
 
 CoreManager::CoreManager()
-	: mInstrumentController(std::make_unique<InstrumentController>()), mSampler(std::make_unique<Sampler>()), mMidiKeyboardState(std::make_unique<juce::MidiKeyboardState>())
+	: mInstrumentController(std::make_unique<InstrumentController>()), mSampler(std::make_unique<OrchestraSampler>()),
+	  mMidiKeyboardState(std::make_unique<juce::MidiKeyboardState>())
 {
 }
 
@@ -73,7 +74,14 @@ void CoreManager::changeArticulation(InstrumentID key, Articulation articulation
 }
 
 
-InstrumentInfo CoreManager::getInstrument(InstrumentID key)
+void CoreManager::changeSamplesFolder(std::string &samplesFolder)
+{
+	if (mSampler)
+		mSampler->reloadSamples(samplesFolder);
+}
+
+
+InstrumentProfile CoreManager::getInstrument(InstrumentID key)
 {
 	return mInstrumentController->getInstrument(key);
 }
@@ -90,6 +98,13 @@ void CoreManager::processAudioBlock(juce::AudioBuffer<float> &buffer, juce::Midi
 	mMidiKeyboardState->processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
 
 	mSampler->process(buffer, midiMessages);
+}
+
+
+void CoreManager::setSamplesFolder(std::string &directory)
+{
+	if (mSampler)
+		mSampler->reloadSamples(directory);
 }
 
 

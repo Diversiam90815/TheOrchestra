@@ -21,7 +21,6 @@ public:
 		mDeviceManager.addMidiInputCallback({}, &mPlayer);
 
 		processor.reset(new OrchestraProcessor());
-
 		editor.reset(new OrchestraEditor(*processor));
 
 		mPlayer.setProcessor(processor.get());
@@ -33,7 +32,7 @@ public:
 		centreWithSize(getWidth(), getHeight());
 		setVisible(true);
 
-		mDeviceManager.addMidiInputCallback({}, editor->mPianoRollView.get());
+		mDeviceManager.addMidiInputCallback({}, &editor->mPianoRollView);
 
 		LOG_INFO("Mainwindow setup finished!");
 	}
@@ -56,7 +55,6 @@ private:
 	AudioProcessorPlayer				mPlayer;
 	AudioDeviceManager					mDeviceManager;
 };
-
 
 
 class Application : public JUCEApplication

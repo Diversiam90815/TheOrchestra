@@ -11,9 +11,10 @@
 
 #include "JuceIncludes.h"
 #include "InstrumentController.h"
-#include "Sampler.h"
+#include "OrchestraSampler.h"
 #include "Logging.h"
 #include "buildinfo.h"
+
 
 class CoreManager
 {
@@ -28,11 +29,14 @@ public:
 
 	void					 changeInstrument(InstrumentID key);
 	void					 changeArticulation(InstrumentID key, Articulation articulation);
-	InstrumentInfo			 getInstrument(InstrumentID key);
+	void					 changeSamplesFolder(std::string &samplesFolder);
+	InstrumentProfile		 getInstrument(InstrumentID key);
 
 	std::set<Articulation>	 getAvailableArticulations(InstrumentID instrumentKey);
 
 	void					 processAudioBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
+
+	void					 setSamplesFolder(std::string &directory);
 
 private:
 	void									 logProjectInfo();
@@ -40,7 +44,7 @@ private:
 	Logging									 mLogger;
 
 	std::unique_ptr<InstrumentController>	 mInstrumentController;
-	std::unique_ptr<Sampler>				 mSampler;
+	std::unique_ptr<OrchestraSampler>		 mSampler;
 	std::unique_ptr<juce::MidiKeyboardState> mMidiKeyboardState;
 
 	int										 mCurrentInstrumentKey{0};
