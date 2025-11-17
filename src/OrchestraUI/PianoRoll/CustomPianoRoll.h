@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			CustomPianoRoll
 	Description		Creating our own custom piano roll, which displays the instrument's individual ranges
-
   ==============================================================================
 */
 
@@ -13,10 +11,11 @@
 #include "Parameters.h"
 #include "CustomLookAndFeel.h"
 #include "Helper.h"
+#include "InstrumentInfo.h"
 
 
 // Enum to identify the key used
-enum key
+enum PianoKey
 {
 	defaultKey = 0,
 	blackKey,
@@ -27,11 +26,10 @@ enum key
 /*
  @brief                 Creating our own Piano Roll in order to display the instrument quality ranges with different colours on the Piano Roll
 */
-class CustomPianoRoll : public MidiKeyboardComponent
+class CustomPianoRoll : public juce::MidiKeyboardComponent
 {
 public:
-	CustomPianoRoll(MidiKeyboardState &state, Orientation orientation);
-
+	CustomPianoRoll(juce::MidiKeyboardState &state, juce::KeyboardComponentBase::Orientation orientation);
 	~CustomPianoRoll() = default;
 
 	/*
@@ -39,28 +37,28 @@ public:
 	 @param                 [IN] qualities as an StringArray.
 	 @return                Boolean indicating success/failure
 	*/
-	bool setMidiRanges(const StringArray &qualities);
+	bool setMidiRanges(const RegisterQualities &qualities);
 
 	/*
 	 @brief                 Fills the vector 'mMidiRanges' with the note ranges information from a String
 	 @param                 [IN] ranges as an String.
 	 @return                Boolean indicating success/failure
 	*/
-	bool setMidiRanges(const String &ranges);
+	bool setMidiRanges(const InstrumentRange &ranges);
 
 
 private:
-	Colour							 getNoteColour(int midiNoteNumber);
+	juce::Colour getNoteColour(int midiNoteNumber);
 
-	void							 drawWhiteNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour lineColour, Colour textColour) override;
+	void drawWhiteNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour lineColour, juce::Colour textColour) override;
 
-	void							 drawBlackNote(int midiNoteNumber, Graphics &g, Rectangle<float> area, bool isDown, bool isOver, Colour noteFillColour) override;
+	void drawBlackNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour noteFillColour) override;
 
-	std::vector<std::pair<int, int>> mMidiRanges;						// Vector of the ranges (stored as pairs of int). This is used to draw different colours of notes
+	std::vector<std::pair<int, int>> mMidiRanges;							 // Vector of the ranges (stored as pairs of int). This is used to draw different colours of notes
 
-	Atomic<bool>					 mRangesSet		 = false;			// If true, the custom piano roll is being applied. This is set to true, if mMidiRanges will be filled
+	std::atomic<bool>				 mRangesSet		 = false;				 // If true, the custom piano roll is being applied. This is set to true, if mMidiRanges will be filled
 
-	Atomic<int>						 mCurrentKeyType = key::defaultKey; // Indicating the current key type for drawing
+	std::atomic<int>				 mCurrentKeyType = PianoKey::defaultKey; // Indicating the current key type for drawing
 
 	CustomLookAndFeel				 mCustomLookAndFeel;
 };

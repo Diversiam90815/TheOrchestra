@@ -1,25 +1,11 @@
 /*
   ==============================================================================
-
 	Module			PianoRoll
 	Description		Creating and managing piano roll and midi input
-
   ==============================================================================
 */
 
 #include "PianoRoll.h"
-
-
-PianoRoll::PianoRoll(MidiKeyboardState &state)
-{
-	mPianoState = &state;
-
-	mPianoState->addListener(this);
-
-	mPianoRoll = std::make_unique<CustomPianoRoll>(*mPianoState, MidiKeyboardComponent::horizontalKeyboard);
-
-	showPianoRoll();
-}
 
 
 PianoRoll::~PianoRoll()
@@ -36,7 +22,7 @@ void PianoRoll::resized()
 }
 
 
-void PianoRoll::handleIncomingMidiMessage(MidiInput *source, const MidiMessage &message)
+void PianoRoll::handleIncomingMidiMessage(juce::MidiInput *source, const juce::MidiMessage &message)
 {
 	mPianoState->processNextMidiEvent(message);
 
@@ -52,22 +38,44 @@ void PianoRoll::handleIncomingMidiMessage(MidiInput *source, const MidiMessage &
 }
 
 
-void PianoRoll::displayInstrumentRanges(InstrumentInfo &info)
+void PianoRoll::init()
 {
+	if (!mPianoState)
+		assert(false); // PianoState should be set before call init!
+
+	mPianoRoll = std::make_unique<CustomPianoRoll>(*mPianoState, juce::MidiKeyboardComponent::horizontalKeyboard);
+	showPianoRoll();
+}
+
+
+void PianoRoll::displayInstrument(InstrumentProfile &info)
+{
+	// Strategy 1: Rhythmic percussion uses displayedRange
 	if (info.isRhythmicPercussion())
 	{
-		mPianoRoll->setMidiRanges(info.getDisplayedRange());
-	}
-	else
-	{
-		bool result = mPianoRoll->setMidiRanges(info.getQualities());
-		if (!result)
-		{
-			mPianoRoll->setMidiRanges(info.getRange());
-		}
+		mPianoRoll->setMidiRanges(info.getRange());
+		repaint();
+		return;
 	}
 
+	// Strategy 2: Try to use qualities for color-coded ranges
+	if (!info.getQualities().empty())
+	{
+		mPianoRoll->setMidiRanges(info.getQualities());
+		repaint();
+		return;
+	}
+
+	// Strategy 3: Fallback to full range (e.g., for strings)
+	mPianoRoll->setMidiRanges(info.getRange());
 	repaint();
+}
+
+
+void PianoRoll::setKeyboardState(juce::MidiKeyboardState &state)
+{
+	mPianoState = &state;
+	mPianoState->addListener(this);
 }
 
 
@@ -76,9 +84,3 @@ void PianoRoll::showPianoRoll()
 	mPianoRoll->setName("Piano Roll");
 	addAndMakeVisible(mPianoRoll.get());
 }
-
-
-void PianoRoll::handleNoteOn(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) {}
-
-
-void PianoRoll::handleNoteOff(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) {}

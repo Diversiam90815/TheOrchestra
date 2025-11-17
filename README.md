@@ -1,6 +1,6 @@
 ## Overview
 
-TheOrchestra is a C++20 / JUCE-based orchestral playback and exploration environment.  
+**The Orchestra** is a C++20 / JUCE-based orchestral playback and exploration environment.  
 It focuses on:  
 - Managing structured instrument metadata (range, transposition, techniques, roles, famous works) loaded from JSON  
 - Real-time MIDI + audio processing (standalone app and plugin-style architecture)  
@@ -19,7 +19,7 @@ The project is in active development and aims to become a lightweight orchestral
 - Rich descriptors:  
   - Playing techniques  
   - Qualities / timbral zones  
-  - Transposition (including octave transposers)  
+  - Ranges & Transposition  
   - Displayed vs actual range (e.g. percussion, harp)  
   - Famous works & usage roles
 - Deterministic lookup by numeric key (e.g. 301 = Violin) with caching
@@ -29,29 +29,6 @@ The project is in active development and aims to become a lightweight orchestral
 - Automatic enumeration & enabling of all available MIDI inputs on startup
 - Sample playback via custom sampler classes (tested)
 - Real-time safe routing through `AudioDeviceManager` and `AudioProcessorPlayer`
-
-### Robust Testing
-- GoogleTest suite covering:
-  - JSON load integrity & presence of all expected instruments
-  - Technique inheritance and override logic
-  - Transposition semantics (octave / interval / non-transposing)
-  - Range formatting consistency
-  - Sampler integration & voice behavior
-  - File management (paths, asset resolution)
-
-### Logging & Diagnostics
-- Central logging abstraction using `{fmt}` formatting
-- Startup build info (branch, commit, timestamp)
-- Structured device enablement traces
-
-### Code Quality & Structure
-- C++20 (concepts-ready codebase)
-- Separation of concerns:
-  - Core domain (instrument, sampler, helper utilities)
-  - App/UI layer (standalone window)
-  - Tests
-- Vendor / third-party dependencies vendored under `_deps`
-
 
 
 ## Technology Stack
@@ -64,58 +41,88 @@ The project is in active development and aims to become a lightweight orchestral
 | Logging          | fmt (via embedded logger) |
 | Build System     | CMake |
 | Testing          | GoogleTest |
-| JSON / Data      | JUCE `var` / `DynamicObject` parsing |
 | Tooling (optional) | Clang-Format, CppCheck, Doxygen |
 
 
 ## Build the project
 
-### Cloning the Repository
+The project uses a modular Python-based build system located in `build.py`, with supporting modules inside the `scripts/` directory. It handles:
 
-Clone the repository including:
+- CMake project generation
+- Selecting platform, architecture, and configuration
+- Automatic versioning
+- Environment detection (Dev / Staging / Prod)
+- Building and installing
+- Running the C++ GoogleTest suite
+
+
+### Command-Line Arguments
+
+| Argument | Short | Description | Default |
+|---------|--------|-------------|---------|
+| `--prepare` | `-p` | Generate CMake build files only (no build). | `False` |
+| `--build` | `-b` | Generate and build the project (also runs tests). | `False` |
+| `--platform` | `-pl` | Select CMake generator (`VS2022`, `Ninja`, `Xcode`). | `Ninja` |
+| `--architecture` | `-a` | Target architecture (`x64`, `ARM64`). | `x64` |
+| `--configuration` | `-c` | Build configuration (`Debug`, `RelWithDebInfo`, `Release`). | `Release` |
+| `--runtest` | `-t` | Run only the CMake test suite | `False` |
+
+
+
+### Build Environment
+
+Generate CMake project files:
 
 ```bash
-git clone git@github.com:Diversiam90815/TheOrchestra.git
-```
-
-### Prepare the Build Environment
-
-Before building the project, you need to generate the necessary build files using CMake. This can be done using the `build.py` script with the `--prepare` or `-p` option. The target build configuration can be adjusted in the build.py file: Currently it is set to build a Visual Studio 2022 project.
-
-```bash
-cd TheOrchestra
 python build.py -p
 ```
 
-For a **Debug** build, add the `--debug` or `-d` option:
+#### Platforms
+
+Select platform with the `--platform` (`-pl`) option:
 
 ```bash
-python build.py -pd
+python build.py -b -pl VS2022
+python build.py -b -pl XCode
+python build.py -b -pl Ninja
 ```
+Default: Ninja
 
-### Build the Project
+#### Build Configurations
 
-To build the project, use the `--build` or `-b` option:
+Select configuration with the `--configuration` (`-c`) option:
 
 ```bash
-python build.py -b
+python build.py -b -c Debug
+python build.py -b -c RelWithDebInfo
+python build.py -b -c Release
+```
+Default: Release
+
+#### Build Architecture
+
+Select configuration with the `--architecture` (`-a`) option:
+
+```bash
+python build.py -b -c x64
+python build.py -b -c ARM64
+```
+Default: x64
+
+
+### Build directory structure
+
+The script generates the following structure:
+
+```php-template
+/build/<Configuration>/<Architecture>/
 ```
 
-This will compile the project using the build files generated during the preparation step.
+*Example:*
 
-- **Release Build**: By default, the build is configured for a Release build.
-- **Debug Build**: To build the project in Debug mode, include the `--debug` or `-d` option:
-
-  ```bash
-  python build.py -bd
-  ```
-
-**Important**: You do not need to run the `--prepare` step separately, the script will automatically prepare the build environment before building.
-
-
-### Running the Plugin
-
-After a successful build, the application can be found in the build output directory. Currently, the app is set to build standalone executable binary. They can be found within the respective folder.
+```bash
+build/Release/x64/
+```
 
 
 ## Showcase

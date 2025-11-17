@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			InstrumentView
 	Description		View box containing the name and an image of the instrument
-
   ==============================================================================
 */
 
@@ -15,30 +13,29 @@
 class InstrumentView : public CustomComponent
 {
 public:
-	InstrumentView();
-	~InstrumentView();
+	InstrumentView()  = default;
+	~InstrumentView() = default;
 
-	void init();
-
-	void displayInstrument(InstrumentInfo &instrument) override;
+	void init() override;
+	void displayInstrument(InstrumentProfile &instrument) override;
 
 private:
-	Label		  mName;  // Name of the instrument
+	juce::Label			mName;	// Name of the instrument
 
-	DrawableImage mImage; // Image of the instrument
+	juce::DrawableImage mImage; // Image of the instrument
 
-	FileManager	  mFileManager;
+	FileManager			mFileManager;
 
-	const int	  mNameX	   = 16;
-	const int	  mNameY	   = 22;
-	const int	  mNameWidth   = 120;
-	const int	  mNameHeight  = 33;
+	const int			mNameX		 = 16;
+	const int			mNameY		 = 22;
+	const int			mNameWidth	 = 120;
+	const int			mNameHeight	 = 33;
 
-	const int	  mImageX	   = 157;
-	const int	  mImageY	   = 7;
-	const int	  mImageWidth  = 100;
-	const int	  mImageHeight = 64;
+	const int			mImageX		 = 157;
+	const int			mImageY		 = 7;
+	const int			mImageWidth	 = 100;
+	const int			mImageHeight = 64;
 
-	const int	  mWidth	   = 314;
-	const int	  mHeight	   = 77;
+	const int			mWidth		 = 314;
+	const int			mHeight		 = 77;
 };

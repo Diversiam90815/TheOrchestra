@@ -8,11 +8,11 @@
 #include "FileManager.h"
 
 
-std::string FileManager::getSamplesFolder()
+std::string FileManager::getDefaultSamplesFolderPath()
 {
-	std::filesystem::path projectDir = getProjectDirectory();
+	std::filesystem::path projectDir = getAssetsFolder();
 
-	std::filesystem::path samplesDir = projectDir / AssetsFolderName / SampleFolderName;
+	std::filesystem::path samplesDir = projectDir / SampleFolderName;
 
 	return samplesDir.string();
 }
@@ -20,9 +20,9 @@ std::string FileManager::getSamplesFolder()
 
 std::string FileManager::getInstrumentDataJSONPath()
 {
-	std::filesystem::path projectDir = getProjectDirectory();
+	std::filesystem::path projectDir = getAssetsFolder();
 
-	std::filesystem::path dataDir	 = projectDir / AssetsFolderName / InstrumentDataFolderName / InstrumentsDataFileName;
+	std::filesystem::path dataDir	 = projectDir / InstrumentDataFolderName / InstrumentsDataFileName;
 
 	return dataDir.string();
 }
@@ -37,11 +37,11 @@ std::vector<std::string> FileManager::getInstrumentsImages(InstrumentID instrume
 }
 
 
-File FileManager::getInstrumentImage(TypeOfImage type, InstrumentID instrumentKey)
+juce::File FileManager::getInstrumentImage(TypeOfImage type, InstrumentID instrumentKey)
 {
-	auto   images = getInstrumentsImages(instrumentKey);
+	auto		images = getInstrumentsImages(instrumentKey);
 
-	String filter = "";
+	std::string filter = "";
 	switch (type)
 	{
 	case (TypeOfImage::InstrumentImage):
@@ -69,20 +69,20 @@ File FileManager::getInstrumentImage(TypeOfImage type, InstrumentID instrumentKe
 		filter = "transposition_high";
 		break;
 	}
-	default: return File();
+	default: return juce::File();
 	}
 
 	// Find an image within the folder that has the name "instrument"
-	auto it = std::find_if(images.begin(), images.end(), [&filter](const String &imagePath) { return imagePath.containsIgnoreCase(filter); });
+	auto it = std::find_if(images.begin(), images.end(), [&filter](const juce::String &imagePath) { return imagePath.containsIgnoreCase(filter); });
 
 	// Check if it was found
 	if (it != images.end())
 	{
-		File path = File(*it);
+		juce::File path = juce::File(*it);
 		return path;
 	}
 
-	return File(); // return empty file it not found
+	return juce::File(); // return empty file it not found
 }
 
 
@@ -126,15 +126,43 @@ std::filesystem::path FileManager::getLoggingPath()
 std::filesystem::path FileManager::getProjectDirectory()
 {
 	std::filesystem::path cwd		 = std::filesystem::current_path();
-	std::filesystem::path projectDir = cwd.parent_path().parent_path().parent_path(); // TODO: Use built folder instead of project folder for assets
+	std::filesystem::path projectDir = cwd.parent_path().parent_path().parent_path().parent_path(); // TODO: Use built folder instead of project folder for assets
 	return projectDir;
+}
+
+
+std::filesystem::path FileManager::getExecutableDirectory()
+{
+	auto exePath = juce::File::getSpecialLocation(juce::File::currentExecutableFile);
+	return std::filesystem::path(exePath.getParentDirectory().getFullPathName().toStdString());
+}
+
+
+std::filesystem::path FileManager::getAssetsFolder()
+{
+	return getProjectDirectory() / AssetsFolderName;
+}
+
+
+std::filesystem::path FileManager::getConfigFilePath()
+{
+	std::filesystem::path projectAppDataPath = getProjectsAppDataPath();
+
+	std::filesystem::path configFolder		 = projectAppDataPath / ConfigFolderName;
+
+	if (!std::filesystem::exists(configFolder))
+	{
+		std::filesystem::create_directories(configFolder);
+	}
+
+	return configFolder;
 }
 
 
 std::vector<std::string> FileManager::getInstrumentImages(const std::string &family, const std::string &instrumentName)
 {
-	std::filesystem::path	 projectDir = getProjectDirectory();
-	std::filesystem::path	 imagesDir	= projectDir / AssetsFolderName / ImageFolderName / family / instrumentName;
+	std::filesystem::path	 projectDir = getAssetsFolder();
+	std::filesystem::path	 imagesDir	= projectDir / ImageFolderName / family / instrumentName;
 
 	std::vector<std::string> images;
 	images.reserve(4); // there should be 3-4 images in the folder
