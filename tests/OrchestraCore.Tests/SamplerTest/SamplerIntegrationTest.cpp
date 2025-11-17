@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Sampler.h"
+#include "OrchestraSampler.h"
 #include "InstrumentController.h"
 
 

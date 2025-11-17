@@ -8,7 +8,7 @@
 #pragma once
 
 #include "CustomComponent.h"
-#include "Sampler.h"
+#include "OrchestraSampler.h"
 #include "Helper.h"
 
 
