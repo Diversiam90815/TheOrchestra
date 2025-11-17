@@ -17,12 +17,6 @@
 using json = nlohmann::json;
 
 
-enum class SettingsType
-{
-	SamplesFolder = 1,
-};
-
-
 class UserConfig
 {
 public:
