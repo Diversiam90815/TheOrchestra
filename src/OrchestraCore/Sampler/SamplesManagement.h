@@ -63,10 +63,13 @@ public:
 
 	std::vector<Sample> getSamplesForInstrument(const InstrumentID &instrumentKey) const;
 
+	// If directory is set, the path will be overridden, otherwise the FileManager will chose the path
+	void				setSampleDirectory(std::string directory = "");
+
+	void				loadSamples(); // TODO: Make async
+	void				reloadSamples();
 
 private:
-	void										parseSampleFiles(); // TODO: Make async
-
 	void										parseRhythmicPercussionFiles(const juce::File &instrument);
 
 	void										parseInstrumentSamples(const juce::File &instrumentFolder, std::string &sectionName);

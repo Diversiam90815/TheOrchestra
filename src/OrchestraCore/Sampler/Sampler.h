@@ -35,6 +35,8 @@ public:
 	bool				   getSamplesAreReady();
 	void				   setSamplesAreReady(bool value); // TODO: Make visible to UI
 
+	bool				   loadSamples();
+	bool				   reloadSamples(std::string samplesDirectory);
 
 private:
 	std::map<int, std::map<int, std::vector<juce::File>>> createDynamicMap(std::vector<Sample> &samples);
