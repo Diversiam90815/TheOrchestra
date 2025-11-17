@@ -32,7 +32,7 @@ public:
 	void		init();
 
 	std::string getSavedSamplesFolder();
-	void		saveSamplesFolder();
+	void		saveSamplesFolder(std::string directory);
 
 private:
 	template <typename T>
