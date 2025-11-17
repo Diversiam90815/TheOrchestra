@@ -15,11 +15,11 @@
 #include "InstrumentController.h"
 
 
-class Sampler
+class OrchestraSampler
 {
 public:
-	Sampler() = default;
-	~Sampler();
+	OrchestraSampler() = default;
+	~OrchestraSampler();
 
 	void				   init(InstrumentController &controller);
 
