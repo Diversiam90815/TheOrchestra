@@ -153,6 +153,8 @@ constexpr auto LogFileName		 = "Orchestra.log";
 constexpr auto ProjectName		 = "TheOrchestra";
 constexpr auto LogFolderName	 = "Logs";
 constexpr auto LogFile			 = "Orchestra.log";
+constexpr auto ConfigFolderName	 = "Config";
+constexpr auto ConfigFile		 = "config.json";
 
 
 //==============================================================================
