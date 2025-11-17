@@ -33,7 +33,7 @@ set(INSTRUMENT_FILES
 )
 
 set(SAMPLER_FILES
-    ${SAMPLER_DIR}/Sampler.h                ${SAMPLER_DIR}/Sampler.cpp
+    ${SAMPLER_DIR}/OrchestraSampler.h       ${SAMPLER_DIR}/OrchestraSampler.cpp
     ${SAMPLER_DIR}/SamplesManagement.h      ${SAMPLER_DIR}/SamplesManagement.cpp
     ${SAMPLER_DIR}/OrchestraSound.h         ${SAMPLER_DIR}/OrchestraSound.cpp
     ${SAMPLER_DIR}/OrchestraVoice.h         ${SAMPLER_DIR}/OrchestraVoice.cpp
