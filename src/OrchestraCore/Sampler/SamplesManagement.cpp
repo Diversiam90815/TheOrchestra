@@ -14,8 +14,7 @@
 
 SamplesManagement::SamplesManagement()
 {
-	std::string sampleFolder = mFileManager.getSamplesFolder();
-	mSamplesFolder			 = juce::File(sampleFolder);
+	setSampleDirectory();
 }
 
 
@@ -23,7 +22,7 @@ void SamplesManagement::init()
 {
 	if (mSamplesFolder.exists() && mSamplesFolder.isDirectory())
 	{
-		parseSampleFiles();
+		loadSamples();
 	}
 }
 
@@ -49,7 +48,7 @@ juce::File SamplesManagement::getInstrumentSamplesPath(const InstrumentID &instr
 }
 
 
-void SamplesManagement::parseSampleFiles()
+void SamplesManagement::loadSamples()
 {
 	for (const auto &section : mSamplesFolder.findChildFiles(juce::File::findDirectories, false))
 	{
@@ -89,6 +88,13 @@ void SamplesManagement::parseSampleFiles()
 			}
 		}
 	}
+}
+
+
+void SamplesManagement::reloadSamples()
+{
+	mInstrumentSamples.clear();
+	loadSamples();
 }
 
 
@@ -272,4 +278,14 @@ std::vector<Sample> SamplesManagement::getSamplesForInstrument(const InstrumentI
 	}
 	LOG_WARNING("Could not find instrument's samples with the key {}", instrumentKey);
 	return {};
+}
+
+
+void SamplesManagement::setSampleDirectory(std::string directory)
+{
+	if (!directory.empty())
+		mFileManager.setAssetsFolder(directory);
+
+	std::string sampleFolder = mFileManager.getSamplesFolder();
+	mSamplesFolder			 = juce::File(sampleFolder);
 }

@@ -15,6 +15,7 @@
 #include "Logging.h"
 #include "buildinfo.h"
 
+
 class CoreManager
 {
 public:
@@ -28,11 +29,14 @@ public:
 
 	void					 changeInstrument(InstrumentID key);
 	void					 changeArticulation(InstrumentID key, Articulation articulation);
+	void					 changeSamplesFolder(std::string &samplesFolder);
 	InstrumentProfile		 getInstrument(InstrumentID key);
 
 	std::set<Articulation>	 getAvailableArticulations(InstrumentID instrumentKey);
 
 	void					 processAudioBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
+
+	void					 setSamplesFolder(std::string &directory);
 
 private:
 	void									 logProjectInfo();
