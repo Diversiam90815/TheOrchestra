@@ -33,18 +33,18 @@ private:
 	void saveToConfig(std::string key, T value);
 
 	template <typename T>
-	T			   readFromConfig(std::string key);
+	T				  readFromConfig(std::string key);
 
-	bool		   loadConfigFile();
-	bool		   saveConfigFile();
-	std::string	   getConfigFullPath();
+	bool			  loadConfigFile();
+	bool			  saveConfigFile();
+	std::string		  getConfigFullPath();
 
 
-	constexpr auto SAMPLES_FOLDER_SETTING = "SAMPLER_FOLDER";
+	const std::string SAMPLES_FOLDER_SETTING = "SAMPLER_FOLDER";
 
-	FileManager	   mFileManager;
+	FileManager		  mFileManager;
 
-	json		   mConfigData;
+	json			  mConfigData;
 };
 
 
@@ -55,18 +55,18 @@ inline void UserConfig::saveToConfig(std::string key, T value)
 	{
 		mConfigData[key] = value;
 
-		if (!saveToConfig())
+		if (!saveConfigFile())
 		{
 			LOG_ERROR("Failed to save config for key: {}", key);
 		}
-		catch (const json::exception &e)
-		{
-			LOG_ERROR("JSON error saving key '{}': {}", key, e.what());
-		}
-		catch (const std::exception &e)
-		{
-			LOG_ERROR("Error saving config key '{}': {}", key, e.what());
-		}
+	}
+	catch (const json::exception &e)
+	{
+		LOG_ERROR("JSON error saving key '{}': {}", key, e.what());
+	}
+	catch (const std::exception &e)
+	{
+		LOG_ERROR("Error saving config key '{}': {}", key, e.what());
 	}
 }
 
@@ -81,6 +81,7 @@ inline T UserConfig::readFromConfig(std::string key)
 			LOG_WARNING("Config key '{}' not found, returning default value", key);
 			return {};
 		}
+
 		return mConfigData[key].get<T>();
 	}
 	catch (const json::exception &e)

@@ -12,24 +12,30 @@
 #include <filesystem>
 
 
-SamplesManagement::SamplesManagement()
-{
-	setSampleDirectory();
-}
+SamplesManagement::SamplesManagement() {}
 
 
 void SamplesManagement::init()
 {
-	if (mSamplesFolder.exists() && mSamplesFolder.isDirectory())
+	mUserConfig.init();
+	mSampleDirectory = mUserConfig.getSavedSamplesFolder();
+
+	// If the sample directory is empty, set it to a default value for now (TODO: Give user a message)
+	if (mSampleDirectory.empty())
 	{
-		loadSamples();
+		mSampleDirectory = mFileManager.getDefaultSamplesFolderPath();
+		setSampleDirectory(mSampleDirectory);
 	}
+
+	loadSamples();
 }
 
 
 juce::File SamplesManagement::getInstrumentSamplesPath(const InstrumentID &instrumentKey)
 {
-	for (const auto &section : mSamplesFolder.findChildFiles(juce::File::findDirectories, false))
+	juce::File sampleDirectoryFile = (juce::File)mSampleDirectory;
+
+	for (const auto &section : sampleDirectoryFile.findChildFiles(juce::File::findDirectories, false))
 	{
 		std::string sectionName = section.getFileName().toStdString();
 
@@ -50,7 +56,9 @@ juce::File SamplesManagement::getInstrumentSamplesPath(const InstrumentID &instr
 
 void SamplesManagement::loadSamples()
 {
-	for (const auto &section : mSamplesFolder.findChildFiles(juce::File::findDirectories, false))
+	juce::File sampleDirectoryFile = (juce::File)mSampleDirectory;
+
+	for (const auto &section : sampleDirectoryFile.findChildFiles(juce::File::findDirectories, false))
 	{
 		for (const auto &instrument : section.findChildFiles(juce::File::findDirectories, false))
 		{
@@ -283,9 +291,12 @@ std::vector<Sample> SamplesManagement::getSamplesForInstrument(const InstrumentI
 
 void SamplesManagement::setSampleDirectory(std::string directory)
 {
-	if (!directory.empty())
-		mFileManager.setAssetsFolder(directory);
+	if (directory.empty())
+	{
+		LOG_WARNING("Tried to set an empty directory for the samples! Skipping..");
+		return;
+	}
 
-	std::string sampleFolder = mFileManager.getSamplesFolder();
-	mSamplesFolder			 = juce::File(sampleFolder);
+	mSampleDirectory = directory;
+	mUserConfig.saveSamplesFolder(directory);
 }
