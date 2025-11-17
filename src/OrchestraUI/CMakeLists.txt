@@ -3,10 +3,9 @@ set(TARGET_NAME TheOrchestraUI)
 set (ASSETS_DIR             ${PROJECT_SOURCE_DIR}/Assets)
 set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets")
 
-set (CustomComponent_Dir        ${CMAKE_CURRENT_SOURCE_DIR}/CustomComponent )
+set (Custom_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/Custom )
 set (PianoRoll_Dir              ${CMAKE_CURRENT_SOURCE_DIR}/PianoRoll )
-set (CustomLookAndFeel_Dir      ${CMAKE_CURRENT_SOURCE_DIR}/CustomLookAndFeel )
-set (CustomMenuBar_Dir          ${CMAKE_CURRENT_SOURCE_DIR}/CustomMenuBar )
+set (MenuBar_Dir                ${CMAKE_CURRENT_SOURCE_DIR}/MenuBar )
 set (InstrumentFamousWorks_Dir  ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentFamousWorks )
 set (InstrumentInfo_Dir         ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentInfo )
 set (InstrumentQualities_Dir    ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentQualities )
@@ -19,10 +18,9 @@ set (Helper_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/Helper)
 
 
 set(ALL_PROJECT_DIRS
-    ${CustomComponent_Dir}
+    ${Custom_Dir}
     ${PianoRoll_Dir}
-    ${CustomLookAndFeel_Dir}
-    ${CustomMenuBar_Dir}
+    ${MenuBar_Dir}
     ${InstrumentFamousWorks_Dir}
     ${InstrumentInfo_Dir}
     ${InstrumentQualities_Dir}
@@ -34,21 +32,18 @@ set(ALL_PROJECT_DIRS
     ${Helper_Dir}
 )
 
-set(CustomComponent_Files
-    ${CustomComponent_Dir}/CustomComponent.h         ${CustomComponent_Dir}/CustomComponent.cpp
+set(Custom_Files
+    ${Custom_Dir}/CustomComponent.h         ${Custom_Dir}/CustomComponent.cpp
+    ${Custom_Dir}/CustomLookAndFeel.h       ${Custom_Dir}/CustomLookAndFeel.cpp
 )
 
 set(PianoRoll_Files
     ${PianoRoll_Dir}/PianoRoll.h            ${PianoRoll_Dir}/PianoRoll.cpp
-    ${PianoRoll_Dir}/CustomPianoRoll.h            ${PianoRoll_Dir}/CustomPianoRoll.cpp
+    ${PianoRoll_Dir}/CustomPianoRoll.h      ${PianoRoll_Dir}/CustomPianoRoll.cpp
 )
 
-set(CustomLookAndFeel_Files
-    ${CustomLookAndFeel_Dir}/CustomLookAndFeel.h       ${CustomLookAndFeel_Dir}/CustomLookAndFeel.cpp
-)
-
-set(CustomMenuBar_Dir
-    ${CustomMenuBar_Dir}/CustomMenuBar.h            ${CustomMenuBar_Dir}/CustomMenuBar.cpp
+set(MenuBar_Dir
+    ${MenuBar_Dir}/MenuBar.h            ${MenuBar_Dir}/MenuBar.cpp
 )
 
 set(InstrumentFamousWorks_Files
@@ -88,10 +83,9 @@ set(Helper_Files
 )
 
 set(UI_PROJECT_FILES
-    ${CustomComponent_Files}
+    ${Custom_Files}
     ${PianoRoll_Files}
-    ${CustomLookAndFeel_Files}
-    ${CustomMenuBar_Dir}
+    ${MenuBar_Dir}
     ${InstrumentFamousWorks_Files}
     ${InstrumentInfo_Files}
     ${InstrumentQualities_Files}
@@ -106,6 +100,11 @@ set(UI_PROJECT_FILES
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${UI_PROJECT_FILES})
 
 
+juce_add_binary_data(FontBinaryData
+    NAMESPACE FontData
+    SOURCES ${ASSETS_DIR}/Font/Instrument-Serif/InstrumentSerif-Regular.ttf
+)
+
 add_library(${TARGET_NAME} STATIC ${UI_PROJECT_FILES})
 
 
@@ -114,7 +113,7 @@ if(ENABLE_CPPCHECK)
 endif()
 
 if(ENABLE_FORMAT)
-	Format(${TARGET_NAME} .)
+	Format(${TARGET_NAME} ${ALL_PROJECT_DIRS})
 endif()
 
 if(ENABLE_DOXYGEN)
@@ -122,58 +121,14 @@ if(ENABLE_DOXYGEN)
 endif()
 
 
-juce_add_binary_data(FontBinaryData
-    SOURCES ${ASSETS_DIR}/Font/Instrument-Serif/InstrumentSerif-Regular.ttf
-)
-
-
 target_include_directories(${TARGET_NAME} PUBLIC
         ${PROJECT_BINARY_DIR}
         ${ALL_PROJECT_DIRS}
 )
 
-target_compile_definitions(${TARGET_NAME} PUBLIC
-        JUCE_WEB_BROWSER=0
-        JUCE_USE_CURL=0
-        JUCE_VST3_CAN_REPLACE_VST2=0
-	    JUCE_USE_WINDOWS_MEDIA_FORMAT=1
-        JUCE_LOAD_CURL_SYMBOLS_LAZILY=1
-        JUCE_WASAPI=1
-        JUCE_DIRECTSOUND=1
-        JUCE_ASIO=0
-        JUCE_USE_ANDROID_OBOE=1
-        JUCE_USE_OBOE_STABILIZED_CALLBACK=1
-        JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=1
+include(ProjectOptions)
+set_common_target_options(${TARGET_NAME})
 
-        -DENV_DEVELOPMENT
-        _CRT_SECURE_NO_WARNINGS
-
-        "$<$<CONFIG:Debug>:"
-                "_DEBUG"
-        ">"
-        "$<$<CONFIG:Release>:"
-                "NDEBUG"
-        ">"
-)
-
-target_compile_options(${TARGET_NAME} 
-    PRIVATE
-        $<$<CONFIG:Release>:
-                /Oi;
-                /Gy
-        >
-        $<$<CONFIG:Debug>:
-                /Od;
-                /Z7
-        >
-        /sdl
-        /MP
-        /WX-        # Don't treat warnings as errors
-        /wd4146     # Suppress warning C4146
-        /wd4996     # Suppress warning C4996
-        ${DEFAULT_CXX_DEBUG_INFORMATION_FORMAT};
-        ${DEFAULT_CXX_EXCEPTION_HANDLING}
-)
 
 set (PROJECT_LIBS       TheOrchestraCore 
                         FontBinaryData
@@ -183,3 +138,7 @@ set (PROJECT_LIBS       TheOrchestraCore
 )
 
 target_link_libraries(${TARGET_NAME} PUBLIC ${PROJECT_LIBS} )
+
+target_include_directories(${TARGET_NAME} PRIVATE
+    $<TARGET_PROPERTY:FontBinaryData,INTERFACE_INCLUDE_DIRECTORIES>
+)

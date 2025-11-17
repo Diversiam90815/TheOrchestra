@@ -12,7 +12,8 @@
 
 
 OrchestraProcessor::OrchestraProcessor()
-	: AudioProcessor(BusesProperties().withInput("Input", juce::AudioChannelSet::stereo(), true).withOutput("Output", juce::AudioChannelSet::stereo(), true)),
+	: juce::AudioProcessor(
+		  juce::AudioProcessor::BusesProperties().withInput("Input", juce::AudioChannelSet::stereo(), true).withOutput("Output", juce::AudioChannelSet::stereo(), true)),
 	  mCoreManager(std::make_unique<CoreManager>())
 {
 	mCoreManager->init();
@@ -32,22 +33,20 @@ void OrchestraProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 }
 
 
-#ifndef JucePlugin_PreferredChannelConfigurations
 bool OrchestraProcessor::isBusesLayoutSupported(const BusesLayout &layouts) const
 {
-	if (layouts.getMainOutputChannelSet() != AudioChannelSet::mono() && layouts.getMainOutputChannelSet() != AudioChannelSet::stereo())
+	if (layouts.getMainOutputChannelSet() != juce::AudioChannelSet::mono() && layouts.getMainOutputChannelSet() != juce::AudioChannelSet::stereo())
 		return false;
 
 	return true;
 }
-#endif
 
 
-void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &midiMessages)
+void OrchestraProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
 {
-	ScopedNoDenormals noDenormals;
-	auto			  totalNumInputChannels	 = getTotalNumInputChannels();
-	auto			  totalNumOutputChannels = getTotalNumOutputChannels();
+	juce::ScopedNoDenormals noDenormals;
+	auto					totalNumInputChannels  = getTotalNumInputChannels();
+	auto					totalNumOutputChannels = getTotalNumOutputChannels();
 
 	for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
 		buffer.clear(i, 0, buffer.getNumSamples());
@@ -56,7 +55,7 @@ void OrchestraProcessor::processBlock(AudioBuffer<float> &buffer, MidiBuffer &mi
 }
 
 
-AudioProcessor *JUCE_CALLTYPE createPluginFilter()
+juce::AudioProcessor *JUCE_CALLTYPE createPluginFilter()
 {
 	return new OrchestraProcessor();
 }

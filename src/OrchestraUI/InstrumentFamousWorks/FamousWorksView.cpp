@@ -1,19 +1,11 @@
 /*
   ==============================================================================
-
 	Module			InformationView
 	Description		View box containing the useful additional information of the instrument
-
   ==============================================================================
 */
 
 #include "FamousWorksView.h"
-
-
-FamousWorksView::FamousWorksView() {}
-
-
-FamousWorksView::~FamousWorksView() {}
 
 
 void FamousWorksView::init()
@@ -28,11 +20,20 @@ void FamousWorksView::init()
 }
 
 
-void FamousWorksView::displayInstrument(InstrumentInfo &instrument)
+void FamousWorksView::displayInstrument(InstrumentProfile &instrument)
 {
-	const StringArray &works = instrument.getFamousWorks();
+	const auto &works = instrument.getFamousWorks();
 
-	mFirstWork.setText(works[0], dontSendNotification);
-	mSecondWork.setText(works[1], dontSendNotification);
-	mThirdWork.setText(works[2], dontSendNotification);
+	if (works.empty())
+		return;
+
+	size_t size = works.size();
+
+	mFirstWork.setText(works.at(0).getWork(), juce::dontSendNotification);
+
+	if (size > 1)
+		mSecondWork.setText(works.at(1).getWork(), juce::dontSendNotification);
+
+	if (size > 2)
+		mThirdWork.setText(works.at(2).getWork(), juce::dontSendNotification);
 }
