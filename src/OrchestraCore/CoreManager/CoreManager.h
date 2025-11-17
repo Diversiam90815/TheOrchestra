@@ -11,7 +11,7 @@
 
 #include "JuceIncludes.h"
 #include "InstrumentController.h"
-#include "Sampler.h"
+#include "OrchestraSampler.h"
 #include "Logging.h"
 #include "buildinfo.h"
 
@@ -44,7 +44,7 @@ private:
 	Logging									 mLogger;
 
 	std::unique_ptr<InstrumentController>	 mInstrumentController;
-	std::unique_ptr<OrchestraSampler>				 mSampler;
+	std::unique_ptr<OrchestraSampler>		 mSampler;
 	std::unique_ptr<juce::MidiKeyboardState> mMidiKeyboardState;
 
 	int										 mCurrentInstrumentKey{0};

@@ -5,7 +5,7 @@
   ==============================================================================
 */
 
-#include "Sampler.h"
+#include "OrchestraSampler.h"
 #include "InstrumentController.h" // For note ranges
 
 
