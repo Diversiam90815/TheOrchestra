@@ -73,6 +73,9 @@ void CoreManager::changeArticulation(InstrumentID key, Articulation articulation
 }
 
 
+void			  CoreManager::changeSamplesFolder(std::string &samplesFolder) {}
+
+
 InstrumentProfile CoreManager::getInstrument(InstrumentID key)
 {
 	return mInstrumentController->getInstrument(key);
@@ -90,6 +93,13 @@ void CoreManager::processAudioBlock(juce::AudioBuffer<float> &buffer, juce::Midi
 	mMidiKeyboardState->processNextMidiBuffer(midiMessages, 0, buffer.getNumSamples(), true);
 
 	mSampler->process(buffer, midiMessages);
+}
+
+
+void CoreManager::setSamplesFolder(std::string &directory)
+{
+	if (mSampler)
+		mSampler->reloadSamples(directory);
 }
 
 

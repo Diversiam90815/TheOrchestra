@@ -138,6 +138,22 @@ void Sampler::reset()
 }
 
 
+bool Sampler::loadSamples()
+{
+	mSamplesManager->loadSamples();
+	return true;
+}
+
+
+bool Sampler::reloadSamples(std::string samplesDirectory)
+{
+	// Path to samples have been reset, so we will trigger a reload
+	mSamplesManager->setSampleDirectory(samplesDirectory);
+	mSamplesManager->reloadSamples();
+	return true;
+}
+
+
 std::map<int, std::map<int, std::vector<juce::File>>> Sampler::createDynamicMap(std::vector<Sample> &samples)
 {
 	// Group the samples by midinote -> dynamic -> files
