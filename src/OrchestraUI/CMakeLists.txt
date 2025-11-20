@@ -14,6 +14,7 @@ set (InstrumentHeading_Dir      ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentHeading )
 set (InstrumentRanges_Dir       ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentRanges )
 set (OrchestraEditor_Dir        ${CMAKE_CURRENT_SOURCE_DIR}/OrchestraEditor )
 set (Sampler_Dir                ${CMAKE_CURRENT_SOURCE_DIR}/Sampler )
+set (NotationRenderer_Dir       ${CMAKE_CURRENT_SOURCE_DIR}/NotationRenderer )
 set (Helper_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/Helper)
 
 
@@ -29,6 +30,7 @@ set(ALL_PROJECT_DIRS
     ${InstrumentRanges_Dir}
     ${OrchestraEditor_Dir}
     ${Sampler_Dir}
+    ${NotationRenderer_Dir}
     ${Helper_Dir}
 )
 
@@ -78,6 +80,10 @@ set(Sampler_Files
     ${Sampler_Dir}/SamplerView.h          ${Sampler_Dir}/SamplerView.cpp
 )
 
+set(NotationRenderer_Files
+    ${NotationRenderer_Dir}/NotationRenderer.h          ${NotationRenderer_Dir}/NotationRenderer.cpp
+)
+
 set(Helper_Files
     ${Helper_Dir}/CreateEditor.cpp
 )
@@ -94,6 +100,7 @@ set(UI_PROJECT_FILES
     ${InstrumentRanges_Files}
     ${OrchestraEditor_Files}
     ${Sampler_Files}
+    ${NotationRenderer_Files}
     ${Helper_Files}
 )
 
