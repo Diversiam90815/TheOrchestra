@@ -26,6 +26,7 @@ enum class Accidental
 	None,
 	Sharp,
 	Flat,
+	Natural,
 	DoubleSharp,
 	DoubleFlat,
 };
@@ -71,7 +72,7 @@ private:
 
 	int					 midiNoteToStaffPosition(const int midiNote, Clef clef);
 
-	float				 staffPositionToY(int staffPosition, juce::Rectangle<int> staffArea);
+	float				 staffPositionToY(int staffPosition, juce::Rectangle<float> staffArea) const;
 
 	juce::String		 getSMuFLCharacter(const juce::String &glyphname);
 
