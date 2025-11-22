@@ -82,6 +82,7 @@ set(Sampler_Files
 
 set(NotationRenderer_Files
     ${NotationRenderer_Dir}/NotationRenderer.h          ${NotationRenderer_Dir}/NotationRenderer.cpp
+    ${NotationRenderer_Dir}/NotationComponent.h         ${NotationRenderer_Dir}/NotationComponent.cpp
 )
 
 set(Helper_Files
