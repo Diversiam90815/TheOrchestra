@@ -19,7 +19,7 @@ void NotationRenderer::renderStaffWithNote(juce::Graphics &g, juce::Rectangle<in
 	if (bounds.isEmpty())
 		return;
 
-	juce::Rectangle<float> staffArea   = bounds.toFloat().reduced(10.0f);
+	juce::Rectangle<float> staffArea   = bounds.toFloat().reduced(3.0f, 0.0f);
 
 	// Calculate staff height (4 spaces + line spacing)
 	float				   staffHeight = mStaffLineSpacing * 4.0f;
@@ -87,7 +87,7 @@ void NotationRenderer::drawStaff(juce::Graphics &g, juce::Rectangle<float> staff
 void NotationRenderer::drawClef(juce::Graphics &g, juce::Rectangle<float> staffArea, Clef clef)
 {
 	g.setColour(mNoteColor);
-	g.setFont(mNotationFont.withHeight(mStaffLineSpacing * 10.0f));
+	g.setFont(mNotationFont.withHeight(mStaffLineSpacing * 15.0f));
 
 	float clefX = staffArea.getX() + 5.0f;
 	float clefY = 0.0f;
@@ -130,7 +130,7 @@ void NotationRenderer::drawClef(juce::Graphics &g, juce::Rectangle<float> staffA
 void NotationRenderer::drawNote(juce::Graphics &g, juce::Rectangle<float> staffArea, const NoteDescriptor &note, Clef clef)
 {
 	int	  staffPosition = midiNoteToStaffPosition(note.midiNoteNumber, clef);
-	float noteX			= staffArea.getCentreX();
+	float noteX			= staffArea.getCentreX() * 1.2f;
 	float noteY			= staffPositionToY(staffPosition, staffArea);
 
 	// Draw ledger lines if needed
@@ -139,11 +139,11 @@ void NotationRenderer::drawNote(juce::Graphics &g, juce::Rectangle<float> staffA
 
 	// Draw accidental if needed
 	if (note.accidental != Accidental::None)
-		drawAccidental(g, noteX - 20.0f, noteY, note.accidental);
+		drawAccidental(g, noteX - 25.0f, noteY, note.accidental);
 
 	// Draw notehead
 	g.setColour(mNoteColor);
-	g.setFont(mNotationFont.withHeight(mStaffLineSpacing * 10.0f));
+	g.setFont(mNotationFont.withHeight(mStaffLineSpacing * 15.0f));
 
 	juce::String noteGlyph = juce::String::charToString(kGlyphNoteheadBlack);
 	float		 noteWidth = mStaffLineSpacing * 2.5f;
@@ -183,7 +183,7 @@ void NotationRenderer::drawLedgerLines(juce::Graphics &g, juce::Rectangle<float>
 void NotationRenderer::drawAccidental(juce::Graphics &g, float x, float y, Accidental accidental)
 {
 	g.setColour(mNoteColor);
-	g.setFont(mNotationFont.withHeight(mStaffLineSpacing * 2.5f));
+	g.setFont(mNotationFont.withHeight(mStaffLineSpacing * 12.0f));
 
 	int glyphCode = kGlyphAccidentalNatural;
 

@@ -81,7 +81,7 @@ private:
 	juce::Colour		 mStaffLineColor			 = juce::Colour(0xff000000);
 	juce::Colour		 mNoteColor					 = juce::Colour(0xff000000);
 
-	const float			 mStaffLineSpacing			 = 10.0f; // Space between staff lines in px
+	const float			 mStaffLineSpacing			 = 8.0f; // Space between staff lines in px
 	const float			 mStaffLineThickness		 = 1.5f;
 
 															  // SMuFL codepoints (Bravura font)
