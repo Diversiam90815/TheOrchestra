@@ -130,6 +130,7 @@ set_common_target_options(${TARGET_NAME})
 
 juce_add_binary_data(InstrumentData
     NAMESPACE InstrumentData
+    HEADER_NAME InstrumentData
     SOURCES ${ASSETS_DIR}/InstrumentData/Instruments.json
 )
 

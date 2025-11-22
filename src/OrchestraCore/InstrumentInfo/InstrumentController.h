@@ -9,6 +9,7 @@
 
 #include <map>
 #include <fstream>
+#include <InstrumentData>
 
 #include "JuceIncludes.h"
 #include "InstrumentInfo.h"
