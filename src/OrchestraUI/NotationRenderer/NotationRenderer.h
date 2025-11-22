@@ -36,7 +36,7 @@ struct NoteDescriptor
 {
 	int		   midiNoteNumber  = 60; // Middle C = 60
 	Accidental accidental	   = Accidental::None;
-	bool	   showLedgerLines = false;
+	bool	   showLedgerLines = true;
 
 	NoteDescriptor()		   = default;
 	NoteDescriptor(const int midi, Accidental acc = Accidental::None) : midiNoteNumber(midi), accidental(acc) {}

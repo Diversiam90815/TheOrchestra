@@ -139,11 +139,11 @@ void NotationRenderer::drawNote(juce::Graphics &g, juce::Rectangle<float> staffA
 
 	// Draw accidental if needed
 	if (note.accidental != Accidental::None)
-		drawAccidental(g, noteX - 25.0f, noteY, note.accidental);
+		drawAccidental(g, noteX - 22.0f, noteY, note.accidental);
 
 	// Draw notehead
 	g.setColour(mNoteColor);
-	g.setFont(mNotationFont.withHeight(mStaffLineSpacing * 15.0f));
+	g.setFont(mNotationFont.withHeight(mStaffLineSpacing * 18.0f));
 
 	juce::String noteGlyph = juce::String::charToString(kGlyphNoteheadBlack);
 	float		 noteWidth = mStaffLineSpacing * 2.5f;
@@ -204,6 +204,8 @@ void NotationRenderer::drawAccidental(juce::Graphics &g, float x, float y, Accid
 
 int NotationRenderer::midiNoteToStaffPosition(const int midiNote, Clef clef)
 {
+	// TODO: REFACTOR & FIX!!
+
 	// Staff position 0 = top line, increasing downward
 	// Even numbers = lines, Odd numbers = spaces
 
