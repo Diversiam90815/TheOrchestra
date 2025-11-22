@@ -46,12 +46,12 @@ private:
 	const int		  mLowerNoteImageX	 = 38;
 	const int		  mLowerNoteImageY	 = 55;
 	const int		  mLowerNoteNameX	 = 66;
-	const int		  mLowerNoteNameY	 = 124;
+	const int		  mLowerNoteNameY	 = 150;
 
 	const int		  mHigherNoteImageX	 = 146;
 	const int		  mHigherNoteImageY	 = 55;
 	const int		  mHigherNoteNameX	 = 178;
-	const int		  mHigherNoteNameY	 = 124;
+	const int		  mHigherNoteNameY	 = 150;
 
 	const int		  mImageBoxWidth	 = 100;
 	const int		  mImageBoxHeight	 = 80;
