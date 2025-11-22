@@ -87,7 +87,7 @@ void NotationRenderer::drawStaff(juce::Graphics &g, juce::Rectangle<float> staff
 void NotationRenderer::drawClef(juce::Graphics &g, juce::Rectangle<float> staffArea, Clef clef)
 {
 	g.setColour(mNoteColor);
-	g.setFont(mNotationFont.withHeight(mStaffLineSpacing * 7.0f));
+	g.setFont(mNotationFont.withHeight(mStaffLineSpacing * 10.0f));
 
 	float clefX = staffArea.getX() + 5.0f;
 	float clefY = 0.0f;
@@ -143,7 +143,7 @@ void NotationRenderer::drawNote(juce::Graphics &g, juce::Rectangle<float> staffA
 
 	// Draw notehead
 	g.setColour(mNoteColor);
-	g.setFont(mNotationFont.withHeight(mStaffLineSpacing * 3.0f));
+	g.setFont(mNotationFont.withHeight(mStaffLineSpacing * 10.0f));
 
 	juce::String noteGlyph = juce::String::charToString(kGlyphNoteheadBlack);
 	float		 noteWidth = mStaffLineSpacing * 2.5f;
