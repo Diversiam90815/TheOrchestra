@@ -8,28 +8,37 @@
 #pragma once
 
 #include "NotationRenderer.h"
-#include "CustomComponent.h"
 
 
-class NotationComponent : public CustomComponent
+class NotationComponent : public juce::Component
 {
 public:
 	NotationComponent();
 	~NotationComponent() = default;
 
-	void init() override;
+	void paint(juce::Graphics &g) override;
 
-	void displayInstrument(InstrumentProfile &instrument) override;
+	/**
+	 * @brief Sets the note to display.
+	 */
+	void setNote(int midiNumber, Accidental accidental = Accidental::None);
+
+	/**
+	 * @brief Sets the note from a note name string (e.g., "C4", "F#5", "Bb3").
+	 */
+	void setNoteFromString(const std::string &noteName);
+
+	/**
+	 * @brief Sets the clef to use.
+	 */
+	void setClef(Clef clef);
+
+	/**
+	 * @brief Determines clef based on note. Currently just determines between Treble & Bass
+	 */
+	void autoSelectClef(const int midiNoteNumber);
 
 private:
-	void			 setNote(int midiNumber, Accidental accidental = Accidental::None);
-
-	void			 setNoteFromString(const std::string &noteName);
-
-	void			 setClef(Clef clef);
-
-	void			 autoSelectClef();
-
 	NotationRenderer mRenderer;
 	NoteDescriptor	 mNote;
 	Clef			 mClef = Clef::Treble;
