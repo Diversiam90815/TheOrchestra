@@ -8,7 +8,6 @@
 
 #include "InstrumentController.h"
 #include <cassert>
-#include "BinaryData.h"
 
 
 void InstrumentController::init()
