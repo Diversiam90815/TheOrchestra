@@ -84,7 +84,7 @@ private:
 	const float			 mStaffLineSpacing			 = 8.0f; // Space between staff lines in px
 	const float			 mStaffLineThickness		 = 1.5f;
 
-															  // SMuFL codepoints (Bravura font)
+	// SMuFL codepoints (Bravura font)
 	static constexpr int kGlyphNoteheadBlack		 = 0xE0A4;
 	static constexpr int kGlyphNoteheadHalf			 = 0xE0A3;
 	static constexpr int kGlyphNoteheadWhole		 = 0xE0A2;

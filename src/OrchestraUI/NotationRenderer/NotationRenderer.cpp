@@ -204,42 +204,72 @@ void NotationRenderer::drawAccidental(juce::Graphics &g, float x, float y, Accid
 
 int NotationRenderer::midiNoteToStaffPosition(const int midiNote, Clef clef)
 {
-	// TODO: REFACTOR & FIX!!
-
+	// Convert midi note to diatonic staff position
 	// Staff position 0 = top line, increasing downward
-	// Even numbers = lines, Odd numbers = spaces
 
-	int referenceNote	  = 0;
-	int referencePosition = 0;
+	// 1 -	Get note class (C=0, C#=1, D=2,..)
+	int				 noteClass				 = midiNote % 12;
+	int				 octave					 = (midiNote / 12) - 1; // Midi Octave: C4 = oct. 4
+
+	// 2 -	Map chromatic note class to diatonic position within octave
+	//		C=0, D=1, E=2, F=3,..
+	static const int chromaticToDiatonic[12] = {
+		0, // C
+		0, // C# (display as C)
+		1, // D
+		1, // D# (display as D)
+		2, // E
+		3, // F
+		3, // F# (display as F)
+		4, // G
+		4, // G# (display as G)
+		5, // A
+		5, // A# (display as A)
+		6  // B
+	};
+
+	int diatonicNote			 = chromaticToDiatonic[noteClass];
+
+	// 3 -	Calculate absolute diatonic positon (C0 = pos 0)
+	int absoluteDiatonicPosition = octave * 7 + diatonicNote;
+
+	// 4 -	Calculate staff position relative to clef
+	int referencePosition		 = 0; // Position on staff for reference note
+	int referenceDiatonicPos	 = 0; // Absolute diatonic position of reference
 
 	switch (clef)
 	{
-	case Clef::Treble: // F5 (MIDI 77) is on the top line (position 0)
-		referenceNote	  = 77;
-		referencePosition = 0;
+	case Clef::Treble:
+		// F5 is on top line (position 0)
+		// F5 = MIDI 77, octave 5, F = diatonic 3
+		referencePosition	 = 0;
+		referenceDiatonicPos = 5 * 7 + 3; // Octave 5, F
 		break;
 
-	case Clef::Bass: // A3 (MIDI 57) is on the top line (position 0)
-		referenceNote	  = 57;
-		referencePosition = 0;
+	case Clef::Bass:
+		// A3 is on top line (position 0)
+		// A3 = MIDI 57, octave 3, A = diatonic 5
+		referencePosition	 = 0;
+		referenceDiatonicPos = 3 * 7 + 5; // Octave 3, A
 		break;
 
-	case Clef::Alto: // C5 (MIDI 72) is on the middle line (position 4)
-		referenceNote	  = 72;
-		referencePosition = 4;
+	case Clef::Alto:
+		// C4 is on middle line (position 4)
+		// C4 = MIDI 60, octave 4, C = diatonic 0
+		referencePosition	 = 4;
+		referenceDiatonicPos = 4 * 7 + 0; // Octave 4, C
 		break;
 
-	case Clef::Tenor: // A4 (MIDI 69) is on the middle line (position 4)
-		referenceNote	  = 69;
-		referencePosition = 4;
+	case Clef::Tenor:
+		// A3 is on middle line (position 4)
+		// A3 = MIDI 57, octave 3, A = diatonic 5
+		referencePosition	 = 4;
+		referenceDiatonicPos = 3 * 7 + 5; // Octave 3, A
 		break;
 	}
 
-	// Calculate positon based on chromatic distance
-	// Approximate: 2 chrom. steps = 1 staff position
-
-	int chromaticDiff = referenceNote - midiNote;
-	int staffPosition = referencePosition + chromaticDiff;
+	// calculate staff position (going down from reference = positive positions)
+	int staffPosition = referencePosition + (referenceDiatonicPos - absoluteDiatonicPosition);
 
 	return staffPosition;
 }
