@@ -1,19 +1,19 @@
 /*
   ==============================================================================
-	Module			QualitiesView
+	Module			RegisterView
 	Description		View box containing the qualities of the differnt ranges of the instrument
   ==============================================================================
 */
 
-#include "QualitiesView.h"
+#include "RegisterView.h"
 
 
-void QualitiesView::init()
+void RegisterView::init()
 {
 	setSize(mWidth, mHeight);
 
 	// Title
-	addAndConfigureLabel(mTitle, "QualitiesTitle", "Registers", mQualitiesTitleX, mQualitiesTitleY, mQualitiesTitleWidth, mQualitiesTitleHeight);
+	addAndConfigureLabel(mTitle, "RegistersTitle", "Registers", mRegisterTitleX, mRegisterTitleY, mRegisterTitleWidth, mRegisterTitleHeight);
 
 	// Note buttons
 	addAndConfigureButton(mFirstLowerNote, "FirstQualityLower", mLowerNoteX, mFirstRowY, mNoteButtonWidth, mNoteButtonHeight, false);
@@ -29,14 +29,14 @@ void QualitiesView::init()
 	addAndConfigureButton(mFourthHigherNote, "FourthQualityHigher", mHigherNoteX, mFourthRowY, mNoteButtonWidth, mNoteButtonHeight, false);
 
 	// InstrumentRegisters TextEditors
-	addAndConfigureTextEditor(mFirstQuality, mQualityX, mFirstRowY, mQualityWidth, mQualityHeight);
-	addAndConfigureTextEditor(mSecondQuality, mQualityX, mSecondRowY, mQualityWidth, mQualityHeight);
-	addAndConfigureTextEditor(mThirdQuality, mQualityX, mThirdRowY, mQualityWidth, mQualityHeight);
-	addAndConfigureTextEditor(mFourthQuality, mQualityX, mFourthRowY, mQualityWidth, mQualityHeight);
+	addAndConfigureTextEditor(mFirstRegister, mRegisterX, mFirstRowY, mRegisterWidth, mRegisterHeight);
+	addAndConfigureTextEditor(mSecondRegister, mRegisterX, mSecondRowY, mRegisterWidth, mRegisterHeight);
+	addAndConfigureTextEditor(mThirdRegister, mRegisterX, mThirdRowY, mRegisterWidth, mRegisterHeight);
+	addAndConfigureTextEditor(mFourthRegister, mRegisterX, mFourthRowY, mRegisterWidth, mRegisterHeight);
 }
 
 
-void QualitiesView::displayInstrument(InstrumentProfile &instrument)
+void RegisterView::displayInstrument(InstrumentProfile &instrument)
 {
 	const auto														  registers = instrument.getRegisters();
 
@@ -54,7 +54,7 @@ void QualitiesView::displayInstrument(InstrumentProfile &instrument)
 
 	juce::TextButton *lowerNotes[]	   = {&mFirstLowerNote, &mSecondLowerNote, &mThirdLowerNote, &mFourthLowerNote};
 	juce::TextButton *higherNotes[]	   = {&mFirstHigherNote, &mSecondHigherNote, &mThirdHigherNote, &mFourthHigherNote};
-	juce::TextEditor *qualitiesTexts[] = {&mFirstQuality, &mSecondQuality, &mThirdQuality, &mFourthQuality};
+	juce::TextEditor *qualitiesTexts[] = {&mFirstRegister, &mSecondRegister, &mThirdRegister, &mFourthRegister};
 
 	auto			  configureEditor  = [](juce::TextEditor &editor, const juce::String &text)
 	{

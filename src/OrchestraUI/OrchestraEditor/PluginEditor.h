@@ -12,7 +12,7 @@
 #include "PianoRoll.h"
 #include "MenuBar.h"
 #include "InstrumentRangesView.h"
-#include "QualitiesView.h"
+#include "RegisterView.h"
 #include "TechniquesView.h"
 #include "InformationView.h"
 #include "FamousWorksView.h"
@@ -48,7 +48,7 @@ private:
 
 	InstrumentView		   mInstrumentView;
 	InstrumentRangesView   mRangesView;
-	QualitiesView		   mQualitiesView;
+	RegisterView		   mQualitiesView;
 	TechniquesView		   mTechniquesView;
 	InformationView		   mInfoView;
 	FamousWorksView		   mFamousWorksView;

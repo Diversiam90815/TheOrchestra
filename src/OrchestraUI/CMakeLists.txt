@@ -8,7 +8,7 @@ set (PianoRoll_Dir              ${CMAKE_CURRENT_SOURCE_DIR}/PianoRoll )
 set (MenuBar_Dir                ${CMAKE_CURRENT_SOURCE_DIR}/MenuBar )
 set (InstrumentFamousWorks_Dir  ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentFamousWorks )
 set (InstrumentInfo_Dir         ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentInfo )
-set (InstrumentQualities_Dir    ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentQualities )
+set (InstrumentRegister_Dir     ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentRegisters)
 set (InstrumentTechniques_Dir   ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentTechniques )
 set (InstrumentHeading_Dir      ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentHeading )
 set (InstrumentRanges_Dir       ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentRanges )
@@ -24,7 +24,7 @@ set(ALL_PROJECT_DIRS
     ${MenuBar_Dir}
     ${InstrumentFamousWorks_Dir}
     ${InstrumentInfo_Dir}
-    ${InstrumentQualities_Dir}
+    ${InstrumentRegister_Dir}
     ${InstrumentTechniques_Dir}
     ${InstrumentHeading_Dir}
     ${InstrumentRanges_Dir}
@@ -56,8 +56,8 @@ set(InstrumentInfo_Files
     ${InstrumentInfo_Dir}/InformationView.h         ${InstrumentInfo_Dir}/InformationView.cpp
 )
 
-set(InstrumentQualities_Files
-    ${InstrumentQualities_Dir}/QualitiesView.h           ${InstrumentQualities_Dir}/QualitiesView.cpp
+set(InstrumentRegisters_Files
+    ${InstrumentRegister_Dir}/RegisterView.h           ${InstrumentRegister_Dir}/RegisterView.cpp
 )
 
 set(InstrumentTechniques_Files
@@ -95,7 +95,7 @@ set(UI_PROJECT_FILES
     ${MenuBar_Dir}
     ${InstrumentFamousWorks_Files}
     ${InstrumentInfo_Files}
-    ${InstrumentQualities_Files}
+    ${InstrumentRegisters_Files}
     ${InstrumentTechniques_Files}
     ${InstrumentHeading_Files}
     ${InstrumentRanges_Files}
