@@ -29,7 +29,7 @@ set(INSTRUMENT_FILES
     ${INSTRUMENT_DIR}/InstrumentRange.h
     ${INSTRUMENT_DIR}/SignatureWork.h
     ${INSTRUMENT_DIR}/PlayingTechnique.h
-    ${INSTRUMENT_DIR}/RegisterQuality.h
+    ${INSTRUMENT_DIR}/InstrumentRegister.h
     ${INSTRUMENT_DIR}/OrchestrationRole.h
     ${INSTRUMENT_DIR}/InstrumentController.h    ${INSTRUMENT_DIR}/InstrumentController.cpp
 )
