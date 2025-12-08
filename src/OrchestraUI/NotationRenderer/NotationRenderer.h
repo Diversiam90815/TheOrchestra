@@ -52,7 +52,6 @@ public:
 	void						renderStaffWithNote(juce::Graphics &g, juce::Rectangle<int> bounds, const NoteDescriptor &note, Clef clef = Clef::Treble);
 
 	void						setStafflineColour(juce::Colour colour);
-
 	void						setNoteColour(juce::Colour colour);
 
 	static juce::Rectangle<int> getRecommendedBounds();
@@ -61,20 +60,14 @@ private:
 	void				 loadNotationFont();
 
 	void				 drawStaff(juce::Graphics &g, juce::Rectangle<float> staffArea);
-
 	void				 drawClef(juce::Graphics &g, juce::Rectangle<float> staffArea, Clef clef);
-
 	void				 drawNote(juce::Graphics &g, juce::Rectangle<float> staffArea, const NoteDescriptor &note, Clef clef);
-
 	void				 drawLedgerLines(juce::Graphics &g, juce::Rectangle<float> staffArea, int staffPosition, float noteX);
-
 	void				 drawAccidental(juce::Graphics &g, float x, float y, Accidental accidental);
 
 	int					 midiNoteToStaffPosition(const int midiNote, Clef clef);
 
 	float				 staffPositionToY(int staffPosition, juce::Rectangle<float> staffArea) const;
-
-	juce::String		 getSMuFLCharacter(const juce::String &glyphname);
 
 
 	juce::Font			 mNotationFont;

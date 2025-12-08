@@ -283,8 +283,3 @@ float NotationRenderer::staffPositionToY(int staffPosition, juce::Rectangle<floa
 	return y;
 }
 
-
-juce::String NotationRenderer::getSMuFLCharacter(const juce::String &glyphname)
-{
-	return juce::String();
-}

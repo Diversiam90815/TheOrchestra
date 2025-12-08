@@ -58,10 +58,10 @@ void PianoRoll::displayInstrument(InstrumentProfile &info)
 		return;
 	}
 
-	// Strategy 2: Try to use qualities for color-coded ranges
-	if (!info.getQualities().empty())
+	// Strategy 2: Try to use registers for color-coded ranges
+	if (!info.getRegisters().empty())
 	{
-		mPianoRoll->setMidiRanges(info.getQualities());
+		mPianoRoll->setMidiRanges(info.getRegisters());
 		repaint();
 		return;
 	}
