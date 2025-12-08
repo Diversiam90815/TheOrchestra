@@ -99,12 +99,12 @@ bool InstrumentController::loadInstrumentData()
 				bool			  isRhythmicPercussion = instrumentJson.value("isRhythmicPercussion", false);
 
 				// Parse qualities
-				RegisterQualities qualities;
-				if (instrumentJson.contains("qualities"))
+				InstrumentRegisters qualities;
+				if (instrumentJson.contains("registers"))
 				{
-					for (const auto &q : instrumentJson["qualities"])
+					for (const auto &q : instrumentJson["registers"])
 					{
-						qualities.push_back(q.get<RegisterQuality>());
+						qualities.push_back(q.get<InstrumentRegister>());
 					}
 				}
 

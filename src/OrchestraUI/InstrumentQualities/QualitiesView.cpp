@@ -13,7 +13,7 @@ void QualitiesView::init()
 	setSize(mWidth, mHeight);
 
 	// Title
-	addAndConfigureLabel(mTitle, "QualitiesTitle", "RegisterQualities", mQualitiesTitleX, mQualitiesTitleY, mQualitiesTitleWidth, mQualitiesTitleHeight);
+	addAndConfigureLabel(mTitle, "QualitiesTitle", "Registers", mQualitiesTitleX, mQualitiesTitleY, mQualitiesTitleWidth, mQualitiesTitleHeight);
 
 	// Note buttons
 	addAndConfigureButton(mFirstLowerNote, "FirstQualityLower", mLowerNoteX, mFirstRowY, mNoteButtonWidth, mNoteButtonHeight, false);
@@ -28,7 +28,7 @@ void QualitiesView::init()
 	addAndConfigureButton(mFourthLowerNote, "FourthQualityLower", mLowerNoteX, mFourthRowY, mNoteButtonWidth, mNoteButtonHeight, false);
 	addAndConfigureButton(mFourthHigherNote, "FourthQualityHigher", mHigherNoteX, mFourthRowY, mNoteButtonWidth, mNoteButtonHeight, false);
 
-	// RegisterQualities TextEditors
+	// InstrumentRegisters TextEditors
 	addAndConfigureTextEditor(mFirstQuality, mQualityX, mFirstRowY, mQualityWidth, mQualityHeight);
 	addAndConfigureTextEditor(mSecondQuality, mQualityX, mSecondRowY, mQualityWidth, mQualityHeight);
 	addAndConfigureTextEditor(mThirdQuality, mQualityX, mThirdRowY, mQualityWidth, mQualityHeight);
@@ -38,18 +38,18 @@ void QualitiesView::init()
 
 void QualitiesView::displayInstrument(InstrumentProfile &instrument)
 {
-	const auto														  qualities = instrument.getQualities();
+	const auto														  registers = instrument.getRegisters();
 
-	std::vector<std::tuple<juce::String, juce::String, juce::String>> parsedQualities;
+	std::vector<std::tuple<juce::String, juce::String, juce::String>> parsedRegisters;
 
 	// Dividing the qualities and the ranges into separate parts
-	for (auto &quality : qualities)
+	for (auto &quality : registers)
 	{
 		std::string lowerNote	= quality.getLowerRange();
 		std::string higherNote	= quality.getHigherRange();
 		std::string description = quality.getDescription();
 
-		parsedQualities.emplace_back(lowerNote, higherNote, description);
+		parsedRegisters.emplace_back(lowerNote, higherNote, description);
 	}
 
 	juce::TextButton *lowerNotes[]	   = {&mFirstLowerNote, &mSecondLowerNote, &mThirdLowerNote, &mFourthLowerNote};
@@ -73,9 +73,9 @@ void QualitiesView::displayInstrument(InstrumentProfile &instrument)
 
 	for (size_t i = 0; i < std::size(lowerNotes); ++i)
 	{
-		if (i < parsedQualities.size())
+		if (i < parsedRegisters.size())
 		{
-			const auto &[lowerNote, higherNote, description] = parsedQualities[i];
+			const auto &[lowerNote, higherNote, description] = parsedRegisters[i];
 
 			configureButton(*lowerNotes[i], lowerNote);
 			configureButton(*higherNotes[i], higherNote);

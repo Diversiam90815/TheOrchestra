@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "description": "Orchestra instrument profiles with family-based organization"
   },
   "families": {
@@ -46,13 +46,14 @@
       "instruments": [
         {
           "name": "Violin",
+          "clefs": ["Treble"],
           "range": {
             "written": {
               "low": "G3",
               "high": "A7"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "G3",
@@ -105,13 +106,14 @@
         },
         {
           "name": "Viola",
+          "clefs": ["Alto", "Treble"],
           "range": {
             "written": {
               "low": "C3",
               "high": "E6"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "C3",
@@ -163,13 +165,14 @@
         },
         {
           "name": "Violoncello",
+          "clefs": ["Bass", "Tenor", "Treble"],
           "range": {
             "written": {
               "low": "C2",
               "high": "C6"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "C2",
@@ -224,14 +227,18 @@
         },
         {
           "name": "Double Bass",
+          "clefs": ["Bass", "Tenor"],
           "range": {
             "written": {
               "low": "E1",
               "high": "C4"
             },
-            "transposition": "Sounds one octave lower than written"
+            "sounding": {
+              "low": "E0",
+              "high": "C3"
+            }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "E1",
@@ -320,14 +327,18 @@
       "instruments": [
         {
           "name": "French Horn",
+          "clefs": ["Treble", "Bass"],
           "range": {
             "written": {
               "low": "F2",
               "high": "C6"
             },
-            "transposition": "F: Sounds a perfect 5th lower"
+            "sounding": {
+              "low": "Bb1",
+              "high": "F5"
+            }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "F2",
@@ -379,14 +390,18 @@
         },
         {
           "name": "Trumpet",
+          "clefs": ["Treble"],
           "range": {
             "written": {
               "low": "F#3",
               "high": "D6"
             },
-            "transposition": "C: as written; Bb: Major 2nd lower"
+            "sounding": {
+              "low": "E3",
+              "high": "C6"
+            }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "F#3",
@@ -431,13 +446,14 @@
         },
         {
           "name": "Tenor Trombone",
+          "clefs": ["Bass", "Tenor"],
           "range": {
             "written": {
               "low": "E2",
               "high": "Bb4"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "E2",
@@ -483,13 +499,14 @@
         },
         {
           "name": "Bass Trombone",
+          "clefs": ["Bass"],
           "range": {
             "written": {
               "low": "Bb1",
               "high": "Bb4"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "Bb1",
@@ -534,13 +551,14 @@
         },
         {
           "name": "Cimbasso",
+          "clefs": ["Bass"],
           "range": {
             "written": {
               "low": "F1",
               "high": "F4"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "F1",
@@ -584,13 +602,14 @@
         },
         {
           "name": "Tuba",
+          "clefs": ["Bass"],
           "range": {
             "written": {
               "low": "D1",
               "high": "F4"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "D1",
@@ -672,14 +691,18 @@
       "instruments": [
         {
           "name": "Piccolo",
+          "clefs": ["Treble"],
           "range": {
             "written": {
               "low": "D4",
               "high": "C8"
             },
-            "transposition": "Sounds one octave higher than written"
+            "sounding": {
+              "low": "D5",
+              "high": "C9"
+            }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "D4",
@@ -731,13 +754,14 @@
         },
         {
           "name": "Flute",
+          "clefs": ["Treble"],
           "range": {
             "written": {
               "low": "C4",
               "high": "D7"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "C4",
@@ -789,13 +813,14 @@
         },
         {
           "name": "Oboe",
+          "clefs": ["Treble"],
           "range": {
             "written": {
               "low": "Bb3",
               "high": "A6"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "Bb3",
@@ -847,14 +872,18 @@
         },
         {
           "name": "Cor Anglais",
+          "clefs": ["Treble"],
           "range": {
             "written": {
               "low": "B3",
               "high": "G6"
             },
-            "transposition": "Sounds a perfect 5th lower than written"
+            "sounding": {
+              "low": "E3",
+              "high": "C6"
+            }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "B3",
@@ -899,14 +928,18 @@
         },
         {
           "name": "Clarinet",
+          "clefs": ["Treble"],
           "range": {
             "written": {
               "low": "E3",
               "high": "C7"
             },
-            "transposition": "Bb: Major 2nd lower; A: Minor 3rd lower"
+            "sounding": {
+              "low": "D3",
+              "high": "Bb6"
+            }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "E3",
@@ -959,14 +992,18 @@
         },
         {
           "name": "Bass Clarinet",
+          "clefs": ["Treble"],
           "range": {
             "written": {
               "low": "D3",
               "high": "G6"
             },
-            "transposition": "Bb: Sounds a major ninth lower"
+            "sounding": {
+              "low": "C2",
+              "high": "F5"
+            }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "D3",
@@ -1011,13 +1048,14 @@
         },
         {
           "name": "Bassoon",
+          "clefs": ["Bass", "Tenor"],
           "range": {
             "written": {
               "low": "Bb1",
               "high": "Eb5"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "Bb1",
@@ -1069,14 +1107,18 @@
         },
         {
           "name": "Contrabassoon",
+          "clefs": ["Bass"],
           "range": {
             "written": {
               "low": "Bb0",
               "high": "Bb4"
             },
-            "transposition": "Sounds one octave lower than written"
+            "sounding": {
+              "low": "Bb-1",
+              "high": "Bb3"
+            }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "Bb0",
@@ -1158,6 +1200,7 @@
       "instruments": [
         {
           "name": "Timpani",
+          "clefs": ["Bass"],
           "range": {
             "written": {
               "low": "D2",
@@ -1168,7 +1211,7 @@
               "high": "A1"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "D1",
@@ -1201,13 +1244,14 @@
         },
         {
           "name": "Harp",
+          "clefs": ["Treble", "Bass"],
           "range": {
             "written": {
               "low": "C1",
               "high": "G7"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "B1",
@@ -1254,13 +1298,14 @@
         },
         {
           "name": "Celeste",
+          "clefs": ["Treble", "Bass"],
           "range": {
             "written": {
               "low": "C4",
               "high": "C8"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "C4",
@@ -1292,13 +1337,14 @@
         },
         {
           "name": "Marimba",
+          "clefs": ["Treble", "Bass"],
           "range": {
             "written": {
               "low": "C2",
               "high": "C7"
             }
           },
-          "qualities": [
+          "registers": [
             {
               "range": {
                 "low": "C2",
