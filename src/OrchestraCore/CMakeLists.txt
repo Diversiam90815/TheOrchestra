@@ -29,7 +29,7 @@ set(INSTRUMENT_FILES
     ${INSTRUMENT_DIR}/InstrumentRange.h
     ${INSTRUMENT_DIR}/SignatureWork.h
     ${INSTRUMENT_DIR}/PlayingTechnique.h
-    ${INSTRUMENT_DIR}/RegisterQuality.h
+    ${INSTRUMENT_DIR}/InstrumentRegister.h
     ${INSTRUMENT_DIR}/OrchestrationRole.h
     ${INSTRUMENT_DIR}/InstrumentController.h    ${INSTRUMENT_DIR}/InstrumentController.cpp
 )
@@ -130,6 +130,7 @@ set_common_target_options(${TARGET_NAME})
 
 juce_add_binary_data(InstrumentData
     NAMESPACE InstrumentData
+    HEADER_NAME InstrumentData
     SOURCES ${ASSETS_DIR}/InstrumentData/Instruments.json
 )
 
