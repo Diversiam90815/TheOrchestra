@@ -198,7 +198,7 @@ juce::Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
 }
 
 
-bool CustomPianoRoll::setMidiRanges(const RegisterQualities &qualities)
+bool CustomPianoRoll::setMidiRanges(const InstrumentRegisters &qualities)
 {
 	mRangesSet = false;
 	mMidiRanges.clear();

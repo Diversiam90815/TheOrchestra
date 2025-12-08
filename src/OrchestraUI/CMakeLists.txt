@@ -8,12 +8,13 @@ set (PianoRoll_Dir              ${CMAKE_CURRENT_SOURCE_DIR}/PianoRoll )
 set (MenuBar_Dir                ${CMAKE_CURRENT_SOURCE_DIR}/MenuBar )
 set (InstrumentFamousWorks_Dir  ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentFamousWorks )
 set (InstrumentInfo_Dir         ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentInfo )
-set (InstrumentQualities_Dir    ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentQualities )
+set (InstrumentRegister_Dir     ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentRegisters)
 set (InstrumentTechniques_Dir   ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentTechniques )
 set (InstrumentHeading_Dir      ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentHeading )
 set (InstrumentRanges_Dir       ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentRanges )
 set (OrchestraEditor_Dir        ${CMAKE_CURRENT_SOURCE_DIR}/OrchestraEditor )
 set (Sampler_Dir                ${CMAKE_CURRENT_SOURCE_DIR}/Sampler )
+set (NotationRenderer_Dir       ${CMAKE_CURRENT_SOURCE_DIR}/NotationRenderer )
 set (Helper_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/Helper)
 
 
@@ -23,12 +24,13 @@ set(ALL_PROJECT_DIRS
     ${MenuBar_Dir}
     ${InstrumentFamousWorks_Dir}
     ${InstrumentInfo_Dir}
-    ${InstrumentQualities_Dir}
+    ${InstrumentRegister_Dir}
     ${InstrumentTechniques_Dir}
     ${InstrumentHeading_Dir}
     ${InstrumentRanges_Dir}
     ${OrchestraEditor_Dir}
     ${Sampler_Dir}
+    ${NotationRenderer_Dir}
     ${Helper_Dir}
 )
 
@@ -54,8 +56,8 @@ set(InstrumentInfo_Files
     ${InstrumentInfo_Dir}/InformationView.h         ${InstrumentInfo_Dir}/InformationView.cpp
 )
 
-set(InstrumentQualities_Files
-    ${InstrumentQualities_Dir}/QualitiesView.h           ${InstrumentQualities_Dir}/QualitiesView.cpp
+set(InstrumentRegisters_Files
+    ${InstrumentRegister_Dir}/RegisterView.h           ${InstrumentRegister_Dir}/RegisterView.cpp
 )
 
 set(InstrumentTechniques_Files
@@ -78,6 +80,11 @@ set(Sampler_Files
     ${Sampler_Dir}/SamplerView.h          ${Sampler_Dir}/SamplerView.cpp
 )
 
+set(NotationRenderer_Files
+    ${NotationRenderer_Dir}/NotationRenderer.h          ${NotationRenderer_Dir}/NotationRenderer.cpp
+    ${NotationRenderer_Dir}/NotationComponent.h         ${NotationRenderer_Dir}/NotationComponent.cpp
+)
+
 set(Helper_Files
     ${Helper_Dir}/CreateEditor.cpp
 )
@@ -88,22 +95,31 @@ set(UI_PROJECT_FILES
     ${MenuBar_Dir}
     ${InstrumentFamousWorks_Files}
     ${InstrumentInfo_Files}
-    ${InstrumentQualities_Files}
+    ${InstrumentRegisters_Files}
     ${InstrumentTechniques_Files}
     ${InstrumentHeading_Files}
     ${InstrumentRanges_Files}
     ${OrchestraEditor_Files}
     ${Sampler_Files}
+    ${NotationRenderer_Files}
     ${Helper_Files}
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${UI_PROJECT_FILES})
 
 
-juce_add_binary_data(FontBinaryData
-    NAMESPACE FontData
+juce_add_binary_data(TextFontData
+    NAMESPACE TextFontData
+    HEADER_NAME  TextFontData
     SOURCES ${ASSETS_DIR}/Font/Instrument-Serif/InstrumentSerif-Regular.ttf
 )
+
+juce_add_binary_data(NotationFontData
+    NAMESPACE NotationFontData
+    HEADER_NAME  NotationFontData
+    SOURCES ${ASSETS_DIR}/Font/Bravura/Bravura.otf
+)
+
 
 add_library(${TARGET_NAME} STATIC ${UI_PROJECT_FILES})
 
@@ -117,7 +133,7 @@ if(ENABLE_FORMAT)
 endif()
 
 if(ENABLE_DOXYGEN)
-	Doxygen(Chess_Engine ${SOURCE_DIR})
+	Doxygen(The_Orchestra ${SOURCE_DIR})
 endif()
 
 
@@ -131,7 +147,8 @@ set_common_target_options(${TARGET_NAME})
 
 
 set (PROJECT_LIBS       TheOrchestraCore 
-                        FontBinaryData
+                        TextFontData
+                        NotationFontData
                         juce::juce_gui_basics
                         juce::juce_gui_extra
                         juce::juce_audio_utils
@@ -140,5 +157,6 @@ set (PROJECT_LIBS       TheOrchestraCore
 target_link_libraries(${TARGET_NAME} PUBLIC ${PROJECT_LIBS} )
 
 target_include_directories(${TARGET_NAME} PRIVATE
-    $<TARGET_PROPERTY:FontBinaryData,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:TextFontData,INTERFACE_INCLUDE_DIRECTORIES>
+    $<TARGET_PROPERTY:NotationFontData,INTERFACE_INCLUDE_DIRECTORIES>
 )

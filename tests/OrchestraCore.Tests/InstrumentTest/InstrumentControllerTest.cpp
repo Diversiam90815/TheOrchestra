@@ -47,7 +47,7 @@ TEST_F(InstrumentControllerTest, RetrieveKnownInstrumentByKey)
 	EXPECT_FALSE(violin.getName().empty()) << "Violin name should not be empty";
 	EXPECT_FALSE(violin.getRange().getHigherRange().empty()) << "Violin higher range should be populated";
 	EXPECT_FALSE(violin.getRange().getLowerRange().empty()) << "Violin lower range should be populated";
-	EXPECT_GE(violin.getQualities().size(), 0) << "RegisterQualities should not be empty";
+	EXPECT_GE(violin.getRegisters().size(), 0) << "InstrumentRegisters should not be empty";
 	EXPECT_GE(violin.getRoles().size(), 0) << "OrchestrationRoles should not be empty";
 	EXPECT_GE(violin.getTechniques().size(), 0) << "Playing techniques should be available (family or specific)";
 }

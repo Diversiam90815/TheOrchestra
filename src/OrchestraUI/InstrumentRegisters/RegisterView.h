@@ -1,6 +1,6 @@
 /*
   ==============================================================================
-	Module			QualitiesView
+	Module			RegisterView
 	Description		View box containing the qualities of the different ranges of the instrument
   ==============================================================================
 */
@@ -9,11 +9,11 @@
 #include "CustomComponent.h"
 
 
-class QualitiesView : public CustomComponent
+class RegisterView : public CustomComponent
 {
 public:
-	QualitiesView()	 = default;
-	~QualitiesView() = default;
+	RegisterView()	= default;
+	~RegisterView() = default;
 
 	void init() override;
 	void displayInstrument(InstrumentProfile &instrument) override;
@@ -23,37 +23,37 @@ private:
 
 	juce::TextButton mFirstLowerNote;
 	juce::TextButton mFirstHigherNote;
-	juce::TextEditor mFirstQuality;
+	juce::TextEditor mFirstRegister;
 
 	juce::TextButton mSecondLowerNote;
 	juce::TextButton mSecondHigherNote;
-	juce::TextEditor mSecondQuality;
+	juce::TextEditor mSecondRegister;
 
 	juce::TextButton mThirdLowerNote;
 	juce::TextButton mThirdHigherNote;
-	juce::TextEditor mThirdQuality;
+	juce::TextEditor mThirdRegister;
 
 	juce::TextButton mFourthLowerNote;
 	juce::TextButton mFourthHigherNote;
-	juce::TextEditor mFourthQuality;
+	juce::TextEditor mFourthRegister;
 
-	const int		 mQualitiesTitleX		   = 79;
-	const int		 mQualitiesTitleY		   = 15;
-	const int		 mQualitiesTitleWidth	   = 110;
-	const int		 mQualitiesTitleHeight	   = 33;
+	const int		 mRegisterTitleX		   = 79;
+	const int		 mRegisterTitleY		   = 15;
+	const int		 mRegisterTitleWidth	   = 110;
+	const int		 mRegisterTitleHeight	   = 33;
 
 	const int		 mNoteButtonWidth		   = 36;
 	const int		 mNoteButtonHeight		   = 31;
 
-	const int		 mQualityWidth			   = 151;
-	const int		 mQualityHeight			   = 48;
+	const int		 mRegisterWidth			   = 151;
+	const int		 mRegisterHeight		   = 48;
 
 	const int		 mFirstRowY				   = 67;
 	const int		 mSecondRowY			   = 126;
 	const int		 mThirdRowY				   = 185;
 	const int		 mFourthRowY			   = 244;
 
-	const int		 mQualityX				   = 100;
+	const int		 mRegisterX				   = 100;
 	const int		 mLowerNoteX			   = 13;
 	const int		 mHigherNoteX			   = 49;
 
