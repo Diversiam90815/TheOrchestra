@@ -1,6 +1,6 @@
 /*
   ==============================================================================
-	Module			RegisterQuality
+	Module			InstrumentRegister
 	Description		Struct storing register quality information
   ==============================================================================
 */
@@ -16,9 +16,9 @@ constexpr auto REG_QUAL_RANGE_HIGH = "high";
 constexpr auto REG_QUAL_DESC	   = "description";
 
 
-struct RegisterQuality
+struct InstrumentRegister
 {
-	RegisterQuality() = default;
+	InstrumentRegister() = default;
 
 	std::string getLowerRange() const { return lowerNote; }
 	std::string getHigherRange() const { return higherNote; }
@@ -26,13 +26,13 @@ struct RegisterQuality
 	int			getLowerNoteValue() const { return lowerNoteValue; }
 	std::string getDescription() const { return description; }
 
-	bool		operator==(const RegisterQuality &other) const
+	bool		operator==(const InstrumentRegister &other) const
 	{
 		return this->lowerNote == other.lowerNote && this->higherNote == other.higherNote && this->description == other.description;
 	}
 
-	friend void from_json(const nlohmann::json &j, RegisterQuality &quality);
-	friend void to_json(nlohmann::json &j, const RegisterQuality &quality);
+	friend void from_json(const nlohmann::json &j, InstrumentRegister &quality);
+	friend void to_json(nlohmann::json &j, const InstrumentRegister &quality);
 
 private:
 	std::string higherNote{""};
@@ -43,7 +43,7 @@ private:
 };
 
 
-inline void from_json(const nlohmann::json &j, RegisterQuality &quality)
+inline void from_json(const nlohmann::json &j, InstrumentRegister &quality)
 {
 	const auto &range		= j[REG_QUAL_RANGE];
 	quality.lowerNote		= range[REG_QUAL_RANGE_LOW].get<std::string>();
@@ -53,7 +53,7 @@ inline void from_json(const nlohmann::json &j, RegisterQuality &quality)
 	quality.description		= j[REG_QUAL_DESC].get<std::string>();
 }
 
-inline void to_json(nlohmann::json &j, const RegisterQuality &quality)
+inline void to_json(nlohmann::json &j, const InstrumentRegister &quality)
 {
 	j[REG_QUAL_RANGE][REG_QUAL_RANGE_LOW]  = quality.getLowerRange();
 	j[REG_QUAL_RANGE][REG_QUAL_RANGE_HIGH] = quality.getHigherRange();

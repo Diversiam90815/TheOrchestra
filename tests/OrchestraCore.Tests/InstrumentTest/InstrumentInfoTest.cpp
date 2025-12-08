@@ -150,7 +150,7 @@ protected:
 
 TEST_F(RegisterQualityTest, DefaultConstructorInitializesEmptyState)
 {
-	RegisterQuality quality;
+	InstrumentRegister quality;
 
 	EXPECT_EQ(quality.getLowerRange(), "");
 	EXPECT_EQ(quality.getHigherRange(), "");
@@ -169,7 +169,7 @@ TEST_F(RegisterQualityTest, DeserializesFromJSON)
 		"description": "Rich and resonant"
 	})"_json;
 
-	RegisterQuality quality = j.get<RegisterQuality>();
+	InstrumentRegister quality = j.get<InstrumentRegister>();
 
 	EXPECT_EQ(quality.getLowerRange(), "C3");
 	EXPECT_EQ(quality.getHigherRange(), "E3");
@@ -188,7 +188,7 @@ TEST_F(RegisterQualityTest, HandlesSingleNoteRange)
 		"description": "Warm and dark"
 	})"_json;
 
-	RegisterQuality quality = j.get<RegisterQuality>();
+	InstrumentRegister quality = j.get<InstrumentRegister>();
 
 	EXPECT_EQ(quality.getLowerRange(), "G3");
 	EXPECT_EQ(quality.getHigherRange(), "G3");
@@ -201,9 +201,9 @@ TEST_F(RegisterQualityTest, EqualityOperatorWorks)
 	json			j2 = R"({"range": {"low": "C3", "high": "E3"}, "description": "Test"})"_json;
 	json			j3 = R"({"range": {"low": "F3", "high": "A3"}, "description": "Different"})"_json;
 
-	RegisterQuality q1 = j1.get<RegisterQuality>();
-	RegisterQuality q2 = j2.get<RegisterQuality>();
-	RegisterQuality q3 = j3.get<RegisterQuality>();
+	InstrumentRegister q1 = j1.get<InstrumentRegister>();
+	InstrumentRegister q2 = j2.get<InstrumentRegister>();
+	InstrumentRegister q3 = j3.get<InstrumentRegister>();
 
 	EXPECT_EQ(q1, q2);
 	EXPECT_FALSE(q1 == q3);
@@ -216,7 +216,7 @@ TEST_F(RegisterQualityTest, SerializesToJSON)
 		"description": "Rich and resonant"
 	})"_json;
 
-	RegisterQuality quality = j.get<RegisterQuality>();
+	InstrumentRegister quality = j.get<InstrumentRegister>();
 	json			output;
 	to_json(output, quality);
 
@@ -408,7 +408,7 @@ protected:
 		json			   rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
 		InstrumentRange	   range	 = rangeJson.get<InstrumentRange>();
 
-		RegisterQualities  qualities;
+		InstrumentRegisters  qualities;
 		OrchestrationRoles roles;
 		roles.push_back(OrchestrationRole("Test role"));
 		SignatureWorks	  works;
@@ -481,8 +481,8 @@ TEST_F(InstrumentProfileTest, GettersReturnCorrectValues)
 	InstrumentRange	  range		  = rangeJson.get<InstrumentRange>();
 
 	json			  qualityJson = R"({"range": {"low": "G3", "high": "G3"}, "description": "Rich"})"_json;
-	RegisterQualities qualities;
-	qualities.push_back(qualityJson.get<RegisterQuality>());
+	InstrumentRegisters qualities;
+	qualities.push_back(qualityJson.get<InstrumentRegister>());
 
 	OrchestrationRoles roles;
 	roles.push_back(OrchestrationRole("Leads melody"));
@@ -499,7 +499,7 @@ TEST_F(InstrumentProfileTest, GettersReturnCorrectValues)
 
 	EXPECT_EQ(profile.getName(), "Violin");
 	EXPECT_EQ(profile.getInstrumentID(), 301);
-	EXPECT_EQ(profile.getQualities().size(), 1);
+	EXPECT_EQ(profile.getRegisters().size(), 1);
 	EXPECT_EQ(profile.getRoles().size(), 1);
 	EXPECT_EQ(profile.getFamousWorks().size(), 1);
 	EXPECT_EQ(profile.getTechniques().size(), 1);
@@ -525,7 +525,7 @@ TEST_F(InstrumentProfileTest, CanStoreEmptyCollections)
 
 	InstrumentProfile profile("Test", 100, range, {}, {}, {}, {}, false);
 
-	EXPECT_EQ(profile.getQualities().size(), 0);
+	EXPECT_EQ(profile.getRegisters().size(), 0);
 	EXPECT_EQ(profile.getRoles().size(), 0);
 	EXPECT_EQ(profile.getFamousWorks().size(), 0);
 	EXPECT_EQ(profile.getTechniques().size(), 0);
@@ -536,11 +536,11 @@ TEST_F(InstrumentProfileTest, CanStoreLargeCollections)
 	json			  rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
 	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
 
-	RegisterQualities qualities;
+	InstrumentRegisters qualities;
 	for (int i = 0; i < 10; ++i)
 	{
 		json j = nlohmann::json::parse(R"({"range": {"low": "C3", "high": "E3"}, "description": "Quality )" + std::to_string(i) + R"("})");
-		qualities.push_back(j.get<RegisterQuality>());
+		qualities.push_back(j.get<InstrumentRegister>());
 	}
 
 	OrchestrationRoles roles;
@@ -563,7 +563,7 @@ TEST_F(InstrumentProfileTest, CanStoreLargeCollections)
 
 	InstrumentProfile profile("Test", 100, range, qualities, roles, works, techniques, false);
 
-	EXPECT_EQ(profile.getQualities().size(), 10);
+	EXPECT_EQ(profile.getRegisters().size(), 10);
 	EXPECT_EQ(profile.getRoles().size(), 5);
 	EXPECT_EQ(profile.getFamousWorks().size(), 15);
 	EXPECT_EQ(profile.getTechniques().size(), 8);
@@ -623,9 +623,9 @@ TEST_F(IntegrationTest, DeserializesCompleteViolinProfileFromJSON)
 	std::string		  name	= j["name"];
 	InstrumentRange	  range = j["range"].get<InstrumentRange>();
 
-	RegisterQualities qualities;
+	InstrumentRegisters qualities;
 	for (const auto &q : j["qualities"])
-		qualities.push_back(q.get<RegisterQuality>());
+		qualities.push_back(q.get<InstrumentRegister>());
 
 	OrchestrationRoles roles;
 	for (const auto &r : j["roles"])
@@ -645,7 +645,7 @@ TEST_F(IntegrationTest, DeserializesCompleteViolinProfileFromJSON)
 
 	EXPECT_EQ(profile.getName(), "Violin");
 	EXPECT_EQ(profile.getInstrumentID(), 301);
-	EXPECT_EQ(profile.getQualities().size(), 2);
+	EXPECT_EQ(profile.getRegisters().size(), 2);
 	EXPECT_EQ(profile.getRoles().size(), 2);
 	EXPECT_EQ(profile.getFamousWorks().size(), 1);
 	EXPECT_EQ(profile.getTechniques().size(), 1);
@@ -687,9 +687,9 @@ TEST_F(IntegrationTest, DeserializesTimpaniWithDisplayedRange)
 	std::string		  name	= j["name"];
 	InstrumentRange	  range = j["range"].get<InstrumentRange>();
 
-	RegisterQualities qualities;
+	InstrumentRegisters qualities;
 	for (const auto &q : j["qualities"])
-		qualities.push_back(q.get<RegisterQuality>());
+		qualities.push_back(q.get<InstrumentRegister>());
 
 	OrchestrationRoles roles;
 	for (const auto &r : j["roles"])

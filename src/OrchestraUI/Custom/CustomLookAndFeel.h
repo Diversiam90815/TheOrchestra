@@ -8,7 +8,7 @@
 #pragma once
 
 #include "JuceIncludes.h"
-#include "BinaryData.h"
+#include <TextFontData>
 
 
 class CustomLookAndFeel : public juce::LookAndFeel_V4

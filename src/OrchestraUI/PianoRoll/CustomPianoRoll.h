@@ -37,7 +37,7 @@ public:
 	 @param                 [IN] qualities as an StringArray.
 	 @return                Boolean indicating success/failure
 	*/
-	bool setMidiRanges(const RegisterQualities &qualities);
+	bool setMidiRanges(const InstrumentRegisters &qualities);
 
 	/*
 	 @brief                 Fills the vector 'mMidiRanges' with the note ranges information from a String
