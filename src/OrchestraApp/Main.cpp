@@ -1,10 +1,7 @@
 
 #include <JuceHeader.h>
 #include "PluginEditor.h"
-
-#include <Logging.h>
 #include "buildinfo.h"
-
 
 class MainWindow : public DocumentWindow
 {
@@ -24,7 +21,6 @@ public:
 		mDeviceManager.addMidiInputCallback({}, &mPlayer);
 
 		processor.reset(new OrchestraProcessor());
-
 		editor.reset(new OrchestraEditor(*processor));
 
 		mPlayer.setProcessor(processor.get());
@@ -36,7 +32,7 @@ public:
 		centreWithSize(getWidth(), getHeight());
 		setVisible(true);
 
-		mDeviceManager.addMidiInputCallback({}, editor->mPianoRollView.get());
+		mDeviceManager.addMidiInputCallback({}, &editor->mPianoRollView);
 
 		LOG_INFO("Mainwindow setup finished!");
 	}
@@ -61,57 +57,21 @@ private:
 };
 
 
-
 class Application : public JUCEApplication
 {
 public:
 	Application() = default;
 
-	const String getApplicationName() override { return JucePlugin_Name; }
+	const String getApplicationName() override { return BuildInfo::Name; }
 
-	const String getApplicationVersion() override { return String(JucePlugin_VersionString); }
+	const String getApplicationVersion() override { return String(BuildInfo::Version); }
 
-	void		 initialise(const String &) override
-	{
-		mLog = std::make_unique<Logging>();
-		mLog->initLogging();
-		logProjectInfo();
-		mainWindow.reset(new MainWindow(getApplicationName(), *this));
-	}
+	void		 initialise(const String &) override { mainWindow.reset(new MainWindow(getApplicationName(), *this)); }
 
-	void shutdown() override { mainWindow = nullptr; }
-
-	void logProjectInfo()
-	{
-		LOG_INFO("=======================================");
-		LOG_INFO("============ SYSTEM INFO ==============");
-
-		LOG_INFO("Project Name:\t\t {}", BuildInfo::Name);
-		LOG_INFO("Project Version:\t\t {}", BuildInfo::Version);
-
-		LOG_INFO("Build Time:\t\t {}", BuildInfo::Timestamp);
-		LOG_INFO("Branch:\t\t\t {}", BuildInfo::Branch);
-		LOG_INFO("Commit SHA:\t\t {}", BuildInfo::CommitSHA);
-		LOG_INFO("Commit SHA Short:\t {}", BuildInfo::CommitSHAShort);
-
-		LOG_INFO("Generator:\t\t {}", BuildInfo::Generator);
-		LOG_INFO("CPP Version:\t\t {}", BuildInfo::CxxStandard);
-
-		LOG_INFO("System Name:\t\t {}", BuildInfo::SystemName);
-		LOG_INFO("System Version:\t\t {}", BuildInfo::SystemVersion);
-		LOG_INFO("System CPU:\t\t {}", BuildInfo::SystemCPU);
-
-		LOG_INFO("Compiler:\t\t {}", BuildInfo::CompilerID);
-		LOG_INFO("Compiler Version:\t {}", BuildInfo::CompilerVersion);
-
-		LOG_INFO("================= END =================");
-		LOG_INFO("=======================================");
-	}
+	void		 shutdown() override { mainWindow = nullptr; }
 
 private:
 	std::unique_ptr<MainWindow> mainWindow;
-
-	std::unique_ptr<Logging>	mLog;
 };
 
 START_JUCE_APPLICATION(Application)

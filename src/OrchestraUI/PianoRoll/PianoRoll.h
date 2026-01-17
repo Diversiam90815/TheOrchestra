@@ -1,40 +1,40 @@
 /*
   ==============================================================================
-
 	Module			PianoRoll
 	Description		Creating and managing piano roll and midi input
-
   ==============================================================================
 */
 
 #pragma once
+#include <assert.h>
 
-#include "JuceIncludes.h"
 #include "CustomPianoRoll.h"
-#include "Logging.h"
+#include "CustomComponent.h"
 
 
-class PianoRoll : public Component, private MidiKeyboardState::Listener, public MidiInputCallback
+class PianoRoll : public CustomComponent, private juce::MidiKeyboardState::Listener, public juce::MidiInputCallback
 {
 public:
-	PianoRoll(MidiKeyboardState *state);
+	PianoRoll() = default;
 	~PianoRoll();
 
-	void displayInstrumentRanges(InstrumentInfo &info);
+	void init() override;
+	void displayInstrument(InstrumentProfile &info) override;
+
+	void setKeyboardState(juce::MidiKeyboardState &state);
 
 private:
 	void							 showPianoRoll();
 
 	void							 resized() override;
 
-	void							 handleIncomingMidiMessage(MidiInput *source, const MidiMessage &message) override;
+	void							 handleIncomingMidiMessage(juce::MidiInput *source, const juce::MidiMessage &message) override;
 
-	void							 handleNoteOn(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override;
+	void							 handleNoteOn(juce::MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override {}
 
-	void							 handleNoteOff(MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override;
+	void							 handleNoteOff(juce::MidiKeyboardState *, int midiChannel, int midiNoteNumber, float velocity) override {}
 
 
 	std::unique_ptr<CustomPianoRoll> mPianoRoll;
-
-	MidiKeyboardState				*pianoState;
+	juce::MidiKeyboardState			*mPianoState = nullptr;
 };

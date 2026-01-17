@@ -1,16 +1,14 @@
 /*
   ==============================================================================
-
 	Module			SamplerView
 	Description		View box containing sampler information
-
   ==============================================================================
 */
 
 #pragma once
 
 #include "CustomComponent.h"
-#include "Sampler.h"
+#include "OrchestraSampler.h"
 #include "Helper.h"
 
 
@@ -20,12 +18,11 @@ using ArticulationChangedCallback = std::function<void(Articulation)>;
 class SamplerView : public CustomComponent
 {
 public:
-	SamplerView();
-	~SamplerView();
+	SamplerView()  = default;
+	~SamplerView() = default;
 
-	void init();
-
-	void displayInstrument(InstrumentInfo &instrument) override {}
+	void init() override;
+	void displayInstrument(InstrumentProfile &instrument) override {}
 
 	void displayInstrument(std::set<Articulation> availableArticulations);
 
@@ -33,8 +30,8 @@ public:
 
 
 private:
-	Label						mTitle;
-	ComboBox					mArticulations;
+	juce::Label					mTitle;
+	juce::ComboBox				mArticulations;
 
 	const int					mWidth					 = 269;
 	const int					mHeight					 = 107;
