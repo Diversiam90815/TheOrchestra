@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
-	Module			InstrumentInfo
+	Module			InstrumentProfile
 	Description		Class storing information about each instrument
-
   ==============================================================================
 */
 
@@ -12,65 +10,66 @@
 #include "JuceIncludes.h"
 
 #include "Parameters.h"
+#include "nlohmann/json.hpp"
+#include "Helper.h"
+#include "InstrumentRange.h"
+#include "InstrumentRegister.h"
+#include "PlayingTechnique.h"
+#include "OrchestrationRole.h"
+#include "SignatureWork.h"
+
+
+using InstrumentRegisters = std::vector<InstrumentRegister>;
+using PlayingTechniques	  = std::vector<PlayingTechnique>;
+using OrchestrationRoles  = std::vector<OrchestrationRole>;
+using SignatureWorks	  = std::vector<SignatureWork>;
+
 
 /*
- @brief             Struct defining an instrument and it's information (info can be found in InstrumentData.h)
+ @brief             Struct defining an instrument and it's information
 */
-struct InstrumentInfo
+struct InstrumentProfile
 {
 public:
-	InstrumentInfo() = default;
+	InstrumentProfile()	 = default;
+	~InstrumentProfile() = default;
 
-	InstrumentInfo(const String		 &name,
-				   const String		 &range,
-				   const StringArray &qualities,
-				   const StringArray &roles,
-				   const StringArray &famousWorks,
-				   const String		 &transposition,
-				   const StringArray &playingTechniques,
-				   int				  key,
-				   bool				  isRhythmicPercussion = false,
-				   String			  displayedRange	   = juce::String(""))
-		: mName(name), mRange(range), mQualities(qualities), mUsefulInformation(roles), mFamousWorks(famousWorks), mTransposition(transposition),
-		  mPlayingTechniques(playingTechniques), mKey(key), mIsRhythmicPercussion(isRhythmicPercussion), mDisplayedRange(displayedRange)
+	InstrumentProfile(const std::string			&name,
+					  InstrumentID				 id,
+					  const InstrumentRange		&range,
+					  const InstrumentRegisters &registers,
+					  const OrchestrationRoles	&roles,
+					  const SignatureWorks		&works,
+					  const PlayingTechniques	&techniques,
+					  bool						 isRhythmicPercussion = false)
+		: mName(name), mRange(range), mRegisters(registers), mRoles(roles), mFamousWorks(works), mPlayingTechniques(techniques), mID(id),
+		  mIsRhythmicPercussion(isRhythmicPercussion)
 	{
 	}
 
-	~InstrumentInfo() = default;
+	std::string			getName() const { return mName; }
+	InstrumentRange		getRange() const { return mRange; }
+	InstrumentRegisters getRegisters() const { return mRegisters; }
+	OrchestrationRoles	getRoles() const { return mRoles; }
+	SignatureWorks		getFamousWorks() const { return mFamousWorks; }
+	PlayingTechniques	getTechniques() const { return mPlayingTechniques; }
+	InstrumentID		getInstrumentID() const { return mID; }
+	bool				isRhythmicPercussion() const { return mIsRhythmicPercussion; }
 
-	String		getName() const { return mName; }
+	bool				isValid() const { return !mName.empty() && mID != 0; }
 
-	String		getRange() const { return mRange; }
-
-	StringArray getQualities() const { return mQualities; }
-
-	StringArray getInformation() const { return mUsefulInformation; }
-
-	StringArray getFamousWorks() const { return mFamousWorks; }
-
-	String		getTransposition() const { return mTransposition; }
-
-	StringArray getTechniques() const { return mPlayingTechniques; }
-
-	int			getKey() const { return mKey; }
-
-	String		getDisplayedRange() const { return mDisplayedRange; }
-
-	bool		isRhythmicPercussion() const { return mIsRhythmicPercussion; }
+	bool				operator==(const InstrumentProfile &other) const { return this->mID == other.mID; }
 
 private:
-	String		mName;						   // Name of the instrument
-	String		mRange;						   // Range of notes (lowest to highest playable note)
-	StringArray mQualities;					   // Sound characteristics of each section within the range
-	StringArray mUsefulInformation;			   // Any useful information of the instrument
-	StringArray mFamousWorks;				   // Famous works presenting the qualitiy of the instrument
-	String		mTransposition;				   // Information about the transposition of the instrument, if it applies
-	StringArray mPlayingTechniques;			   // Different playing techniques featured within the instrument's family
-	bool		mIsRhythmicPercussion = false; // If the instrument is a rhythmic percussion instrument, it will be set to true
-	String		mDisplayedRange;			   // The range that is displayed if it differs from the actual range such as for rhythmic percussion
+	std::string			mName;						   // Name of the instrument
+	InstrumentRange		mRange;						   // Range of notes (lowest to highest playable note)
+	InstrumentRegisters mRegisters;					   // Sound characteristics of each section within the range
+	OrchestrationRoles	mRoles;						   // Any useful information of the instrument
+	SignatureWorks		mFamousWorks;				   // Famous works presenting the qualitiy of the instrument
+	PlayingTechniques	mPlayingTechniques;			   // Different playing techniques featured within the instrument's family
+	bool				mIsRhythmicPercussion = false; // If the instrument is a rhythmic percussion instrument, it will be set to true
 
-	int			mKey = 0;					   // 3 digit key defining the instrument (see Helper.h)
+	InstrumentID		mID					  = 0;	   // 3 digit key defining the instrument (see Helper.h)
 
-	friend class InstrumentController;
-	friend class InstrumentInfoView;
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(InstrumentProfile, mName, mRange, mRegisters, mRoles, mFamousWorks, mPlayingTechniques, mIsRhythmicPercussion, mID)
 };

@@ -1,3 +1,9 @@
+#pragma once
+#ifndef BUILDINFO_H_INCLUDED
+#define BUILDINFO_H_INCLUDED
+
+#include <string>
+
 struct BuildInfo{
     static inline const std::string CommitSHA           = "@COMMIT_SHA@";
     static inline const std::string CommitSHAShort      = "@COMMIT_SHA_SHORT@";
@@ -14,3 +20,5 @@ struct BuildInfo{
     static inline const std::string SystemVersion       = "@SYS_VER@";
     static inline const std::string SystemCPU           = "@SYS_CPU@";
 };
+
+#endif

@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			InstrumentController
 	Description		Managing instrument data for the whole orchestra
-
   ==============================================================================
 */
 
@@ -12,252 +10,162 @@
 #include <cassert>
 
 
-InstrumentController::InstrumentController() {}
-
-
-InstrumentController::~InstrumentController() {}
-
-
 void InstrumentController::init()
 {
-	loadFromJSON();
-	LOG_INFO("Instruments loaded from JSON");
+	loadInstrumentData();
+	LOG_INFO("Instruments data loaded.");
 }
 
 
-void InstrumentController::addInstrument(const InstrumentInfo &info)
+void InstrumentController::addInstrument(const InstrumentProfile &info)
 {
-	int key			 = info.getKey();
+	InstrumentID key = info.getInstrumentID();
 	instruments[key] = info;
-	LOG_INFO("Instrument {} loaded!", info.getName().toStdString().c_str());
+	LOG_INFO("Instrument {} loaded!", info.getName().c_str());
 }
 
 
-StringArray InstrumentController::readPlayingTechniquesFromJSON(DynamicObject *obj)
-{
-	StringArray playingTechniques;
-	if (obj->hasProperty("playingTechniques"))
-	{
-		var techniquesVar = obj->getProperty("playingTechniques");
-		if (techniquesVar.isArray())
-		{
-			for (int i = 0; i < techniquesVar.size(); ++i)
-			{
-				var techniqueVar = techniquesVar[i];
-				if (techniqueVar.isString())
-					playingTechniques.add(techniqueVar.toString());
-			}
-		}
-	}
-	return playingTechniques;
-}
-
-
-StringArray InstrumentController::readQualitiesFromJSON(DynamicObject *obj)
-{
-	StringArray qualities;
-
-	if (obj->hasProperty("qualities"))
-	{
-		var qualitiesVar = obj->getProperty("qualities");
-		if (qualitiesVar.isArray())
-		{
-			for (int q = 0; q < qualitiesVar.size(); ++q)
-			{
-				var qualityVar = qualitiesVar[q];
-				if (qualityVar.isString())
-					qualities.add(qualityVar.toString());
-			}
-		}
-	}
-	return qualities;
-}
-
-
-String InstrumentController::readNameFromJSON(DynamicObject *obj)
-{
-	String name = obj->getProperty("name").toString();
-	return name;
-}
-
-
-String InstrumentController::readRangeFromJSON(DynamicObject *obj)
-{
-	String range = obj->getProperty("range").toString();
-	return range;
-}
-
-
-String InstrumentController::readDisplayedRangeFromJSON(DynamicObject *obj)
-{
-	String range = obj->getProperty("displayedRange").toString();
-	return range;
-}
-
-
-bool InstrumentController::readIsRhythmicPercussionFromJSON(DynamicObject *obj)
-{
-	bool isRhythmicPercussion = false;
-	if (obj->hasProperty("isRhythmicPercussion"))
-	{
-		var rhythmicPercussionVar = obj->getProperty("isRhythmicPercussion");
-		if (rhythmicPercussionVar.isBool())
-			isRhythmicPercussion = rhythmicPercussionVar;
-	}
-	return isRhythmicPercussion;
-}
-
-
-String InstrumentController::readTranspositionFromJSON(DynamicObject *obj)
-{
-	String transposition = obj->getProperty("transposition").toString();
-	return transposition;
-}
-
-
-StringArray InstrumentController::readInformationFromJSON(DynamicObject *obj)
-{
-	StringArray roles;
-	if (obj->hasProperty("roles"))
-	{
-		var rolesVar = obj->getProperty("roles");
-		if (rolesVar.isArray())
-		{
-			for (int r = 0; r < rolesVar.size(); ++r)
-			{
-				var roleVar = rolesVar[r];
-				if (roleVar.isString())
-					roles.add(roleVar.toString());
-			}
-		}
-	}
-	return roles;
-}
-
-
-StringArray InstrumentController::readFamousWorksFromJSON(DynamicObject *obj)
-{
-	StringArray famousWorks;
-
-	if (obj->hasProperty("famousWorks"))
-	{
-		var worksVar = obj->getProperty("famousWorks");
-		if (worksVar.isArray())
-		{
-			for (int w = 0; w < worksVar.size(); ++w)
-			{
-				var workVar = worksVar[w];
-				if (workVar.isString())
-					famousWorks.add(workVar.toString());
-			}
-		}
-	}
-	return famousWorks;
-}
-
-
-InstrumentInfo InstrumentController::getInstrument(int key)
+InstrumentProfile InstrumentController::getInstrument(InstrumentID key)
 {
 	auto it = instruments.find(key);
-	assert(it != instruments.end());
 
 	if (it != instruments.end())
 		return it->second;
 
-	return InstrumentInfo();
+	return InstrumentProfile();
 }
 
 
-bool InstrumentController::loadFromJSON()
+bool InstrumentController::loadInstrumentData()
 {
-	std::string jsonFilePath = mFileManager.getInstrumentDataJSONPath();
-	File		jsonFile(jsonFilePath);
-
-	if (!jsonFile.existsAsFile())
-		return false;
-
-	String jsonContent = jsonFile.loadFileAsString();
-
-	var	   parsedJSON  = JSON::parse(jsonContent);
-
-	if (parsedJSON.isVoid())
-		return false;
-
-	if (!parsedJSON.isObject())
-		return false;
-
-	auto *rootObj = parsedJSON.getDynamicObject();
-
-	// Iterate through each family
-	for (auto it = rootObj->getProperties().begin(); it != rootObj->getProperties().end(); ++it)
+	try
 	{
-		String familyName = it->name.toString();
-		var	   familyVar  = it->value;
+		// Get embedded JSON data
+		int			dataSize = 0;
+		const char *data	 = InstrumentData::getNamedResource("Instruments_json", dataSize);
 
-		// Determine the family enum based on familyName
-		Family familyEnum = familyMap[familyName];
-
-		if (!familyVar.isObject())
-			continue;
-
-		auto	   *familyObj				= familyVar.getDynamicObject();
-		StringArray familyPlayingTechniques = readPlayingTechniquesFromJSON(familyObj);
-
-		// Retrieve instruments array
-		if (!familyObj->hasProperty("instruments"))
-			continue;
-
-		var instrumentsVar = familyObj->getProperty("instruments");
-
-		if (!instrumentsVar.isArray())
-			continue;
-
-		for (int i = 0; i < instrumentsVar.size(); ++i)
+		if (data == nullptr || dataSize == 0)
 		{
-			var instrumentVar = instrumentsVar[i];
-
-			if (!instrumentVar.isObject())
-				continue;
-
-			String displayedRange{};
-
-			auto  *instrumentObj		= instrumentVar.getDynamicObject();
-
-			String name					= readNameFromJSON(instrumentObj);
-			String range				= readRangeFromJSON(instrumentObj);
-
-			bool   isRhythmicPercussion = readIsRhythmicPercussionFromJSON(instrumentObj);
-			if (isRhythmicPercussion)
-			{
-				displayedRange = readDisplayedRangeFromJSON(instrumentObj);
-			}
-
-			String		transposition		 = readTranspositionFromJSON(instrumentObj);
-
-			StringArray qualities			 = readQualitiesFromJSON(instrumentObj);
-			StringArray information			 = readInformationFromJSON(instrumentObj);
-			StringArray famousWorks			 = readFamousWorksFromJSON(instrumentObj);
-
-			// For some instruments, the playing techniques are instrument-specific ( e.g. for the percussion section)
-			// So if there are instrument specific techniques available, we override them here
-			StringArray instrumentTechniques = readPlayingTechniquesFromJSON(instrumentObj);
-
-			if (instrumentTechniques.isEmpty())
-			{
-				instrumentTechniques = familyPlayingTechniques;
-			}
-
-			int			   instrumentID = instrumentMap[name];
-
-			int			   key			= getInstrumentKey(familyEnum, instrumentID);
-
-			// Create InstrumentInfo object
-			InstrumentInfo info(name, range, qualities, information, famousWorks, transposition, instrumentTechniques, key, isRhythmicPercussion, displayedRange);
-
-			// Add instrument to the map
-			addInstrument(info);
+			LOG_ERROR("Embedded instrument data not found!");
+			return false;
 		}
-	}
 
-	return true;
+		LOG_INFO("Loading instruments from embedded data ({} bytes)", dataSize);
+
+		json j = json::parse(std::string(data, dataSize));
+
+		// Skip metadata section
+		if (!j.contains("families"))
+		{
+			LOG_ERROR("JSON file missing 'families' section");
+			return false;
+		}
+
+		const auto &families = j["families"];
+
+		// Iterate through families
+		for (auto &[familyName, familyData] : families.items())
+		{
+			Family			  familyEnum = familyMap[familyName];
+
+			// Read family-level playing techniques
+			PlayingTechniques familyTechniques;
+			if (familyData.contains("techniques"))
+			{
+				for (const auto &t : familyData["techniques"])
+				{
+					familyTechniques.push_back(t.get<PlayingTechnique>());
+				}
+			}
+
+			// Process instruments
+			if (!familyData.contains("instruments"))
+			{
+				LOG_WARNING("Family {} has no instruments!", familyName);
+				continue;
+			}
+
+			for (const auto &instrumentJson : familyData["instruments"])
+			{
+				// Parse basic fields
+				std::string		  name				   = instrumentJson["name"];
+				int				  instrumentID		   = instrumentMap[name];
+				InstrumentID	  key				   = getInstrumentKey(familyEnum, instrumentID);
+
+				// Parse range
+				InstrumentRange	  range				   = instrumentJson["range"].get<InstrumentRange>();
+
+				// isRhythmicPercussion, defaults to false
+				bool			  isRhythmicPercussion = instrumentJson.value("isRhythmicPercussion", false);
+
+				// Parse qualities
+				InstrumentRegisters qualities;
+				if (instrumentJson.contains("registers"))
+				{
+					for (const auto &q : instrumentJson["registers"])
+					{
+						qualities.push_back(q.get<InstrumentRegister>());
+					}
+				}
+
+				// Parse roles
+				OrchestrationRoles roles;
+				if (instrumentJson.contains("roles"))
+				{
+					for (const auto &r : instrumentJson["roles"])
+					{
+						roles.push_back(r.get<OrchestrationRole>());
+					}
+				}
+
+				// Parse SignatureWorks
+				SignatureWorks famousWorks;
+				if (instrumentJson.contains("famousWorks"))
+				{
+					for (const auto &s : instrumentJson["famousWorks"])
+					{
+						famousWorks.push_back(s.get<SignatureWork>());
+					}
+				}
+
+				// Parse playing techniques (instrument-specific or family-level)
+				PlayingTechniques techniques;
+				if (instrumentJson.contains("techniques"))
+				{
+					for (const auto &t : instrumentJson["techniques"])
+					{
+						techniques.push_back(t.get<PlayingTechnique>());
+					}
+				}
+				else
+				{
+					techniques = familyTechniques; // Use family techniques
+				}
+
+				// Create and add instrument
+				InstrumentProfile info(name, key, range, qualities, roles, famousWorks, techniques, isRhythmicPercussion);
+
+				if (!info.isValid())
+				{
+					LOG_ERROR("Invalid instrument profile for {}!", name);
+					continue;
+				}
+
+				addInstrument(info);
+			}
+		}
+
+		LOG_INFO("Successfully loaded {} instruments!", instruments.size());
+		return true;
+	}
+	catch (const json::exception &e)
+	{
+		LOG_ERROR("JSON parsing error: {}", e.what());
+		return false;
+	}
+	catch (const std::exception &e)
+	{
+		LOG_ERROR("Error loading instruments: {}", e.what());
+		return false;
+	}
 }
