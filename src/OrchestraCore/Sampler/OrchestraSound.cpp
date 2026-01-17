@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			OrchestraSound
 	Description		Custom sound class holding multiple dynamic layers & round-robins per single MIDI note/range
-
   ==============================================================================
 */
 
@@ -11,10 +9,6 @@
 
 
 OrchestraSound::OrchestraSound(int noteRangeStart, int noteRangeEnd, int rootNote) : noteRangeStart(noteRangeStart), noteRangeEnd(noteRangeEnd), rootNote(rootNote) {}
-
-
-OrchestraSound::~OrchestraSound() {}
-
 
 
 void OrchestraSound::addDynamicLayer(Dynamics dynamicValue, juce::OwnedArray<juce::AudioBuffer<float>> &&rrSamples)

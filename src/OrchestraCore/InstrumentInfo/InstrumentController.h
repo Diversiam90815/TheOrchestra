@@ -1,58 +1,41 @@
 /*
   ==============================================================================
-
 	Module			InstrumentController
 	Description		Managing instrument data for the whole orchestra
-
   ==============================================================================
 */
 
 #pragma once
 
-#include "JuceIncludes.h"
 #include <map>
+#include <fstream>
+#include <InstrumentData>
+
+#include "JuceIncludes.h"
 #include "InstrumentInfo.h"
-#include "Helper.h"
 #include "FileManager.h"
 #include "Logging.h"
+
+using json = nlohmann::json;
 
 
 class InstrumentController
 {
 public:
-	InstrumentController();
-	~InstrumentController();
+	InstrumentController()	= default;
+	~InstrumentController() = default;
 
-	void		   init();
+	void			  init();
 
-	InstrumentInfo getInstrument(int key);
-
-	bool		   loadFromJSON();
+	InstrumentProfile getInstrument(InstrumentID key);
 
 
 private:
-	void						  addInstrument(const InstrumentInfo &info);
+	bool									  loadInstrumentData();
 
-	StringArray					  readPlayingTechniquesFromJSON(DynamicObject *obj);
+	void									  addInstrument(const InstrumentProfile &info);
 
-	StringArray					  readQualitiesFromJSON(DynamicObject *obj);
+	std::map<InstrumentID, InstrumentProfile> instruments; // Mapping the instrument's key to the corresponding InstrumentProfile object
 
-	String						  readNameFromJSON(DynamicObject *obj);
-
-	String						  readRangeFromJSON(DynamicObject *obj);
-
-	String						  readDisplayedRangeFromJSON(DynamicObject *obj);
-
-	bool						  readIsRhythmicPercussionFromJSON(DynamicObject *obj);
-
-	String						  readTranspositionFromJSON(DynamicObject *obj);
-
-	StringArray					  readInformationFromJSON(DynamicObject *obj);
-
-	StringArray					  readFamousWorksFromJSON(DynamicObject *obj);
-
-
-	std::map<int, InstrumentInfo> instruments; // Mapping the instrument's key to the corresponding InstrumentInfo object
-
-	FileManager					  mFileManager;
+	FileManager								  mFileManager;
 };

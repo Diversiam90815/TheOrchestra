@@ -1,26 +1,18 @@
 /*
   ==============================================================================
-
 	Module			InformationView
 	Description		View box containing the useful additional information of the instrument
-
   ==============================================================================
 */
 
 #include "InformationView.h"
 
 
-InformationView::InformationView() {}
-
-
-InformationView::~InformationView() {}
-
-
 void InformationView::init()
 {
 	setSize(mWidth, mHeight);
 
-	addAndConfigureLabel(mTitle, "InformationTitle", "Useful Information", mTitleX, mTitleY, mTitleWidth, mTitleHeight, Justification::centred);
+	addAndConfigureLabel(mTitle, "InformationTitle", "Useful Information", mTitleX, mTitleY, mTitleWidth, mTitleHeight, juce::Justification::centred);
 
 	addAndConfigureTextEditor(mFirstInformation, mFirstColumX, mFirstRowY, mInfoWidth, mInfoHeight);
 	addAndConfigureTextEditor(mSecondInformation, mSecondColumx, mFirstRowY, mInfoWidth, mInfoHeight);
@@ -29,12 +21,23 @@ void InformationView::init()
 }
 
 
-void InformationView::displayInstrument(InstrumentInfo &instrument)
+void InformationView::displayInstrument(InstrumentProfile &instrument)
 {
-	const StringArray &info = instrument.getInformation();
+	const auto &roles = instrument.getRoles();
 
-	mFirstInformation.setText(info[0], dontSendNotification);
-	mSecondInformation.setText(info[1], dontSendNotification);
-	mThirdInformation.setText(info[2], dontSendNotification);
-	mFourthInformation.setText(info[3], dontSendNotification);
+	if (roles.empty())
+		return;
+
+	size_t size = roles.size();
+
+	mFirstInformation.setText(roles.at(0).getRole(), juce::dontSendNotification);
+
+	if (size > 1)
+		mSecondInformation.setText(roles.at(1).getRole(), juce::dontSendNotification);
+
+	if (size > 2)
+		mThirdInformation.setText(roles.at(2).getRole(), juce::dontSendNotification);
+
+	if (size > 3)
+		mFourthInformation.setText(roles.at(3).getRole(), juce::dontSendNotification);
 }

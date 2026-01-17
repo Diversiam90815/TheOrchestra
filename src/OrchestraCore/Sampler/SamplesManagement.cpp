@@ -1,9 +1,7 @@
 /*
   ==============================================================================
-
 	Module			SamplesManagement
 	Description		Managing the samples
-
   ==============================================================================
 */
 
@@ -14,67 +12,71 @@
 #include <filesystem>
 
 
-SamplesManagement::SamplesManagement()
-{
-	std::string sampleFolder = mFileManager.getSamplesFolder();
-	mSamplesFolder			 = File(sampleFolder);
-}
-
-
 void SamplesManagement::init()
 {
-	if (mSamplesFolder.exists() && mSamplesFolder.isDirectory())
+	mUserConfig.init();
+	mSampleDirectory = mUserConfig.getSavedSamplesFolder();
+
+	// If the sample directory is empty, set it to a default value for now (TODO: Give user a message)
+	if (mSampleDirectory.empty())
 	{
-		parseSampleFiles();
+		mSampleDirectory = mFileManager.getDefaultSamplesFolderPath();
+		setSampleDirectory(mSampleDirectory);
 	}
+
+	loadSamples();
 }
 
 
-File SamplesManagement::getInstrumentSamplesPath(const int &instrumentKey)
+juce::File SamplesManagement::getInstrumentSamplesPath(const InstrumentID &instrumentKey)
 {
-	for (const auto &section : mSamplesFolder.findChildFiles(File::findDirectories, false))
+	juce::File sampleDirectoryFile = (juce::File)mSampleDirectory;
+
+	for (const auto &section : sampleDirectoryFile.findChildFiles(juce::File::findDirectories, false))
 	{
-		String sectionName = section.getFileName();
+		std::string sectionName = section.getFileName().toStdString();
 
-		for (const auto &instrument : section.findChildFiles(File::findDirectories, false))
+		for (const auto &instrument : section.findChildFiles(juce::File::findDirectories, false))
 		{
-			String instrumentName = instrument.getFileName();
+			std::string instrumentName = instrument.getFileName().toStdString();
 
-			int	   currentKey	  = getInstrumentKey(sectionName, instrumentName);
+			int			currentKey	   = getInstrumentKey(sectionName, instrumentName);
 			if (currentKey == instrumentKey)
 			{
 				return instrument;
 			}
 		}
 	}
-	return File();
+	return juce::File();
 }
 
 
-void SamplesManagement::parseSampleFiles()
+void SamplesManagement::loadSamples()
 {
-	for (const auto &section : mSamplesFolder.findChildFiles(File::findDirectories, false))
+	juce::File sampleDirectoryFile = (juce::File)mSampleDirectory;
+
+	for (const auto &section : sampleDirectoryFile.findChildFiles(juce::File::findDirectories, false))
 	{
-		for (const auto &instrument : section.findChildFiles(File::findDirectories, false))
+		for (const auto &instrument : section.findChildFiles(juce::File::findDirectories, false))
 		{
-			String sectionStr = section.getFileName();
+			std::string sectionStr = section.getFileName().toStdString();
 
 			if (sectionStr == "Percussion")
 			{
-				for (const auto &percussionType : section.findChildFiles(File::findDirectories, false))
+				for (const auto &percussionType : section.findChildFiles(juce::File::findDirectories, false))
 				{
-					String percussionTypeStr = percussionType.getFileName();
+					std::string percussionTypeStr = percussionType.getFileName().toStdString();
 
 					if (percussionTypeStr == "Rhythmic")
 					{
-						for (const auto &instrument : percussionType.findChildFiles(File::findDirectories, false))
+						for (const auto &instrument : percussionType.findChildFiles(juce::File::findDirectories, false))
 						{
 							parseRhythmicPercussionFiles(instrument);
 						}
 					}
 					else if (percussionTypeStr == "Melodic")
 					{
-						for (const auto &instrument : percussionType.findChildFiles(File::findDirectories, false))
+						for (const auto &instrument : percussionType.findChildFiles(juce::File::findDirectories, false))
 						{
 							parseInstrumentSamples(instrument, sectionStr);
 						}
@@ -84,7 +86,7 @@ void SamplesManagement::parseSampleFiles()
 			else
 			{
 				// Handle non-percussion instruments
-				for (const auto &instrument : section.findChildFiles(File::findDirectories, false))
+				for (const auto &instrument : section.findChildFiles(juce::File::findDirectories, false))
 				{
 					parseInstrumentSamples(instrument, sectionStr);
 				}
@@ -94,15 +96,22 @@ void SamplesManagement::parseSampleFiles()
 }
 
 
-void SamplesManagement::parseRhythmicPercussionFiles(const File &instrument)
+void SamplesManagement::reloadSamples()
 {
-	String instrumentName	  = instrument.getFileName();
-	String tmpPercSectionName = "Percussion";
-	int	   instrumentKey	  = getInstrumentKey(tmpPercSectionName, instrumentName);
+	mInstrumentSamples.clear();
+	loadSamples();
+}
 
-	for (const auto &articulationFolder : instrument.findChildFiles(File::findDirectories, false))
+
+void SamplesManagement::parseRhythmicPercussionFiles(const juce::File &instrument)
+{
+	std::string instrumentName	   = instrument.getFileName().toStdString();
+	std::string tmpPercSectionName = "Percussion";
+	int			instrumentKey	   = getInstrumentKey(tmpPercSectionName, instrumentName);
+
+	for (const auto &articulationFolder : instrument.findChildFiles(juce::File::findDirectories, false))
 	{
-		String		 articulationStr = articulationFolder.getFileName();
+		std::string	 articulationStr = articulationFolder.getFileName().toStdString();
 		Articulation articulationValue{};
 		try
 		{
@@ -110,11 +119,11 @@ void SamplesManagement::parseRhythmicPercussionFiles(const File &instrument)
 		}
 		catch (std::exception &e)
 		{
-			LOG_ERROR("Could not locate articulation for {}. Error: {}", articulationStr.toStdString(), e.what());
+			LOG_ERROR("Could not locate articulation for {}. Error: {}", articulationStr, e.what());
 			continue;
 		}
 
-		for (const auto &file : articulationFolder.findChildFiles(File::findFiles, false))
+		for (const auto &file : articulationFolder.findChildFiles(juce::File::findFiles, false))
 		{
 			addPercussionSamples(file, instrumentKey, articulationValue);
 		}
@@ -122,14 +131,14 @@ void SamplesManagement::parseRhythmicPercussionFiles(const File &instrument)
 }
 
 
-void SamplesManagement::parseInstrumentSamples(const File &instrumentFolder, String &sectionName)
+void SamplesManagement::parseInstrumentSamples(const juce::File &instrumentFolder, std::string &sectionName)
 {
-	String instrumentName = instrumentFolder.getFileName();
-	int	   instrumentKey  = getInstrumentKey(sectionName, instrumentName);
+	std::string instrumentName = instrumentFolder.getFileName().toStdString();
+	int			instrumentKey  = getInstrumentKey(sectionName, instrumentName);
 
-	for (const auto &articulationFolder : instrumentFolder.findChildFiles(File::findDirectories, false))
+	for (const auto &articulationFolder : instrumentFolder.findChildFiles(juce::File::findDirectories, false))
 	{
-		String		 articulationStr = articulationFolder.getFileName();
+		std::string	 articulationStr = articulationFolder.getFileName().toStdString();
 		Articulation articulationValue{};
 
 		try
@@ -138,11 +147,11 @@ void SamplesManagement::parseInstrumentSamples(const File &instrumentFolder, Str
 		}
 		catch (std::exception &e)
 		{
-			LOG_ERROR("Could not locate articulation for {}. Error: {}", articulationStr.toStdString(), e.what());
+			LOG_ERROR("Could not locate articulation for {}. Error: {}", articulationStr, e.what());
 			continue;
 		}
 
-		for (const auto &file : articulationFolder.findChildFiles(File::findFiles, false))
+		for (const auto &file : articulationFolder.findChildFiles(juce::File::findFiles, false))
 		{
 			addSample(file, instrumentKey, articulationValue);
 		}
@@ -150,10 +159,10 @@ void SamplesManagement::parseInstrumentSamples(const File &instrumentFolder, Str
 }
 
 
-void SamplesManagement::addPercussionSamples(const File &file, const int &key, Articulation articulation)
+void SamplesManagement::addPercussionSamples(const juce::File &file, const InstrumentID &key, Articulation articulation)
 {
-	String		filename = file.getFileNameWithoutExtension();
-	StringArray parts	 = StringArray::fromTokens(filename, "_", "");
+	juce::String	  filename = file.getFileNameWithoutExtension();
+	juce::StringArray parts	   = juce::StringArray::fromTokens(filename, "_", "");
 
 	if (parts.size() < 3)
 	{
@@ -161,30 +170,30 @@ void SamplesManagement::addPercussionSamples(const File &file, const int &key, A
 		return;
 	}
 
-	String note				= parts[0];
-	String dynamicString	= parts[1];
-	String roundRobinString = parts[2];
+	std::string note			 = parts[0].toStdString();
+	std::string dynamicString	 = parts[1].toStdString();
+	std::string roundRobinString = parts[2].toStdString();
 
-	int	   roundRobin		= 0;
+	int			roundRobin		 = 0;
 	try
 	{
-		roundRobin = stoi(roundRobinString.toStdString());
+		roundRobin = stoi(roundRobinString);
 	}
 	catch (std::exception &e)
 	{
-		LOG_WARNING("Failed to parse round robin value: {}, Error: {}", roundRobinString.toStdString().c_str(), e.what());
+		LOG_WARNING("Failed to parse round robin value: {}, Error: {}", roundRobinString, e.what());
 		roundRobin = 1; // Default to first round robin
 	}
 
-	int	   dynamic		  = getIndexOfDynamics(dynamicString);
+	int			dynamic		   = getIndexOfDynamics(dynamicString);
 
-	String instrumentName = file.getParentDirectory().getParentDirectory().getFileName();
+	std::string instrumentName = file.getParentDirectory().getParentDirectory().getFileName().toStdString();
 
 	// For percussion, we'll determine the MIDI note based on a mapping
-	int	   midiNote		  = turnNotenameIntoMidinumber(note);
+	int			midiNote	   = turnNotenameIntoMidinumber(note);
 	if (midiNote == -1)
 	{
-		LOG_WARNING("Invalid note name for percussion: {}, defaulting to C3 (60)", note.toStdString().c_str());
+		LOG_WARNING("Invalid note name for percussion: {}, defaulting to C3 (60)", note);
 		midiNote = 60; // Default to middle C if parsing fails
 	}
 
@@ -193,7 +202,7 @@ void SamplesManagement::addPercussionSamples(const File &file, const int &key, A
 	// Set percussion element name if we have more than 3 parts in the filename
 	if (parts.size() > 3)
 	{
-		sampleInfo.percussionElementName = parts[3];
+		sampleInfo.percussionElementName = parts[3].toStdString();
 	}
 	else
 	{
@@ -202,15 +211,14 @@ void SamplesManagement::addPercussionSamples(const File &file, const int &key, A
 
 	mInstrumentSamples[key].emplace_back(sampleInfo);
 
-	LOG_INFO("Added percussion sample for instrument {} (Note = {}, MIDI = {}, Element = {})", instrumentName.toStdString().c_str(), note.toStdString().c_str(), midiNote,
-			 sampleInfo.percussionElementName.toStdString().c_str());
+	LOG_INFO("Added percussion sample for instrument {} (Note = {}, MIDI = {}, Element = {})", instrumentName, note, midiNote, sampleInfo.percussionElementName);
 }
 
 
-void SamplesManagement::addSample(const File &file, const int &key, Articulation articulation)
+void SamplesManagement::addSample(const juce::File &file, const InstrumentID &key, Articulation articulation)
 {
-	String		filename = file.getFileNameWithoutExtension();
-	StringArray parts	 = StringArray::fromTokens(filename, "_", "");
+	juce::String	  filename = file.getFileNameWithoutExtension();
+	juce::StringArray parts	   = juce::StringArray::fromTokens(filename, "_", "");
 
 	if (parts.size() < 3)
 	{
@@ -218,37 +226,37 @@ void SamplesManagement::addSample(const File &file, const int &key, Articulation
 		return; // Invalid file name format
 	}
 
-	String note				= parts[0];
-	String dynamicString	= parts[1];
-	String roundRobinString = parts[2];
+	std::string note			 = parts[0].toStdString();
+	std::string dynamicString	 = parts[1].toStdString();
+	std::string roundRobinString = parts[2].toStdString();
 
-	int	   roundRobin		= 0;
-	roundRobin				= stoi(roundRobinString.toStdString());
+	int			roundRobin		 = 0;
+	roundRobin					 = stoi(roundRobinString);
 
-	int	   dynamic			= getIndexOfDynamics(dynamicString);
+	int			dynamic			 = getIndexOfDynamics(dynamicString);
 
-	String instrumentName	= file.getParentDirectory().getParentDirectory().getFileName();
+	std::string instrumentName	 = file.getParentDirectory().getParentDirectory().getFileName().toStdString();
 
-	Sample sampleInfo(instrumentName, note, roundRobin, static_cast<Dynamics>(dynamic), articulation, file);
+	Sample		sampleInfo(instrumentName, note, roundRobin, static_cast<Dynamics>(dynamic), articulation, file);
 
 	mInstrumentSamples[key].emplace_back(sampleInfo);
 
-	LOG_INFO("Added sample for instrument {} (Dynamic = {}, Note = {})", instrumentName.toStdString().c_str(), dynamicString.toStdString().c_str(), note.toStdString().c_str());
+	LOG_DEBUG("Added sample for instrument {} (Dynamic = {}, Note = {})", instrumentName, dynamicString, note);
 }
 
 
-int SamplesManagement::getIndexOfDynamics(const String &dynamicString)
+int SamplesManagement::getIndexOfDynamics(const std::string &dynamicString)
 {
 	int dynamic = 0;
 
-	if (dynamicString.startsWith("v")) // If the dynamic layer is set to a v# value, we hardcode them to the following dynamic layers
+	if (dynamicString.starts_with("v")) // If the dynamic layer is set to a v# value, we hardcode them to the following dynamic layers
 	{
 		auto it = velocityLayerMap.find(dynamicString);
 		if (it != velocityLayerMap.end())
 			return static_cast<int>(it->second);
 
 		// Fallback:
-		LOG_WARNING("Unhandled velocity layer: {}", dynamicString.toStdString().c_str());
+		LOG_WARNING("Unhandled velocity layer: {}", dynamicString);
 		return static_cast<int>(Dynamics::mezzoForte);
 	}
 	else // Otherwise see if it is in the standart dynamic map
@@ -258,7 +266,7 @@ int SamplesManagement::getIndexOfDynamics(const String &dynamicString)
 			return static_cast<int>(it->second);
 
 		// Fallback:
-		LOG_WARNING("Unknown dynamic token: {}", dynamicString.toStdString().c_str());
+		LOG_WARNING("Unknown dynamic token: {}", dynamicString);
 		dynamic = static_cast<int>(Dynamics::mezzoForte);
 	}
 
@@ -266,13 +274,26 @@ int SamplesManagement::getIndexOfDynamics(const String &dynamicString)
 }
 
 
-std::vector<Sample> SamplesManagement::getSamplesForInstrument(const int &instrumentKey) const
+std::vector<Sample> SamplesManagement::getSamplesForInstrument(const InstrumentID &instrumentKey) const
 {
 	auto it = mInstrumentSamples.find(instrumentKey);
+	
 	if (it != mInstrumentSamples.end())
-	{
 		return it->second;
-	}
+
 	LOG_WARNING("Could not find instrument's samples with the key {}", instrumentKey);
 	return {};
+}
+
+
+void SamplesManagement::setSampleDirectory(std::string directory)
+{
+	if (directory.empty())
+	{
+		LOG_WARNING("Tried to set an empty directory for the samples! Skipping..");
+		return;
+	}
+
+	mSampleDirectory = directory;
+	mUserConfig.saveSamplesFolder(directory);
 }
