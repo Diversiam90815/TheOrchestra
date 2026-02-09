@@ -8,8 +8,8 @@ It focuses on:
 - Fast, structured logging (fmt-backed)  
 - Comprehensive automated tests (GoogleTest) for core musical domain logic
 
-The project is in active development and aims to become a lightweight orchestral study / sketching tool and foundation for more advanced articulation and performance modeling.
-
+## Disclaimer
+**The project is in active development and aims to become a lightweight orchestral study / sketching tool and foundation for more advanced articulation and performance modeling. Currently the UI (especially the notation rendering) is currently being refactored.**
 
 ## Features
 
