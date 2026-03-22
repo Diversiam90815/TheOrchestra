@@ -23,6 +23,7 @@ using InstrumentRegisters = std::vector<InstrumentRegister>;
 using PlayingTechniques	  = std::vector<PlayingTechnique>;
 using OrchestrationRoles  = std::vector<OrchestrationRole>;
 using SignatureWorks	  = std::vector<SignatureWork>;
+using InstrumentClefs	  = std::vector<std::string>;
 
 
 /*
@@ -41,8 +42,9 @@ public:
 					  const OrchestrationRoles	&roles,
 					  const SignatureWorks		&works,
 					  const PlayingTechniques	&techniques,
+					  const InstrumentClefs		&clefs			  = {},
 					  bool						 isRhythmicPercussion = false)
-		: mName(name), mRange(range), mRegisters(registers), mRoles(roles), mFamousWorks(works), mPlayingTechniques(techniques), mID(id),
+		: mName(name), mRange(range), mRegisters(registers), mRoles(roles), mFamousWorks(works), mPlayingTechniques(techniques), mClefs(clefs), mID(id),
 		  mIsRhythmicPercussion(isRhythmicPercussion)
 	{
 	}
@@ -54,6 +56,7 @@ public:
 	SignatureWorks		getFamousWorks() const { return mFamousWorks; }
 	PlayingTechniques	getTechniques() const { return mPlayingTechniques; }
 	InstrumentID		getInstrumentID() const { return mID; }
+	InstrumentClefs		getClefs() const { return mClefs; }
 	bool				isRhythmicPercussion() const { return mIsRhythmicPercussion; }
 
 	bool				isValid() const { return !mName.empty() && mID != 0; }
@@ -67,6 +70,7 @@ private:
 	OrchestrationRoles	mRoles;						   // Any useful information of the instrument
 	SignatureWorks		mFamousWorks;				   // Famous works presenting the qualitiy of the instrument
 	PlayingTechniques	mPlayingTechniques;			   // Different playing techniques featured within the instrument's family
+	InstrumentClefs		mClefs;						   // Clefs used by the instrument (e.g. "Treble", "Bass", "Alto")
 	bool				mIsRhythmicPercussion = false; // If the instrument is a rhythmic percussion instrument, it will be set to true
 
 	InstrumentID		mID					  = 0;	   // 3 digit key defining the instrument (see Helper.h)

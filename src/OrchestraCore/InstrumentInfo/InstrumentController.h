@@ -29,6 +29,8 @@ public:
 
 	InstrumentProfile getInstrument(InstrumentID key);
 
+	std::vector<std::pair<InstrumentID, std::string>> getInstrumentsForFamily(Family family);
+
 
 private:
 	bool									  loadInstrumentData();

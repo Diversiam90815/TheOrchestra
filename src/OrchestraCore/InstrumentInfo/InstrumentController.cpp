@@ -36,6 +36,26 @@ InstrumentProfile InstrumentController::getInstrument(InstrumentID key)
 }
 
 
+std::vector<std::pair<InstrumentID, std::string>> InstrumentController::getInstrumentsForFamily(Family family)
+{
+	std::vector<std::pair<InstrumentID, std::string>> result;
+	int familyPrefix = static_cast<int>(family) * 100;
+
+	for (const auto &[key, profile] : instruments)
+	{
+		if (key / 100 == static_cast<int>(family))
+		{
+			result.emplace_back(key, profile.getName());
+		}
+	}
+
+	// Sort by instrument ID for consistent ordering
+	std::sort(result.begin(), result.end(), [](const auto &a, const auto &b) { return a.first < b.first; });
+
+	return result;
+}
+
+
 bool InstrumentController::loadInstrumentData()
 {
 	try
@@ -98,6 +118,16 @@ bool InstrumentController::loadInstrumentData()
 				// isRhythmicPercussion, defaults to false
 				bool			  isRhythmicPercussion = instrumentJson.value("isRhythmicPercussion", false);
 
+				// Parse clefs
+				InstrumentClefs	  clefs;
+				if (instrumentJson.contains("clefs"))
+				{
+					for (const auto &c : instrumentJson["clefs"])
+					{
+						clefs.push_back(c.get<std::string>());
+					}
+				}
+
 				// Parse qualities
 				InstrumentRegisters qualities;
 				if (instrumentJson.contains("registers"))
@@ -143,7 +173,7 @@ bool InstrumentController::loadInstrumentData()
 				}
 
 				// Create and add instrument
-				InstrumentProfile info(name, key, range, qualities, roles, famousWorks, techniques, isRhythmicPercussion);
+				InstrumentProfile info(name, key, range, qualities, roles, famousWorks, techniques, clefs, isRhythmicPercussion);
 
 				if (!info.isValid())
 				{
