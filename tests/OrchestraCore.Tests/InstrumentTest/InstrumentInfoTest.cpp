@@ -414,7 +414,7 @@ protected:
 		SignatureWorks	  works;
 		PlayingTechniques techniques;
 
-		return InstrumentProfile("TestInstrument", 301, range, qualities, roles, works, techniques, false);
+		return InstrumentProfile("TestInstrument", 301, range, qualities, roles, works, techniques, {}, false);
 	}
 };
 
@@ -450,7 +450,7 @@ TEST_F(InstrumentProfileTest, IsValidReturnsFalseForEmptyName)
 	json			  rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
 	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
 
-	InstrumentProfile profile("", 301, range, {}, {}, {}, {}, false);
+	InstrumentProfile profile("", 301, range, {}, {}, {}, {}, {}, false);
 
 	EXPECT_FALSE(profile.isValid());
 }
@@ -460,7 +460,7 @@ TEST_F(InstrumentProfileTest, IsValidReturnsFalseForZeroKey)
 	json			  rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
 	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
 
-	InstrumentProfile profile("ValidName", 0, range, {}, {}, {}, {}, false);
+	InstrumentProfile profile("ValidName", 0, range, {}, {}, {}, {}, {}, false);
 
 	EXPECT_FALSE(profile.isValid());
 }
@@ -470,7 +470,7 @@ TEST_F(InstrumentProfileTest, RhythmicPercussionFlagWorks)
 	json			  rangeJson = R"({"written": {"low": "D2", "high": "C4"}})"_json;
 	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
 
-	InstrumentProfile profile("Timpani", 403, range, {}, {}, {}, {}, true);
+	InstrumentProfile profile("Timpani", 403, range, {}, {}, {}, {}, {}, true);
 
 	EXPECT_TRUE(profile.isRhythmicPercussion());
 }
@@ -495,7 +495,7 @@ TEST_F(InstrumentProfileTest, GettersReturnCorrectValues)
 	PlayingTechniques techniques;
 	techniques.push_back(techJson.get<PlayingTechnique>());
 
-	InstrumentProfile profile("Violin", 301, range, qualities, roles, works, techniques, false);
+	InstrumentProfile profile("Violin", 301, range, qualities, roles, works, techniques, {}, false);
 
 	EXPECT_EQ(profile.getName(), "Violin");
 	EXPECT_EQ(profile.getInstrumentID(), 301);
@@ -512,7 +512,7 @@ TEST_F(InstrumentProfileTest, EqualityOperatorComparesKeyAndName)
 
 	json			  rangeJson = R"({"written": {"low": "C3", "high": "E6"}})"_json;
 	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
-	InstrumentProfile p3("DifferentInstrument", 302, range, {}, {}, {}, {}, false);
+	InstrumentProfile p3("DifferentInstrument", 302, range, {}, {}, {}, {}, {}, false);
 
 	EXPECT_EQ(p1, p2);
 	EXPECT_FALSE(p1 == p3);
@@ -523,7 +523,7 @@ TEST_F(InstrumentProfileTest, CanStoreEmptyCollections)
 	json			  rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
 	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
 
-	InstrumentProfile profile("Test", 100, range, {}, {}, {}, {}, false);
+	InstrumentProfile profile("Test", 100, range, {}, {}, {}, {}, {}, false);
 
 	EXPECT_EQ(profile.getRegisters().size(), 0);
 	EXPECT_EQ(profile.getRoles().size(), 0);
@@ -561,7 +561,7 @@ TEST_F(InstrumentProfileTest, CanStoreLargeCollections)
 		techniques.push_back(j.get<PlayingTechnique>());
 	}
 
-	InstrumentProfile profile("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile profile("Test", 100, range, qualities, roles, works, techniques, {}, false);
 
 	EXPECT_EQ(profile.getRegisters().size(), 10);
 	EXPECT_EQ(profile.getRoles().size(), 5);
@@ -641,7 +641,7 @@ TEST_F(IntegrationTest, DeserializesCompleteViolinProfileFromJSON)
 
 	bool			  isRhythmic = j["isRhythmicPercussion"];
 
-	InstrumentProfile profile(name, 301, range, qualities, roles, works, techniques, isRhythmic);
+	InstrumentProfile profile(name, 301, range, qualities, roles, works, techniques, {}, isRhythmic);
 
 	EXPECT_EQ(profile.getName(), "Violin");
 	EXPECT_EQ(profile.getInstrumentID(), 301);
@@ -701,7 +701,7 @@ TEST_F(IntegrationTest, DeserializesTimpaniWithDisplayedRange)
 
 	PlayingTechniques techniques;
 
-	InstrumentProfile profile(name, 403, range, qualities, roles, works, techniques, true);
+	InstrumentProfile profile(name, 403, range, qualities, roles, works, techniques, {}, true);
 
 	EXPECT_EQ(profile.getName(), "Timpani");
 	EXPECT_TRUE(profile.isRhythmicPercussion());
