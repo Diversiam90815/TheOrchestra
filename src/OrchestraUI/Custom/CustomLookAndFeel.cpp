@@ -40,12 +40,12 @@ void CustomLookAndFeel::setFont()
 {
 	instrumentTypeface = juce::Typeface::createSystemTypefaceFor(TextFontData::InstrumentSerifRegular_ttf, TextFontData::InstrumentSerifRegular_ttfSize);
 
-	instrumentNameFont = juce::Font(instrumentTypeface).withHeight(32.0f);
-	sectionTitleFont   = juce::Font(instrumentTypeface).withHeight(12.0f);
-	bodyFont		   = juce::Font(instrumentTypeface).withHeight(14.0f);
-	smallFont		   = juce::Font(instrumentTypeface).withHeight(12.0f);
-	textEditorFont	   = juce::Font(instrumentTypeface).withHeight(14.0f);
-	tooltipFont		   = juce::Font(instrumentTypeface).withHeight(13.0f);
+	instrumentNameFont = juce::Font(instrumentTypeface).withHeight(36.0f);
+	sectionTitleFont   = juce::Font(instrumentTypeface).withHeight(14.0f);
+	bodyFont		   = juce::Font(instrumentTypeface).withHeight(16.0f);
+	smallFont		   = juce::Font(instrumentTypeface).withHeight(14.0f);
+	textEditorFont	   = juce::Font(instrumentTypeface).withHeight(16.0f);
+	tooltipFont		   = juce::Font(instrumentTypeface).withHeight(15.0f);
 
 	instrumentNameFont.setExtraKerningFactor(0.005f);
 	sectionTitleFont.setExtraKerningFactor(0.1f);

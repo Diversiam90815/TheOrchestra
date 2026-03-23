@@ -48,9 +48,9 @@ void FamousWorksPanel::paint(juce::Graphics &g)
 		auto entryBounds = area.removeFromTop(kEntryHeight);
 
 		// Composer line (uppercase, small)
-		auto composerArea = entryBounds.removeFromTop(14);
+		auto composerArea = entryBounds.removeFromTop(16);
 		g.setColour(tertiaryCol);
-		auto composerFont = juce::Font(lnf->getInstrumentTypeface()).withHeight(11.0f);
+		auto composerFont = juce::Font(lnf->getInstrumentTypeface()).withHeight(13.0f);
 		composerFont.setExtraKerningFactor(0.08f);
 		g.setFont(composerFont);
 		g.drawText(mWorks[i].composer.toUpperCase(), composerArea, juce::Justification::centredLeft, false);
