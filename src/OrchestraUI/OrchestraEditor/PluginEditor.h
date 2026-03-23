@@ -67,11 +67,11 @@ private:
 	PianoRoll			   mPianoRollView;
 
 	// Layout constants
-	static constexpr int   kWidth		= 1400;
-	static constexpr int   kHeight		= 800;
+	static constexpr int   kWidth		= 1500;
+	static constexpr int   kHeight		= 900;
 	static constexpr int   kHeaderH		= 40;
 	static constexpr int   kPianoH		= 120;
-	static constexpr int   kSidebarW	= 280;
+	static constexpr int   kSidebarW	= 200;
 	static constexpr int   kDetailW		= 320;
 
 	InstrumentID		   mCurrentInstrument = 0;

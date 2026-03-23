@@ -195,13 +195,13 @@ void OrchestraEditor::layoutRightColumn(int availableHeight)
 	if (registerCount < 1)
 		registerCount = 4; // default assumption
 
-	const int registerCardH = 68;
+	const int registerCardH = 74;
 	const int registerGap	= 8;
 	const int registerPad	= 16 * 2 + 24; // kPadding*2 + kTitleHeight
 	int registerH = registerPad + registerCount * registerCardH + (registerCount - 1) * registerGap;
 
-	const int rolesH = 150;
-	const int worksH = 180;
+	const int rolesH = 170;
+	const int worksH = 200;
 
 	int totalNeeded = registerH + gap + rolesH + gap + worksH;
 	int contentH	= juce::jmax(totalNeeded, availableHeight);
