@@ -12,7 +12,7 @@
 InstrumentSidebar::InstrumentSidebar()
 {
 	mListBox.setModel(this);
-	mListBox.setRowHeight(52);
+	mListBox.setRowHeight(44);
 	mListBox.setColour(juce::ListBox::backgroundColourId, juce::Colours::transparentBlack);
 	mListBox.setColour(juce::ListBox::outlineColourId, juce::Colours::transparentBlack);
 	addAndMakeVisible(mListBox);
@@ -104,8 +104,8 @@ void InstrumentSidebar::paintListBoxItem(int rowNumber, juce::Graphics &g, int w
 	}
 
 	// Icon placeholder
-	const int iconSize = 36;
-	const int iconX	   = 16;
+	const int iconSize = 30;
+	const int iconX	   = 12;
 	const int iconY	   = (height - iconSize) / 2;
 
 	if (lnf)
@@ -123,17 +123,17 @@ void InstrumentSidebar::paintListBoxItem(int rowNumber, juce::Graphics &g, int w
 	else
 		g.setColour(juce::Colour(158, 154, 142));
 
-	g.setFont(juce::Font(16.0f));
+	g.setFont(juce::Font(14.0f));
 	g.drawText(juce::String(name.substr(0, 2)),
 			   iconX, iconY, iconSize, iconSize,
 			   juce::Justification::centred, false);
 
 	// Instrument name
-	const int textX = iconX + iconSize + 14;
+	const int textX = iconX + iconSize + 12;
 	if (lnf)
 	{
 		g.setColour(isSelected ? lnf->getTextPrimaryColour() : lnf->getTextSecondaryColour());
-		auto nameFont = juce::Font(lnf->getInstrumentTypeface()).withHeight(16.0f);
+		auto nameFont = juce::Font(lnf->getInstrumentTypeface()).withHeight(15.0f);
 		nameFont.setExtraKerningFactor(0.003f);
 		g.setFont(nameFont);
 	}
