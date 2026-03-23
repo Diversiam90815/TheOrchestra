@@ -38,7 +38,7 @@ void CustomLookAndFeel::init()
 
 void CustomLookAndFeel::setFont()
 {
-	instrumentTypeface = juce::Typeface::createSystemTypefaceFor(TextFontData::InstrumentSerifRegular_ttf, TextFontData::InstrumentSerifRegular_ttfSize);
+	instrumentTypeface = juce::Typeface::createSystemTypefaceFor(TextFontData::SourceSerif4Regular_ttf, TextFontData::SourceSerif4Regular_ttfSize);
 
 	instrumentNameFont = juce::Font(instrumentTypeface).withHeight(36.0f);
 	sectionTitleFont   = juce::Font(instrumentTypeface).withHeight(14.0f);
