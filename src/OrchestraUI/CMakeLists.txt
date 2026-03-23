@@ -119,7 +119,7 @@ source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${UI_PROJECT_FILES})
 juce_add_binary_data(TextFontData
     NAMESPACE TextFontData
     HEADER_NAME  TextFontData
-    SOURCES ${ASSETS_DIR}/Font/Instrument-Serif/InstrumentSerif-Regular.ttf
+    SOURCES ${ASSETS_DIR}/Font/Source-Serif-4/SourceSerif4-Regular.ttf
 )
 
 juce_add_binary_data(NotationFontData
