@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 	Module			PluginEditor
-	Description		User Interface
+	Description		Main UI - Three-column layout with header, sidebar, content, and piano roll
   ==============================================================================
 */
 
@@ -10,14 +10,15 @@
 #include "PluginProcessor.h"
 
 #include "PianoRoll.h"
-#include "MenuBar.h"
-#include "InstrumentRangesView.h"
-#include "RegisterView.h"
-#include "TechniquesView.h"
-#include "InformationView.h"
-#include "FamousWorksView.h"
-#include "InstrumentView.h"
-#include "SamplerView.h"
+#include "HeaderBar.h"
+#include "InstrumentSidebar.h"
+#include "InstrumentHeaderPanel.h"
+#include "RangesPanel.h"
+#include "RegisterPanel.h"
+#include "TechniquesPanel.h"
+#include "RolesPanel.h"
+#include "FamousWorksPanel.h"
+#include "SamplerPanel.h"
 
 
 class OrchestraEditor : public juce::AudioProcessorEditor
@@ -29,64 +30,46 @@ public:
 	void paint(juce::Graphics &) override;
 	void resized() override;
 
-	void init();
-	void showUI();
-
 private:
-	void				   changeInstrument(InstrumentID key);
+	void changeFamily(Family family);
+	void changeInstrument(InstrumentID key);
+	void onSettingsClicked();
+	void onClefChanged(Clef clef);
+	void onPitchModeChanged(PitchMode mode);
 
 	CoreManager			  *mCoreManager;
-
 	OrchestraProcessor	  &audioProcessor;
-
-	PianoRoll			   mPianoRollView;
-	MenuBar				   mMenuBar;
-
-	juce::MenuBarComponent mMenuBarComponent;
 
 	CustomLookAndFeel	   mCustomLookAndFeel;
 
-	InstrumentView		   mInstrumentView;
-	InstrumentRangesView   mRangesView;
-	RegisterView		   mQualitiesView;
-	TechniquesView		   mTechniquesView;
-	InformationView		   mInfoView;
-	FamousWorksView		   mFamousWorksView;
-	SamplerView			   mSamplerView;
+	// Navigation
+	HeaderBar			   mHeaderBar;
+	InstrumentSidebar	   mSidebar;
 
-	const int			   mInstrumentViewX	  = 443;
-	const int			   mInstrumentViewY	  = 49;
+	// Center content panels
+	InstrumentHeaderPanel  mInstrumentHeader;
+	RangesPanel			   mRangesPanel;
+	SamplerPanel		   mSamplerPanel;
+	TechniquesPanel		   mTechniquesPanel;
 
-	const int			   mRangesViewX		  = 16;
-	const int			   mRangesViewY		  = 145;
+	// Right detail panels
+	RegisterPanel		   mRegisterPanel;
+	RolesPanel			   mRolesPanel;
+	FamousWorksPanel	   mFamousWorksPanel;
 
-	const int			   mQualitiesViewX	  = 325;
-	const int			   mQualitiesViewY	  = 145;
+	// Piano roll
+	PianoRoll			   mPianoRollView;
 
-	const int			   mTechniquesViewX	  = 650;
-	const int			   mTechniquesViewY	  = 145;
-
-	const int			   mInfoViewX		  = 654;
-	const int			   mInfoViewY		  = 389;
-
-	const int			   mFamousWorksViewX  = 962;
-	const int			   mFamousWorksViewY  = 145;
-
-	const int			   mSamplerViewX	  = 335;
-	const int			   mSamplerViewY	  = 459;
-
-	const int			   mPianoRollX		  = 0;
-	const int			   mPianoRollY		  = 586;
-	const int			   mPianoRollHeight	  = 114;
-
-	const int			   mMenuBarX		  = 0;
-	const int			   mMenuBarY		  = 0;
-	const int			   mMenuBarHeight	  = 30;
-
-	const int			   mWidth			  = 1200;
-	const int			   mHeight			  = 700;
+	// Layout constants
+	static constexpr int   kWidth		= 1400;
+	static constexpr int   kHeight		= 800;
+	static constexpr int   kHeaderH		= 40;
+	static constexpr int   kPianoH		= 120;
+	static constexpr int   kSidebarW	= 280;
+	static constexpr int   kDetailW		= 320;
 
 	InstrumentID		   mCurrentInstrument = 0;
+	Family				   mCurrentFamily	  = Family::Strings;
 
 	friend class MainWindow;
 };
