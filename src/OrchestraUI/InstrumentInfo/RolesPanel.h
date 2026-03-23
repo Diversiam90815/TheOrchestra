@@ -22,7 +22,7 @@ public:
 private:
 	std::vector<juce::String> mRoles;
 
-	static constexpr int   kRowHeight	= 24;
-	static constexpr float kBulletSize	= 4.0f;
-	static constexpr int   kTextPadding = 16;
+	static constexpr int   kRowHeight	= 28;
+	static constexpr float kBulletSize	= 5.0f;
+	static constexpr int   kTextPadding = 18;
 };

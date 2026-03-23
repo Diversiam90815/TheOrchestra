@@ -28,5 +28,5 @@ private:
 
 	std::vector<WorkData> mWorks;
 
-	static constexpr int kEntryHeight = 36;
+	static constexpr int kEntryHeight = 42;
 };
