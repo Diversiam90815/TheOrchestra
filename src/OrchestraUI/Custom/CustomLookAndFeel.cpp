@@ -97,6 +97,26 @@ void CustomLookAndFeel::drawLabel(juce::Graphics &g, juce::Label &label)
 		g.setFont(instrumentNameFont);
 		g.drawText(label.getText(), label.getLocalBounds(), juce::Justification::centredLeft, true);
 	}
+	else if (labelName.contains("FamilySubtitle"))
+	{
+		g.fillAll(label.findColour(juce::Label::backgroundColourId));
+		g.setColour(textSecondary);
+		g.setFont(bodyFont);
+		g.drawText(label.getText(), label.getLocalBounds(), juce::Justification::centredLeft, false);
+	}
+	else if (labelName.contains("MetaInfo"))
+	{
+		// Non-interactive info pill (clefs, transposition)
+		auto bounds = label.getLocalBounds().toFloat().reduced(0.5f);
+		g.setColour(surfaceElevated);
+		g.fillRoundedRectangle(bounds, 4.0f);
+
+		auto font = juce::Font(instrumentTypeface).withHeight(12.0f);
+		font.setExtraKerningFactor(0.02f);
+		g.setFont(font);
+		g.setColour(textSecondary);
+		g.drawText(label.getText(), label.getLocalBounds(), juce::Justification::centred, true);
+	}
 	else if (labelName.contains("SectionTitle"))
 	{
 		g.fillAll(label.findColour(juce::Label::backgroundColourId));
@@ -305,4 +325,22 @@ std::vector<juce::Colour> CustomLookAndFeel::getQualityColours()
 std::vector<juce::Colour> CustomLookAndFeel::getQualityColoursBase()
 {
 	return {firstQualityColour, secondQualityColour, thirdQualityColour, fourthQualityColour};
+}
+
+
+void CustomLookAndFeel::drawButtonText(juce::Graphics &g, juce::TextButton &button, bool /*shouldDrawButtonAsHighlighted*/, bool /*shouldDrawButtonAsDown*/)
+{
+	auto font = juce::Font(instrumentTypeface).withHeight(13.0f);
+	font.setExtraKerningFactor(0.02f);
+	g.setFont(font);
+
+	bool isToggled = button.getToggleState();
+
+	// Use appropriate text colour
+	if (isToggled)
+		g.setColour(textPrimary);
+	else
+		g.setColour(textSecondary);
+
+	g.drawText(button.getButtonText(), button.getLocalBounds(), juce::Justification::centred, true);
 }

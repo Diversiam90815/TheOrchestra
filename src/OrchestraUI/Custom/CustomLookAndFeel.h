@@ -63,6 +63,7 @@ private:
 						   const juce::Colour		  *textColour) override;
 	void drawButtonBackground(
 		juce::Graphics &g, juce::Button &button, const juce::Colour &backgroundColour, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override;
+	void drawButtonText(juce::Graphics &g, juce::TextButton &button, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override;
 
 	void			 drawTooltip(juce::Graphics &, const juce::String &text, int width, int height) override;
 	juce::TextLayout layoutTooltipText(const juce::String &text) const noexcept;
