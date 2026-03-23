@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 	Module			OrchestraPanel
-	Description		Base class for all UI panels in the redesigned layout
+	Description		Base class for all UI panels.
   ==============================================================================
 */
 

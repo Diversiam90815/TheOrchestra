@@ -1,12 +1,7 @@
 /*
   ==============================================================================
 	Module			OrchestraPanel
-	Description		Base class for all UI panels in the redesigned layout.
-					Replaces CustomComponent with a cleaner pattern:
-					- No per-component LookAndFeel (inherits from parent)
-					- No path accumulation bug (local path in paint)
-					- Single setInstrument() replaces init() + displayInstrument()
-					- Built-in section title rendering
+	Description		Base class for all UI panels.
   ==============================================================================
 */
 
