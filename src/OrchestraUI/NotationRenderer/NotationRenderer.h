@@ -31,6 +31,13 @@ enum class Accidental
 	DoubleFlat,
 };
 
+enum class OttavaType
+{
+	None,
+	Ottava8va,	// 8va - display note an octave lower than actual
+	Ottava8vb,	// 8vb - display note an octave higher than actual
+};
+
 
 struct NoteDescriptor
 {
@@ -61,9 +68,12 @@ private:
 
 	void				 drawStaff(juce::Graphics &g, juce::Rectangle<float> staffArea);
 	void				 drawClef(juce::Graphics &g, juce::Rectangle<float> staffArea, Clef clef);
-	void				 drawNote(juce::Graphics &g, juce::Rectangle<float> staffArea, const NoteDescriptor &note, Clef clef);
+	void				 drawNote(juce::Graphics &g, juce::Rectangle<float> staffArea, const NoteDescriptor &note, Clef clef, OttavaType ottava);
 	void				 drawLedgerLines(juce::Graphics &g, juce::Rectangle<float> staffArea, int staffPosition, float noteX);
 	void				 drawAccidental(juce::Graphics &g, float x, float y, Accidental accidental);
+	void				 drawOttavaText(juce::Graphics &g, juce::Rectangle<float> staffArea, OttavaType ottava);
+
+	OttavaType			 determineOttava(int midiNote, Clef clef);
 
 	int					 midiNoteToStaffPosition(const int midiNote, Clef clef);
 
@@ -71,8 +81,8 @@ private:
 
 
 	juce::Font			 mNotationFont;
-	juce::Colour		 mStaffLineColor			 = juce::Colour(0xff000000);
-	juce::Colour		 mNoteColor					 = juce::Colour(0xff000000);
+	juce::Colour		 mStaffLineColor			 = juce::Colour::fromRGB(107, 103, 96);  // textTertiary
+	juce::Colour		 mNoteColor					 = juce::Colour::fromRGB(238, 233, 218); // textPrimary
 
 	const float			 mStaffLineSpacing			 = 8.0f; // Space between staff lines in px
 	const float			 mStaffLineThickness		 = 1.5f;
@@ -89,4 +99,7 @@ private:
 	static constexpr int kGlyphAccidentalNatural	 = 0xE261;
 	static constexpr int kGlyphAccidentalDoubleSharp = 0xE263;
 	static constexpr int kGlyphAccidentalDoubleFlat	 = 0xE264;
+
+	// Max ledger lines before triggering ottava
+	static constexpr int kMaxLedgerLines			 = 3;
 };
