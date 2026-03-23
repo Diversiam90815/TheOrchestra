@@ -12,6 +12,7 @@
 
 constexpr auto RANGE_WRITTEN	   = "written";
 constexpr auto RANGE_DISPLAYED	   = "displayed";
+constexpr auto RANGE_SOUNDING	   = "sounding";
 constexpr auto RANGE_TRANSPOSITION = "transposition";
 constexpr auto RANGE_LOW		   = "low";
 constexpr auto RANGE_HIGH		   = "high";
@@ -65,18 +66,25 @@ inline void from_json(const nlohmann::json &j, InstrumentRange &range)
 		range.higherNoteRange = turnNotenameIntoMidinumber(range.higherRange);
 	}
 
-	// Parse displayed range (optional, for rhythmic percussion)
-	if (j.contains(RANGE_DISPLAYED))
+	// Parse sounding/displayed range (optional - used for transposing instruments and rhythmic percussion)
+	// JSON data may use either "sounding" or "displayed" as the key
+	const char *soundingKey = nullptr;
+	if (j.contains(RANGE_SOUNDING))
+		soundingKey = RANGE_SOUNDING;
+	else if (j.contains(RANGE_DISPLAYED))
+		soundingKey = RANGE_DISPLAYED;
+
+	if (soundingKey != nullptr)
 	{
-		const auto &displayed	   = j[RANGE_DISPLAYED];
-		range.lowerDisplay		   = displayed[RANGE_LOW].get<std::string>();
-		range.higherDisplay		   = displayed[RANGE_HIGH].get<std::string>();
+		const auto &sounding	   = j[soundingKey];
+		range.lowerDisplay		   = sounding[RANGE_LOW].get<std::string>();
+		range.higherDisplay		   = sounding[RANGE_HIGH].get<std::string>();
 		range.lowerDisplayedRange  = turnNotenameIntoMidinumber(range.lowerDisplay);
 		range.higherDisplayedRange = turnNotenameIntoMidinumber(range.higherDisplay);
 	}
 	else
 	{
-		// Default to written range
+		// Default to written range (non-transposing instruments)
 		range.lowerDisplay		   = range.lowerRange;
 		range.higherDisplay		   = range.higherRange;
 		range.lowerDisplayedRange  = range.lowerNoteRange;
