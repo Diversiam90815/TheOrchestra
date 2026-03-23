@@ -87,6 +87,12 @@ InstrumentProfile CoreManager::getInstrument(InstrumentID key)
 }
 
 
+std::vector<std::pair<InstrumentID, std::string>> CoreManager::getInstrumentsForFamily(Family family)
+{
+	return mInstrumentController->getInstrumentsForFamily(family);
+}
+
+
 std::set<Articulation> CoreManager::getAvailableArticulations(InstrumentID instrumentKey)
 {
 	return mSampler->getAvailableArticulationsForInstrument(instrumentKey);
