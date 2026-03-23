@@ -159,7 +159,7 @@ void OrchestraEditor::layoutCenterColumn(int availableHeight)
 	const int cw  = mCenterViewport.getWidth() - 8; // account for scrollbar
 
 	const int headerPanelH	   = 140;
-	const int rangesPanelH	   = 120;
+	const int rangesPanelH	   = 140;
 	const int samplerPanelH	   = 110;
 	const int techniquesPanelH = 280; // generous default for techniques
 
@@ -195,7 +195,7 @@ void OrchestraEditor::layoutRightColumn(int availableHeight)
 	if (registerCount < 1)
 		registerCount = 4; // default assumption
 
-	const int registerCardH = 74;
+	const int registerCardH = 64;
 	const int registerGap	= 8;
 	const int registerPad	= 16 * 2 + 24; // kPadding*2 + kTitleHeight
 	int registerH = registerPad + registerCount * registerCardH + (registerCount - 1) * registerGap;

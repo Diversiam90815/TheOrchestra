@@ -32,6 +32,9 @@ InstrumentHeaderPanel::InstrumentHeaderPanel() : OrchestraPanel("")
 	mFamilyLabel.setName("FamilySubtitle");
 	addAndMakeVisible(mFamilyLabel);
 
+	mTranspositionLabel.setName("SectionTitle");
+	addAndMakeVisible(mTranspositionLabel);
+
 	addAndMakeVisible(mInstrumentImage);
 }
 
@@ -46,8 +49,21 @@ void InstrumentHeaderPanel::setInstrument(const InstrumentProfile &instrument)
 
 	// Store clefs and transposition info
 	mClefs			   = instrument.getClefs();
-	mHasTransposition  = !instrument.getRange().getTransposition().empty();
+	auto range		   = instrument.getRange();
+	mHasTransposition  = (range.getLowerRange() != range.getDisplayedLowerRange())
+					  || (range.getHigherRange() != range.getDisplayedHigherRange());
 	mCurrentPitchMode  = PitchMode::Written;
+
+	// Derive transposition label (e.g., "in Bb", "in F")
+	if (mHasTransposition)
+	{
+		auto transLabel = deriveTranspositionLabel(range.getLowerRange(), range.getDisplayedLowerRange());
+		mTranspositionLabel.setText(transLabel, juce::dontSendNotification);
+	}
+	else
+	{
+		mTranspositionLabel.setText("", juce::dontSendNotification);
+	}
 
 	if (!mClefs.empty())
 		mCurrentClef = stringToClef(mClefs[0]);
@@ -79,14 +95,24 @@ void InstrumentHeaderPanel::resized()
 	mInstrumentImage.setBounds(imageArea.withHeight(84).withY(imageArea.getY() + (imageArea.getHeight() - 84) / 2));
 	area.removeFromLeft(16); // gap
 
-	// Right side: name, family, meta tags stacked
+	// Right side: name, family + transposition, meta tags stacked
 	auto rightSide = area;
 
 	// Name at top
 	mNameLabel.setBounds(rightSide.removeFromTop(36));
 
-	// Family subtitle
-	mFamilyLabel.setBounds(rightSide.removeFromTop(20));
+	// Family subtitle + transposition label on same row
+	auto familyRow = rightSide.removeFromTop(20);
+	if (mHasTransposition)
+	{
+		mFamilyLabel.setBounds(familyRow.removeFromLeft(familyRow.getWidth() / 2));
+		mTranspositionLabel.setBounds(familyRow);
+	}
+	else
+	{
+		mFamilyLabel.setBounds(familyRow);
+		mTranspositionLabel.setBounds(0, 0, 0, 0);
+	}
 
 	// Meta tags row
 	rightSide.removeFromTop(8);
@@ -179,6 +205,61 @@ void InstrumentHeaderPanel::rebuildMetaTags()
 		};
 		addAndMakeVisible(mSoundingBtn.get());
 	}
+}
+
+
+juce::String InstrumentHeaderPanel::deriveTranspositionLabel(const std::string &writtenLow, const std::string &soundingLow) const
+{
+	// Derive the transposition interval by comparing written vs sounding pitch
+	// e.g., Clarinet: written E3, sounding D3 → transposition is down a major 2nd → "in Bb"
+	// French Horn: written F2, sounding Bb1 → transposition is down a 5th → "in F"
+
+	int writtenMidi	 = turnNotenameIntoMidinumber(writtenLow);
+	int soundingMidi = turnNotenameIntoMidinumber(soundingLow);
+
+	if (writtenMidi <= 0 || soundingMidi <= 0)
+		return "Transposing";
+
+	// The interval in semitones (positive = sounds lower than written)
+	int interval = writtenMidi - soundingMidi;
+
+	// Normalize to 0-11 range (mod 12) to find the transposition key
+	int normalised = ((interval % 12) + 12) % 12;
+
+	// Map interval to key name
+	// 0 semitones = C (concert pitch, but might be octave transposition)
+	// 1 = Db/C#, 2 = Bb (down major 2nd), 3 = A, etc.
+	// Note: The convention for transposing instruments:
+	// When the instrument plays C, it sounds the transposition note
+	// So if written C sounds as Bb, it's "in Bb" (interval = +2 semitones written above sounding)
+
+	static const char *keyNames[] = {
+		"in C",	 // 0
+		"in B",	 // 1  (sounds a semitone lower)
+		"in Bb", // 2  (Clarinet, Trumpet)
+		"in A",	 // 3  (Clarinet in A)
+		"in Ab", // 4
+		"in G",	 // 5  (Alto Flute)
+		"in Gb", // 6
+		"in F",	 // 7  (French Horn, Cor Anglais)
+		"in E",	 // 8
+		"in Eb", // 9  (Alto Sax, Eb Clarinet)
+		"in D",	 // 10
+		"in Db", // 11
+	};
+
+	juce::String label = keyNames[normalised];
+
+	// Check for octave transposition (e.g., Double Bass sounds octave lower, Piccolo sounds octave higher)
+	if (normalised == 0 && interval != 0)
+	{
+		if (interval > 0)
+			label = "8vb (octave lower)";
+		else
+			label = "8va (octave higher)";
+	}
+
+	return label;
 }
 
 

@@ -31,7 +31,7 @@ private:
 	std::vector<RegisterData> mRegisters;
 	bool					  mIsStringInstrument = false;
 
-	static constexpr int kCardHeight = 74;
+	static constexpr int kCardHeight = 64;
 	static constexpr int kBarWidth	 = 4;
 	static constexpr int kCardGap	 = 8;
 };
