@@ -17,11 +17,43 @@ RegisterPanel::RegisterPanel() : OrchestraPanel("REGISTERS")
 void RegisterPanel::setInstrument(const InstrumentProfile &instrument)
 {
 	mRegisters.clear();
+	mIsStringInstrument = false;
 
-	for (const auto &reg : instrument.getRegisters())
+	auto registers = instrument.getRegisters();
+
+	// Detect string instruments: all registers have low == high (open string tuning)
+	if (!registers.empty())
+	{
+		bool allSingleNote = true;
+		for (const auto &reg : registers)
+		{
+			if (reg.getLowerRange() != reg.getHigherRange())
+			{
+				allSingleNote = false;
+				break;
+			}
+		}
+		mIsStringInstrument = allSingleNote;
+	}
+
+	// Update panel title based on instrument type
+	setTitle(mIsStringInstrument ? "STRINGS" : "REGISTERS");
+
+	for (const auto &reg : registers)
 	{
 		RegisterData data;
-		data.range		 = juce::String(reg.getLowerRange() + " - " + reg.getHigherRange());
+
+		if (mIsStringInstrument)
+		{
+			// String instruments: show just the note as the string identifier
+			data.range = juce::String(reg.getLowerRange()) + " String";
+		}
+		else
+		{
+			// Wind/brass: show pitch range
+			data.range = juce::String(reg.getLowerRange() + " - " + reg.getHigherRange());
+		}
+
 		data.description = juce::String(reg.getDescription());
 		mRegisters.push_back(data);
 	}
@@ -72,12 +104,12 @@ void RegisterPanel::paint(juce::Graphics &g)
 		// Range label
 		auto rangeArea = textArea.removeFromTop(20);
 		g.setColour(primaryCol);
-		g.setFont(juce::Font(14.0f));
+		g.setFont(lnf->getBodyFont());
 		g.drawText(mRegisters[i].range, rangeArea, juce::Justification::centredLeft, false);
 
 		// Description
 		g.setColour(secondaryCol);
-		g.setFont(juce::Font(12.0f));
+		g.setFont(lnf->getSmallFont());
 		g.drawFittedText(mRegisters[i].description, textArea, juce::Justification::topLeft, 2);
 
 		// Gap between cards

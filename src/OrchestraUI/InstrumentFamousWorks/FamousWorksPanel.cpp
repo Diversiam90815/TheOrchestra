@@ -50,13 +50,15 @@ void FamousWorksPanel::paint(juce::Graphics &g)
 		// Composer line (uppercase, small)
 		auto composerArea = entryBounds.removeFromTop(14);
 		g.setColour(tertiaryCol);
-		g.setFont(juce::Font(11.0f));
+		auto composerFont = juce::Font(lnf->getInstrumentTypeface()).withHeight(11.0f);
+		composerFont.setExtraKerningFactor(0.08f);
+		g.setFont(composerFont);
 		g.drawText(mWorks[i].composer.toUpperCase(), composerArea, juce::Justification::centredLeft, false);
 
 		// Title line
 		auto titleArea = entryBounds;
 		g.setColour(primaryCol);
-		g.setFont(juce::Font(14.0f));
+		g.setFont(lnf->getBodyFont());
 		g.drawText(mWorks[i].title, titleArea, juce::Justification::centredLeft, true);
 	}
 }

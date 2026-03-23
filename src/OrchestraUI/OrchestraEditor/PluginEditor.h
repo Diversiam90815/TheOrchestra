@@ -36,6 +36,8 @@ private:
 	void onSettingsClicked();
 	void onClefChanged(Clef clef);
 	void onPitchModeChanged(PitchMode mode);
+	void layoutCenterColumn(int availableHeight);
+	void layoutRightColumn(int availableHeight);
 
 	CoreManager			  *mCoreManager;
 	OrchestraProcessor	  &audioProcessor;
@@ -46,13 +48,17 @@ private:
 	HeaderBar			   mHeaderBar;
 	InstrumentSidebar	   mSidebar;
 
-	// Center content panels
+	// Center content - wrapped in viewport for scrolling
+	juce::Viewport		   mCenterViewport;
+	juce::Component		   mCenterContent;
 	InstrumentHeaderPanel  mInstrumentHeader;
 	RangesPanel			   mRangesPanel;
 	SamplerPanel		   mSamplerPanel;
 	TechniquesPanel		   mTechniquesPanel;
 
-	// Right detail panels
+	// Right detail - wrapped in viewport for scrolling
+	juce::Viewport		   mRightViewport;
+	juce::Component		   mRightContent;
 	RegisterPanel		   mRegisterPanel;
 	RolesPanel			   mRolesPanel;
 	FamousWorksPanel	   mFamousWorksPanel;

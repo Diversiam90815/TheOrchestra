@@ -33,19 +33,37 @@ OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : juce::AudioProcesso
 	// Setup sampler callback
 	mSamplerPanel.setArticulationChangedCallback([this](Articulation articulation) { mCoreManager->changeArticulation(mCurrentInstrument, articulation); });
 
-	// Add all components
+	// Setup center viewport (scrollable column for center panels)
+	mCenterViewport.setViewedComponent(&mCenterContent, false);
+	mCenterViewport.setScrollBarsShown(true, false);
+	mCenterViewport.setScrollBarThickness(6);
+
+	// Setup right viewport (scrollable column for detail panels)
+	mRightViewport.setViewedComponent(&mRightContent, false);
+	mRightViewport.setScrollBarsShown(true, false);
+	mRightViewport.setScrollBarThickness(6);
+
+	// Add center panels to the center content container
+	mCenterContent.addAndMakeVisible(mInstrumentHeader);
+	mCenterContent.addAndMakeVisible(mRangesPanel);
+	mCenterContent.addAndMakeVisible(mSamplerPanel);
+	mCenterContent.addAndMakeVisible(mTechniquesPanel);
+
+	// Add right panels to the right content container
+	mRightContent.addAndMakeVisible(mRegisterPanel);
+	mRightContent.addAndMakeVisible(mRolesPanel);
+	mRightContent.addAndMakeVisible(mFamousWorksPanel);
+
+	// Add top-level components
 	addAndMakeVisible(mHeaderBar);
 	addAndMakeVisible(mSidebar);
-	addAndMakeVisible(mInstrumentHeader);
-	addAndMakeVisible(mRangesPanel);
-	addAndMakeVisible(mSamplerPanel);
-	addAndMakeVisible(mTechniquesPanel);
-	addAndMakeVisible(mRegisterPanel);
-	addAndMakeVisible(mRolesPanel);
-	addAndMakeVisible(mFamousWorksPanel);
+	addAndMakeVisible(mCenterViewport);
+	addAndMakeVisible(mRightViewport);
 	addAndMakeVisible(mPianoRollView);
 
 	setSize(kWidth, kHeight);
+	setResizable(true, true);
+	setResizeLimits(900, 500, 2560, 1600);
 
 	// Load default instrument (Violin)
 	changeFamily(Family::Strings);
@@ -135,13 +153,80 @@ void OrchestraEditor::paint(juce::Graphics &g)
 }
 
 
+void OrchestraEditor::layoutCenterColumn(int availableHeight)
+{
+	const int gap = 12;
+	const int cw  = mCenterViewport.getWidth() - 8; // account for scrollbar
+
+	const int headerPanelH	   = 140;
+	const int rangesPanelH	   = 120;
+	const int samplerPanelH	   = 110;
+	const int techniquesPanelH = 280; // generous default for techniques
+
+	int totalNeeded = headerPanelH + gap + rangesPanelH + gap + samplerPanelH + gap + techniquesPanelH;
+	int contentH	= juce::jmax(totalNeeded, availableHeight);
+
+	mCenterContent.setSize(cw, contentH);
+
+	int cy = 0;
+
+	mInstrumentHeader.setBounds(0, cy, cw, headerPanelH);
+	cy += headerPanelH + gap;
+
+	mRangesPanel.setBounds(0, cy, cw, rangesPanelH);
+	cy += rangesPanelH + gap;
+
+	mSamplerPanel.setBounds(0, cy, cw, samplerPanelH);
+	cy += samplerPanelH + gap;
+
+	// Techniques gets remaining space, minimum 280px
+	int techniquesH = juce::jmax(techniquesPanelH, contentH - cy);
+	mTechniquesPanel.setBounds(0, cy, cw, techniquesH);
+}
+
+
+void OrchestraEditor::layoutRightColumn(int availableHeight)
+{
+	const int gap = 12;
+	const int dw  = mRightViewport.getWidth() - 8; // account for scrollbar
+
+	// Calculate register panel height dynamically based on register count
+	int registerCount = static_cast<int>(mRegisterPanel.getRegisterCount());
+	if (registerCount < 1)
+		registerCount = 4; // default assumption
+
+	const int registerCardH = 68;
+	const int registerGap	= 8;
+	const int registerPad	= 16 * 2 + 24; // kPadding*2 + kTitleHeight
+	int registerH = registerPad + registerCount * registerCardH + (registerCount - 1) * registerGap;
+
+	const int rolesH = 150;
+	const int worksH = 180;
+
+	int totalNeeded = registerH + gap + rolesH + gap + worksH;
+	int contentH	= juce::jmax(totalNeeded, availableHeight);
+
+	mRightContent.setSize(dw, contentH);
+
+	int dy = 0;
+
+	mRegisterPanel.setBounds(0, dy, dw, registerH);
+	dy += registerH + gap;
+
+	mRolesPanel.setBounds(0, dy, dw, rolesH);
+	dy += rolesH + gap;
+
+	// Famous Works gets remaining space
+	int worksHActual = juce::jmax(worksH, contentH - dy);
+	mFamousWorksPanel.setBounds(0, dy, dw, worksHActual);
+}
+
+
 void OrchestraEditor::resized()
 {
-	const int contentX = kSidebarW;
 	const int contentW = getWidth() - kSidebarW - kDetailW;
 	const int contentH = getHeight() - kHeaderH - kPianoH;
 	const int detailX  = getWidth() - kDetailW;
-	const int gap	   = 12;
 	const int pad	   = 12;
 
 	// Header bar
@@ -153,50 +238,11 @@ void OrchestraEditor::resized()
 	// Piano roll
 	mPianoRollView.setBounds(0, getHeight() - kPianoH, getWidth(), kPianoH);
 
-	// Center content area
-	int cx = contentX + pad;
-	int cy = kHeaderH + pad;
-	int cw = contentW - pad * 2;
+	// Center viewport
+	mCenterViewport.setBounds(kSidebarW + pad, kHeaderH + pad, contentW - pad * 2, contentH - pad * 2);
+	layoutCenterColumn(contentH - pad * 2);
 
-	// Instrument header: ~100px
-	const int headerPanelH = 100;
-	mInstrumentHeader.setBounds(cx, cy, cw, headerPanelH);
-	cy += headerPanelH + gap;
-
-	// Ranges: ~120px (compact)
-	const int rangesPanelH = 120;
-	mRangesPanel.setBounds(cx, cy, cw, rangesPanelH);
-	cy += rangesPanelH + gap;
-
-	// Sampler: ~110px
-	const int samplerPanelH = 110;
-	mSamplerPanel.setBounds(cx, cy, cw, samplerPanelH);
-	cy += samplerPanelH + gap;
-
-	// Techniques: remaining space
-	int techniquesH = (kHeaderH + contentH) - cy - pad;
-	if (techniquesH < 100)
-		techniquesH = 100;
-	mTechniquesPanel.setBounds(cx, cy, cw, techniquesH);
-
-	// Right detail panel
-	int dx = detailX + pad;
-	int dy = kHeaderH + pad;
-	int dw = kDetailW - pad * 2;
-
-	// Registers: flexible based on count, ~300px
-	const int registerH = 300;
-	mRegisterPanel.setBounds(dx, dy, dw, registerH);
-	dy += registerH + gap;
-
-	// Roles: ~150px
-	const int rolesH = 150;
-	mRolesPanel.setBounds(dx, dy, dw, rolesH);
-	dy += rolesH + gap;
-
-	// Famous Works: remaining
-	int worksH = (kHeaderH + contentH) - dy - pad;
-	if (worksH < 100)
-		worksH = 100;
-	mFamousWorksPanel.setBounds(dx, dy, dw, worksH);
+	// Right detail viewport
+	mRightViewport.setBounds(detailX + pad, kHeaderH + pad, kDetailW - pad * 2, contentH - pad * 2);
+	layoutRightColumn(contentH - pad * 2);
 }
