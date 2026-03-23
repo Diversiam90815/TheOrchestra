@@ -56,32 +56,26 @@ set(InstrumentSidebar_Files
 )
 
 set(InstrumentFamousWorks_Files
-    ${InstrumentFamousWorks_Dir}/FamousWorksView.h         ${InstrumentFamousWorks_Dir}/FamousWorksView.cpp
     ${InstrumentFamousWorks_Dir}/FamousWorksPanel.h        ${InstrumentFamousWorks_Dir}/FamousWorksPanel.cpp
 )
 
 set(InstrumentInfo_Files
-    ${InstrumentInfo_Dir}/InformationView.h         ${InstrumentInfo_Dir}/InformationView.cpp
     ${InstrumentInfo_Dir}/RolesPanel.h              ${InstrumentInfo_Dir}/RolesPanel.cpp
 )
 
 set(InstrumentRegisters_Files
-    ${InstrumentRegister_Dir}/RegisterView.h           ${InstrumentRegister_Dir}/RegisterView.cpp
     ${InstrumentRegister_Dir}/RegisterPanel.h          ${InstrumentRegister_Dir}/RegisterPanel.cpp
 )
 
 set(InstrumentTechniques_Files
-    ${InstrumentTechniques_Dir}/TechniquesView.h          ${InstrumentTechniques_Dir}/TechniquesView.cpp
     ${InstrumentTechniques_Dir}/TechniquesPanel.h         ${InstrumentTechniques_Dir}/TechniquesPanel.cpp
 )
 
 set(InstrumentHeading_Files
-    ${InstrumentHeading_Dir}/InstrumentView.h         ${InstrumentHeading_Dir}/InstrumentView.cpp
     ${InstrumentHeading_Dir}/InstrumentHeaderPanel.h   ${InstrumentHeading_Dir}/InstrumentHeaderPanel.cpp
 )
 
 set(InstrumentRanges_Files
-    ${InstrumentRanges_Dir}/InstrumentRangesView.h         ${InstrumentRanges_Dir}/InstrumentRangesView.cpp
     ${InstrumentRanges_Dir}/RangesPanel.h                  ${InstrumentRanges_Dir}/RangesPanel.cpp
 )
 
@@ -90,7 +84,6 @@ set(OrchestraEditor_Files
 )
 
 set(Sampler_Files
-    ${Sampler_Dir}/SamplerView.h          ${Sampler_Dir}/SamplerView.cpp
     ${Sampler_Dir}/SamplerPanel.h         ${Sampler_Dir}/SamplerPanel.cpp
 )
 
