@@ -1,8 +1,8 @@
 /*
   ==============================================================================
 	Module			RangesPanel
-	Description		Compact range display with notation, supporting written/sounding toggle.
-					Horizontal layout: label | notation | note name  for each note
+	Description		Two-column range display with notation, vertically centered.
+					Left column = lowest note, Right column = highest note.
   ==============================================================================
 */
 
@@ -13,11 +13,11 @@
 RangesPanel::RangesPanel() : OrchestraPanel("Range")
 {
 	mLowLabel.setName("SectionTitle");
-	mLowLabel.setText("LOWEST", juce::dontSendNotification);
+	mLowLabel.setText("LOWEST NOTE", juce::dontSendNotification);
 	addAndMakeVisible(mLowLabel);
 
 	mHighLabel.setName("SectionTitle");
-	mHighLabel.setText("HIGHEST", juce::dontSendNotification);
+	mHighLabel.setText("HIGHEST NOTE", juce::dontSendNotification);
 	addAndMakeVisible(mHighLabel);
 
 	mLowNoteName.setName("NoteName");
@@ -85,7 +85,6 @@ void RangesPanel::updateDisplay()
 	mLowNoteName.setText(low, juce::dontSendNotification);
 	mHighNoteName.setText(high, juce::dontSendNotification);
 
-	// setNoteFromString auto-selects the best clef for each note independently
 	mLowNotation.setNoteFromString(low);
 	mHighNotation.setNoteFromString(high);
 
@@ -108,36 +107,49 @@ void RangesPanel::resized()
 		mPitchModeLabel.setBounds(0, 0, 0, 0);
 	}
 
-	// Horizontal layout for each note:
-	// [ Label (60px) | Notation (centered, 100x80) | NoteName (50px) ]
-	// Two rows stacked vertically
+	// Two columns side-by-side, each vertically centered:
+	//   Section title (top)
+	//   Notation (centered, takes most space)
+	//   Note name (bottom)
 
-	const int labelW	= 60;
-	const int noteNameW = 50;
-	const int notationW = 100;
-	const int rowH		= (area.getHeight() - 4) / 2; // Two rows with small gap
-	const int notationH = juce::jmin(rowH, 80);
+	const int halfW		= (area.getWidth() - 20) / 2;
+	const int notationW = 110;
+	const int notationH = 80;
+	const int labelH	= 16;
+	const int nameH		= 22;
+	const int innerGap	= 2;
 
-	// Row 1: Lowest note
-	auto lowRow = area.removeFromTop(rowH);
-	area.removeFromTop(4); // gap
+	// Total content height for centering
+	int stackH	  = labelH + innerGap + notationH + innerGap + nameH;
+	int topMargin = juce::jmax(0, (area.getHeight() - stackH) / 2);
 
-	auto lowLabelArea = lowRow.removeFromLeft(labelW);
-	mLowLabel.setBounds(lowLabelArea.withSizeKeepingCentre(labelW, 16));
+	auto leftCol  = area.removeFromLeft(halfW);
+	area.removeFromLeft(20); // gap
+	auto rightCol = area;
 
-	auto lowNoteNameArea = lowRow.removeFromRight(noteNameW);
-	mLowNoteName.setBounds(lowNoteNameArea.withSizeKeepingCentre(noteNameW, 20));
+	// --- Left column: low note ---
+	auto lc = leftCol;
+	lc.removeFromTop(topMargin);
 
-	mLowNotation.setBounds(lowRow.withSizeKeepingCentre(notationW, notationH));
+	mLowLabel.setBounds(lc.removeFromTop(labelH));
+	lc.removeFromTop(innerGap);
 
-	// Row 2: Highest note
-	auto highRow = area;
+	auto lowNotArea = lc.removeFromTop(notationH);
+	mLowNotation.setBounds(lowNotArea.withSizeKeepingCentre(notationW, notationH));
 
-	auto highLabelArea = highRow.removeFromLeft(labelW);
-	mHighLabel.setBounds(highLabelArea.withSizeKeepingCentre(labelW, 16));
+	lc.removeFromTop(innerGap);
+	mLowNoteName.setBounds(lc.removeFromTop(nameH));
 
-	auto highNoteNameArea = highRow.removeFromRight(noteNameW);
-	mHighNoteName.setBounds(highNoteNameArea.withSizeKeepingCentre(noteNameW, 20));
+	// --- Right column: high note ---
+	auto rc = rightCol;
+	rc.removeFromTop(topMargin);
 
-	mHighNotation.setBounds(highRow.withSizeKeepingCentre(notationW, notationH));
+	mHighLabel.setBounds(rc.removeFromTop(labelH));
+	rc.removeFromTop(innerGap);
+
+	auto highNotArea = rc.removeFromTop(notationH);
+	mHighNotation.setBounds(highNotArea.withSizeKeepingCentre(notationW, notationH));
+
+	rc.removeFromTop(innerGap);
+	mHighNoteName.setBounds(rc.removeFromTop(nameH));
 }
