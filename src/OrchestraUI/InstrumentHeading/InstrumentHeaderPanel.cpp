@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 	Module			InstrumentHeaderPanel
-	Description		Displays instrument name, image, family, clefs, and transposition
+	Description		Displays instrument name, image, family, clefs (info), transposition
   ==============================================================================
 */
 
@@ -32,9 +32,6 @@ InstrumentHeaderPanel::InstrumentHeaderPanel() : OrchestraPanel("")
 	mFamilyLabel.setName("FamilySubtitle");
 	addAndMakeVisible(mFamilyLabel);
 
-	mTranspositionLabel.setName("SectionTitle");
-	addAndMakeVisible(mTranspositionLabel);
-
 	addAndMakeVisible(mInstrumentImage);
 }
 
@@ -54,16 +51,11 @@ void InstrumentHeaderPanel::setInstrument(const InstrumentProfile &instrument)
 					  || (range.getHigherRange() != range.getDisplayedHigherRange());
 	mCurrentPitchMode  = PitchMode::Written;
 
-	// Derive transposition label (e.g., "in Bb", "in F")
+	// Derive transposition label
 	if (mHasTransposition)
-	{
-		auto transLabel = deriveTranspositionLabel(range.getLowerRange(), range.getDisplayedLowerRange());
-		mTranspositionLabel.setText(transLabel, juce::dontSendNotification);
-	}
+		mTranspositionText = deriveTranspositionLabel(range.getLowerRange(), range.getDisplayedLowerRange());
 	else
-	{
-		mTranspositionLabel.setText("", juce::dontSendNotification);
-	}
+		mTranspositionText = "";
 
 	if (!mClefs.empty())
 		mCurrentClef = stringToClef(mClefs[0]);
@@ -95,45 +87,43 @@ void InstrumentHeaderPanel::resized()
 	mInstrumentImage.setBounds(imageArea.withHeight(84).withY(imageArea.getY() + (imageArea.getHeight() - 84) / 2));
 	area.removeFromLeft(16); // gap
 
-	// Right side: name, family + transposition, meta tags stacked
+	// Right side: name, family, meta tags stacked
 	auto rightSide = area;
 
 	// Name at top
 	mNameLabel.setBounds(rightSide.removeFromTop(36));
 
-	// Family subtitle + transposition label on same row
-	auto familyRow = rightSide.removeFromTop(20);
-	if (mHasTransposition)
-	{
-		mFamilyLabel.setBounds(familyRow.removeFromLeft(familyRow.getWidth() / 2));
-		mTranspositionLabel.setBounds(familyRow);
-	}
-	else
-	{
-		mFamilyLabel.setBounds(familyRow);
-		mTranspositionLabel.setBounds(0, 0, 0, 0);
-	}
+	// Family subtitle
+	mFamilyLabel.setBounds(rightSide.removeFromTop(20));
 
-	// Meta tags row
+	// Meta tags row: [clef info labels] [transposition info] [Written | Sounding toggles]
 	rightSide.removeFromTop(8);
 	int tagX = rightSide.getX();
 	const int tagH = 24;
 	const int tagGap = 6;
 
-	for (auto &btn : mClefButtons)
+	// Clef info labels (non-interactive)
+	for (auto &label : mClefLabels)
 	{
-		int w = btn->getBestWidthForHeight(tagH) + 16;
-		if (w < 70)
-			w = 70;
-		btn->setBounds(tagX, rightSide.getY(), w, tagH);
+		int w = 80;
+		label->setBounds(tagX, rightSide.getY(), w, tagH);
 		tagX += w + tagGap;
 	}
 
+	// Transposition info label
+	if (mTranspositionInfoLabel)
+	{
+		int w = 90;
+		mTranspositionInfoLabel->setBounds(tagX, rightSide.getY(), w, tagH);
+		tagX += w + tagGap;
+	}
+
+	// Written/Sounding toggle buttons
 	if (mHasTransposition && mWrittenBtn && mSoundingBtn)
 	{
-		tagX += 8; // extra separator gap
+		tagX += 4; // small separator
 
-		int ww = 70;
+		int ww = 80;
 		mWrittenBtn->setBounds(tagX, rightSide.getY(), ww, tagH);
 		tagX += ww + tagGap;
 		mSoundingBtn->setBounds(tagX, rightSide.getY(), ww, tagH);
@@ -143,10 +133,14 @@ void InstrumentHeaderPanel::resized()
 
 void InstrumentHeaderPanel::rebuildMetaTags()
 {
-	// Remove old buttons
-	for (auto &btn : mClefButtons)
-		removeChildComponent(btn.get());
-	mClefButtons.clear();
+	// Remove old components
+	for (auto &label : mClefLabels)
+		removeChildComponent(label.get());
+	mClefLabels.clear();
+
+	if (mTranspositionInfoLabel)
+		removeChildComponent(mTranspositionInfoLabel.get());
+	mTranspositionInfoLabel.reset();
 
 	if (mWrittenBtn)
 		removeChildComponent(mWrittenBtn.get());
@@ -155,25 +149,21 @@ void InstrumentHeaderPanel::rebuildMetaTags()
 	mWrittenBtn.reset();
 	mSoundingBtn.reset();
 
-	// Create clef buttons
+	// Create clef info labels (non-interactive pills)
 	for (size_t i = 0; i < mClefs.size(); ++i)
 	{
-		auto btn = std::make_unique<juce::TextButton>(mClefs[i] + " Clef");
-		btn->setName("MetaTag");
-		btn->setClickingTogglesState(true);
-		btn->setRadioGroupId(100);
-		btn->setToggleState(i == 0, juce::dontSendNotification);
+		auto label = std::make_unique<juce::Label>("MetaInfo", mClefs[i] + " Clef");
+		label->setJustificationType(juce::Justification::centred);
+		addAndMakeVisible(label.get());
+		mClefLabels.push_back(std::move(label));
+	}
 
-		auto clef = stringToClef(mClefs[i]);
-		btn->onClick = [this, clef]()
-		{
-			mCurrentClef = clef;
-			if (mClefChangedCallback)
-				mClefChangedCallback(clef);
-		};
-
-		addAndMakeVisible(btn.get());
-		mClefButtons.push_back(std::move(btn));
+	// Create transposition info label if applicable
+	if (mHasTransposition && mTranspositionText.isNotEmpty())
+	{
+		mTranspositionInfoLabel = std::make_unique<juce::Label>("MetaInfo", mTranspositionText);
+		mTranspositionInfoLabel->setJustificationType(juce::Justification::centred);
+		addAndMakeVisible(mTranspositionInfoLabel.get());
 	}
 
 	// Create Written/Sounding toggles for transposing instruments
@@ -210,34 +200,20 @@ void InstrumentHeaderPanel::rebuildMetaTags()
 
 juce::String InstrumentHeaderPanel::deriveTranspositionLabel(const std::string &writtenLow, const std::string &soundingLow) const
 {
-	// Derive the transposition interval by comparing written vs sounding pitch
-	// e.g., Clarinet: written E3, sounding D3 → transposition is down a major 2nd → "in Bb"
-	// French Horn: written F2, sounding Bb1 → transposition is down a 5th → "in F"
-
 	int writtenMidi	 = turnNotenameIntoMidinumber(writtenLow);
 	int soundingMidi = turnNotenameIntoMidinumber(soundingLow);
 
 	if (writtenMidi <= 0 || soundingMidi <= 0)
 		return "Transposing";
 
-	// The interval in semitones (positive = sounds lower than written)
-	int interval = writtenMidi - soundingMidi;
-
-	// Normalize to 0-11 range (mod 12) to find the transposition key
+	int interval   = writtenMidi - soundingMidi;
 	int normalised = ((interval % 12) + 12) % 12;
-
-	// Map interval to key name
-	// 0 semitones = C (concert pitch, but might be octave transposition)
-	// 1 = Db/C#, 2 = Bb (down major 2nd), 3 = A, etc.
-	// Note: The convention for transposing instruments:
-	// When the instrument plays C, it sounds the transposition note
-	// So if written C sounds as Bb, it's "in Bb" (interval = +2 semitones written above sounding)
 
 	static const char *keyNames[] = {
 		"in C",	 // 0
-		"in B",	 // 1  (sounds a semitone lower)
+		"in B",	 // 1
 		"in Bb", // 2  (Clarinet, Trumpet)
-		"in A",	 // 3  (Clarinet in A)
+		"in A",	 // 3
 		"in Ab", // 4
 		"in G",	 // 5  (Alto Flute)
 		"in Gb", // 6
@@ -250,13 +226,13 @@ juce::String InstrumentHeaderPanel::deriveTranspositionLabel(const std::string &
 
 	juce::String label = keyNames[normalised];
 
-	// Check for octave transposition (e.g., Double Bass sounds octave lower, Piccolo sounds octave higher)
+	// Check for octave transposition
 	if (normalised == 0 && interval != 0)
 	{
 		if (interval > 0)
-			label = "8vb (octave lower)";
+			label = "8vb";
 		else
-			label = "8va (octave higher)";
+			label = "8va";
 	}
 
 	return label;
