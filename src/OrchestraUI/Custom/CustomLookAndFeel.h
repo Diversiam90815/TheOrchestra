@@ -17,6 +17,9 @@ public:
 	CustomLookAndFeel();
 	~CustomLookAndFeel() = default;
 
+	// Legacy getter for CustomComponent backward compat
+	juce::Colour			  getBoxBackgroundColour() const { return surface; }
+
 	// Color getters
 	juce::Colour			  getBackgroundColour() const { return background; }
 	juce::Colour			  getSurfaceColour() const { return surface; }

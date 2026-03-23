@@ -32,6 +32,8 @@ public:
 	void					 changeSamplesFolder(std::string &samplesFolder);
 	InstrumentProfile		 getInstrument(InstrumentID key);
 
+	std::vector<std::pair<InstrumentID, std::string>> getInstrumentsForFamily(Family family);
+
 	std::set<Articulation>	 getAvailableArticulations(InstrumentID instrumentKey);
 
 	void					 processAudioBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);

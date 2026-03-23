@@ -160,19 +160,15 @@ void CustomPianoRoll::drawBlackNote(int midiNoteNumber, juce::Graphics &g, juce:
 
 juce::Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
 {
-	auto qualityColours = mCustomLookAndFeel.getQualityColours(); // Get the colours for the note ranges
+	auto qualityColours = mCustomLookAndFeel.getQualityColours();
 
-	if (mMidiRanges.size() > qualityColours.size())				  // Ensure there is a color for each range
+	if (mMidiRanges.size() > qualityColours.size())
 	{
-		jassertfalse;											  // More ranges than colors provided
+		jassertfalse;
 		if (mCurrentKeyType.load() == PianoKey::whiteKey)
-		{
 			return juce::Colours::transparentWhite;
-		}
 		if (mCurrentKeyType.load() == PianoKey::blackKey)
-		{
 			return juce::Colours::black;
-		}
 	}
 
 	// Check which range the midiNoteNumber falls into
@@ -181,19 +177,37 @@ juce::Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
 		const auto &range = mMidiRanges[i];
 		if (midiNoteNumber >= range.first && midiNoteNumber <= range.second)
 		{
-			return qualityColours[i]; // Return the corresponding color
+			auto colour = qualityColours[i];
+
+			// Soften the color: use lower alpha for a gentle tint effect
+			if (mCurrentKeyType.load() == PianoKey::whiteKey)
+			{
+				// Blend register colour gently with white
+				auto whiteBase = juce::Colour(245, 240, 232); // warm white key base
+				return whiteBase.interpolatedWith(colour, 0.18f);
+			}
+			else
+			{
+				// Black keys: very subtle overlay
+				return juce::Colours::black.interpolatedWith(colour, 0.12f);
+			}
 		}
 	}
 
-	// If no range matches, return a default color
+	// Out of range: dimmed
+	if (mRangesSet.load())
+	{
+		if (mCurrentKeyType.load() == PianoKey::whiteKey)
+			return juce::Colour(200, 192, 176); // dimmed warm white
+		if (mCurrentKeyType.load() == PianoKey::blackKey)
+			return juce::Colour(30, 25, 35);	// dimmed dark
+	}
+
 	if (mCurrentKeyType.load() == PianoKey::whiteKey)
-	{
 		return juce::Colours::transparentWhite;
-	}
 	if (mCurrentKeyType.load() == PianoKey::blackKey)
-	{
 		return juce::Colours::black;
-	}
+
 	return {};
 }
 
