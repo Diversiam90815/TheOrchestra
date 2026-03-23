@@ -18,8 +18,8 @@ NotationComponent::NotationComponent()
 
 void NotationComponent::paint(juce::Graphics &g)
 {
-	// Fill background
-	g.fillAll(juce::Colours::white);
+	// Transparent background - inherits panel colour
+	g.fillAll(juce::Colours::transparentBlack);
 
 	// Render the notation
 	mRenderer.renderStaffWithNote(g, getLocalBounds(), mNote, mClef);
@@ -65,16 +65,15 @@ void NotationComponent::setClef(Clef clef)
 
 void NotationComponent::autoSelectClef(const int midiNoteNumber)
 {
-	// TOOD: REFINE CLEF HANDLING!
-
-	// Heuristic for clef selection based on pitch range
-	if (midiNoteNumber >= 55) // G3 and above
-	{
+	// Auto-select clef so the note sits comfortably on the staff
+	// without excessive ledger lines.
+	// B3 (MIDI 59) and below → Bass clef
+	// C4 (MIDI 60, middle C) and above → Treble clef
+	// This is the standard split point used in grand staff notation.
+	if (midiNoteNumber >= 60)
 		mClef = Clef::Treble;
-	}
-	else // Below G3
-	{
+	else
 		mClef = Clef::Bass;
-	}
+
 	repaint();
 }
