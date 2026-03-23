@@ -38,7 +38,9 @@ void RolesPanel::paint(juce::Graphics &g)
 
 	auto area = getContentArea();
 
-	g.setFont(juce::Font(13.0f));
+	auto roleFont = juce::Font(lnf->getInstrumentTypeface()).withHeight(13.0f);
+	roleFont.setExtraKerningFactor(0.003f);
+	g.setFont(roleFont);
 
 	for (size_t i = 0; i < mRoles.size(); ++i)
 	{

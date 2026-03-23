@@ -35,6 +35,7 @@ public:
 
 protected:
 	juce::Rectangle<int> getContentArea() const;
+	void setTitle(const juce::String &newTitle) { mTitle = newTitle; }
 
 	static constexpr int   kPadding		 = 16;
 	static constexpr int   kTitleHeight	 = 24;

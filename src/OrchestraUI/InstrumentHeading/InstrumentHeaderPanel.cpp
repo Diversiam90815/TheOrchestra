@@ -59,7 +59,7 @@ void InstrumentHeaderPanel::setInstrument(const InstrumentProfile &instrument)
 		juce::Image img = juce::ImageFileFormat::loadFrom(imageFile);
 		if (img.isValid())
 		{
-			img = img.rescaled(120, 84, juce::Graphics::highResamplingQuality);
+			img = img.rescaled(90, 84, juce::Graphics::highResamplingQuality);
 			mInstrumentImage.setImage(img);
 		}
 	}
@@ -74,17 +74,23 @@ void InstrumentHeaderPanel::resized()
 {
 	auto area = getLocalBounds().reduced(kPadding);
 
-	// Image on left
-	mInstrumentImage.setBounds(area.removeFromLeft(120).withHeight(84).withY(area.getY()));
-	area.removeFromLeft(20); // gap
+	// Image on the left, vertically centered
+	auto imageArea = area.removeFromLeft(90);
+	mInstrumentImage.setBounds(imageArea.withHeight(84).withY(imageArea.getY() + (imageArea.getHeight() - 84) / 2));
+	area.removeFromLeft(16); // gap
 
-	// Name and family
-	mNameLabel.setBounds(area.removeFromTop(36));
-	mFamilyLabel.setBounds(area.removeFromTop(20));
+	// Right side: name, family, meta tags stacked
+	auto rightSide = area;
+
+	// Name at top
+	mNameLabel.setBounds(rightSide.removeFromTop(36));
+
+	// Family subtitle
+	mFamilyLabel.setBounds(rightSide.removeFromTop(20));
 
 	// Meta tags row
-	area.removeFromTop(8);
-	int tagX = area.getX();
+	rightSide.removeFromTop(8);
+	int tagX = rightSide.getX();
 	const int tagH = 24;
 	const int tagGap = 6;
 
@@ -93,7 +99,7 @@ void InstrumentHeaderPanel::resized()
 		int w = btn->getBestWidthForHeight(tagH) + 16;
 		if (w < 70)
 			w = 70;
-		btn->setBounds(tagX, area.getY(), w, tagH);
+		btn->setBounds(tagX, rightSide.getY(), w, tagH);
 		tagX += w + tagGap;
 	}
 
@@ -102,9 +108,9 @@ void InstrumentHeaderPanel::resized()
 		tagX += 8; // extra separator gap
 
 		int ww = 70;
-		mWrittenBtn->setBounds(tagX, area.getY(), ww, tagH);
+		mWrittenBtn->setBounds(tagX, rightSide.getY(), ww, tagH);
 		tagX += ww + tagGap;
-		mSoundingBtn->setBounds(tagX, area.getY(), ww, tagH);
+		mSoundingBtn->setBounds(tagX, rightSide.getY(), ww, tagH);
 	}
 }
 

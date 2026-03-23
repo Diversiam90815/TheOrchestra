@@ -42,8 +42,8 @@ void OrchestraPanel::paint(juce::Graphics &g)
 		else
 			g.setColour(juce::Colour(107, 103, 96));
 
-		auto titleFont = juce::Font(12.0f);
-		titleFont.setExtraKerningFactor(0.1f);
+		auto titleFont = lnf ? lnf->getSectionTitleFont()
+						   : juce::Font(12.0f);
 		g.setFont(titleFont);
 		g.drawText(mTitle.toUpperCase(), titleArea, juce::Justification::centredLeft, false);
 	}

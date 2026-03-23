@@ -19,6 +19,8 @@ public:
 	void paint(juce::Graphics &g) override;
 	void setInstrument(const InstrumentProfile &instrument) override;
 
+	size_t getRegisterCount() const { return mRegisters.size(); }
+
 private:
 	struct RegisterData
 	{
@@ -27,6 +29,7 @@ private:
 	};
 
 	std::vector<RegisterData> mRegisters;
+	bool					  mIsStringInstrument = false;
 
 	static constexpr int kCardHeight = 68;
 	static constexpr int kBarWidth	 = 4;
