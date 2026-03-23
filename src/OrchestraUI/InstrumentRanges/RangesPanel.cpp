@@ -1,7 +1,8 @@
 /*
   ==============================================================================
 	Module			RangesPanel
-	Description		Compact range display with notation, supporting written/sounding toggle
+	Description		Compact range display with notation, supporting written/sounding toggle.
+					Horizontal layout: label | notation | note name  for each note
   ==============================================================================
 */
 
@@ -12,11 +13,11 @@
 RangesPanel::RangesPanel() : OrchestraPanel("Range")
 {
 	mLowLabel.setName("SectionTitle");
-	mLowLabel.setText("LOWEST NOTE", juce::dontSendNotification);
+	mLowLabel.setText("LOWEST", juce::dontSendNotification);
 	addAndMakeVisible(mLowLabel);
 
 	mHighLabel.setName("SectionTitle");
-	mHighLabel.setText("HIGHEST NOTE", juce::dontSendNotification);
+	mHighLabel.setText("HIGHEST", juce::dontSendNotification);
 	addAndMakeVisible(mHighLabel);
 
 	mLowNoteName.setName("NoteName");
@@ -42,7 +43,8 @@ void RangesPanel::setInstrument(const InstrumentProfile &instrument)
 	mSoundingLow   = range.getDisplayedLowerRange();
 	mSoundingHigh  = range.getDisplayedHigherRange();
 
-	mHasTransposition = !range.getTransposition().empty();
+	// Detect transposition: written and sounding ranges differ
+	mHasTransposition = (mWrittenLow != mSoundingLow) || (mWrittenHigh != mSoundingHigh);
 	mPitchMode		  = PitchMode::Written;
 
 	updateDisplay();
@@ -50,11 +52,9 @@ void RangesPanel::setInstrument(const InstrumentProfile &instrument)
 }
 
 
-void RangesPanel::setClef(Clef clef)
+void RangesPanel::setClef(Clef /*clef*/)
 {
-	mLowNotation.setClef(clef);
-	mHighNotation.setClef(clef);
-	repaint();
+	// Range panel always auto-selects the best clef per note.
 }
 
 
@@ -85,6 +85,7 @@ void RangesPanel::updateDisplay()
 	mLowNoteName.setText(low, juce::dontSendNotification);
 	mHighNoteName.setText(high, juce::dontSendNotification);
 
+	// setNoteFromString auto-selects the best clef for each note independently
 	mLowNotation.setNoteFromString(low);
 	mHighNotation.setNoteFromString(high);
 
@@ -96,7 +97,7 @@ void RangesPanel::resized()
 {
 	auto area = getContentArea();
 
-	// Pitch mode label on the right of the title area
+	// Pitch mode label in the title area (right-aligned)
 	if (mHasTransposition)
 	{
 		auto titleRow = getLocalBounds().reduced(kPadding).removeFromTop(kTitleHeight);
@@ -107,34 +108,36 @@ void RangesPanel::resized()
 		mPitchModeLabel.setBounds(0, 0, 0, 0);
 	}
 
-	// Two columns with a divider gap
-	const int halfW		= (area.getWidth() - 20) / 2;
-	const int notationW = 120;
-	const int notationH = 70;
+	// Horizontal layout for each note:
+	// [ Label (60px) | Notation (centered, 100x80) | NoteName (50px) ]
+	// Two rows stacked vertically
 
-	auto leftCol  = area.removeFromLeft(halfW);
-	area.removeFromLeft(20); // gap
-	auto rightCol = area;
+	const int labelW	= 60;
+	const int noteNameW = 50;
+	const int notationW = 100;
+	const int rowH		= (area.getHeight() - 4) / 2; // Two rows with small gap
+	const int notationH = juce::jmin(rowH, 80);
 
-	// Left column: low note
-	auto labelArea = leftCol.removeFromTop(16);
-	mLowLabel.setBounds(labelArea);
+	// Row 1: Lowest note
+	auto lowRow = area.removeFromTop(rowH);
+	area.removeFromTop(4); // gap
 
-	leftCol.removeFromTop(4);
-	auto notArea = leftCol.removeFromTop(notationH);
-	mLowNotation.setBounds(notArea.withSizeKeepingCentre(notationW, notationH));
+	auto lowLabelArea = lowRow.removeFromLeft(labelW);
+	mLowLabel.setBounds(lowLabelArea.withSizeKeepingCentre(labelW, 16));
 
-	leftCol.removeFromTop(4);
-	mLowNoteName.setBounds(leftCol.removeFromTop(20));
+	auto lowNoteNameArea = lowRow.removeFromRight(noteNameW);
+	mLowNoteName.setBounds(lowNoteNameArea.withSizeKeepingCentre(noteNameW, 20));
 
-	// Right column: high note
-	labelArea = rightCol.removeFromTop(16);
-	mHighLabel.setBounds(labelArea);
+	mLowNotation.setBounds(lowRow.withSizeKeepingCentre(notationW, notationH));
 
-	rightCol.removeFromTop(4);
-	notArea = rightCol.removeFromTop(notationH);
-	mHighNotation.setBounds(notArea.withSizeKeepingCentre(notationW, notationH));
+	// Row 2: Highest note
+	auto highRow = area;
 
-	rightCol.removeFromTop(4);
-	mHighNoteName.setBounds(rightCol.removeFromTop(20));
+	auto highLabelArea = highRow.removeFromLeft(labelW);
+	mHighLabel.setBounds(highLabelArea.withSizeKeepingCentre(labelW, 16));
+
+	auto highNoteNameArea = highRow.removeFromRight(noteNameW);
+	mHighNoteName.setBounds(highNoteNameArea.withSizeKeepingCentre(noteNameW, 20));
+
+	mHighNotation.setBounds(highRow.withSizeKeepingCentre(notationW, notationH));
 }

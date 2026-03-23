@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 	Module			InstrumentHeaderPanel
-	Description		Displays instrument name, image, family, clefs, and transposition
+	Description		Displays instrument name, image, family, clefs, transposition info
   ==============================================================================
 */
 
@@ -31,11 +31,13 @@ public:
 	void setPitchModeChangedCallback(PitchModeChangedCallback callback);
 
 private:
-	void rebuildMetaTags();
+	void		rebuildMetaTags();
+	juce::String deriveTranspositionLabel(const std::string &writtenLow, const std::string &soundingLow) const;
 
 	juce::DrawableImage mInstrumentImage;
 	juce::Label			mNameLabel;
 	juce::Label			mFamilyLabel;
+	juce::Label			mTranspositionLabel; // Shows "in Bb", "in F", etc.
 
 	// Interactive clef + pitch mode toggle buttons
 	std::vector<std::unique_ptr<juce::TextButton>> mClefButtons;
