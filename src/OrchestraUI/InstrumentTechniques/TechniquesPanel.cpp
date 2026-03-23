@@ -37,14 +37,14 @@ void TechniqueCard::paint(juce::Graphics &g)
 
 	auto textArea = bounds.reduced(12.0f, 8.0f);
 
-	auto nameFont = lnf ? juce::Font(lnf->getInstrumentTypeface()).withHeight(14.0f) : juce::Font(14.0f);
+	auto nameFont = lnf ? juce::Font(lnf->getInstrumentTypeface()).withHeight(16.0f) : juce::Font(16.0f);
 	nameFont.setExtraKerningFactor(0.003f);
 	g.setColour(nameColour);
 	g.setFont(nameFont);
-	g.drawText(mName, textArea.removeFromTop(18.0f), juce::Justification::centredLeft, true);
+	g.drawText(mName, textArea.removeFromTop(20.0f), juce::Justification::centredLeft, true);
 
 	// Description
-	auto descFont = lnf ? juce::Font(lnf->getInstrumentTypeface()).withHeight(12.0f) : juce::Font(12.0f);
+	auto descFont = lnf ? juce::Font(lnf->getInstrumentTypeface()).withHeight(14.0f) : juce::Font(14.0f);
 	descFont.setExtraKerningFactor(0.003f);
 	g.setColour(descColour);
 	g.setFont(descFont);
@@ -92,7 +92,7 @@ void TechniquesPanel::resized()
 	const int gap		  = 8;
 	const int numCols	  = 2;
 	const int colWidth	  = (area.getWidth() - gap - 8) / numCols; // -8 for scrollbar
-	const int cardHeight  = 56;
+	const int cardHeight  = 62;
 
 	int totalRows = (static_cast<int>(mCards.size()) + numCols - 1) / numCols;
 	int contentHeight = totalRows * (cardHeight + gap);
