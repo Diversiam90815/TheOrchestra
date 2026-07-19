@@ -86,6 +86,19 @@ juce::Font CustomLookAndFeel::getInstrumentNameFont()
 }
 
 
+juce::Font CustomLookAndFeel::getSerifFont(float height, bool semiBold) const
+{
+	juce::Font font = juce::Font(instrumentTypeface).withHeight(height);
+	font.setExtraKerningFactor(0.003f);
+
+	// Source Serif 4 ships Regular only; synthesize a heavier weight for the design's 600-weight text.
+	if (semiBold)
+		font = font.boldened();
+
+	return font;
+}
+
+
 void CustomLookAndFeel::drawLabel(juce::Graphics &g, juce::Label &label)
 {
 	juce::String labelName = label.getName();
