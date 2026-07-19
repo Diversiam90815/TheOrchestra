@@ -29,10 +29,12 @@ class Configuration(Enum):
 
 class Platform(Enum):
     Ninja       = 'Ninja'
-    VS2022      =  'VS2022'
-    XCode       = 'Xcode'
+    VS2022      = 'VS2022'
+    VS2026      = 'VS2026'
     
     def __str__(self) -> str:
         if self is Platform.VS2022:
             return 'Visual Studio 17 2022'
+        elif self is Platform.VS2026:
+            return 'Visual Studio 18 2026'
         return self.value
