@@ -1,4 +1,5 @@
 include(Testing)
+include(Assets)
 
 set(TARGET_NAME OrchestraCore.Tests)
 
@@ -52,3 +53,5 @@ target_compile_definitions(${TARGET_NAME}
 )
 
 AddTests(${TARGET_NAME})
+
+copy_assets_to_target(${TARGET_NAME})

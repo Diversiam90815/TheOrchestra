@@ -43,6 +43,9 @@ set (PROJECT_LIBS   TheOrchestraCore
 
 target_link_libraries(${TARGET_NAME} PRIVATE ${PROJECT_LIBS} )
 
+include(Assets)
+copy_assets_to_target(${TARGET_NAME})
+
 include(GNUInstallDirs)
 
 install(TARGETS ${TARGET_NAME}
