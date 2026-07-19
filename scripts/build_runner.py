@@ -27,6 +27,66 @@ class BuildRunner:
         self.version = self.version_manager.update_build_number_in_version()
 
     # ---- CMake / build ----
+    def prepare_cmake_project(self, platform: Platform, architecture: Architecture) -> None:
+        prepare_cmd = [
+            "cmake",
+            "-G", str(platform),
+            "-S", str(self.root_dir),
+            "-B", str(self.build_dir),
+        ]
+        if platform == Platform.VS2022 or platform == Platform.VS2026:
+            prepare_cmd += ["-A", str(architecture)]
+
+        BuildUtils.execute_command(
+            prepare_cmd,
+            f"CMake: Generate {platform} project",
+        )
+
+        # build backend in Release
+        BuildUtils.execute_command(
+            [
+                "cmake",
+                "--build", str(self.build_dir),
+                "--config", str(Configuration.Release),
+                "--parallel", "8",
+            ],
+            f"CMake: Build {self.project_name} v{self.version or 'unknown'} (Release)",
+        )
+        
+        # build backend in Debug
+        BuildUtils.execute_command(
+            [
+                "cmake",
+                "--build", str(self.build_dir),
+                "--config", str(Configuration.Debug),
+                "--parallel", "8",
+            ],
+            f"CMake: Build {self.project_name} v{self.version or 'unknown'} (Debug)",
+        )
+
+        # install Release
+        BuildUtils.execute_command(
+            [
+                "cmake",
+                "--install", str(self.build_dir),
+                "--config", str(Configuration.Release),
+                "--prefix", str(CMAKE_INSTALL_DIR),
+            ],
+            f"CMake: Install {self.project_name} (Release)",
+        )
+
+        # install Debug
+        BuildUtils.execute_command(
+            [
+                "cmake",
+                "--install", str(self.build_dir),
+                "--config", str(Configuration.Debug),
+                "--prefix", str(CMAKE_INSTALL_DIR),
+            ],
+            f"CMake: Install {self.project_name} (Debug)",
+        )
+        
+    # ---- CMake / build ----
     def create_build_generator(
         self,
         platform: Platform,
@@ -37,10 +97,12 @@ class BuildRunner:
         prepare_cmd = [
             "cmake",
             "-G", str(platform),
-            "-A", str(architecture),
             "-S", str(self.root_dir),
             "-B", str(self.build_dir),
         ]  
+        if platform == Platform.VS2022 or platform == Platform.VS2026:
+            prepare_cmd += ["-A", str(architecture)]
+
         BuildUtils.execute_command(
             prepare_cmd,
             f"CMake: Generate {platform} project",
@@ -75,7 +137,7 @@ class BuildRunner:
             BuildUtils.execute_command(
                 [
                     "cmake",
-                    "--build", str(test_build_dir),
+                    "--build", str(self.build_dir),
                     "--config", str(configuration),
                     "--target", str(target),
                 ],
