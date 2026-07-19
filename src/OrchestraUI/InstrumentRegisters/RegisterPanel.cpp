@@ -27,7 +27,7 @@ void RegisterPanel::setInstrument(const InstrumentProfile &instrument)
 		bool allSingleNote = true;
 		for (const auto &reg : registers)
 		{
-			if (reg.getLowerRange() != reg.getHigherRange())
+			if (reg.getWrittenLowNote() != reg.getWrittenHighNote())
 			{
 				allSingleNote = false;
 				break;
@@ -46,12 +46,12 @@ void RegisterPanel::setInstrument(const InstrumentProfile &instrument)
 		if (mIsStringInstrument)
 		{
 			// String instruments: show just the note as the string identifier
-			data.range = juce::String(reg.getLowerRange()) + " String";
+			data.range = juce::String(reg.getWrittenLowNote()) + " String";
 		}
 		else
 		{
 			// Wind/brass: show pitch range
-			data.range = juce::String(reg.getLowerRange() + " - " + reg.getHigherRange());
+			data.range = juce::String(reg.getWrittenLowNote() + " - " + reg.getWrittenHighNote());
 		}
 
 		data.description = juce::String(reg.getDescription());
