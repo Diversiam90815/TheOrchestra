@@ -18,6 +18,9 @@ set (Sampler_Dir                ${CMAKE_CURRENT_SOURCE_DIR}/Sampler )
 set (NotationRenderer_Dir       ${CMAKE_CURRENT_SOURCE_DIR}/NotationRenderer )
 set (Helper_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/Helper)
 set (FamilySwitcher_Dir         ${CMAKE_CURRENT_SOURCE_DIR}/FamilySwitcher )
+set (InstrumentDetail_Dir       ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentDetail )
+set (TabBar_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/TabBar )
+set (Overview_Dir               ${CMAKE_CURRENT_SOURCE_DIR}/Overview )
 
 
 set(ALL_PROJECT_DIRS
@@ -36,6 +39,9 @@ set(ALL_PROJECT_DIRS
     ${NotationRenderer_Dir}
     ${Helper_Dir}
     ${FamilySwitcher_Dir}
+    ${InstrumentDetail_Dir}
+    ${TabBar_Dir}
+    ${Overview_Dir}
 )
 
 set(Custom_Files
@@ -47,6 +53,9 @@ set(Custom_Files
 set(PianoRoll_Files
     ${PianoRoll_Dir}/PianoRoll.h            ${PianoRoll_Dir}/PianoRoll.cpp
     ${PianoRoll_Dir}/CustomPianoRoll.h      ${PianoRoll_Dir}/CustomPianoRoll.cpp
+    ${PianoRoll_Dir}/CcConfig.h
+    ${PianoRoll_Dir}/MidiCcGutter.h         ${PianoRoll_Dir}/MidiCcGutter.cpp
+    ${PianoRoll_Dir}/PianoRollWithCc.h      ${PianoRoll_Dir}/PianoRollWithCc.cpp
 )
 
 set(HeaderBar_Files
@@ -102,6 +111,20 @@ set(FamilySwitcher_Files
     ${FamilySwitcher_Dir}/FamilySwitcherView.h    ${FamilySwitcher_Dir}/FamilySwitcherView.cpp
     ${FamilySwitcher_Dir}/FamilyCard.h            ${FamilySwitcher_Dir}/FamilyCard.cpp
 )
+
+set(InstrumentDetail_Files
+    ${InstrumentDetail_Dir}/InstrumentDetailView.h    ${InstrumentDetail_Dir}/InstrumentDetailView.cpp
+)
+
+set(TabBar_Files
+    ${TabBar_Dir}/TabBar.h            ${TabBar_Dir}/TabBar.cpp
+)
+
+set(Overview_Files
+    ${Overview_Dir}/OverviewPanel.h       ${Overview_Dir}/OverviewPanel.cpp
+    ${Overview_Dir}/QualitiesPanel.h      ${Overview_Dir}/QualitiesPanel.cpp
+)
+
 set(UI_PROJECT_FILES
     ${Custom_Files}
     ${PianoRoll_Files}
@@ -118,6 +141,9 @@ set(UI_PROJECT_FILES
     ${NotationRenderer_Files}
     ${Helper_Files}
     ${FamilySwitcher_Files}
+    ${InstrumentDetail_Files}
+    ${TabBar_Files}
+    ${Overview_Files}
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${UI_PROJECT_FILES})
