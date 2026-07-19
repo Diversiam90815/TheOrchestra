@@ -38,10 +38,10 @@ void RangesPanel::setInstrument(const InstrumentProfile &instrument)
 {
 	auto range = instrument.getRange();
 
-	mWrittenLow	   = range.getLowerRange();
-	mWrittenHigh   = range.getHigherRange();
-	mSoundingLow   = range.getDisplayedLowerRange();
-	mSoundingHigh  = range.getDisplayedHigherRange();
+	mWrittenLow	   = range.getWrittenLowNote();
+	mWrittenHigh   = range.getWrittenHighNote();
+	mSoundingLow   = range.getSoundingLowNote();
+	mSoundingHigh  = range.getSoundingHighNote();
 
 	// Detect transposition: written and sounding ranges differ
 	mHasTransposition = (mWrittenLow != mSoundingLow) || (mWrittenHigh != mSoundingHigh);

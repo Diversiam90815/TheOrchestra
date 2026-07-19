@@ -235,8 +235,8 @@ bool CustomPianoRoll::setMidiRanges(const InstrumentRange &range)
 	mMidiRanges.clear();
 	mRangesSet	  = false;
 
-	int startMidi = range.getDisplayedLowerRange().empty() ? range.getLowerRangeNoteValue() : range.getDisplayedLowerRangeNoteValue();
-	int endMidi	  = range.getDisplayedHigherRange().empty() ? range.getHigherRangeNoteValue() : range.getDisplayedHigherRangeNoteValue();
+	int startMidi = range.getSoundingLowNote().empty() ? range.getWrittenLowNoteAsMidiValue() : range.getSoundingLowNoteAsMidiValue();
+	int endMidi	  = range.getSoundingHighNote().empty() ? range.getWrittenHighNoteAsMidiValue() : range.getSoundingHighNoteAsMidiValue();
 
 
 	mMidiRanges.push_back(std::make_pair(startMidi, endMidi));

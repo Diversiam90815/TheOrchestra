@@ -13,7 +13,6 @@
 constexpr auto RANGE_WRITTEN	   = "written";
 constexpr auto RANGE_DISPLAYED	   = "displayed";
 constexpr auto RANGE_SOUNDING	   = "sounding";
-constexpr auto RANGE_TRANSPOSITION = "transposition";
 constexpr auto RANGE_LOW		   = "low";
 constexpr auto RANGE_HIGH		   = "high";
 
@@ -22,35 +21,31 @@ struct InstrumentRange
 {
 	InstrumentRange() = default;
 
-	std::string getHigherRange() const { return higherRange; }
-	std::string getLowerRange() const { return lowerRange; }
-	const int	getHigherRangeNoteValue() const { return higherNoteRange; }
-	const int	getLowerRangeNoteValue() const { return lowerNoteRange; }
+	std::string getWrittenHighNote() const { return writtenHigh; }
+	std::string getWrittenLowNote() const { return writtenLow; }
+	const int	getWrittenHighNoteAsMidiValue() const { return writtenHighNoteValue; }
+	const int	getWrittenLowNoteAsMidiValue() const { return writtenLowNoteValue; }
 
-	std::string getDisplayedHigherRange() const { return higherDisplay; }
-	std::string getDisplayedLowerRange() const { return lowerDisplay; }
-	const int	getDisplayedHigherRangeNoteValue() const { return higherDisplayedRange; }
-	const int	getDisplayedLowerRangeNoteValue() const { return lowerDisplayedRange; }
+	std::string getSoundingHighNote() const { return soundingHigh; }
+	std::string getSoundingLowNote() const { return soundingLow; }
+	const int	getSoundingHighNoteAsMidiValue() const { return soundingHighNoteValue; }
+	const int	getSoundingLowNoteAsMidiValue() const { return soundingLowNoteValue; }
 
-	std::string getTransposition() const { return transposition; }
-
-	bool		operator==(const InstrumentRange &other) const { return this->lowerRange == other.lowerRange && this->higherRange == other.higherRange; }
+	bool		operator==(const InstrumentRange &other) const { return this->writtenLow == other.writtenLow && this->writtenHigh == other.writtenHigh; }
 
 	friend void from_json(const nlohmann::json &j, InstrumentRange &range);
 	friend void to_json(nlohmann::json &j, const InstrumentRange &range);
 
 private:
-	std::string higherRange{""};
-	std::string lowerRange{""};
-	int			higherNoteRange{0};
-	int			lowerNoteRange{0};
+	std::string writtenHigh{""};
+	std::string writtenLow{""};
+	int			writtenHighNoteValue{0};
+	int			writtenLowNoteValue{0};
 
-	std::string higherDisplay{""};
-	std::string lowerDisplay{""};
-	int			higherDisplayedRange{0};
-	int			lowerDisplayedRange{0};
-
-	std::string transposition{""};
+	std::string soundingHigh{""};
+	std::string soundingLow{""};
+	int			soundingHighNoteValue{0};
+	int			soundingLowNoteValue{0};
 };
 
 
@@ -60,10 +55,10 @@ inline void from_json(const nlohmann::json &j, InstrumentRange &range)
 	if (j.contains(RANGE_WRITTEN))
 	{
 		const auto &written	  = j[RANGE_WRITTEN];
-		range.lowerRange	  = written[RANGE_LOW].get<std::string>();
-		range.higherRange	  = written[RANGE_HIGH].get<std::string>();
-		range.lowerNoteRange  = turnNotenameIntoMidinumber(range.lowerRange);
-		range.higherNoteRange = turnNotenameIntoMidinumber(range.higherRange);
+		range.writtenLow	  = written[RANGE_LOW].get<std::string>();
+		range.writtenHigh	  = written[RANGE_HIGH].get<std::string>();
+		range.writtenLowNoteValue  = turnNotenameIntoMidinumber(range.writtenLow);
+		range.writtenHighNoteValue = turnNotenameIntoMidinumber(range.writtenHigh);
 	}
 
 	// Parse sounding/displayed range (optional - used for transposing instruments and rhythmic percussion)
@@ -77,41 +72,30 @@ inline void from_json(const nlohmann::json &j, InstrumentRange &range)
 	if (soundingKey != nullptr)
 	{
 		const auto &sounding	   = j[soundingKey];
-		range.lowerDisplay		   = sounding[RANGE_LOW].get<std::string>();
-		range.higherDisplay		   = sounding[RANGE_HIGH].get<std::string>();
-		range.lowerDisplayedRange  = turnNotenameIntoMidinumber(range.lowerDisplay);
-		range.higherDisplayedRange = turnNotenameIntoMidinumber(range.higherDisplay);
+		range.soundingLow		   = sounding[RANGE_LOW].get<std::string>();
+		range.soundingHigh		   = sounding[RANGE_HIGH].get<std::string>();
+		range.soundingLowNoteValue  = turnNotenameIntoMidinumber(range.soundingLow);
+		range.soundingHighNoteValue = turnNotenameIntoMidinumber(range.soundingHigh);
 	}
 	else
 	{
 		// Default to written range (non-transposing instruments)
-		range.lowerDisplay		   = range.lowerRange;
-		range.higherDisplay		   = range.higherRange;
-		range.lowerDisplayedRange  = range.lowerNoteRange;
-		range.higherDisplayedRange = range.higherNoteRange;
-	}
-
-	// Parse transposition (optional)
-	if (j.contains(RANGE_TRANSPOSITION))
-	{
-		range.transposition = j[RANGE_TRANSPOSITION].get<std::string>();
+		range.soundingLow		   = range.writtenLow;
+		range.soundingHigh		   = range.writtenHigh;
+		range.soundingLowNoteValue  = range.writtenLowNoteValue;
+		range.soundingHighNoteValue = range.writtenHighNoteValue;
 	}
 }
 
 inline void to_json(nlohmann::json &j, const InstrumentRange &range)
 {
-	j[RANGE_WRITTEN][RANGE_LOW]	 = range.getLowerRange();
-	j[RANGE_WRITTEN][RANGE_HIGH] = range.getHigherRange();
-
-	if (!range.getTransposition().empty())
-	{
-		j[RANGE_TRANSPOSITION] = range.getTransposition();
-	}
+	j[RANGE_WRITTEN][RANGE_LOW]	 = range.getWrittenLowNote();
+	j[RANGE_WRITTEN][RANGE_HIGH] = range.getWrittenHighNote();
 
 	// Only add displayed if different from written
-	if (range.getDisplayedLowerRange() != range.getLowerRange() || range.getDisplayedHigherRange() != range.getHigherRange())
+	if (range.getSoundingLowNote() != range.getWrittenLowNote() || range.getSoundingHighNote() != range.getWrittenHighNote())
 	{
-		j[RANGE_DISPLAYED][RANGE_LOW]  = range.getDisplayedLowerRange();
-		j[RANGE_DISPLAYED][RANGE_HIGH] = range.getDisplayedHigherRange();
+		j[RANGE_DISPLAYED][RANGE_LOW]  = range.getSoundingLowNote();
+		j[RANGE_DISPLAYED][RANGE_HIGH] = range.getSoundingHighNote();
 	}
 }
