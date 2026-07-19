@@ -8,7 +8,6 @@
 #include <gtest/gtest.h>
 
 #include "InstrumentController.h"
-#include "FileManager.h"
 
 namespace InstrumentTests
 {
@@ -17,20 +16,10 @@ class InstrumentControllerTest : public ::testing::Test
 {
 protected:
 	std::unique_ptr<InstrumentController> controller;
-	FileManager							  fileManager;
 
 	void								  SetUp() override
 	{
-		controller				   = std::make_unique<InstrumentController>();
-
-		// Verify the JSON file exists before running JSON dependent tests
-		const std::string jsonPath = fileManager.getInstrumentDataJSONPath();
-		juce::File		  jsonFile(jsonPath);
-		if (!jsonFile.existsAsFile())
-		{
-			GTEST_SKIP() << "Instruments.json not found at: " << jsonPath << " — skipping InstrumentController tests that require data.";
-		}
-
+		controller = std::make_unique<InstrumentController>();
 		controller->init();
 	}
 
