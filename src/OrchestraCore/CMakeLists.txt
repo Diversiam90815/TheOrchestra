@@ -1,7 +1,6 @@
 set(TARGET_NAME TheOrchestraCore)
 
 set (ASSETS_DIR             ${PROJECT_SOURCE_DIR}/Assets)
-set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets")
 
 set (INSTRUMENT_DIR         ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentInfo )
 set (PROCESSOR_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/AudioProcessor )
@@ -144,18 +143,3 @@ set (PROJECT_LIBS   juce::juce_audio_utils
 )
 
 target_link_libraries(${TARGET_NAME} PUBLIC ${PROJECT_LIBS} )
-
-
-add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${ASSETS_DIR}/Samples
-    "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets/Samples"
-    COMMENT "Copying Samples to build directory..."
-)
-
-add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${ASSETS_DIR}/Images
-    "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets/Images"
-    COMMENT "Copying Images to build directory..."
-)
