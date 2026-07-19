@@ -1,6 +1,11 @@
-include(cpm)
+CPMAddPackage(
+    NAME JUCE
+    GITHUB_REPOSITORY juce-framework/JUCE
+    GIT_TAG 8.0.3
+    VERSION 8.0.3
+)
 
-if(ENABLE_FORMAT) 
+if(ENABLE_FORMAT)
     include(Format)
 endif()
 
