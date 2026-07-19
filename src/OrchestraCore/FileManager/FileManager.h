@@ -33,8 +33,6 @@ public:
 
 	std::string			  getDefaultSamplesFolderPath();
 
-	std::string			  getInstrumentDataJSONPath();
-
 	juce::File			  getInstrumentImage(TypeOfImage type, InstrumentID instrumentKey);
 
 	std::filesystem::path getProjectsAppDataPath();
@@ -42,7 +40,6 @@ public:
 	std::filesystem::path getConfigFilePath();
 
 private:
-	std::filesystem::path	 getProjectDirectory();	   // Gets the project's directory
 	std::filesystem::path	 getExecutableDirectory(); // Gets the directory containing the executable
 	std::filesystem::path	 getAssetsFolder();		   // Gets the assets folder
 
@@ -51,10 +48,8 @@ private:
 	std::vector<std::string> getInstrumentImages(const std::string &family, const std::string &instrumentName);
 
 
-	std::string				 ConfigFileName			  = "Config.json";
-	std::string				 AssetsFolderName		  = "Assets";
-	std::string				 SampleFolderName		  = "Samples";
-	std::string				 ImageFolderName		  = "Images";
-	std::string				 InstrumentDataFolderName = "InstrumentData";
-	std::string				 InstrumentsDataFileName  = "Instruments.json";
+	std::string				 ConfigFileName	  = "Config.json";
+	std::string				 AssetsFolderName = "Assets";
+	std::string				 SampleFolderName = "Samples";
+	std::string				 ImageFolderName  = "Images";
 };

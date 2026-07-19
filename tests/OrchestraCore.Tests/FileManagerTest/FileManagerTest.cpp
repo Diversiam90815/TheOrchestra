@@ -29,20 +29,6 @@ TEST_F(FileManagerTest, SamplesFolderPathShape)
 }
 
 
-TEST_F(FileManagerTest, InstrumentDataJSONPathExistsOrSkips)
-{
-	std::string jsonPath = fm.getInstrumentDataJSONPath();
-	juce::File	jsonFile(jsonPath);
-
-	if (!jsonFile.existsAsFile())
-	{
-		GTEST_SKIP() << "Instruments.json not found at: " << jsonPath << " — skipping existence assertion.";
-	}
-
-	EXPECT_TRUE(jsonFile.existsAsFile()) << "File should exist as file";
-}
-
-
 TEST_F(FileManagerTest, ProjectsAppDataPathCreated)
 {
 	try

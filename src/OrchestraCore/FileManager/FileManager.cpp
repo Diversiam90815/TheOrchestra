@@ -18,16 +18,6 @@ std::string FileManager::getDefaultSamplesFolderPath()
 }
 
 
-std::string FileManager::getInstrumentDataJSONPath()
-{
-	std::filesystem::path projectDir = getAssetsFolder();
-
-	std::filesystem::path dataDir	 = projectDir / InstrumentDataFolderName / InstrumentsDataFileName;
-
-	return dataDir.string();
-}
-
-
 std::vector<std::string> FileManager::getInstrumentsImages(InstrumentID instrumentKey)
 {
 	std::string familyName	   = getFamilyNameFromKey(instrumentKey);
@@ -97,7 +87,11 @@ std::filesystem::path FileManager::getProjectsAppDataPath()
 
 	std::filesystem::path appDataPath(appDataEnv);
 
-	std::filesystem::path projectAppDataPath = appDataPath / ProjectName;
+	// Test binaries get their own AppData namespace so running them never reads or overwrites a real user's saved settings.
+	auto		 exeName	= juce::File::getSpecialLocation(juce::File::currentExecutableFile).getFileNameWithoutExtension();
+	const char	*projectName = exeName.containsIgnoreCase("Tests") ? TestProjectName : ProjectName;
+
+	std::filesystem::path projectAppDataPath = appDataPath / projectName;
 
 	if (!std::filesystem::exists(projectAppDataPath))
 	{
@@ -123,14 +117,6 @@ std::filesystem::path FileManager::getLoggingPath()
 }
 
 
-std::filesystem::path FileManager::getProjectDirectory()
-{
-	std::filesystem::path cwd		 = std::filesystem::current_path();
-	std::filesystem::path projectDir = cwd.parent_path().parent_path().parent_path().parent_path(); // TODO: Use built folder instead of project folder for assets
-	return projectDir;
-}
-
-
 std::filesystem::path FileManager::getExecutableDirectory()
 {
 	auto exePath = juce::File::getSpecialLocation(juce::File::currentExecutableFile);
@@ -140,7 +126,9 @@ std::filesystem::path FileManager::getExecutableDirectory()
 
 std::filesystem::path FileManager::getAssetsFolder()
 {
-	return getProjectDirectory() / AssetsFolderName;
+	// Assets are copied next to the executable at build time (see cmake/Assets.cmake), so resolve relative to it
+	// rather than the current working directory, which varies depending on how the process is launched.
+	return getExecutableDirectory() / AssetsFolderName;
 }
 
 
