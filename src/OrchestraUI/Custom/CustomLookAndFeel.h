@@ -34,12 +34,22 @@ public:
 	juce::Colour			  getSidebarSelectedColour() const { return sidebarSelected; }
 	juce::Colour			  getSidebarHoverColour() const { return sidebarHover; }
 
+	// Design-token getters (design is the source of truth)
+	juce::Colour			  getToolbarColour() const { return headerBar; }		 // #181520 toolbar / tab-bar
+	juce::Colour			  getCardColour() const { return surface; }				 // #1B1726 card / tile / slider bg
+	juce::Colour			  getSelectedCardColour() const { return surfaceElevated; }	 // #241F33 selected card
+	juce::Colour			  getPianoWellColour() const { return pianoWell; }			 // #0a090e piano-roll well
+	juce::Colour			  getDividerColour(float alpha = 0.14f) const { return accentGold.withAlpha(alpha); }
+	juce::Colour			  getOutlineColour(float alpha = 0.3f) const { return accentGold.withAlpha(alpha); }
+
 	float					  getCornerRadius() const;
 	juce::Font				  getTextEditorFont();
 	juce::Font				  getSectionTitleFont();
 	juce::Font				  getBodyFont();
 	juce::Font				  getSmallFont();
 	juce::Font				  getInstrumentNameFont();
+	// General serif helper; semiBold synthesizes a heavier weight since Source Serif 4 ships Regular only.
+	juce::Font				  getSerifFont(float height, bool semiBold = false) const;
 	juce::Typeface::Ptr		  getInstrumentTypeface() const { return instrumentTypeface; }
 	std::vector<juce::Colour> getQualityColours();
 	std::vector<juce::Colour> getQualityColoursBase();
@@ -85,11 +95,12 @@ private:
 	// Color Palette (redesigned)
 	// ==============================
 
-	// Backgrounds
-	const juce::Colour	background		 = juce::Colour::fromRGB(18, 16, 26);	 // #12101A - Main background
-	const juce::Colour	surface			 = juce::Colour::fromRGB(30, 27, 42);	 // #1E1B2A - Panel backgrounds
-	const juce::Colour	surfaceElevated	 = juce::Colour::fromRGB(40, 36, 64);	 // #282440 - Cards, hover states
-	const juce::Colour	headerBar		 = juce::Colour::fromRGB(24, 21, 32);	 // #181520 - Header bar
+	// Backgrounds (aligned to the design tokens)
+	const juce::Colour	background		 = juce::Colour::fromRGB(18, 16, 26);	 // #12101A - Main / panel background
+	const juce::Colour	surface			 = juce::Colour::fromRGB(27, 23, 38);	 // #1B1726 - Card / tile / slider bg
+	const juce::Colour	surfaceElevated	 = juce::Colour::fromRGB(36, 31, 51);	 // #241F33 - Selected card / hover
+	const juce::Colour	headerBar		 = juce::Colour::fromRGB(24, 21, 32);	 // #181520 - Toolbar / tab-bar
+	const juce::Colour	pianoWell		 = juce::Colour::fromRGB(10, 9, 14);	 // #0a090e - Piano-roll well
 
 	// Accent
 	const juce::Colour	accentGold		 = juce::Colour::fromRGB(196, 148, 58);	 // #C4943A - Primary accent
