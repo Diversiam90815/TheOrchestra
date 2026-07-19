@@ -17,6 +17,7 @@ set (OrchestraEditor_Dir        ${CMAKE_CURRENT_SOURCE_DIR}/OrchestraEditor )
 set (Sampler_Dir                ${CMAKE_CURRENT_SOURCE_DIR}/Sampler )
 set (NotationRenderer_Dir       ${CMAKE_CURRENT_SOURCE_DIR}/NotationRenderer )
 set (Helper_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/Helper)
+set (FamilySwitcher_Dir         ${CMAKE_CURRENT_SOURCE_DIR}/FamilySwitcher )
 
 
 set(ALL_PROJECT_DIRS
@@ -34,6 +35,7 @@ set(ALL_PROJECT_DIRS
     ${Sampler_Dir}
     ${NotationRenderer_Dir}
     ${Helper_Dir}
+    ${FamilySwitcher_Dir}
 )
 
 set(Custom_Files
@@ -96,6 +98,10 @@ set(Helper_Files
     ${Helper_Dir}/CreateEditor.cpp
 )
 
+set(FamilySwitcher_Files
+    ${FamilySwitcher_Dir}/FamilySwitcherView.h    ${FamilySwitcher_Dir}/FamilySwitcherView.cpp
+    ${FamilySwitcher_Dir}/FamilyCard.h            ${FamilySwitcher_Dir}/FamilyCard.cpp
+)
 set(UI_PROJECT_FILES
     ${Custom_Files}
     ${PianoRoll_Files}
@@ -111,6 +117,7 @@ set(UI_PROJECT_FILES
     ${Sampler_Files}
     ${NotationRenderer_Files}
     ${Helper_Files}
+    ${FamilySwitcher_Files}
 )
 
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${UI_PROJECT_FILES})
