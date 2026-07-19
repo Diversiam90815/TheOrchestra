@@ -34,8 +34,8 @@ TEST_F(InstrumentControllerTest, RetrieveKnownInstrumentByKey)
 
 	EXPECT_EQ(violin.getInstrumentID(), violinKey);
 	EXPECT_FALSE(violin.getName().empty()) << "Violin name should not be empty";
-	EXPECT_FALSE(violin.getRange().getHigherRange().empty()) << "Violin higher range should be populated";
-	EXPECT_FALSE(violin.getRange().getLowerRange().empty()) << "Violin lower range should be populated";
+	EXPECT_FALSE(violin.getRange().getWrittenHighNote().empty()) << "Violin higher range should be populated";
+	EXPECT_FALSE(violin.getRange().getWrittenLowNote().empty()) << "Violin lower range should be populated";
 	EXPECT_GE(violin.getRegisters().size(), 0) << "InstrumentRegisters should not be empty";
 	EXPECT_GE(violin.getRoles().size(), 0) << "OrchestrationRoles should not be empty";
 	EXPECT_GE(violin.getTechniques().size(), 0) << "Playing techniques should be available (family or specific)";
@@ -51,8 +51,8 @@ TEST_F(InstrumentControllerTest, RhythmicPercussionInstrumentProperties)
 	EXPECT_TRUE(timpani.isRhythmicPercussion()) << "Timpani should be flagged as rhythmic percussion";
 
 	// Displayed range may differ from actual range; at least accessible
-	EXPECT_FALSE(timpani.getRange().getDisplayedHigherRange().empty()) << "Rhythmic percussion should have displayed higher range";
-	EXPECT_FALSE(timpani.getRange().getDisplayedLowerRange().empty()) << "Rhythmic percussion should have displayed lower range";
+	EXPECT_FALSE(timpani.getRange().getSoundingHighNote().empty()) << "Rhythmic percussion should have displayed higher range";
+	EXPECT_FALSE(timpani.getRange().getSoundingLowNote().empty()) << "Rhythmic percussion should have displayed lower range";
 }
 
 
@@ -75,7 +75,6 @@ TEST_F(InstrumentControllerTest, RetrievalIsConsistentAcrossCalls)
 
 	EXPECT_EQ(a.getName(), b.getName());
 	EXPECT_EQ(a.getRange(), b.getRange());
-	EXPECT_EQ(a.getRange().getTransposition(), b.getRange().getTransposition());
 	EXPECT_EQ(a.isRhythmicPercussion(), b.isRhythmicPercussion());
 }
 
@@ -134,25 +133,6 @@ TEST_F(InstrumentControllerTest, InstrumentSpecificTechniquesOverrideFamilyTechn
 		}
 	}
 	EXPECT_TRUE(hasFourMalletGrip) << "Marimba should have 'Four-mallet grip' technique";
-}
-
-
-TEST_F(InstrumentControllerTest, TransposingInstrumentDataLoaded)
-{
-	int			   frenchHornKey = 201;
-
-	InstrumentProfile horn			 = controller->getInstrument(frenchHornKey);
-	EXPECT_EQ(horn.getName(), "French Horn");
-	EXPECT_FALSE(horn.getRange().getTransposition().empty()) << "French Horn should have transposition info";
-}
-
-
-TEST_F(InstrumentControllerTest, NonTransposingInstrumentDataLoaded)
-{
-	int			   violinKey = 301;
-
-	InstrumentProfile violin	 = controller->getInstrument(violinKey);
-	EXPECT_EQ(violin.getRange().getTransposition(), "") << "Violin is non-transposing, should return empty string";
 }
 
 

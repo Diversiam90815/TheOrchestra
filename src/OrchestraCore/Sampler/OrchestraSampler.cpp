@@ -239,8 +239,8 @@ std::pair<int, int> OrchestraSampler::getRangesOfInstrument(const InstrumentID k
 
 	auto instrument		 = mInstrumentController->getInstrument(key);
 	auto range			 = instrument.getRange();
-	auto higherNote		 = range.getHigherRange();
-	auto lowerNote		 = range.getLowerRange();
+	auto higherNote		 = range.getWrittenHighNote();
+	auto lowerNote		 = range.getWrittenLowNote();
 
 	int	 lowerNoteValue	 = turnNotenameIntoMidinumber(lowerNote);
 	int	 higherNoteValue = turnNotenameIntoMidinumber(higherNote);

@@ -47,13 +47,13 @@ void InstrumentHeaderPanel::setInstrument(const InstrumentProfile &instrument)
 	// Store clefs and transposition info
 	mClefs			   = instrument.getClefs();
 	auto range		   = instrument.getRange();
-	mHasTransposition  = (range.getLowerRange() != range.getDisplayedLowerRange())
-					  || (range.getHigherRange() != range.getDisplayedHigherRange());
+	mHasTransposition  = (range.getWrittenLowNote() != range.getSoundingLowNote())
+					  || (range.getWrittenHighNote() != range.getSoundingHighNote());
 	mCurrentPitchMode  = PitchMode::Written;
 
 	// Derive transposition label
 	if (mHasTransposition)
-		mTranspositionText = deriveTranspositionLabel(range.getLowerRange(), range.getDisplayedLowerRange());
+		mTranspositionText = deriveTranspositionLabel(range.getWrittenLowNote(), range.getSoundingLowNote());
 	else
 		mTranspositionText = "";
 
