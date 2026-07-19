@@ -5,7 +5,7 @@
 
 cmake_minimum_required(VERSION 3.25)
 
-set(PROJECT_VERSION 2.1.299)
+set(PROJECT_VERSION 2.1.317)
 
 project(TheOrchestra VERSION ${PROJECT_VERSION} LANGUAGES CXX)
 
@@ -17,7 +17,8 @@ option(ENABLE_CPPCHECK  "Run cppcheck static analysis on C++ targets"       ON)
 option(ENABLE_DOXYGEN   "Add doxygen documentation target"                  OFF)
 option(ENABLE_MEMCHECK  "Add memcheck target "                              OFF)
 
-set(LIB_DIR "${CMAKE_SOURCE_DIR}/libs" CACHE PATH "Directory for external dependencies")
+set(LIB_DIR "${CMAKE_SOURCE_DIR}/libs" CACHE PATH "Directory for external dependencies" FORCE)
+set(CPM_SOURCE_CACHE "${LIB_DIR}/cpm-cache" CACHE PATH "Shared cache for CPM-fetched dependencies" FORCE)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 

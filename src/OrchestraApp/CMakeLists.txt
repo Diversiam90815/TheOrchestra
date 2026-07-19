@@ -7,13 +7,6 @@ set(APP_FILES    ${CMAKE_CURRENT_SOURCE_DIR}/Main.cpp)
 source_group("App"              FILES ${APP_FILES})
 
 
-CPMAddPackage(
-        NAME JUCE
-        GITHUB_REPOSITORY juce-framework/JUCE
-        GIT_TAG 8.0.3
-        VERSION 8.0.3
-)
-
 juce_add_gui_app(${TARGET_NAME}
     COMPANY_NAME "DiversiamProduction"
     PLUGIN_MANUFACTURER_CODE 3160

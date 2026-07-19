@@ -92,14 +92,15 @@ source_group("User Config"      FILES ${USER_CONFIG_FILES})
 CPMAddPackage(
     NAME Logger
     GITHUB_REPOSITORY Diversiam90815/Logger
-    VERSION 1.3.81
+    VERSION 2.0.86
 )
 
 CPMAddPackage(
-    NAME JUCE
-    GITHUB_REPOSITORY juce-framework/JUCE
-    GIT_TAG 8.0.3
-    VERSION 8.0.3
+    NAME nlohmann_json
+    GITHUB_REPOSITORY nlohmann/json
+    VERSION 3.12.0
+    OPTIONS
+        "JSON_Install OFF"
 )
 
 add_library(${TARGET_NAME} STATIC ${CORE_PROJECT_FILES})
@@ -138,6 +139,7 @@ set (PROJECT_LIBS   juce::juce_audio_utils
                     juce::juce_audio_plugin_client
                     juce::juce_core
                     Logger
+                    nlohmann_json::nlohmann_json
                     InstrumentData
 )
 
