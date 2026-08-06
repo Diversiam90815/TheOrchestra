@@ -46,6 +46,7 @@ set(Custom_Files
     ${Custom_Dir}/OrchestraPanel.h          ${Custom_Dir}/OrchestraPanel.cpp
     ${Custom_Dir}/Theme.h                   ${Custom_Dir}/Theme.cpp
     ${Custom_Dir}/TextMeasure.h             ${Custom_Dir}/TextMeasure.cpp
+    ${Custom_Dir}/GridFlow.h                ${Custom_Dir}/GridFlow.cpp
 )
 
 set(PianoRoll_Files
