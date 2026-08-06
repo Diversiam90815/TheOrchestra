@@ -5,11 +5,9 @@ set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets")
 
 set (Custom_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/Custom )
 set (PianoRoll_Dir              ${CMAKE_CURRENT_SOURCE_DIR}/PianoRoll )
-set (HeaderBar_Dir              ${CMAKE_CURRENT_SOURCE_DIR}/HeaderBar )
 set (InstrumentSidebar_Dir      ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentSidebar )
 set (InstrumentFamousWorks_Dir  ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentFamousWorks )
 set (InstrumentInfo_Dir         ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentInfo )
-set (InstrumentRegister_Dir     ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentRegisters)
 set (InstrumentTechniques_Dir   ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentTechniques )
 set (InstrumentHeading_Dir      ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentHeading )
 set (InstrumentRanges_Dir       ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentRanges )
@@ -26,11 +24,9 @@ set (Overview_Dir               ${CMAKE_CURRENT_SOURCE_DIR}/Overview )
 set(ALL_PROJECT_DIRS
     ${Custom_Dir}
     ${PianoRoll_Dir}
-    ${HeaderBar_Dir}
     ${InstrumentSidebar_Dir}
     ${InstrumentFamousWorks_Dir}
     ${InstrumentInfo_Dir}
-    ${InstrumentRegister_Dir}
     ${InstrumentTechniques_Dir}
     ${InstrumentHeading_Dir}
     ${InstrumentRanges_Dir}
@@ -58,10 +54,6 @@ set(PianoRoll_Files
     ${PianoRoll_Dir}/PianoRollWithCc.h      ${PianoRoll_Dir}/PianoRollWithCc.cpp
 )
 
-set(HeaderBar_Files
-    ${HeaderBar_Dir}/HeaderBar.h            ${HeaderBar_Dir}/HeaderBar.cpp
-)
-
 set(InstrumentSidebar_Files
     ${InstrumentSidebar_Dir}/InstrumentSidebar.h    ${InstrumentSidebar_Dir}/InstrumentSidebar.cpp
 )
@@ -72,10 +64,6 @@ set(InstrumentFamousWorks_Files
 
 set(InstrumentInfo_Files
     ${InstrumentInfo_Dir}/RolesPanel.h              ${InstrumentInfo_Dir}/RolesPanel.cpp
-)
-
-set(InstrumentRegisters_Files
-    ${InstrumentRegister_Dir}/RegisterPanel.h          ${InstrumentRegister_Dir}/RegisterPanel.cpp
 )
 
 set(InstrumentTechniques_Files
@@ -128,11 +116,9 @@ set(Overview_Files
 set(UI_PROJECT_FILES
     ${Custom_Files}
     ${PianoRoll_Files}
-    ${HeaderBar_Files}
     ${InstrumentSidebar_Files}
     ${InstrumentFamousWorks_Files}
     ${InstrumentInfo_Files}
-    ${InstrumentRegisters_Files}
     ${InstrumentTechniques_Files}
     ${InstrumentHeading_Files}
     ${InstrumentRanges_Files}
