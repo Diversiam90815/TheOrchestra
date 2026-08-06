@@ -44,6 +44,8 @@ set(Custom_Files
     ${Custom_Dir}/CustomComponent.h         ${Custom_Dir}/CustomComponent.cpp
     ${Custom_Dir}/CustomLookAndFeel.h       ${Custom_Dir}/CustomLookAndFeel.cpp
     ${Custom_Dir}/OrchestraPanel.h          ${Custom_Dir}/OrchestraPanel.cpp
+    ${Custom_Dir}/Theme.h                   ${Custom_Dir}/Theme.cpp
+    ${Custom_Dir}/TextMeasure.h             ${Custom_Dir}/TextMeasure.cpp
 )
 
 set(PianoRoll_Files
