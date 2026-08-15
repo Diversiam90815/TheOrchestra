@@ -14,10 +14,10 @@
 TabBar::TabBar()
 {
 	mTabs = {
-		{ DetailTab::Overview,	  "Overview",	  {} },
-		{ DetailTab::Techniques,  "Techniques",	  {} },
-		{ DetailTab::Roles,		  "Roles",		  {} },
-		{ DetailTab::FamousWorks, "Famous Works", {} },
+		{DetailTab::Overview, "Overview", {}},
+		{DetailTab::Techniques, "Techniques", {}},
+		{DetailTab::Roles, "Roles", {}},
+		{DetailTab::FamousWorks, "Famous Works", {}},
 	};
 }
 

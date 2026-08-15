@@ -11,10 +11,11 @@
 #include "OrchestraSampler.h"
 
 #include <functional>
+#include <optional>
 #include <set>
 
 
-using ArticulationChangedCallback = std::function<void(Articulation)>;
+using ArticulationChangedCallback = std::function<bool(Articulation)>;
 
 
 class SamplerPanel : public OrchestraPanel, public HasPreferredHeight
@@ -23,31 +24,29 @@ public:
 	SamplerPanel();
 	~SamplerPanel() override = default;
 
-	void				 setInstrument(const InstrumentProfile &instrument) override { /* Not used directly */ }
+	void setInstrument(const InstrumentProfile &instrument) override { /* Not used directly */ }
 
-	void				 setAvailableArticulations(std::set<Articulation> available);
-	void				 setArticulationChangedCallback(ArticulationChangedCallback callback);
+	void setAvailableArticulations(std::set<Articulation> available);
+	void setArticulationChangedCallback(ArticulationChangedCallback callback);
 
-	void				 resized() override;
+	void paint(juce::Graphics &g) override;
+	void resized() override;
 
-	int					 getPreferredHeight(int width) const override;
+	int	 getPreferredHeight(int width) const override;
 
 private:
-	void				 onArticulationClicked(Articulation articulation);
+	void										   onArticulationClicked(Articulation articulation);
+	void										   updateStatus();
 
-	/*
-	 @brief					Rows the articulation buttons wrap into at a width.
-							The panel used to be a fixed 96px, which left 40px of
-							content for a 32px button row plus an 18px status
-							label - they overlapped, and a second row was
-							impossible. Height now follows the wrap.
-	*/
-	int					 wrappedRowCount(int width) const;
+	int											   wrappedRowCount(int width) const;
 
 	std::vector<std::unique_ptr<juce::TextButton>> mButtons;
 	std::set<Articulation>						   mAvailable;
 	Articulation								   mSelected = Articulation::sustain;
 	juce::Label									   mStatusLabel;
+
+	std::optional<Articulation>					   mLoadedArticulation;
+	bool										   mSamplesReady = false;
 
 	ArticulationChangedCallback					   mCallback;
 
@@ -55,4 +54,5 @@ private:
 	static constexpr int						   kButtonHeight = 38;
 	static constexpr int						   kGap			 = Space::s;
 	static constexpr int						   kStatusHeight = 26;
+	static constexpr float						   kDotSize		 = 9.0f;
 };

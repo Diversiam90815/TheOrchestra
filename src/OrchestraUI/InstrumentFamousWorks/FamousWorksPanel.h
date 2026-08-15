@@ -17,10 +17,10 @@ public:
 	FamousWorksPanel();
 	~FamousWorksPanel() override = default;
 
-	void					 paint(juce::Graphics &g) override;
-	void					 setInstrument(const InstrumentProfile &instrument) override;
+	void paint(juce::Graphics &g) override;
+	void setInstrument(const InstrumentProfile &instrument) override;
 
-	int						 getPreferredHeight(int width) const override;
+	int	 getPreferredHeight(int width) const override;
 
 private:
 	struct WorkData
@@ -29,9 +29,7 @@ private:
 		juce::String title;
 	};
 
-	// Titles run to 79 characters, so the title line wraps and the card height
-	// follows the measured text.
-	std::vector<int>	 cellHeights(int width) const;
+	std::vector<int>	  cellHeights(int width) const;
 
 	std::vector<WorkData> mWorks;
 

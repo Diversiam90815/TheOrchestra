@@ -32,13 +32,13 @@ void BreadcrumbBar::setPath(const juce::String &family, const juce::String &inst
 
 void BreadcrumbBar::layout()
 {
-	auto *lf	= dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
-	auto  font	= lf ? lf->getSerifFont(Type::bodySmall) : juce::Font(Type::bodySmall);
+	auto	 *lf   = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	auto	  font = lf ? lf->getSerifFont(Type::bodySmall) : juce::Font(Type::bodySmall);
 
-	const int x = Space::xl;
-	mBackBounds = juce::Rectangle<int>(x, 0, TextMeasure::lineWidth(font, kBackLabel) + Space::s, getHeight());
-	mDividerX	= mBackBounds.getRight() + Space::m;
-	mPathX		= mDividerX + Space::m;
+	const int x	   = Space::xl;
+	mBackBounds	   = juce::Rectangle<int>(x, 0, TextMeasure::lineWidth(font, kBackLabel) + Space::s, getHeight());
+	mDividerX	   = mBackBounds.getRight() + Space::m;
+	mPathX		   = mDividerX + Space::m;
 }
 
 
@@ -95,6 +95,7 @@ void BreadcrumbBar::mouseUp(const juce::MouseEvent &e)
 //==============================================================================
 // InstrumentDetailView
 //==============================================================================
+
 InstrumentDetailView::InstrumentDetailView()
 {
 	addAndMakeVisible(mBreadcrumb);
@@ -153,7 +154,6 @@ void InstrumentDetailView::setAvailableArticulations(std::set<Articulation> avai
 {
 	mSampler.setAvailableArticulations(std::move(available));
 
-	// The sampler's height follows how many rows the articulations wrap into.
 	resized();
 }
 
@@ -193,11 +193,11 @@ const HasPreferredHeight &InstrumentDetailView::activeBody() const
 {
 	switch (mCurrentTab)
 	{
-	case DetailTab::Techniques:	 return mTechniques;
-	case DetailTab::Roles:		 return mRoles;
+	case DetailTab::Techniques: return mTechniques;
+	case DetailTab::Roles: return mRoles;
 	case DetailTab::FamousWorks: return mFamousWorks;
 	case DetailTab::Overview:
-	default:					 return mOverview;
+	default: return mOverview;
 	}
 }
 
@@ -206,11 +206,11 @@ juce::Component &InstrumentDetailView::activeBodyComponent()
 {
 	switch (mCurrentTab)
 	{
-	case DetailTab::Techniques:	 return mTechniques;
-	case DetailTab::Roles:		 return mRoles;
+	case DetailTab::Techniques: return mTechniques;
+	case DetailTab::Roles: return mRoles;
 	case DetailTab::FamousWorks: return mFamousWorks;
 	case DetailTab::Overview:
-	default:					 return mOverview;
+	default: return mOverview;
 	}
 }
 
@@ -254,19 +254,16 @@ void InstrumentDetailView::resized()
 	mSampler.setBounds(slot(mSampler.getPreferredHeight(panelWidth), kPad).reduced(kPad, 0));
 	mTabBar.setBounds(detail.removeFromTop(Chrome::tabBarH));
 
-	// The piano roll is a constant height - it is an instrument, not a panel, so
-	// it must look identical at every window size. Everything left over goes to
-	// the tab body, which scrolls when its content does not fit.
+	// The piano roll is a constant height
 	mPianoRoll.setBounds(detail.removeFromBottom(Chrome::pianoRollH + kPad).withTrimmedBottom(kPad).reduced(kPad + Space::s, 0));
 
 	auto body = detail.reduced(kPad, 0);
 	mBodyViewport.setBounds(body);
 
 	// Holder is as tall as the content wants, so the viewport scrolls only when
-	// the content genuinely does not fit. Reserve scrollbar width in that case
-	// so the reflow does not then change the answer.
-	const bool needsScroll = activeBody().getPreferredHeight(body.getWidth()) > body.getHeight();
-	const int  holderWidth = body.getWidth() - (needsScroll ? Space::m : 0);
+	// the content genuinely does not fit
+	const bool needsScroll	= activeBody().getPreferredHeight(body.getWidth()) > body.getHeight();
+	const int  holderWidth	= body.getWidth() - (needsScroll ? Space::m : 0);
 	const int  holderHeight = juce::jmax(body.getHeight(), activeBody().getPreferredHeight(holderWidth));
 
 	mBodyHolder.setSize(holderWidth, holderHeight);

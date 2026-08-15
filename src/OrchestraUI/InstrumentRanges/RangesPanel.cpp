@@ -36,12 +36,12 @@ RangesPanel::RangesPanel() : OrchestraPanel("Range")
 
 void RangesPanel::setInstrument(const InstrumentProfile &instrument)
 {
-	auto range = instrument.getRange();
+	auto range		  = instrument.getRange();
 
-	mWrittenLow	   = range.getWrittenLowNote();
-	mWrittenHigh   = range.getWrittenHighNote();
-	mSoundingLow   = range.getSoundingLowNote();
-	mSoundingHigh  = range.getSoundingHighNote();
+	mWrittenLow		  = range.getWrittenLowNote();
+	mWrittenHigh	  = range.getWrittenHighNote();
+	mSoundingLow	  = range.getSoundingLowNote();
+	mSoundingHigh	  = range.getSoundingHighNote();
 
 	// Detect transposition: written and sounding ranges differ
 	mHasTransposition = (mWrittenLow != mSoundingLow) || (mWrittenHigh != mSoundingHigh);
@@ -54,7 +54,8 @@ void RangesPanel::setInstrument(const InstrumentProfile &instrument)
 
 void RangesPanel::setClef(Clef /*clef*/)
 {
-	// Range panel always auto-selects the best clef per note.
+	// @TODO:
+	//		- Range panel always auto-selects the best clef per note.
 }
 
 
@@ -129,7 +130,7 @@ void RangesPanel::resized()
 	auto rightCol = area;
 
 	// --- Left column: low note ---
-	auto lc = leftCol;
+	auto lc		  = leftCol;
 	lc.removeFromTop(topMargin);
 
 	mLowLabel.setBounds(lc.removeFromTop(labelH));

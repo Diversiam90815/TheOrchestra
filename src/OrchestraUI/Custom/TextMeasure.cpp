@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 	Module			TextMeasure
-	Description		Text measurement and wrapped drawing.
+	Description		Text measurement and wrapped drawing
   ==============================================================================
 */
 
@@ -32,13 +32,13 @@ int TextMeasure::wrappedHeight(const juce::Font &font, const juce::String &text,
 	if (text.isEmpty() || width <= 0)
 		return 0;
 
-	const auto layout	 = buildLayout(font, text, width, juce::Colours::white);
-	const int  height	 = (int)std::ceil(layout.getHeight());
+	const auto layout = buildLayout(font, text, width, juce::Colours::white);
+	const int  height = (int)std::ceil(layout.getHeight());
 
 	if (maxLines <= 0)
 		return height;
 
-	const int  lineHeight = (int)std::ceil(font.getHeight() * 1.35f);
+	const int lineHeight = (int)std::ceil(font.getHeight() * 1.35f);
 	return juce::jmin(height, lineHeight * maxLines);
 }
 
@@ -49,8 +49,7 @@ int TextMeasure::lineWidth(const juce::Font &font, const juce::String &text)
 }
 
 
-void TextMeasure::drawWrapped(
-	juce::Graphics &g, const juce::Font &font, const juce::Colour &colour, const juce::String &text, juce::Rectangle<int> bounds, int maxLines)
+void TextMeasure::drawWrapped(juce::Graphics &g, const juce::Font &font, const juce::Colour &colour, const juce::String &text, juce::Rectangle<int> bounds, int maxLines)
 {
 	if (text.isEmpty() || bounds.isEmpty())
 		return;

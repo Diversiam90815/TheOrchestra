@@ -31,13 +31,13 @@ public:
 
 	std::function<void(DetailTab)> onTabChanged;
 
-	void	  setActiveTab(DetailTab tab);
-	DetailTab getActiveTab() const { return mActiveTab; }
+	void						   setActiveTab(DetailTab tab);
+	DetailTab					   getActiveTab() const { return mActiveTab; }
 
-	void	  paint(juce::Graphics &g) override;
-	void	  resized() override;
-	void	  lookAndFeelChanged() override;
-	void	  mouseUp(const juce::MouseEvent &e) override;
+	void						   paint(juce::Graphics &g) override;
+	void						   resized() override;
+	void						   lookAndFeelChanged() override;
+	void						   mouseUp(const juce::MouseEvent &e) override;
 
 private:
 	struct TabItem
@@ -47,9 +47,6 @@ private:
 		juce::Rectangle<int> bounds;
 	};
 
-	// Tab widths are text-measured, so layout must re-run whenever the size or
-	// the font changes - not from paint(), which left mouseUp() hit-testing
-	// bounds that were only valid after the first repaint.
 	void				 layoutTabs();
 
 	std::vector<TabItem> mTabs;

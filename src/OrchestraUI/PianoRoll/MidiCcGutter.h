@@ -27,18 +27,18 @@ public:
 	// Engine -> gutter: return the latest value for a CC (0..127), or -1 if unknown.
 	std::function<int(int ccNumber)>			 ccValueProvider;
 
-	int	 getPreferredWidth() const;
+	int											 getPreferredWidth() const;
 
-	void resized() override;
+	void										 resized() override;
 
 private:
 	void timerCallback() override;
 
 	class CcSlider;
 
-	std::vector<CcLane>						mLanes;
-	std::vector<std::unique_ptr<CcSlider>>	mSliders;
+	std::vector<CcLane>					   mLanes;
+	std::vector<std::unique_ptr<CcSlider>> mSliders;
 
-	static constexpr int kColumnWidth = 42;
-	static constexpr int kColumnGap	  = Space::m;
+	static constexpr int				   kColumnWidth = 42;
+	static constexpr int				   kColumnGap	= Space::m;
 };

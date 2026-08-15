@@ -17,9 +17,9 @@ public:
 
 	std::function<void(int ccNumber, int value)> onChanged;
 
-	int	 getValue() const { return mValue; }
+	int											 getValue() const { return mValue; }
 
-	void setValueExternally(int newValue)
+	void										 setValueExternally(int newValue)
 	{
 		newValue = juce::jlimit(0, 127, newValue);
 		if (newValue != mValue)
@@ -103,9 +103,9 @@ private:
 		}
 	}
 
-	CcLane mLane;
-	int	   mValue	 = 0;
-	bool   mDragging = false;
+	CcLane				 mLane;
+	int					 mValue	   = 0;
+	bool				 mDragging = false;
 
 	static constexpr int kReadoutH = 20;
 	static constexpr int kLabelH   = 18;
