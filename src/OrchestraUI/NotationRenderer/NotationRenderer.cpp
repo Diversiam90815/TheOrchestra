@@ -19,6 +19,9 @@ void NotationRenderer::renderStaffWithNote(juce::Graphics &g, juce::Rectangle<in
 	if (bounds.isEmpty())
 		return;
 
+	// Enable clipping to prevent notes from drawing outside bounds
+	g.reduceClipRegion(bounds);
+
 	juce::Rectangle<float> staffArea   = bounds.toFloat().reduced(3.0f, 0.0f);
 
 	// Calculate staff height (4 spaces + line spacing)
@@ -29,9 +32,12 @@ void NotationRenderer::renderStaffWithNote(juce::Graphics &g, juce::Rectangle<in
 	float yOffset = (bounds.getHeight() - staffHeight) * 0.5f;
 	staffArea.translate(0.0f, yOffset);
 
+	// Determine if ottava is needed
+	OttavaType ottava = determineOttava(note.midiNoteNumber, clef);
+
 	drawStaff(g, staffArea);
 	drawClef(g, staffArea, clef);
-	drawNote(g, staffArea, note, clef);
+	drawNote(g, staffArea, note, clef, ottava);
 }
 
 
@@ -49,7 +55,7 @@ void NotationRenderer::setNoteColour(juce::Colour colour)
 
 juce::Rectangle<int> NotationRenderer::getRecommendedBounds()
 {
-	return juce::Rectangle<int>(0, 0, 100, 80);
+	return juce::Rectangle<int>(0, 0, 160, 128);
 }
 
 
@@ -127,11 +133,15 @@ void NotationRenderer::drawClef(juce::Graphics &g, juce::Rectangle<float> staffA
 }
 
 
-void NotationRenderer::drawNote(juce::Graphics &g, juce::Rectangle<float> staffArea, const NoteDescriptor &note, Clef clef)
+void NotationRenderer::drawNote(juce::Graphics &g, juce::Rectangle<float> staffArea, const NoteDescriptor &note, Clef clef, OttavaType ottava)
 {
-	int	  staffPosition = midiNoteToStaffPosition(note.midiNoteNumber, clef);
-	float noteX			= staffArea.getCentreX() * 1.2f;
-	float noteY			= staffPositionToY(staffPosition, staffArea);
+	// If ottava is active, shift the displayed note toward the staff by one
+	// or two octaves.
+	const int displayMidi	= note.midiNoteNumber + ottavaDisplacement(ottava);
+
+	int		  staffPosition = midiNoteToStaffPosition(displayMidi, clef);
+	float	  noteX			= staffArea.getX() + staffArea.getWidth() * kNoteXFraction;
+	float	  noteY			= staffPositionToY(staffPosition, staffArea);
 
 	// Draw ledger lines if needed
 	if (note.showLedgerLines)
@@ -148,6 +158,37 @@ void NotationRenderer::drawNote(juce::Graphics &g, juce::Rectangle<float> staffA
 	juce::String noteGlyph = juce::String::charToString(kGlyphNoteheadBlack);
 	float		 noteWidth = mStaffLineSpacing * 2.5f;
 	g.drawText(noteGlyph, noteX - (noteWidth * 0.5f), noteY - (mStaffLineSpacing * 1.5f), noteWidth, mStaffLineSpacing * 3.0f, juce::Justification::centred);
+
+	if (ottava != OttavaType::None)
+		drawOttavaText(g, ottava, noteX, noteY, noteWidth);
+}
+
+
+void NotationRenderer::drawOttavaText(juce::Graphics &g, OttavaType ottava, float noteX, float noteY, float noteWidth)
+{
+	g.setColour(mNoteColor.withAlpha(0.75f));
+
+	auto textFont = juce::Font(juce::FontOptions(12.5f));
+	textFont.setExtraKerningFactor(0.02f);
+	g.setFont(textFont);
+
+	juce::String text;
+	switch (ottava)
+	{
+	case OttavaType::Ottava8va: text = "8va"; break;
+	case OttavaType::Ottava8vb: text = "8vb"; break;
+	case OttavaType::Ottava15ma: text = "15ma"; break;
+	case OttavaType::Ottava15mb: text = "15mb"; break;
+	default: return;
+	}
+
+	// Immediately to the right of the notehead, vertically centred on it -
+	// previously this was centred over the whole staff at a fixed position
+	// above/below it, independent of where the note actually landed, so it
+	// could end up drawn behind the notehead instead of legible beside it.
+	float x = noteX + (noteWidth * 0.5f) + 3.0f;
+	float y = noteY - 7.0f;
+	g.drawText(text, x, y, 36.0f, 14.0f, juce::Justification::centredLeft);
 }
 
 
@@ -202,79 +243,6 @@ void NotationRenderer::drawAccidental(juce::Graphics &g, float x, float y, Accid
 }
 
 
-int NotationRenderer::midiNoteToStaffPosition(const int midiNote, Clef clef)
-{
-	// Convert midi note to diatonic staff position
-	// Staff position 0 = top line, increasing downward
-
-	// 1 -	Get note class (C=0, C#=1, D=2,..)
-	int				 noteClass				 = midiNote % 12;
-	int				 octave					 = (midiNote / 12) - 1; // Midi Octave: C4 = oct. 4
-
-	// 2 -	Map chromatic note class to diatonic position within octave
-	//		C=0, D=1, E=2, F=3,..
-	static const int chromaticToDiatonic[12] = {
-		0, // C
-		0, // C# (display as C)
-		1, // D
-		1, // D# (display as D)
-		2, // E
-		3, // F
-		3, // F# (display as F)
-		4, // G
-		4, // G# (display as G)
-		5, // A
-		5, // A# (display as A)
-		6  // B
-	};
-
-	int diatonicNote			 = chromaticToDiatonic[noteClass];
-
-	// 3 -	Calculate absolute diatonic positon (C0 = pos 0)
-	int absoluteDiatonicPosition = octave * 7 + diatonicNote;
-
-	// 4 -	Calculate staff position relative to clef
-	int referencePosition		 = 0; // Position on staff for reference note
-	int referenceDiatonicPos	 = 0; // Absolute diatonic position of reference
-
-	switch (clef)
-	{
-	case Clef::Treble:
-		// F5 is on top line (position 0)
-		// F5 = MIDI 77, octave 5, F = diatonic 3
-		referencePosition	 = 0;
-		referenceDiatonicPos = 5 * 7 + 3; // Octave 5, F
-		break;
-
-	case Clef::Bass:
-		// A3 is on top line (position 0)
-		// A3 = MIDI 57, octave 3, A = diatonic 5
-		referencePosition	 = 0;
-		referenceDiatonicPos = 3 * 7 + 5; // Octave 3, A
-		break;
-
-	case Clef::Alto:
-		// C4 is on middle line (position 4)
-		// C4 = MIDI 60, octave 4, C = diatonic 0
-		referencePosition	 = 4;
-		referenceDiatonicPos = 4 * 7 + 0; // Octave 4, C
-		break;
-
-	case Clef::Tenor:
-		// A3 is on middle line (position 4)
-		// A3 = MIDI 57, octave 3, A = diatonic 5
-		referencePosition	 = 4;
-		referenceDiatonicPos = 3 * 7 + 5; // Octave 3, A
-		break;
-	}
-
-	// calculate staff position (going down from reference = positive positions)
-	int staffPosition = referencePosition + (referenceDiatonicPos - absoluteDiatonicPosition);
-
-	return staffPosition;
-}
-
-
 float NotationRenderer::staffPositionToY(int staffPosition, juce::Rectangle<float> staffArea) const
 {
 	// Staff position 0 = top line, 8 = bottom line
@@ -282,4 +250,3 @@ float NotationRenderer::staffPositionToY(int staffPosition, juce::Rectangle<floa
 	float y = staffArea.getY() + (staffPosition * mStaffLineSpacing * 0.5f);
 	return y;
 }
-

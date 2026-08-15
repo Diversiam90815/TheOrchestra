@@ -149,8 +149,8 @@ constexpr auto FortissimoDynamic = "ff";
 //                          FOLDERS / FILES
 //==============================================================================
 
-constexpr auto LogFileName		 = "Orchestra.log";
 constexpr auto ProjectName		 = "TheOrchestra";
+constexpr auto TestProjectName	 = "TheOrchestra-Tests";
 constexpr auto LogFolderName	 = "Logs";
 constexpr auto LogFile			 = "Orchestra.log";
 constexpr auto ConfigFolderName	 = "Config";

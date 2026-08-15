@@ -6,20 +6,25 @@
 */
 
 #include "NotationComponent.h"
+#include "Theme.h"
 
 
 NotationComponent::NotationComponent()
 {
 	mNote.midiNoteNumber = 60; // Middle C
 	mNote.accidental	 = Accidental::None;
-	setSize(100, 80);
+	setSize(160, 128);
 }
 
 
 void NotationComponent::paint(juce::Graphics &g)
 {
-	// Fill background
-	g.fillAll(juce::Colours::white);
+	// Transparent background - inherits panel colour
+	g.fillAll(juce::Colours::transparentBlack);
+
+	const auto &t = themeFor(*this);
+	mRenderer.setStafflineColour(t.textTertiary);
+	mRenderer.setNoteColour(t.textPrimary);
 
 	// Render the notation
 	mRenderer.renderStaffWithNote(g, getLocalBounds(), mNote, mClef);
@@ -52,7 +57,6 @@ void NotationComponent::setNoteFromString(const std::string &noteName)
 		acc = Accidental::Flat;
 
 	setNote(midiNote, acc);
-	autoSelectClef(midiNote);
 }
 
 
@@ -63,18 +67,29 @@ void NotationComponent::setClef(Clef clef)
 }
 
 
-void NotationComponent::autoSelectClef(const int midiNoteNumber)
+void NotationComponent::selectBestClef(Clef preferredClef)
 {
-	// TOOD: REFINE CLEF HANDLING!
+	static constexpr Clef kAllClefs[]		   = {Clef::Treble, Clef::Bass, Clef::Alto, Clef::Tenor};
 
-	// Heuristic for clef selection based on pitch range
-	if (midiNoteNumber >= 55) // G3 and above
+	constexpr int		  kPreferenceTolerance = 4;
+
+	Clef				  best				   = kAllClefs[0];
+	int					  bestOverflow		   = ledgerOverflow(mNote.midiNoteNumber, best);
+
+	for (Clef clef : kAllClefs)
 	{
-		mClef = Clef::Treble;
+		const int overflow = ledgerOverflow(mNote.midiNoteNumber, clef);
+		if (overflow < bestOverflow)
+		{
+			best		 = clef;
+			bestOverflow = overflow;
+		}
 	}
-	else // Below G3
-	{
-		mClef = Clef::Bass;
-	}
+
+	const int preferredOverflow = ledgerOverflow(mNote.midiNoteNumber, preferredClef);
+	if (preferredOverflow <= bestOverflow + kPreferenceTolerance)
+		best = preferredClef;
+
+	mClef = best;
 	repaint();
 }

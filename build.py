@@ -20,21 +20,18 @@ def main():
     build_dir = get_build_dir(str(args.architecture))
     runner = BuildRunner(root_dir=ROOT_DIR, build_dir=build_dir, project_name="The Orchestra")
 
-    runner.update_environment()
     runner.update_app_version()
 
     print("==== The Orchestra Configuration ====")
     print(f"Current Directory:          {ROOT_DIR}")
     print(f"Build Directory:            {build_dir}")
-    print(f"Test Build Directory:       {TEST_BUILD_DIR}")
     print(f"Architecture:               {args.architecture}")
     print(f"Configuration:              {args.configuration}")
-    print(f"Environment:                {runner.env}")
     print(f"Version:                    {runner.version}")
     print("=====================================")
 
-    if(args.runtest):
-        runner.run_cpp_unit_tests(configuration=args.configuration, test_build_dir=TEST_BUILD_DIR, target="RUN_TESTS")
+    if args.runtest:
+        runner.run_cpp_unit_tests(configuration=args.configuration)
         exit(0)
 
     runner.create_build_generator(
@@ -44,8 +41,8 @@ def main():
         configuration=args.configuration,
     )
 
-    if not args.prepare:
-        runner.run_cpp_unit_tests(configuration=args.configuration, test_build_dir=TEST_BUILD_DIR, target="RUN_TESTS")
+    if args.build:
+        runner.run_cpp_unit_tests(configuration=args.configuration)
 
 
 if __name__ == "__main__":

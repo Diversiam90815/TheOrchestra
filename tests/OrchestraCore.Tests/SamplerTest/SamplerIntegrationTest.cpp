@@ -17,7 +17,7 @@ namespace SamplerTests
 class SamplerIntegrationTest : public ::testing::Test
 {
 protected:
-	std::unique_ptr<OrchestraSampler>			  mSampler;
+	std::unique_ptr<OrchestraSampler>	  mSampler;
 	std::unique_ptr<InstrumentController> mController;
 
 

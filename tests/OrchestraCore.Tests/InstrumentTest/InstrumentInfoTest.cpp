@@ -29,11 +29,10 @@ TEST_F(InstrumentRangeTest, DefaultConstructorInitializesEmptyState)
 {
 	InstrumentRange range;
 
-	EXPECT_EQ(range.getHigherRange(), "");
-	EXPECT_EQ(range.getLowerRange(), "");
-	EXPECT_EQ(range.getHigherRangeNoteValue(), 0);
-	EXPECT_EQ(range.getLowerRangeNoteValue(), 0);
-	EXPECT_EQ(range.getTransposition(), "");
+	EXPECT_EQ(range.getWrittenHighNote(), "");
+	EXPECT_EQ(range.getWrittenLowNote(), "");
+	EXPECT_EQ(range.getWrittenHighNoteAsMidiValue(), 0);
+	EXPECT_EQ(range.getWrittenLowNoteAsMidiValue(), 0);
 }
 
 TEST_F(InstrumentRangeTest, DeserializesWrittenRangeFromJSON)
@@ -47,26 +46,12 @@ TEST_F(InstrumentRangeTest, DeserializesWrittenRangeFromJSON)
 
 	InstrumentRange range = j.get<InstrumentRange>();
 
-	EXPECT_EQ(range.getLowerRange(), "C3");
-	EXPECT_EQ(range.getHigherRange(), "C6");
-	EXPECT_EQ(range.getLowerRangeNoteValue(), 48);	// C3 MIDI note
-	EXPECT_EQ(range.getHigherRangeNoteValue(), 84); // C6 MIDI note
+	EXPECT_EQ(range.getWrittenLowNote(), "C3");
+	EXPECT_EQ(range.getWrittenHighNote(), "C6");
+	EXPECT_EQ(range.getWrittenLowNoteAsMidiValue(), 48);  // C3 MIDI note
+	EXPECT_EQ(range.getWrittenHighNoteAsMidiValue(), 84); // C6 MIDI note
 }
 
-TEST_F(InstrumentRangeTest, DeserializesWithTransposition)
-{
-	json			j	  = R"({
-		"written": {
-			"low": "F2",
-			"high": "C6"
-		},
-		"transposition": "F: Sounds a perfect 5th lower"
-	})"_json;
-
-	InstrumentRange range = j.get<InstrumentRange>();
-
-	EXPECT_EQ(range.getTransposition(), "F: Sounds a perfect 5th lower");
-}
 
 TEST_F(InstrumentRangeTest, DeserializesWithDisplayedRange)
 {
@@ -83,10 +68,10 @@ TEST_F(InstrumentRangeTest, DeserializesWithDisplayedRange)
 
 	InstrumentRange range = j.get<InstrumentRange>();
 
-	EXPECT_EQ(range.getLowerRange(), "D2");
-	EXPECT_EQ(range.getHigherRange(), "C4");
-	EXPECT_EQ(range.getDisplayedLowerRange(), "D1");
-	EXPECT_EQ(range.getDisplayedHigherRange(), "A1");
+	EXPECT_EQ(range.getWrittenLowNote(), "D2");
+	EXPECT_EQ(range.getWrittenHighNote(), "C4");
+	EXPECT_EQ(range.getSoundingLowNote(), "D1");
+	EXPECT_EQ(range.getSoundingHighNote(), "A1");
 }
 
 TEST_F(InstrumentRangeTest, DefaultsDisplayedRangeToWritten)
@@ -100,8 +85,8 @@ TEST_F(InstrumentRangeTest, DefaultsDisplayedRangeToWritten)
 
 	InstrumentRange range = j.get<InstrumentRange>();
 
-	EXPECT_EQ(range.getDisplayedLowerRange(), range.getLowerRange());
-	EXPECT_EQ(range.getDisplayedHigherRange(), range.getHigherRange());
+	EXPECT_EQ(range.getSoundingLowNote(), range.getWrittenLowNote());
+	EXPECT_EQ(range.getSoundingHighNote(), range.getWrittenHighNote());
 }
 
 TEST_F(InstrumentRangeTest, EqualityOperatorComparesCorrectly)
@@ -124,8 +109,7 @@ TEST_F(InstrumentRangeTest, SerializesToJSON)
 		"written": {
 			"low": "C3",
 			"high": "C6"
-		},
-		"transposition": "Bb: Major 2nd lower"
+		}
 	})"_json;
 
 	InstrumentRange range = j.get<InstrumentRange>();
@@ -134,8 +118,8 @@ TEST_F(InstrumentRangeTest, SerializesToJSON)
 
 	EXPECT_EQ(output["written"]["low"], "C3");
 	EXPECT_EQ(output["written"]["high"], "C6");
-	EXPECT_EQ(output["transposition"], "Bb: Major 2nd lower");
 }
+
 
 // ============================================================================
 // RegisterQuality Tests
@@ -152,8 +136,8 @@ TEST_F(RegisterQualityTest, DefaultConstructorInitializesEmptyState)
 {
 	InstrumentRegister quality;
 
-	EXPECT_EQ(quality.getLowerRange(), "");
-	EXPECT_EQ(quality.getHigherRange(), "");
+	EXPECT_EQ(quality.getWrittenLowNote(), "");
+	EXPECT_EQ(quality.getWrittenHighNote(), "");
 	EXPECT_EQ(quality.getDescription(), "");
 	EXPECT_EQ(quality.getLowerNoteValue(), 0);
 	EXPECT_EQ(quality.getHigherNoteValue(), 0);
@@ -161,7 +145,7 @@ TEST_F(RegisterQualityTest, DefaultConstructorInitializesEmptyState)
 
 TEST_F(RegisterQualityTest, DeserializesFromJSON)
 {
-	json			j		= R"({
+	json			   j	   = R"({
 		"range": {
 			"low": "C3",
 			"high": "E3"
@@ -171,8 +155,8 @@ TEST_F(RegisterQualityTest, DeserializesFromJSON)
 
 	InstrumentRegister quality = j.get<InstrumentRegister>();
 
-	EXPECT_EQ(quality.getLowerRange(), "C3");
-	EXPECT_EQ(quality.getHigherRange(), "E3");
+	EXPECT_EQ(quality.getWrittenLowNote(), "C3");
+	EXPECT_EQ(quality.getWrittenHighNote(), "E3");
 	EXPECT_EQ(quality.getDescription(), "Rich and resonant");
 	EXPECT_EQ(quality.getLowerNoteValue(), 48);	 // C3 MIDI
 	EXPECT_EQ(quality.getHigherNoteValue(), 52); // E3 MIDI
@@ -180,7 +164,7 @@ TEST_F(RegisterQualityTest, DeserializesFromJSON)
 
 TEST_F(RegisterQualityTest, HandlesSingleNoteRange)
 {
-	json			j		= R"({
+	json			   j	   = R"({
 		"range": {
 			"low": "G3",
 			"high": "G3"
@@ -190,16 +174,16 @@ TEST_F(RegisterQualityTest, HandlesSingleNoteRange)
 
 	InstrumentRegister quality = j.get<InstrumentRegister>();
 
-	EXPECT_EQ(quality.getLowerRange(), "G3");
-	EXPECT_EQ(quality.getHigherRange(), "G3");
+	EXPECT_EQ(quality.getWrittenLowNote(), "G3");
+	EXPECT_EQ(quality.getWrittenHighNote(), "G3");
 	EXPECT_EQ(quality.getLowerNoteValue(), quality.getHigherNoteValue());
 }
 
 TEST_F(RegisterQualityTest, EqualityOperatorWorks)
 {
-	json			j1 = R"({"range": {"low": "C3", "high": "E3"}, "description": "Test"})"_json;
-	json			j2 = R"({"range": {"low": "C3", "high": "E3"}, "description": "Test"})"_json;
-	json			j3 = R"({"range": {"low": "F3", "high": "A3"}, "description": "Different"})"_json;
+	json			   j1 = R"({"range": {"low": "C3", "high": "E3"}, "description": "Test"})"_json;
+	json			   j2 = R"({"range": {"low": "C3", "high": "E3"}, "description": "Test"})"_json;
+	json			   j3 = R"({"range": {"low": "F3", "high": "A3"}, "description": "Different"})"_json;
 
 	InstrumentRegister q1 = j1.get<InstrumentRegister>();
 	InstrumentRegister q2 = j2.get<InstrumentRegister>();
@@ -211,13 +195,13 @@ TEST_F(RegisterQualityTest, EqualityOperatorWorks)
 
 TEST_F(RegisterQualityTest, SerializesToJSON)
 {
-	json			j		= R"({
+	json			   j	   = R"({
 		"range": {"low": "C3", "high": "E3"},
 		"description": "Rich and resonant"
 	})"_json;
 
 	InstrumentRegister quality = j.get<InstrumentRegister>();
-	json			output;
+	json			   output;
 	to_json(output, quality);
 
 	EXPECT_EQ(output["range"]["low"], "C3");
@@ -405,16 +389,16 @@ protected:
 
 	InstrumentProfile createTestInstrument()
 	{
-		json			   rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
-		InstrumentRange	   range	 = rangeJson.get<InstrumentRange>();
+		json				rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
+		InstrumentRange		range	  = rangeJson.get<InstrumentRange>();
 
-		InstrumentRegisters  qualities;
-		OrchestrationRoles roles;
+		InstrumentRegisters qualities;
+		OrchestrationRoles	roles;
 		roles.push_back(OrchestrationRole("Test role"));
 		SignatureWorks	  works;
 		PlayingTechniques techniques;
 
-		return InstrumentProfile("TestInstrument", 301, range, qualities, roles, works, techniques, false);
+		return InstrumentProfile("TestInstrument", 301, range, qualities, roles, works, techniques, {}, false);
 	}
 };
 
@@ -450,7 +434,7 @@ TEST_F(InstrumentProfileTest, IsValidReturnsFalseForEmptyName)
 	json			  rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
 	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
 
-	InstrumentProfile profile("", 301, range, {}, {}, {}, {}, false);
+	InstrumentProfile profile("", 301, range, {}, {}, {}, {}, {}, false);
 
 	EXPECT_FALSE(profile.isValid());
 }
@@ -460,7 +444,7 @@ TEST_F(InstrumentProfileTest, IsValidReturnsFalseForZeroKey)
 	json			  rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
 	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
 
-	InstrumentProfile profile("ValidName", 0, range, {}, {}, {}, {}, false);
+	InstrumentProfile profile("ValidName", 0, range, {}, {}, {}, {}, {}, false);
 
 	EXPECT_FALSE(profile.isValid());
 }
@@ -470,17 +454,17 @@ TEST_F(InstrumentProfileTest, RhythmicPercussionFlagWorks)
 	json			  rangeJson = R"({"written": {"low": "D2", "high": "C4"}})"_json;
 	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
 
-	InstrumentProfile profile("Timpani", 403, range, {}, {}, {}, {}, true);
+	InstrumentProfile profile("Timpani", 403, range, {}, {}, {}, {}, {}, true);
 
 	EXPECT_TRUE(profile.isRhythmicPercussion());
 }
 
 TEST_F(InstrumentProfileTest, GettersReturnCorrectValues)
 {
-	json			  rangeJson	  = R"({"written": {"low": "G3", "high": "A7"}})"_json;
-	InstrumentRange	  range		  = rangeJson.get<InstrumentRange>();
+	json				rangeJson	= R"({"written": {"low": "G3", "high": "A7"}})"_json;
+	InstrumentRange		range		= rangeJson.get<InstrumentRange>();
 
-	json			  qualityJson = R"({"range": {"low": "G3", "high": "G3"}, "description": "Rich"})"_json;
+	json				qualityJson = R"({"range": {"low": "G3", "high": "G3"}, "description": "Rich"})"_json;
 	InstrumentRegisters qualities;
 	qualities.push_back(qualityJson.get<InstrumentRegister>());
 
@@ -495,7 +479,7 @@ TEST_F(InstrumentProfileTest, GettersReturnCorrectValues)
 	PlayingTechniques techniques;
 	techniques.push_back(techJson.get<PlayingTechnique>());
 
-	InstrumentProfile profile("Violin", 301, range, qualities, roles, works, techniques, false);
+	InstrumentProfile profile("Violin", 301, range, qualities, roles, works, techniques, {}, false);
 
 	EXPECT_EQ(profile.getName(), "Violin");
 	EXPECT_EQ(profile.getInstrumentID(), 301);
@@ -512,7 +496,7 @@ TEST_F(InstrumentProfileTest, EqualityOperatorComparesKeyAndName)
 
 	json			  rangeJson = R"({"written": {"low": "C3", "high": "E6"}})"_json;
 	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
-	InstrumentProfile p3("DifferentInstrument", 302, range, {}, {}, {}, {}, false);
+	InstrumentProfile p3("DifferentInstrument", 302, range, {}, {}, {}, {}, {}, false);
 
 	EXPECT_EQ(p1, p2);
 	EXPECT_FALSE(p1 == p3);
@@ -523,7 +507,7 @@ TEST_F(InstrumentProfileTest, CanStoreEmptyCollections)
 	json			  rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
 	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
 
-	InstrumentProfile profile("Test", 100, range, {}, {}, {}, {}, false);
+	InstrumentProfile profile("Test", 100, range, {}, {}, {}, {}, {}, false);
 
 	EXPECT_EQ(profile.getRegisters().size(), 0);
 	EXPECT_EQ(profile.getRoles().size(), 0);
@@ -533,8 +517,8 @@ TEST_F(InstrumentProfileTest, CanStoreEmptyCollections)
 
 TEST_F(InstrumentProfileTest, CanStoreLargeCollections)
 {
-	json			  rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
-	InstrumentRange	  range		= rangeJson.get<InstrumentRange>();
+	json				rangeJson = R"({"written": {"low": "C3", "high": "C6"}})"_json;
+	InstrumentRange		range	  = rangeJson.get<InstrumentRange>();
 
 	InstrumentRegisters qualities;
 	for (int i = 0; i < 10; ++i)
@@ -561,7 +545,7 @@ TEST_F(InstrumentProfileTest, CanStoreLargeCollections)
 		techniques.push_back(j.get<PlayingTechnique>());
 	}
 
-	InstrumentProfile profile("Test", 100, range, qualities, roles, works, techniques, false);
+	InstrumentProfile profile("Test", 100, range, qualities, roles, works, techniques, {}, false);
 
 	EXPECT_EQ(profile.getRegisters().size(), 10);
 	EXPECT_EQ(profile.getRoles().size(), 5);
@@ -582,7 +566,7 @@ protected:
 
 TEST_F(IntegrationTest, DeserializesCompleteViolinProfileFromJSON)
 {
-	json			  j		= R"({
+	json				j	  = R"({
 		"name": "Violin",
 		"range": {
 			"written": {
@@ -620,8 +604,8 @@ TEST_F(IntegrationTest, DeserializesCompleteViolinProfileFromJSON)
 	})"_json;
 
 	// Manually construct from parsed JSON (simulating InstrumentController logic)
-	std::string		  name	= j["name"];
-	InstrumentRange	  range = j["range"].get<InstrumentRange>();
+	std::string			name  = j["name"];
+	InstrumentRange		range = j["range"].get<InstrumentRange>();
 
 	InstrumentRegisters qualities;
 	for (const auto &q : j["qualities"])
@@ -641,7 +625,7 @@ TEST_F(IntegrationTest, DeserializesCompleteViolinProfileFromJSON)
 
 	bool			  isRhythmic = j["isRhythmicPercussion"];
 
-	InstrumentProfile profile(name, 301, range, qualities, roles, works, techniques, isRhythmic);
+	InstrumentProfile profile(name, 301, range, qualities, roles, works, techniques, {}, isRhythmic);
 
 	EXPECT_EQ(profile.getName(), "Violin");
 	EXPECT_EQ(profile.getInstrumentID(), 301);
@@ -655,7 +639,7 @@ TEST_F(IntegrationTest, DeserializesCompleteViolinProfileFromJSON)
 
 TEST_F(IntegrationTest, DeserializesTimpaniWithDisplayedRange)
 {
-	json			  j		= R"({
+	json				j	  = R"({
 		"name": "Timpani",
 		"range": {
 			"written": {
@@ -684,8 +668,8 @@ TEST_F(IntegrationTest, DeserializesTimpaniWithDisplayedRange)
 		"isRhythmicPercussion": true
 	})"_json;
 
-	std::string		  name	= j["name"];
-	InstrumentRange	  range = j["range"].get<InstrumentRange>();
+	std::string			name  = j["name"];
+	InstrumentRange		range = j["range"].get<InstrumentRange>();
 
 	InstrumentRegisters qualities;
 	for (const auto &q : j["qualities"])
@@ -701,12 +685,12 @@ TEST_F(IntegrationTest, DeserializesTimpaniWithDisplayedRange)
 
 	PlayingTechniques techniques;
 
-	InstrumentProfile profile(name, 403, range, qualities, roles, works, techniques, true);
+	InstrumentProfile profile(name, 403, range, qualities, roles, works, techniques, {}, true);
 
 	EXPECT_EQ(profile.getName(), "Timpani");
 	EXPECT_TRUE(profile.isRhythmicPercussion());
-	EXPECT_NE(range.getDisplayedLowerRange(), range.getLowerRange());
-	EXPECT_EQ(range.getDisplayedLowerRange(), "D1");
+	EXPECT_NE(range.getSoundingLowNote(), range.getWrittenLowNote());
+	EXPECT_EQ(range.getSoundingLowNote(), "D1");
 }
 
 } // namespace InstrumentTests

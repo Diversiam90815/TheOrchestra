@@ -1,8 +1,5 @@
-import os
 import sys
 import subprocess
-from contextlib import contextmanager
-from pathlib import Path
 from typing import Iterable
 
 
@@ -39,14 +36,3 @@ class BuildUtils:
         BuildUtils._log_done()
         sys.stdout.flush()
         return process.stdout
-
-
-@contextmanager
-def working_directory(path: Path):
-    """Context manager to temporarily change CWD."""
-    original = Path.cwd()
-    os.chdir(path)
-    try:
-        yield
-    finally:
-        os.chdir(original)

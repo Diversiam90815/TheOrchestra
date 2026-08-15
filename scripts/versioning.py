@@ -2,6 +2,7 @@ import re
 from pathlib import Path
 from subprocess import check_output
 from typing import Optional
+from .paths import *
 
 
 class VersionManager:
@@ -17,7 +18,7 @@ class VersionManager:
 
 
     def get_current_version(self) -> Optional[str]:
-        pattern = re.compile(rf"set\({self.version_var}\s+(\d+\.\d+\.\d+)\)")
+        pattern = re.compile(rf"set\({re.escape(self.version_var)}\s+(\d+(?:\.\d+){{2,3}})\)")
 
         with self.cmake_file.open("r", encoding="utf-8") as f:
             for line in f:
@@ -28,7 +29,7 @@ class VersionManager:
 
 
     def _write_version(self, new_version: str) -> None:
-        pattern = re.compile(rf"set\({self.version_var}\s+(\d+\.\d+\.\d+)\)")
+        pattern = re.compile(rf"set\({re.escape(self.version_var)}\s+(\d+(?:\.\d+){{2,3}})\)")
         tmp_file = self.cmake_file.with_name(self.cmake_file.name + ".tmp")
 
         with self.cmake_file.open("r", encoding="utf-8") as fin, \

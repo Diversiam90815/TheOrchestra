@@ -8,7 +8,6 @@
 #include <gtest/gtest.h>
 
 #include "InstrumentController.h"
-#include "FileManager.h"
 
 namespace InstrumentTests
 {
@@ -17,20 +16,10 @@ class InstrumentControllerTest : public ::testing::Test
 {
 protected:
 	std::unique_ptr<InstrumentController> controller;
-	FileManager							  fileManager;
 
 	void								  SetUp() override
 	{
-		controller				   = std::make_unique<InstrumentController>();
-
-		// Verify the JSON file exists before running JSON dependent tests
-		const std::string jsonPath = fileManager.getInstrumentDataJSONPath();
-		juce::File		  jsonFile(jsonPath);
-		if (!jsonFile.existsAsFile())
-		{
-			GTEST_SKIP() << "Instruments.json not found at: " << jsonPath << " — skipping InstrumentController tests that require data.";
-		}
-
+		controller = std::make_unique<InstrumentController>();
 		controller->init();
 	}
 
@@ -40,13 +29,13 @@ protected:
 
 TEST_F(InstrumentControllerTest, RetrieveKnownInstrumentByKey)
 {
-	int			   violinKey = 301;
-	InstrumentProfile violin	 = controller->getInstrument(violinKey);
+	int				  violinKey = 301;
+	InstrumentProfile violin	= controller->getInstrument(violinKey);
 
 	EXPECT_EQ(violin.getInstrumentID(), violinKey);
 	EXPECT_FALSE(violin.getName().empty()) << "Violin name should not be empty";
-	EXPECT_FALSE(violin.getRange().getHigherRange().empty()) << "Violin higher range should be populated";
-	EXPECT_FALSE(violin.getRange().getLowerRange().empty()) << "Violin lower range should be populated";
+	EXPECT_FALSE(violin.getRange().getWrittenHighNote().empty()) << "Violin higher range should be populated";
+	EXPECT_FALSE(violin.getRange().getWrittenLowNote().empty()) << "Violin lower range should be populated";
 	EXPECT_GE(violin.getRegisters().size(), 0) << "InstrumentRegisters should not be empty";
 	EXPECT_GE(violin.getRoles().size(), 0) << "OrchestrationRoles should not be empty";
 	EXPECT_GE(violin.getTechniques().size(), 0) << "Playing techniques should be available (family or specific)";
@@ -55,22 +44,22 @@ TEST_F(InstrumentControllerTest, RetrieveKnownInstrumentByKey)
 
 TEST_F(InstrumentControllerTest, RhythmicPercussionInstrumentProperties)
 {
-	int			   timpaniKey = 403;
-	InstrumentProfile timpani	  = controller->getInstrument(timpaniKey);
+	int				  timpaniKey = 403;
+	InstrumentProfile timpani	 = controller->getInstrument(timpaniKey);
 
 	EXPECT_EQ(timpani.getInstrumentID(), timpaniKey);
 	EXPECT_TRUE(timpani.isRhythmicPercussion()) << "Timpani should be flagged as rhythmic percussion";
 
 	// Displayed range may differ from actual range; at least accessible
-	EXPECT_FALSE(timpani.getRange().getDisplayedHigherRange().empty()) << "Rhythmic percussion should have displayed higher range";
-	EXPECT_FALSE(timpani.getRange().getDisplayedLowerRange().empty()) << "Rhythmic percussion should have displayed lower range";
+	EXPECT_FALSE(timpani.getRange().getSoundingHighNote().empty()) << "Rhythmic percussion should have displayed higher range";
+	EXPECT_FALSE(timpani.getRange().getSoundingLowNote().empty()) << "Rhythmic percussion should have displayed lower range";
 }
 
 
 TEST_F(InstrumentControllerTest, NonRhythmicPercussionInstrument)
 {
-	int			   harpKey = 401;
-	InstrumentProfile harp	   = controller->getInstrument(harpKey);
+	int				  harpKey = 401;
+	InstrumentProfile harp	  = controller->getInstrument(harpKey);
 
 	EXPECT_EQ(harp.getInstrumentID(), harpKey);
 	EXPECT_FALSE(harp.isRhythmicPercussion()) << "Harp should NOT be flagged as rhythmic percussion";
@@ -80,20 +69,19 @@ TEST_F(InstrumentControllerTest, NonRhythmicPercussionInstrument)
 
 TEST_F(InstrumentControllerTest, RetrievalIsConsistentAcrossCalls)
 {
-	int			   key = 301;
-	InstrumentProfile a   = controller->getInstrument(key);
-	InstrumentProfile b   = controller->getInstrument(key);
+	int				  key = 301;
+	InstrumentProfile a	  = controller->getInstrument(key);
+	InstrumentProfile b	  = controller->getInstrument(key);
 
 	EXPECT_EQ(a.getName(), b.getName());
 	EXPECT_EQ(a.getRange(), b.getRange());
-	EXPECT_EQ(a.getRange().getTransposition(), b.getRange().getTransposition());
 	EXPECT_EQ(a.isRhythmicPercussion(), b.isRhythmicPercussion());
 }
 
 
 TEST_F(InstrumentControllerTest, PlayingTechniquesFallbackOrSpecific)
 {
-	int			   key	= 301;
+	int				  key  = 301;
 	InstrumentProfile inst = controller->getInstrument(key);
 	EXPECT_FALSE(inst.getTechniques().empty()) << "Playing techniques should be populated from family or instrument definition";
 }
@@ -102,11 +90,11 @@ TEST_F(InstrumentControllerTest, PlayingTechniquesFallbackOrSpecific)
 TEST_F(InstrumentControllerTest, FamilyLevelPlayingTechniquesInherited)
 {
 	// Test that String family instruments inherit family techniques
-	int			   violinKey = 301;
-	int			   violaKey	 = 302;
+	int				  violinKey = 301;
+	int				  violaKey	= 302;
 
-	InstrumentProfile violin	 = controller->getInstrument(violinKey);
-	InstrumentProfile viola	 = controller->getInstrument(violaKey);
+	InstrumentProfile violin	= controller->getInstrument(violinKey);
+	InstrumentProfile viola		= controller->getInstrument(violaKey);
 
 	// Both should have techniques (from family level)
 	EXPECT_GT(violin.getTechniques().size(), 0) << "Violin should inherit Strings family techniques";
@@ -129,9 +117,9 @@ TEST_F(InstrumentControllerTest, FamilyLevelPlayingTechniquesInherited)
 TEST_F(InstrumentControllerTest, InstrumentSpecificTechniquesOverrideFamilyTechniques)
 {
 	// Marimba has instrument-specific techniques (not family-level)
-	int			   marimbaKey = 404;
+	int				  marimbaKey = 404;
 
-	InstrumentProfile marimba	  = controller->getInstrument(marimbaKey);
+	InstrumentProfile marimba	 = controller->getInstrument(marimbaKey);
 	EXPECT_GT(marimba.getTechniques().size(), 0) << "Marimba should have instrument-specific techniques";
 
 	// Check for a Marimba-specific technique
@@ -148,39 +136,20 @@ TEST_F(InstrumentControllerTest, InstrumentSpecificTechniquesOverrideFamilyTechn
 }
 
 
-TEST_F(InstrumentControllerTest, TransposingInstrumentDataLoaded)
-{
-	int			   frenchHornKey = 201;
-
-	InstrumentProfile horn			 = controller->getInstrument(frenchHornKey);
-	EXPECT_EQ(horn.getName(), "French Horn");
-	EXPECT_FALSE(horn.getRange().getTransposition().empty()) << "French Horn should have transposition info";
-}
-
-
-TEST_F(InstrumentControllerTest, NonTransposingInstrumentDataLoaded)
-{
-	int			   violinKey = 301;
-
-	InstrumentProfile violin	 = controller->getInstrument(violinKey);
-	EXPECT_EQ(violin.getRange().getTransposition(), "") << "Violin is non-transposing, should return empty string";
-}
-
-
 TEST_F(InstrumentControllerTest, RolesInformationLoadedCorrectly)
 {
-	int			   violinKey = 301;
+	int				  violinKey = 301;
 
-	InstrumentProfile violin	 = controller->getInstrument(violinKey);
+	InstrumentProfile violin	= controller->getInstrument(violinKey);
 	EXPECT_GT(violin.getRoles().size(), 0) << "Violin should have roles/information populated";
 }
 
 
 TEST_F(InstrumentControllerTest, FamousWorksLoadedCorrectly)
 {
-	int			   violinKey = 301;
+	int				  violinKey = 301;
 
-	InstrumentProfile violin	 = controller->getInstrument(violinKey);
+	InstrumentProfile violin	= controller->getInstrument(violinKey);
 	EXPECT_GE(violin.getFamousWorks().size(), 0) << "Violin should have famous works populated";
 }
 
@@ -189,9 +158,9 @@ TEST_F(InstrumentControllerTest, AllStringInstrumentsLoaded)
 {
 	// Verify all 4 string instruments are loaded
 	InstrumentProfile violin = controller->getInstrument(301);
-	InstrumentProfile viola  = controller->getInstrument(302);
-	InstrumentProfile cello  = controller->getInstrument(303);
-	InstrumentProfile bass	  = controller->getInstrument(304);
+	InstrumentProfile viola	 = controller->getInstrument(302);
+	InstrumentProfile cello	 = controller->getInstrument(303);
+	InstrumentProfile bass	 = controller->getInstrument(304);
 
 	EXPECT_EQ(violin.getName(), "Violin");
 	EXPECT_EQ(viola.getName(), "Viola");
@@ -203,12 +172,12 @@ TEST_F(InstrumentControllerTest, AllStringInstrumentsLoaded)
 TEST_F(InstrumentControllerTest, AllBrassInstrumentsLoaded)
 {
 	// Verify all 6 brass instruments are loaded
-	InstrumentProfile horn		= controller->getInstrument(201);
-	InstrumentProfile trumpet	= controller->getInstrument(202);
+	InstrumentProfile horn	   = controller->getInstrument(201);
+	InstrumentProfile trumpet  = controller->getInstrument(202);
 	InstrumentProfile tenorTbn = controller->getInstrument(203);
-	InstrumentProfile bassTbn	= controller->getInstrument(204);
+	InstrumentProfile bassTbn  = controller->getInstrument(204);
 	InstrumentProfile cimbasso = controller->getInstrument(205);
-	InstrumentProfile tuba		= controller->getInstrument(206);
+	InstrumentProfile tuba	   = controller->getInstrument(206);
 
 	EXPECT_EQ(horn.getName(), "French Horn");
 	EXPECT_EQ(trumpet.getName(), "Trumpet");
@@ -222,14 +191,14 @@ TEST_F(InstrumentControllerTest, AllBrassInstrumentsLoaded)
 TEST_F(InstrumentControllerTest, AllWoodwindInstrumentsLoaded)
 {
 	// Verify all 8 woodwind instruments are loaded
-	InstrumentProfile piccolo	  = controller->getInstrument(101);
-	InstrumentProfile flute	  = controller->getInstrument(102);
-	InstrumentProfile oboe		  = controller->getInstrument(103);
+	InstrumentProfile piccolo	 = controller->getInstrument(101);
+	InstrumentProfile flute		 = controller->getInstrument(102);
+	InstrumentProfile oboe		 = controller->getInstrument(103);
 	InstrumentProfile corAnglais = controller->getInstrument(104);
-	InstrumentProfile clarinet	  = controller->getInstrument(105);
-	InstrumentProfile bassClar	  = controller->getInstrument(106);
-	InstrumentProfile bassoon	  = controller->getInstrument(107);
-	InstrumentProfile cbassoon	  = controller->getInstrument(108);
+	InstrumentProfile clarinet	 = controller->getInstrument(105);
+	InstrumentProfile bassClar	 = controller->getInstrument(106);
+	InstrumentProfile bassoon	 = controller->getInstrument(107);
+	InstrumentProfile cbassoon	 = controller->getInstrument(108);
 
 	EXPECT_EQ(piccolo.getName(), "Piccolo");
 	EXPECT_EQ(flute.getName(), "Flute");
@@ -245,7 +214,7 @@ TEST_F(InstrumentControllerTest, AllWoodwindInstrumentsLoaded)
 TEST_F(InstrumentControllerTest, AllPercussionInstrumentsLoaded)
 {
 	// Verify all 4 percussion instruments are loaded
-	InstrumentProfile harp	   = controller->getInstrument(401);
+	InstrumentProfile harp	  = controller->getInstrument(401);
 	InstrumentProfile celeste = controller->getInstrument(402);
 	InstrumentProfile timpani = controller->getInstrument(403);
 	InstrumentProfile marimba = controller->getInstrument(404);

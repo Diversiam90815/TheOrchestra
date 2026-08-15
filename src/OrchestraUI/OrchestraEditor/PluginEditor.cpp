@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 	Module			PluginEditor
-	Description		User Interface
+	Description		Main UI - view router between the family switcher and the instrument detail view
   ==============================================================================
 */
 
@@ -13,9 +13,63 @@ OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : juce::AudioProcesso
 {
 	mCoreManager = &proc.getCoreManager();
 
-	init();
-	showUI();
 	setLookAndFeel(&mCustomLookAndFeel);
+
+	// --- Family switcher (View A) ---
+	mFamilySwitcher.onFamilySelected = [this](Family family)
+	{
+		changeFamily(family);
+		showInstrumentDetail();
+	};
+	mFamilySwitcher.onSettings = [this]() { onSettingsClicked(); };
+
+	// --- Instrument detail (View B) ---
+	mDetailView.setInstrumentSelectedCallback([this](InstrumentID key) { changeInstrument(key); });
+	mDetailView.setBackToFamiliesCallback([this]() { showFamilySwitcher(); });
+	mDetailView.setArticulationChangedCallback([this](Articulation articulation) { return mCoreManager->changeArticulation(mCurrentInstrument, articulation); });
+
+	// Piano roll wiring: keyboard state + CC send/reflect.
+	mDetailView.initPianoRoll(mCoreManager->getMidiKeyboardState());
+	mDetailView.setPianoRollCcCallbacks([this](int cc, int value) { mCoreManager->sendControllerChange(cc, value); },
+										[this](int cc) { return mCoreManager->getLastControllerValue(cc); });
+
+	addChildComponent(mFamilySwitcher);
+	addChildComponent(mDetailView);
+
+	populateFamilyCounts();
+
+	// Resize limits live on the hosting window (see applyViewSize) so there is
+	// only ever one constrainer in play.
+	setResizable(true, true);
+
+	// Start on the family switcher, at the family switcher's size.
+	mFamilySwitcher.setSelectedFamily(mCurrentFamily);
+	showFamilySwitcher();
+}
+
+
+bool OrchestraEditor::hasUserResized() const
+{
+	return mAppliedSize != juce::Point<int>(0, 0) && mAppliedSize != juce::Point<int>(getWidth(), getHeight());
+}
+
+
+void OrchestraEditor::applyViewSize(int width, int height, int minWidth, int minHeight)
+{
+	if (hasUserResized())
+		return;
+
+	// The window's constrainer works in window coordinates, so the content
+	// minimum has to be widened by the frame and title bar.
+	if (auto *window = dynamic_cast<juce::ResizableWindow *>(getTopLevelComponent()))
+	{
+		const auto border = window->getContentComponentBorder();
+
+		window->setResizeLimits(minWidth + border.getLeftAndRight(), minHeight + border.getTopAndBottom(), 2560, 1600);
+	}
+
+	setSize(width, height);
+	mAppliedSize = {width, height};
 }
 
 
@@ -25,98 +79,96 @@ OrchestraEditor::~OrchestraEditor()
 }
 
 
-void OrchestraEditor::showUI()
+void OrchestraEditor::populateFamilyCounts()
 {
-	mMenuBarComponent.setModel(&mMenuBar);
-	addAndMakeVisible(mMenuBarComponent);
-
-	addAndMakeVisible(mPianoRollView);
-	addAndMakeVisible(mInstrumentView);
-	addAndMakeVisible(mRangesView);
-	addAndMakeVisible(mQualitiesView);
-	addAndMakeVisible(mTechniquesView);
-	addAndMakeVisible(mInfoView);
-	addAndMakeVisible(mFamousWorksView);
-	addAndMakeVisible(mSamplerView);
-
-	setSize(mWidth, mHeight);
+	for (auto family : {Family::Woodwinds, Family::Brass, Family::Strings, Family::Percussion})
+	{
+		const int count = (int)mCoreManager->getInstrumentsForFamily(family).size();
+		mFamilySwitcher.setFamilyCount(family, count);
+	}
 }
 
 
-void OrchestraEditor::init()
+void OrchestraEditor::changeFamily(Family family)
 {
-	mPianoRollView.setKeyboardState(mCoreManager->getMidiKeyboardState());
+	mCurrentFamily = family;
+	mFamilySwitcher.setSelectedFamily(family);
 
-	mPianoRollView.init();
-	mInstrumentView.init();
-	mRangesView.init();
-	mQualitiesView.init();
-	mTechniquesView.init();
-	mInfoView.init();
-	mFamousWorksView.init();
-	mSamplerView.init();
-
-	mMenuBar.setInstrumentSelectedCallback([this](InstrumentID key) { changeInstrument(key); });
-
-	mMenuBar.setSampleFolderChangedCallback(
-		[this](const juce::File &folder)
-		{
-			if (mCoreManager)
-			{
-				std::string directory = folder.getFullPathName().toStdString();
-				mCoreManager->changeSamplesFolder(directory);
-
-				// Show confirmation to user
-				juce::AlertWindow::showMessageBoxAsync(juce::MessageBoxIconType::InfoIcon, "Samples folder updated",
-													   "The samples folder has been set to:\n" + folder.getFullPathName(), "OK");
-			}
-		});
-
-	mSamplerView.setArticulationChangedCallback([this](Articulation articulation) { mCoreManager->changeArticulation(mCurrentInstrument, articulation); });
+	// Populate the detail sidebar; this auto-selects the first instrument (fires changeInstrument).
+	auto instrumentList = mCoreManager->getInstrumentsForFamily(family);
+	mDetailView.setFamily(family, instrumentList);
 }
 
 
 void OrchestraEditor::changeInstrument(InstrumentID key)
 {
-	mCurrentInstrument = key;
-	auto instrument	   = mCoreManager->getInstrument(key);
+	auto instrument = mCoreManager->getInstrument(key);
 
 	if (!instrument.isValid())
-	{
-		LOG_ERROR("Instrument is not valid! We won't change the instrument now..");
 		return;
-	}
+
+	mCurrentInstrument = key;
+
+	// Resets the sampler (clears loaded sounds) before the new instrument's
+	// articulation is loaded. Without this, switching instruments left the
+	// previous instrument's samples loaded and still playable.
+	mCoreManager->changeInstrument(key);
+
+	mDetailView.setInstrument(instrument);
 
 	auto availableSamples = mCoreManager->getAvailableArticulations(key);
-	mSamplerView.displayInstrument(availableSamples);
+	mDetailView.setAvailableArticulations(availableSamples);
+}
 
-	mInstrumentView.displayInstrument(instrument);
-	mRangesView.displayInstrument(instrument);
-	mQualitiesView.displayInstrument(instrument);
-	mTechniquesView.displayInstrument(instrument);
-	mFamousWorksView.displayInstrument(instrument);
-	mInfoView.displayInstrument(instrument);
-	mPianoRollView.displayInstrument(instrument);
 
+void OrchestraEditor::showFamilySwitcher()
+{
+	mDetailView.setVisible(false);
+	mFamilySwitcher.setVisible(true);
+
+	applyViewSize(kFamilyWidth, kFamilyHeight, kFamilyMinWidth, kFamilyMinHeight);
 	resized();
+}
+
+
+void OrchestraEditor::showInstrumentDetail()
+{
+	mFamilySwitcher.setVisible(false);
+	mDetailView.setVisible(true);
+
+	applyViewSize(kDetailWidth, kDetailHeight, kDetailMinWidth, kDetailMinHeight);
+	resized();
+}
+
+
+void OrchestraEditor::onSettingsClicked()
+{
+	auto chooser = std::make_shared<juce::FileChooser>("Select Samples Folder", juce::File(), "*");
+
+	chooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectDirectories,
+						 [this, chooser](const juce::FileChooser &fc)
+						 {
+							 auto result = fc.getResult();
+							 if (result.exists())
+							 {
+								 std::string directory = result.getFullPathName().toStdString();
+								 mCoreManager->changeSamplesFolder(directory);
+
+								 juce::AlertWindow::showMessageBoxAsync(juce::MessageBoxIconType::InfoIcon, "Samples folder updated",
+																		"The samples folder has been set to:\n" + result.getFullPathName(), "OK");
+							 }
+						 });
 }
 
 
 void OrchestraEditor::paint(juce::Graphics &g)
 {
-	g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
+	g.fillAll(mCustomLookAndFeel.getTheme().background);
 }
 
 
 void OrchestraEditor::resized()
 {
-	mQualitiesView.setBounds(mQualitiesViewX, mQualitiesViewY, mQualitiesView.getWidth(), mQualitiesView.getHeight());
-	mRangesView.setBounds(mRangesViewX, mRangesViewY, mRangesView.getWidth(), mRangesView.getHeight());
-	mInstrumentView.setBounds(mInstrumentViewX, mInstrumentViewY, mInstrumentView.getWidth(), mInstrumentView.getHeight());
-	mTechniquesView.setBounds(mTechniquesViewX, mTechniquesViewY, mTechniquesView.getWidth(), mTechniquesView.getHeight());
-	mInfoView.setBounds(mInfoViewX, mInfoViewY, mInfoView.getWidth(), mInfoView.getHeight());
-	mFamousWorksView.setBounds(mFamousWorksViewX, mFamousWorksViewY, mFamousWorksView.getWidth(), mFamousWorksView.getHeight());
-	mSamplerView.setBounds(mSamplerViewX, mSamplerViewY, mSamplerView.getWidth(), mSamplerView.getHeight());
-	mPianoRollView.setBounds(mPianoRollX, mPianoRollY, mWidth, mPianoRollHeight);
-	mMenuBarComponent.setBounds(mMenuBarX, mMenuBarY, mWidth, mMenuBarHeight);
+	mFamilySwitcher.setBounds(getLocalBounds());
+	mDetailView.setBounds(getLocalBounds());
 }

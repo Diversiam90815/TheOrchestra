@@ -9,7 +9,7 @@
 
 #include "JuceIncludes.h"
 #include "Parameters.h"
-#include "CustomLookAndFeel.h"
+#include "Theme.h"
 #include "Helper.h"
 #include "InstrumentInfo.h"
 
@@ -32,33 +32,36 @@ public:
 	CustomPianoRoll(juce::MidiKeyboardState &state, juce::KeyboardComponentBase::Orientation orientation);
 	~CustomPianoRoll() = default;
 
-	/*
-	 @brief                 Fills the vector 'mMidiRanges' with the note ranges information from a StringArray
-	 @param                 [IN] qualities as an StringArray.
-	 @return                Boolean indicating success/failure
-	*/
 	bool setMidiRanges(const InstrumentRegisters &qualities);
 
-	/*
-	 @brief                 Fills the vector 'mMidiRanges' with the note ranges information from a String
-	 @param                 [IN] ranges as an String.
-	 @return                Boolean indicating success/failure
-	*/
 	bool setMidiRanges(const InstrumentRange &ranges);
 
+	void setPlayableRange(int lowNote, int highNote);
+
+	void fitKeysToWidth();
 
 private:
-	juce::Colour getNoteColour(int midiNoteNumber);
+	juce::Colour getNoteColour(int midiNoteNumber, PianoKey keyType) const;
+
+	int			 getRegisterIndex(int midiNoteNumber) const;
 
 	void drawWhiteNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour lineColour, juce::Colour textColour) override;
 
 	void drawBlackNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour noteFillColour) override;
 
-	std::vector<std::pair<int, int>> mMidiRanges;							 // Vector of the ranges (stored as pairs of int). This is used to draw different colours of notes
+	void lookAndFeelChanged() override;
 
-	std::atomic<bool>				 mRangesSet		 = false;				 // If true, the custom piano roll is being applied. This is set to true, if mMidiRanges will be filled
+	void applyThemeColours();
 
-	std::atomic<int>				 mCurrentKeyType = PianoKey::defaultKey; // Indicating the current key type for drawing
+	bool isPlayable(int midiNoteNumber) const;
 
-	CustomLookAndFeel				 mCustomLookAndFeel;
+
+	std::vector<std::pair<int, int>> mMidiRanges;
+
+
+	std::pair<int, int>				 mPlayableRange = {0, 0};
+
+	bool							 mRangesSet		= false;
+
+	static constexpr float			 kMinKeyWidth	= 6.0f;
 };
