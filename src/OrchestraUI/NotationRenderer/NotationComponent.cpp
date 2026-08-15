@@ -62,23 +62,28 @@ void NotationComponent::setClef(Clef clef)
 }
 
 
-void NotationComponent::selectBestClef(const std::vector<Clef> &availableClefs, Clef preferredClef)
+void NotationComponent::selectBestClef(Clef preferredClef)
 {
-	static const std::vector<Clef> kFallback = { Clef::Treble, Clef::Bass };
-	const auto						&candidates = availableClefs.empty() ? kFallback : availableClefs;
+	static constexpr Clef kAllClefs[] = { Clef::Treble, Clef::Bass, Clef::Alto, Clef::Tenor };
 
-	Clef	  best		 = candidates.front();
-	int		  bestOverflow = mRenderer.getLedgerOverflow(mNote.midiNoteNumber, best);
+	constexpr int kPreferenceTolerance = 4;
 
-	for (Clef clef : candidates)
+	Clef		  best			= kAllClefs[0];
+	int			  bestOverflow	= mRenderer.getLedgerOverflow(mNote.midiNoteNumber, best);
+
+	for (Clef clef : kAllClefs)
 	{
 		const int overflow = mRenderer.getLedgerOverflow(mNote.midiNoteNumber, clef);
-		if (overflow < bestOverflow || (overflow == bestOverflow && clef == preferredClef))
+		if (overflow < bestOverflow)
 		{
-			best		  = clef;
+			best		 = clef;
 			bestOverflow = overflow;
 		}
 	}
+
+	const int preferredOverflow = mRenderer.getLedgerOverflow(mNote.midiNoteNumber, preferredClef);
+	if (preferredOverflow <= bestOverflow + kPreferenceTolerance)
+		best = preferredClef;
 
 	mClef = best;
 	repaint();
