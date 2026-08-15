@@ -23,7 +23,7 @@ struct CcLane
 inline std::vector<CcLane> getDefaultCcLanes(const Theme &theme = defaultTheme())
 {
 	return {
-		{1, "MOD", theme.ccLaneFill(0)},
 		{11, "EXPR", theme.ccLaneFill(1)},
+		{1, "MOD", theme.ccLaneFill(0)},
 	};
 }
