@@ -39,7 +39,6 @@ InstrumentProfile InstrumentController::getInstrument(InstrumentID key)
 std::vector<std::pair<InstrumentID, std::string>> InstrumentController::getInstrumentsForFamily(Family family)
 {
 	std::vector<std::pair<InstrumentID, std::string>> result;
-	int familyPrefix = static_cast<int>(family) * 100;
 
 	for (const auto &[key, profile] : instruments)
 	{

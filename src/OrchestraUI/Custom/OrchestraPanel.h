@@ -39,7 +39,6 @@ public:
 
 protected:
 	juce::Rectangle<int> getContentArea() const;
-	void				 setTitle(const juce::String &newTitle) { mTitle = newTitle; }
 
 	int					 getChromeHeight() const;
 

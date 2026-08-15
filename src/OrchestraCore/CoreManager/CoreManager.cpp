@@ -91,8 +91,6 @@ void CoreManager::changeInstrument(InstrumentID key)
 
 	mSampler->reset();
 
-	mCurrentInstrumentKey = key;
-
 	// TODO: maybe preload default articulation
 
 	LOG_INFO("Instrument changed successfully to key {}", key);
@@ -152,13 +150,6 @@ void CoreManager::processAudioBlock(juce::AudioBuffer<float> &buffer, juce::Midi
 	}
 
 	mSampler->process(buffer, midiMessages);
-}
-
-
-void CoreManager::setSamplesFolder(std::string &directory)
-{
-	if (mSampler)
-		mSampler->reloadSamples(directory);
 }
 
 
