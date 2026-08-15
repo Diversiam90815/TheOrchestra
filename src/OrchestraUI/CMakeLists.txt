@@ -155,7 +155,7 @@ if(ENABLE_FORMAT)
 endif()
 
 if(ENABLE_DOXYGEN)
-	Doxygen(The_Orchestra ${SOURCE_DIR})
+	Doxygen(TheOrchestraUI ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
 
@@ -164,7 +164,6 @@ target_include_directories(${TARGET_NAME} PUBLIC
         ${ALL_PROJECT_DIRS}
 )
 
-include(ProjectOptions)
 set_common_target_options(${TARGET_NAME})
 
 

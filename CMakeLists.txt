@@ -13,9 +13,9 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(ENABLE_FORMAT    "Run clang-format on sources during build"          OFF)
-option(ENABLE_CPPCHECK  "Run cppcheck static analysis on C++ targets"       ON)
+option(ENABLE_CPPCHECK  "Run cppcheck static analysis on C++ targets"       OFF)
 option(ENABLE_DOXYGEN   "Add doxygen documentation target"                  OFF)
-option(ENABLE_MEMCHECK  "Add memcheck target "                              OFF)
+option(ENABLE_MEMCHECK  "Add memcheck target"                               OFF)
 
 set(LIB_DIR "${CMAKE_SOURCE_DIR}/libs" CACHE PATH "Directory for external dependencies" FORCE)
 set(CPM_SOURCE_CACHE "${LIB_DIR}/cpm-cache" CACHE PATH "Shared cache for CPM-fetched dependencies" FORCE)
@@ -24,6 +24,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 include(cpm)
 include(CTest)
+include(ProjectOptions)
 
 # Include sub-projects.
 add_subdirectory(src)
