@@ -34,7 +34,7 @@ public:
 
 	void					 changeInstrument(InstrumentID key);
 	bool					 changeArticulation(InstrumentID key, Articulation articulation);
-	void					 changeSamplesFolder(std::string &samplesFolder);
+	void					 changeSamplesFolder(const std::string &samplesFolder);
 	InstrumentProfile		 getInstrument(InstrumentID key);
 
 	std::vector<std::pair<InstrumentID, std::string>> getInstrumentsForFamily(Family family);
