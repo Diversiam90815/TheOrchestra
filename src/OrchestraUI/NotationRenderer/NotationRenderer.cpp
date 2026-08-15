@@ -83,7 +83,7 @@ int NotationRenderer::getLedgerOverflow(int midiNote, Clef clef)
 
 juce::Rectangle<int> NotationRenderer::getRecommendedBounds()
 {
-	return juce::Rectangle<int>(0, 0, 152, 116);
+	return juce::Rectangle<int>(0, 0, 160, 128);
 }
 
 
@@ -108,17 +108,23 @@ void NotationRenderer::loadNotationFont()
 
 OttavaType NotationRenderer::determineOttava(int midiNote, Clef clef)
 {
-	int staffPos = midiNoteToStaffPosition(midiNote, clef);
-
 	// Staff positions: 0 = top line, 8 = bottom line
 	// Ledger lines above: position < 0 (every 2 positions = 1 ledger line)
 	// Ledger lines below: position > 8 (every 2 positions = 1 ledger line)
+	const int staffPos	   = midiNoteToStaffPosition(midiNote, clef);
+	const int threshold	   = kMaxLedgerLines * 2;
 
-	if (staffPos < -(kMaxLedgerLines * 2))
-		return OttavaType::Ottava8va; // Note is too high — display 8va and render octave lower
+	if (staffPos < -threshold)
+	{
+		const int afterOneOctave = midiNoteToStaffPosition(midiNote - 12, clef);
+		return (afterOneOctave < -threshold) ? OttavaType::Ottava15ma : OttavaType::Ottava8va;
+	}
 
-	if (staffPos > 8 + (kMaxLedgerLines * 2))
-		return OttavaType::Ottava8vb; // Note is too low — display 8vb and render octave higher
+	if (staffPos > 8 + threshold)
+	{
+		const int afterOneOctave = midiNoteToStaffPosition(midiNote + 12, clef);
+		return (afterOneOctave > 8 + threshold) ? OttavaType::Ottava15mb : OttavaType::Ottava8vb;
+	}
 
 	return OttavaType::None;
 }
@@ -181,12 +187,17 @@ void NotationRenderer::drawClef(juce::Graphics &g, juce::Rectangle<float> staffA
 
 void NotationRenderer::drawNote(juce::Graphics &g, juce::Rectangle<float> staffArea, const NoteDescriptor &note, Clef clef, OttavaType ottava)
 {
-	// If ottava is active, shift the displayed note by one octave
+	// If ottava is active, shift the displayed note toward the staff by one
+	// or two octaves.
 	int displayMidi = note.midiNoteNumber;
 	if (ottava == OttavaType::Ottava8va)
-		displayMidi -= 12; // Display an octave lower (closer to staff)
+		displayMidi -= 12;
 	else if (ottava == OttavaType::Ottava8vb)
-		displayMidi += 12; // Display an octave higher (closer to staff)
+		displayMidi += 12;
+	else if (ottava == OttavaType::Ottava15ma)
+		displayMidi -= 24;
+	else if (ottava == OttavaType::Ottava15mb)
+		displayMidi += 24;
 
 	int	  staffPosition = midiNoteToStaffPosition(displayMidi, clef);
 	float noteX			= staffArea.getCentreX() * 1.2f;
@@ -221,7 +232,15 @@ void NotationRenderer::drawOttavaText(juce::Graphics &g, OttavaType ottava, floa
 	textFont.setExtraKerningFactor(0.02f);
 	g.setFont(textFont);
 
-	juce::String text = (ottava == OttavaType::Ottava8va) ? "8va" : "8vb";
+	juce::String text;
+	switch (ottava)
+	{
+	case OttavaType::Ottava8va: text = "8va"; break;
+	case OttavaType::Ottava8vb: text = "8vb"; break;
+	case OttavaType::Ottava15ma: text = "15ma"; break;
+	case OttavaType::Ottava15mb: text = "15mb"; break;
+	default: return;
+	}
 
 	// Immediately to the right of the notehead, vertically centred on it -
 	// previously this was centred over the whole staff at a fixed position
@@ -229,7 +248,7 @@ void NotationRenderer::drawOttavaText(juce::Graphics &g, OttavaType ottava, floa
 	// could end up drawn behind the notehead instead of legible beside it.
 	float x = noteX + (noteWidth * 0.5f) + 3.0f;
 	float y = noteY - 7.0f;
-	g.drawText(text, x, y, 32.0f, 14.0f, juce::Justification::centredLeft);
+	g.drawText(text, x, y, 36.0f, 14.0f, juce::Justification::centredLeft);
 }
 
 
