@@ -52,10 +52,13 @@ void RangesPanel::setInstrument(const InstrumentProfile &instrument)
 }
 
 
-void RangesPanel::setClef(Clef /*clef*/)
+void RangesPanel::setClef(Clef clef)
 {
-	// @TODO:
-	//		- Range panel always auto-selects the best clef per note.
+	mClef = clef;
+
+	mLowNotation.setClef(mClef);
+	mHighNotation.setClef(mClef);
+	repaint();
 }
 
 

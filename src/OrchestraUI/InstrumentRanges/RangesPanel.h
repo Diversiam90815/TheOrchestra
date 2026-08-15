@@ -42,4 +42,5 @@ private:
 	std::string		  mSoundingHigh;
 	bool			  mHasTransposition = false;
 	PitchMode		  mPitchMode		= PitchMode::Written;
+	Clef			  mClef				= Clef::Treble;
 };

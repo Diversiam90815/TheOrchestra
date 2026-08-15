@@ -52,7 +52,6 @@ void NotationComponent::setNoteFromString(const std::string &noteName)
 		acc = Accidental::Flat;
 
 	setNote(midiNote, acc);
-	autoSelectClef(midiNote);
 }
 
 

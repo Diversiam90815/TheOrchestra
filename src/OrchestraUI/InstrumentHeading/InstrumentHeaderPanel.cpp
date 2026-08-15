@@ -105,13 +105,13 @@ void InstrumentHeaderPanel::resized()
 
 	int		  tagX	  = rightSide.getX();
 	const int tagY	  = rightSide.getY();
-	const int clefW	  = 104;
+	const int clefW	  = 88;
 	const int transW  = 116;
 	const int toggleW = 104;
 
-	for (auto &label : mClefLabels)
+	for (auto &btn : mClefButtons)
 	{
-		label->setBounds(tagX, tagY, clefW, kTagHeight);
+		btn->setBounds(tagX, tagY, clefW, kTagHeight);
 		tagX += clefW + kTagGap;
 	}
 
@@ -135,9 +135,9 @@ void InstrumentHeaderPanel::resized()
 void InstrumentHeaderPanel::rebuildMetaTags()
 {
 	// Remove old components
-	for (auto &label : mClefLabels)
-		removeChildComponent(label.get());
-	mClefLabels.clear();
+	for (auto &btn : mClefButtons)
+		removeChildComponent(btn.get());
+	mClefButtons.clear();
 
 	if (mTranspositionInfoLabel)
 		removeChildComponent(mTranspositionInfoLabel.get());
@@ -150,13 +150,24 @@ void InstrumentHeaderPanel::rebuildMetaTags()
 	mWrittenBtn.reset();
 	mSoundingBtn.reset();
 
-	// Create clef info labels (non-interactive pills)
 	for (size_t i = 0; i < mClefs.size(); ++i)
 	{
-		auto label = std::make_unique<juce::Label>("MetaInfo", mClefs[i] + " Clef");
-		label->setJustificationType(juce::Justification::centred);
-		addAndMakeVisible(label.get());
-		mClefLabels.push_back(std::move(label));
+		const Clef clef	   = stringToClef(mClefs[i]);
+		const bool isActive = clef == mCurrentClef;
+
+		auto	   btn	   = std::make_unique<juce::TextButton>(mClefs[i]);
+		btn->setName("MetaTag");
+		btn->setClickingTogglesState(true);
+		btn->setRadioGroupId(102);
+		btn->setToggleState(isActive, juce::dontSendNotification);
+		btn->onClick = [this, clef]()
+		{
+			mCurrentClef = clef;
+			if (mClefChangedCallback)
+				mClefChangedCallback(clef);
+		};
+		addAndMakeVisible(btn.get());
+		mClefButtons.push_back(std::move(btn));
 	}
 
 	// Create transposition info label if applicable
