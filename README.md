@@ -1,9 +1,4 @@
 # The Orchestra
-[![Windows Build](https://github.com/Diversiam90815/TheOrchestra/actions/workflows/windows.yml/badge.svg)](https://github.com/Diversiam90815/Chess-Engine/actions/workflows/windows.yml)
-[![macOS Build](https://github.com/Diversiam90815/TheOrchestra/actions/workflows/macos.yml/badge.svg)](https://github.com/Diversiam90815/Chess-Engine/actions/workflows/macos.yml)
-[![Linux Build](https://github.com/Diversiam90815/TheOrchestra/actions/workflows/linux.yml/badge.svg)](https://github.com/Diversiam90815/Chess-Engine/actions/workflows/linux.yml)
-[![Tests](https://github.com/Diversiam90815/TheOrchestra/actions/workflows/tests.yml/badge.svg)](https://github.com/Diversiam90815/Chess-Engine/actions/workflows/tests.yml)
-[![Static Analysis](https://github.com/Diversiam90815/TheOrchestra/actions/workflows/static-analysis.yml/badge.svg)](https://github.com/Diversiam90815/Chess-Engine/actions/workflows/static-analysis.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![C++20](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://en.cppreference.com/w/cpp/20)
 [![JUCE 8](https://img.shields.io/badge/JUCE-8.0.3-8DC63F.svg)](https://juce.com)
