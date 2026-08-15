@@ -99,10 +99,14 @@ void CoreManager::changeInstrument(InstrumentID key)
 }
 
 
-void CoreManager::changeArticulation(InstrumentID key, Articulation articulation)
+bool CoreManager::changeArticulation(InstrumentID key, Articulation articulation)
 {
 	mSampler->addSoundsFromInstrumentToSampler(key, articulation);
-	LOG_INFO("Instrument key {} changed to articulation {}", key, static_cast<int>(articulation));
+
+	const bool ready = mSampler->getSamplesAreReady();
+	LOG_INFO("Instrument key {} changed to articulation {} (ready={})", key, static_cast<int>(articulation), ready);
+
+	return ready;
 }
 
 

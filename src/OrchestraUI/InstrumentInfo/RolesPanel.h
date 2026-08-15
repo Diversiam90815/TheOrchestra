@@ -17,10 +17,10 @@ public:
 	RolesPanel();
 	~RolesPanel() override = default;
 
-	void					  paint(juce::Graphics &g) override;
-	void					  setInstrument(const InstrumentProfile &instrument) override;
+	void paint(juce::Graphics &g) override;
+	void setInstrument(const InstrumentProfile &instrument) override;
 
-	int						  getPreferredHeight(int width) const override;
+	int	 getPreferredHeight(int width) const override;
 
 private:
 	// Roles run to 83 characters, so each one is a wrapped block rather than a

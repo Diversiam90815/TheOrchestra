@@ -1,8 +1,7 @@
 /*
   ==============================================================================
 	Module			FamilySwitcherView
-	Description		The entry screen. Toolbar (logo + search + settings),
-					a "Choose a family" title, and a 2x2 grid of family cards.
+	Description		The entry screen 
   ==============================================================================
 */
 
@@ -21,10 +20,10 @@ FamilySwitcherView::FamilySwitcherView()
 
 	// Badge and glyph colours come from the theme, keyed by family.
 	const std::vector<Def> defs = {
-		{ Family::Woodwinds,  "Woodwinds",	"W" },
-		{ Family::Brass,	  "Brass",		"B" },
-		{ Family::Strings,	  "Strings",	"S" },
-		{ Family::Percussion, "Percussion", "P" },
+		{Family::Woodwinds, "Woodwinds", "W"},
+		{Family::Brass, "Brass", "B"},
+		{Family::Strings, "Strings", "S"},
+		{Family::Percussion, "Percussion", "P"},
 	};
 
 	for (const auto &d : defs)
@@ -36,7 +35,7 @@ FamilySwitcherView::FamilySwitcherView()
 				onFamilySelected(f);
 		};
 		addAndMakeVisible(*card);
-		mCards.push_back({ d.family, std::move(card) });
+		mCards.push_back({d.family, std::move(card)});
 	}
 }
 
@@ -72,12 +71,12 @@ void FamilySwitcherView::layout()
 	// Title block, then the grid. One derivation, read by both layout and paint.
 	// The block is centred in the space below the toolbar rather than pinned to
 	// the top, which otherwise left the lower half of the screen empty.
-	const int blockH  = kTitleH + Space::xs + kSubtitleH + Space::xl + kCardH * 2 + kGridGap;
-	const int belowH  = getHeight() - Chrome::toolbarH;
+	const int blockH   = kTitleH + Space::xs + kSubtitleH + Space::xl + kCardH * 2 + kGridGap;
+	const int belowH   = getHeight() - Chrome::toolbarH;
 
-	int		  y		  = Chrome::toolbarH + juce::jmax(Space::xxl, (belowH - blockH) / 2);
+	int		  y		   = Chrome::toolbarH + juce::jmax(Space::xxl, (belowH - blockH) / 2);
 
-	mTitleBounds	  = juce::Rectangle<int>(cx, y, contentW, kTitleH);
+	mTitleBounds	   = juce::Rectangle<int>(cx, y, contentW, kTitleH);
 	y += kTitleH + Space::xs;
 	mSubtitleBounds = juce::Rectangle<int>(cx, y, contentW, kSubtitleH);
 	y += kSubtitleH + Space::xl;

@@ -33,7 +33,7 @@ public:
 	int						 getLastControllerValue(int ccNumber) const;
 
 	void					 changeInstrument(InstrumentID key);
-	void					 changeArticulation(InstrumentID key, Articulation articulation);
+	bool					 changeArticulation(InstrumentID key, Articulation articulation);
 	void					 changeSamplesFolder(std::string &samplesFolder);
 	InstrumentProfile		 getInstrument(InstrumentID key);
 

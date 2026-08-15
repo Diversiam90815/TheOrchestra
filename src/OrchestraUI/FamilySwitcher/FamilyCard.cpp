@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 	Module			FamilyCard
-	Description		One family card on the family-switcher screen.
+	Description		One family card on the family-switcher screen
   ==============================================================================
 */
 
@@ -10,9 +10,7 @@
 #include "Theme.h"
 
 
-FamilyCard::FamilyCard(Family family, const juce::String &name, const juce::String &letter) : mFamily(family), mName(name), mLetter(letter)
-{
-}
+FamilyCard::FamilyCard(Family family, const juce::String &name, const juce::String &letter) : mFamily(family), mName(name), mLetter(letter) {}
 
 
 void FamilyCard::setCount(int count)

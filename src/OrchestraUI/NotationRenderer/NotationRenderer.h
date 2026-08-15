@@ -34,8 +34,8 @@ enum class Accidental
 enum class OttavaType
 {
 	None,
-	Ottava8va,	// 8va - display note an octave lower than actual
-	Ottava8vb,	// 8vb - display note an octave higher than actual
+	Ottava8va, // 8va - display note an octave lower than actual
+	Ottava8vb, // 8vb - display note an octave higher than actual
 };
 
 
@@ -81,10 +81,10 @@ private:
 
 
 	juce::Font			 mNotationFont;
-	juce::Colour		 mStaffLineColor			 = juce::Colour::fromRGB(107, 103, 96);  // textTertiary
+	juce::Colour		 mStaffLineColor			 = juce::Colour::fromRGB(107, 103, 96);	 // textTertiary
 	juce::Colour		 mNoteColor					 = juce::Colour::fromRGB(238, 233, 218); // textPrimary
 
-	const float			 mStaffLineSpacing			 = 8.0f; // Space between staff lines in px
+	const float			 mStaffLineSpacing			 = 8.0f;								 // Space between staff lines in px
 	const float			 mStaffLineThickness		 = 1.5f;
 
 	// SMuFL codepoints (Bravura font)

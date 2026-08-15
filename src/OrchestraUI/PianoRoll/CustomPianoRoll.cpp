@@ -68,8 +68,7 @@ void CustomPianoRoll::fitKeysToWidth()
 }
 
 
-void CustomPianoRoll::drawWhiteNote(
-	int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour lineColour, juce::Colour textColour)
+void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour lineColour, juce::Colour textColour)
 {
 	if (!mRangesSet)
 	{
@@ -203,14 +202,14 @@ bool CustomPianoRoll::isPlayable(int midiNoteNumber) const
 
 void CustomPianoRoll::setPlayableRange(int lowNote, int highNote)
 {
-	mPlayableRange = { lowNote, highNote };
+	mPlayableRange = {lowNote, highNote};
 }
 
 
 juce::Colour CustomPianoRoll::getNoteColour(int midiNoteNumber, PianoKey keyType) const
 {
-	const auto &t		 = themeFor(*this);
-	const bool	isWhite	 = (keyType == PianoKey::whiteKey);
+	const auto &t		= themeFor(*this);
+	const bool	isWhite = (keyType == PianoKey::whiteKey);
 
 	if (!mRangesSet)
 		return isWhite ? juce::Colours::transparentWhite : juce::Colours::black;

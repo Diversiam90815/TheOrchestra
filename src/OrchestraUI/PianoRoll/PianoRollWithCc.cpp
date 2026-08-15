@@ -55,7 +55,7 @@ void PianoRollWithCc::displayInstrument(const InstrumentProfile &instrument)
 
 void PianoRollWithCc::setCcCallbacks(std::function<void(int, int)> onSend, std::function<int(int)> provider)
 {
-	mCcGutter.onCcChanged	 = std::move(onSend);
+	mCcGutter.onCcChanged	  = std::move(onSend);
 	mCcGutter.ccValueProvider = std::move(provider);
 }
 
@@ -109,7 +109,7 @@ void PianoRollWithCc::paint(juce::Graphics &g)
 
 void PianoRollWithCc::resized()
 {
-	auto body = getLocalBounds().withTrimmedTop(kHeaderH);
+	auto	  body	  = getLocalBounds().withTrimmedTop(kHeaderH);
 
 	const int gutterW = mCcGutter.getPreferredWidth();
 

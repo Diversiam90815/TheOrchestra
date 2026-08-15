@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 	Module			GridFlow
-	Description		One responsive column rule, shared by every card grid.
+	Description		One responsive column rule, shared by every card grid
   ==============================================================================
 */
 

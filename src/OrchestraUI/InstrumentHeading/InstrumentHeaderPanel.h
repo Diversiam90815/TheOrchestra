@@ -14,7 +14,7 @@
 #include <functional>
 
 
-using ClefChangedCallback	  = std::function<void(Clef)>;
+using ClefChangedCallback	   = std::function<void(Clef)>;
 using PitchModeChangedCallback = std::function<void(PitchMode)>;
 
 
@@ -40,12 +40,12 @@ public:
 	static constexpr int kTagGap	   = Space::s;
 
 private:
-	void		 rebuildMetaTags();
-	juce::String deriveTranspositionLabel(const std::string &writtenLow, const std::string &soundingLow) const;
+	void									  rebuildMetaTags();
+	juce::String							  deriveTranspositionLabel(const std::string &writtenLow, const std::string &soundingLow) const;
 
-	juce::DrawableImage mInstrumentImage;
-	juce::Label			mNameLabel;
-	juce::Label			mFamilyLabel;
+	juce::DrawableImage						  mInstrumentImage;
+	juce::Label								  mNameLabel;
+	juce::Label								  mFamilyLabel;
 
 	// Info labels (non-interactive) for clefs and transposition
 	std::vector<std::unique_ptr<juce::Label>> mClefLabels;
@@ -55,14 +55,14 @@ private:
 	std::unique_ptr<juce::TextButton>		  mWrittenBtn;
 	std::unique_ptr<juce::TextButton>		  mSoundingBtn;
 
-	InstrumentClefs			 mClefs;
-	juce::String			 mTranspositionText;
-	bool					 mHasTransposition = false;
-	PitchMode				 mCurrentPitchMode = PitchMode::Written;
-	Clef					 mCurrentClef	   = Clef::Treble;
+	InstrumentClefs							  mClefs;
+	juce::String							  mTranspositionText;
+	bool									  mHasTransposition = false;
+	PitchMode								  mCurrentPitchMode = PitchMode::Written;
+	Clef									  mCurrentClef		= Clef::Treble;
 
-	ClefChangedCallback		 mClefChangedCallback;
-	PitchModeChangedCallback mPitchModeChangedCallback;
+	ClefChangedCallback						  mClefChangedCallback;
+	PitchModeChangedCallback				  mPitchModeChangedCallback;
 
-	FileManager				 mFileManager;
+	FileManager								  mFileManager;
 };

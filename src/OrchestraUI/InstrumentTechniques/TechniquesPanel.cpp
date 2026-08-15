@@ -13,17 +13,15 @@
 
 // ========== TechniqueCard ==========
 
-TechniqueCard::TechniqueCard(const std::string &name, const std::string &description) : mName(name), mDesc(description)
-{
-}
+TechniqueCard::TechniqueCard(const std::string &name, const std::string &description) : mName(name), mDesc(description) {}
 
 
 int TechniqueCard::getPreferredHeight(int width) const
 {
-	auto	  *lnf		= dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
-	const auto descFont = lnf ? lnf->getSerifFont(Type::bodySmall) : juce::Font(Type::bodySmall);
+	auto	  *lnf		  = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	const auto descFont	  = lnf ? lnf->getSerifFont(Type::bodySmall) : juce::Font(Type::bodySmall);
 
-	const int  textWidth = juce::jmax(1, width - kPadX * 2);
+	const int  textWidth  = juce::jmax(1, width - kPadX * 2);
 	const int  descHeight = TextMeasure::wrappedHeight(descFont, juce::String(mDesc), textWidth);
 
 	return juce::jmax(kMinHeight, kPadY * 2 + kNameHeight + descHeight);
@@ -32,10 +30,10 @@ int TechniqueCard::getPreferredHeight(int width) const
 
 void TechniqueCard::paint(juce::Graphics &g)
 {
-	auto	   *lnf	   = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
-	const auto &t	   = themeFor(*this);
+	auto	   *lnf		 = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	const auto &t		 = themeFor(*this);
 
-	auto		bounds = getLocalBounds().toFloat();
+	auto		bounds	 = getLocalBounds().toFloat();
 
 	auto		bgColour = t.surfaceElevated;
 	if (isMouseOver())
@@ -58,9 +56,7 @@ void TechniqueCard::paint(juce::Graphics &g)
 
 // ========== TechniquesPanel ==========
 
-TechniquesPanel::TechniquesPanel() : OrchestraPanel("PLAYING TECHNIQUES")
-{
-}
+TechniquesPanel::TechniquesPanel() : OrchestraPanel("PLAYING TECHNIQUES") {}
 
 
 void TechniquesPanel::setInstrument(const InstrumentProfile &instrument)
