@@ -9,17 +9,20 @@
 #include <assert.h>
 
 #include "CustomPianoRoll.h"
-#include "CustomComponent.h"
 
 
-class PianoRoll : public CustomComponent, private juce::MidiKeyboardState::Listener, public juce::MidiInputCallback
+// Derives from juce::Component directly: the old CustomComponent base called
+// setLookAndFeel() with its own CustomLookAndFeel instance, which hijacked the
+// LookAndFeel for this whole subtree and stopped themeFor() resolving the
+// editor's theme.
+class PianoRoll : public juce::Component, private juce::MidiKeyboardState::Listener, public juce::MidiInputCallback
 {
 public:
 	PianoRoll() = default;
 	~PianoRoll();
 
-	void init() override;
-	void displayInstrument(InstrumentProfile &info) override;
+	void init();
+	void displayInstrument(InstrumentProfile &info);
 
 	void setKeyboardState(juce::MidiKeyboardState &state);
 

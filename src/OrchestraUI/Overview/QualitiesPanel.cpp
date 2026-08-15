@@ -8,6 +8,7 @@
 
 #include "QualitiesPanel.h"
 #include "CustomLookAndFeel.h"
+#include "TextMeasure.h"
 
 
 void QualitiesPanel::setInstrument(const InstrumentProfile &instrument)
@@ -32,52 +33,73 @@ void QualitiesPanel::setPitchMode(PitchMode mode)
 }
 
 
+std::vector<int> QualitiesPanel::rowHeights(int width) const
+{
+	std::vector<int> heights;
+
+	auto			*lnf	   = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	const auto		 font	   = lnf ? lnf->getSerifFont(Type::body) : juce::Font(Type::body);
+	const int		 textWidth = juce::jmax(1, width - kTextInset);
+
+	heights.reserve(mDescriptions.size());
+	for (const auto &description : mDescriptions)
+		heights.push_back(juce::jmax(kMinRowHeight, TextMeasure::wrappedHeight(font, description, textWidth)));
+
+	return heights;
+}
+
+
+int QualitiesPanel::getPreferredHeight(int width) const
+{
+	if (mDescriptions.empty())
+		return kHeaderHeight;
+
+	int total = kHeaderHeight + Space::m;
+
+	for (int h : rowHeights(width))
+		total += h + kRowGap;
+
+	return total - kRowGap;
+}
+
+
 void QualitiesPanel::paint(juce::Graphics &g)
 {
-	auto *lf = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	auto	   *lnf	 = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	const auto &t	 = themeFor(*this);
 
-	const juce::Colour muted	 = lf ? lf->getTextTertiaryColour() : juce::Colour::fromRGB(107, 103, 96);
-	const juce::Colour secondary = lf ? lf->getTextSecondaryColour() : juce::Colour::fromRGB(158, 154, 142);
-	const juce::Colour gold		 = lf ? lf->getAccentColour() : juce::Colour::fromRGB(196, 148, 58);
-	auto			   colours	 = lf ? lf->getQualityColours() : std::vector<juce::Colour>{};
-
-	auto area = getLocalBounds();
+	auto		area = getLocalBounds();
 
 	// Header row: QUALITIES (left) + pitch-mode label (right)
-	auto header = area.removeFromTop(20);
+	auto		header = area.removeFromTop(kHeaderHeight);
 
-	g.setColour(muted);
-	g.setFont(lf ? lf->getSerifFont(10.5f, true) : juce::Font(10.5f));
+	g.setColour(t.textTertiary);
+	g.setFont(lnf ? lnf->getSerifFont(Type::label, true) : juce::Font(Type::label));
 	g.drawText("QUALITIES", header, juce::Justification::centredLeft, false);
 
 	if (mHasTransposition)
 	{
-		g.setColour(gold);
-		g.setFont(lf ? lf->getSerifFont(11.0f) : juce::Font(11.0f));
+		g.setColour(t.accent);
+		g.setFont(lnf ? lnf->getSerifFont(Type::bodySmall) : juce::Font(Type::bodySmall));
 		g.drawText(mPitchMode == PitchMode::Sounding ? "Sounding Pitch" : "Written Pitch", header, juce::Justification::centredRight, false);
 	}
 
-	area.removeFromTop(10);
+	area.removeFromTop(Space::m);
 
-	// Rows: swatch + description
-	const int rowH		= 20;
-	const int rowGap	= 7;
-	const int swatch	= 8;
-	const int textInset = 8 + swatch + 8;
-
-	g.setFont(lf ? lf->getSerifFont(12.5f) : juce::Font(12.5f));
+	const auto font	   = lnf ? lnf->getSerifFont(Type::body) : juce::Font(Type::body);
+	const auto heights = rowHeights(getWidth());
 
 	for (size_t i = 0; i < mDescriptions.size(); ++i)
 	{
-		auto row = area.removeFromTop(rowH);
+		auto row = area.removeFromTop(heights[i]);
 
-		auto swatchRect = juce::Rectangle<float>((float)row.getX(), (float)(row.getCentreY() - swatch / 2), (float)swatch, (float)swatch);
-		g.setColour(i < colours.size() ? colours[i] : juce::Colours::grey);
-		g.fillRoundedRectangle(swatchRect, 2.0f);
+		// Swatch aligned to the first line of the wrapped description.
+		const float swatchY = (float)row.getY() + font.getHeight() * 0.5f - kSwatch * 0.5f;
+		g.setColour(t.registerSwatch((int)i));
+		g.fillRoundedRectangle((float)row.getX(), swatchY, (float)kSwatch, (float)kSwatch, 2.0f);
 
-		g.setColour(secondary);
-		g.drawText(mDescriptions[i], row.withTrimmedLeft(textInset), juce::Justification::centredLeft, true);
+		TextMeasure::drawWrapped(g, font, t.textSecondary, mDescriptions[i], row.withTrimmedLeft(kTextInset));
 
-		area.removeFromTop(rowGap);
+		area.removeFromTop(kRowGap);
 	}
 }

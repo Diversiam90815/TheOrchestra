@@ -99,8 +99,8 @@ void RangesPanel::resized()
 	// Pitch mode label in the title area (right-aligned)
 	if (mHasTransposition)
 	{
-		auto titleRow = getLocalBounds().reduced(kPadding).removeFromTop(kTitleHeight);
-		mPitchModeLabel.setBounds(titleRow.removeFromRight(120));
+		auto titleRow = getLocalBounds().reduced(kPadding, 0).withY(kPadding).withHeight(kTitleHeight);
+		mPitchModeLabel.setBounds(titleRow.removeFromRight(140));
 	}
 	else
 	{
@@ -112,19 +112,20 @@ void RangesPanel::resized()
 	//   Notation (centered, takes most space)
 	//   Note name (bottom)
 
-	const int halfW		= (area.getWidth() - 20) / 2;
-	const int notationW = 110;
-	const int notationH = 80;
-	const int labelH	= 16;
-	const int nameH		= 22;
-	const int innerGap	= 2;
+	const int gutter	= Space::xl;
+	const int halfW		= (area.getWidth() - gutter) / 2;
+	const int notationW = 120;
+	const int notationH = 96;
+	const int labelH	= 20;
+	const int nameH		= 28;
+	const int innerGap	= Space::xs;
 
 	// Total content height for centering
-	int stackH	  = labelH + innerGap + notationH + innerGap + nameH;
-	int topMargin = juce::jmax(0, (area.getHeight() - stackH) / 2);
+	int		  stackH	= labelH + innerGap + notationH + innerGap + nameH;
+	int		  topMargin = juce::jmax(0, (area.getHeight() - stackH) / 2);
 
-	auto leftCol  = area.removeFromLeft(halfW);
-	area.removeFromLeft(20); // gap
+	auto	  leftCol	= area.removeFromLeft(halfW);
+	area.removeFromLeft(gutter);
 	auto rightCol = area;
 
 	// --- Left column: low note ---

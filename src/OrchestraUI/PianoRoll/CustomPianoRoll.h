@@ -9,7 +9,7 @@
 
 #include "JuceIncludes.h"
 #include "Parameters.h"
-#include "CustomLookAndFeel.h"
+#include "Theme.h"
 #include "Helper.h"
 #include "InstrumentInfo.h"
 
@@ -46,19 +46,77 @@ public:
 	*/
 	bool setMidiRanges(const InstrumentRange &ranges);
 
+	/*
+	 @brief                 Sets the instrument's overall playable span.
+
+							Registers are not always a partition of the range:
+							for strings each "register" is a single open-string
+							note (Violin: G3, D4, A4, E5) while the instrument
+							plays everything from G3 to A7. Without this, every
+							note between the open strings would be drawn as
+							out-of-range.
+	 @param                 [IN] lowNote / highNote as MIDI values.
+	*/
+	void setPlayableRange(int lowNote, int highNote);
+
+	/*
+	 @brief                 Sizes the keys so the whole keyboard fits the current
+							width without JUCE's scroll buttons. At the default
+							17px key width a 128-note keyboard needs ~1275px and
+							was being clipped.
+	*/
+	void fitKeysToWidth();
 
 private:
-	juce::Colour getNoteColour(int midiNoteNumber);
+	/*
+	 @brief                 Colour for a key, by note and key type.
+	 @param                 [IN] midiNoteNumber to colour.
+	 @param                 [IN] keyType being drawn - passed explicitly rather
+							than stashed in a member between draw calls.
+	 @return                The key's fill colour.
+	*/
+	juce::Colour						  getNoteColour(int midiNoteNumber, PianoKey keyType) const;
 
-	void drawWhiteNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour lineColour, juce::Colour textColour) override;
+	/*
+	 @brief                 Index of the register a note falls into, or -1.
+	*/
+	int									  getRegisterIndex(int midiNoteNumber) const;
 
-	void drawBlackNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour noteFillColour) override;
+	void								  drawWhiteNote(int midiNoteNumber,
+														juce::Graphics		  &g,
+														juce::Rectangle<float> area,
+														bool				   isDown,
+														bool				   isOver,
+														juce::Colour		   lineColour,
+														juce::Colour		   textColour) override;
 
-	std::vector<std::pair<int, int>> mMidiRanges;							 // Vector of the ranges (stored as pairs of int). This is used to draw different colours of notes
+	void								  drawBlackNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour noteFillColour) override;
 
-	std::atomic<bool>				 mRangesSet		 = false;				 // If true, the custom piano roll is being applied. This is set to true, if mMidiRanges will be filled
+	void								  lookAndFeelChanged() override;
 
-	std::atomic<int>				 mCurrentKeyType = PianoKey::defaultKey; // Indicating the current key type for drawing
+	/*
+	 @brief                 Pushes theme colours into the keyboard's colour IDs.
+							drawKeyboardBackground is final in JUCE and fills
+							with whiteNoteColourId, so the well colour is set
+							rather than painted.
+	*/
+	void								  applyThemeColours();
 
-	CustomLookAndFeel				 mCustomLookAndFeel;
+	/*
+	 @brief                 Whether a note is anywhere the instrument can play.
+	*/
+	bool								  isPlayable(int midiNoteNumber) const;
+
+	// Ranges as (lowNote, highNote) pairs, in register order. Message-thread
+	// only - written by setMidiRanges, read by the paint callbacks.
+	std::vector<std::pair<int, int>>	  mMidiRanges;
+
+	// The instrument's overall span, which registers may only partly cover.
+	std::pair<int, int>					  mPlayableRange = { 0, 0 };
+
+	bool								  mRangesSet	 = false;
+
+	// The keyboard shows all 128 notes, so keys are sized to fit rather than
+	// clamped up - a lower bound here would bring back the scroll buttons.
+	static constexpr float				  kMinKeyWidth = 6.0f;
 };

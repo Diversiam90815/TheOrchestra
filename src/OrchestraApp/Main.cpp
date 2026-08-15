@@ -28,7 +28,11 @@ public:
 
 		setUsingNativeTitleBar(true);
 		setContentOwned(editor.get(), true);
-		setResizable(false, false);
+
+		// Mirrors OrchestraEditor's own limits - previously this pinned the
+		// window and silently overrode the editor's setResizeLimits call.
+		setResizable(true, true);
+		setResizeLimits(1100, 720, 2560, 1600);
 		centreWithSize(getWidth(), getHeight());
 		setVisible(true);
 
