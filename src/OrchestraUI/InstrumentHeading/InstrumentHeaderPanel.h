@@ -40,9 +40,12 @@ public:
 	static constexpr int kFamilyHeight = 28;
 	static constexpr int kTagHeight	   = 32;
 	static constexpr int kTagGap	   = Space::s;
+	static constexpr int kTagPadX	   = Space::m;
+	static constexpr int kMinTagWidth  = 72;
 
 private:
 	void									  rebuildMetaTags();
+	int										  pillWidth(const juce::String &text) const;
 	juce::String							  deriveTranspositionLabel(const std::string &writtenLow, const std::string &soundingLow) const;
 
 	juce::DrawableImage						  mInstrumentImage;

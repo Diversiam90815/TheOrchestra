@@ -12,21 +12,21 @@
 
 RangesPanel::RangesPanel() : OrchestraPanel("Range")
 {
-	mLowLabel.setName("SectionTitle");
+	setLabelStyle(mLowLabel, LabelStyle::SectionTitle);
 	mLowLabel.setText("LOWEST NOTE", juce::dontSendNotification);
 	addAndMakeVisible(mLowLabel);
 
-	mHighLabel.setName("SectionTitle");
+	setLabelStyle(mHighLabel, LabelStyle::SectionTitle);
 	mHighLabel.setText("HIGHEST NOTE", juce::dontSendNotification);
 	addAndMakeVisible(mHighLabel);
 
-	mLowNoteName.setName("NoteName");
+	setLabelStyle(mLowNoteName, LabelStyle::NoteName);
 	addAndMakeVisible(mLowNoteName);
 
-	mHighNoteName.setName("NoteName");
+	setLabelStyle(mHighNoteName, LabelStyle::NoteName);
 	addAndMakeVisible(mHighNoteName);
 
-	mPitchModeLabel.setName("SectionTitle");
+	setLabelStyle(mPitchModeLabel, LabelStyle::SectionTitle);
 	addAndMakeVisible(mPitchModeLabel);
 
 	addAndMakeVisible(mLowNotation);
@@ -109,7 +109,7 @@ void RangesPanel::resized()
 	if (mHasTransposition)
 	{
 		auto titleRow = getLocalBounds().reduced(kPadding, 0).withY(kPadding).withHeight(kTitleHeight);
-		mPitchModeLabel.setBounds(titleRow.removeFromRight(140));
+		mPitchModeLabel.setBounds(titleRow.removeFromRight(kPitchModeLabelW));
 	}
 	else
 	{
@@ -121,13 +121,15 @@ void RangesPanel::resized()
 	//   Notation (centered, takes most space)
 	//   Note name (bottom)
 
-	const int gutter	= Space::xl;
-	const int halfW		= (area.getWidth() - gutter) / 2;
-	const int notationW = 160; // room for the wider "15ma"/"15mb" escalation label
-	const int notationH = 128; // headroom for two-octave-shifted extreme notes (e.g. piccolo top, double bass bottom)
-	const int labelH	= 22;
-	const int nameH		= 32;
-	const int innerGap	= Space::xs;
+	const auto notation = NotationRenderer::getRecommendedBounds();
+
+	const int  gutter	= Space::xl;
+	const int  halfW	= (area.getWidth() - gutter) / 2;
+	const int  notationW = notation.getWidth();
+	const int  notationH = notation.getHeight();
+	const int  labelH	= kTitleHeight;
+	const int  nameH	= kNoteNameHeight;
+	const int  innerGap	= Space::xs;
 
 	// Total content height for centering
 	int		  stackH	= labelH + innerGap + notationH + innerGap + nameH;

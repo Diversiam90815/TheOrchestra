@@ -61,6 +61,40 @@ constexpr int pianoRollH  = 160;
 
 
 
+enum class LabelStyle
+{
+	Default,
+	InstrumentName, // large display name in the header
+	FamilySubtitle, // family line under the instrument name
+	MetaInfo,		// non-interactive info pill (transposition)
+	SectionTitle,	// uppercase eyebrow above a block
+	NoteName,		// large note name under a staff
+	Status			// sampler status line
+};
+
+
+enum class ButtonStyle
+{
+	Default,
+	MetaTag,	 // tight clef / pitch-mode pill
+	Articulation // sampler articulation toggle
+};
+
+namespace RadioGroup
+{
+constexpr int pitchMode	   = 101;
+constexpr int clef		   = 102;
+constexpr int articulation = 200;
+} // namespace RadioGroup
+
+
+void	   setLabelStyle(juce::Component &component, LabelStyle style);
+LabelStyle labelStyleOf(const juce::Component &component);
+
+void		setButtonStyle(juce::Component &component, ButtonStyle style);
+ButtonStyle buttonStyleOf(const juce::Component &component);
+
+
 struct Theme
 {
 	// Surfaces
@@ -78,6 +112,10 @@ struct Theme
 	juce::Colour				textPrimary;   // #EEE9DA
 	juce::Colour				textSecondary; // #9E9A8E
 	juce::Colour				textTertiary;  // #6B6760
+
+	// Status
+	juce::Colour				statusOk;	 // sampler samples loaded
+	juce::Colour				statusError; // sampler failed / nothing loaded
 
 	// Interactive
 	juce::Colour				tabInactive;	 // #3A3650

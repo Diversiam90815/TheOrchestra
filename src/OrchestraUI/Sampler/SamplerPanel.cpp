@@ -13,7 +13,7 @@
 
 SamplerPanel::SamplerPanel() : OrchestraPanel("SAMPLER")
 {
-	mStatusLabel.setName("StatusLabel");
+	setLabelStyle(mStatusLabel, LabelStyle::Status);
 	addAndMakeVisible(mStatusLabel);
 }
 
@@ -34,7 +34,7 @@ void SamplerPanel::setAvailableArticulations(std::set<Articulation> available)
 	for (auto artic : mAvailable)
 	{
 		auto btn = std::make_unique<juce::TextButton>();
-		btn->setName("Articulation");
+		setButtonStyle(*btn, ButtonStyle::Articulation);
 
 		// Get display name
 		auto it = articulationReverseMap.find(artic);
@@ -44,7 +44,7 @@ void SamplerPanel::setAvailableArticulations(std::set<Articulation> available)
 			btn->setButtonText("Unknown");
 
 		btn->setClickingTogglesState(true);
-		btn->setRadioGroupId(200);
+		btn->setRadioGroupId(RadioGroup::articulation);
 
 		auto articulationCopy = artic;
 		btn->onClick		  = [this, articulationCopy]() { onArticulationClicked(articulationCopy); };
@@ -108,19 +108,17 @@ void SamplerPanel::paint(juce::Graphics &g)
 {
 	OrchestraPanel::paint(g);
 
-	auto					 *lnf		= dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	auto	   *lnf		  = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	const auto &t		  = themeFor(*this);
 
-	const auto				  titleFont = lnf ? lnf->getSectionTitleFont() : juce::Font(Type::label);
-	const int				  titleW	= TextMeasure::lineWidth(titleFont, "SAMPLER");
-	const auto				  titleArea = getLocalBounds().reduced(kPadding, 0).withY(kPadding).withHeight(kTitleHeight);
+	const auto	titleFont = lnf ? lnf->getSectionTitleFont() : juce::Font(Type::label);
+	const int	titleW	  = TextMeasure::lineWidth(titleFont, "SAMPLER");
+	const auto	titleArea = getLocalBounds().reduced(kPadding, 0).withY(kPadding).withHeight(kTitleHeight);
 
-	static const juce::Colour kReady	= juce::Colour::fromRGB(88, 178, 96);
-	static const juce::Colour kNotReady = juce::Colour::fromRGB(196, 74, 66);
+	const float dotY	  = (float)titleArea.getCentreY() - kDotSize * 0.5f;
+	const float dotX	  = (float)titleArea.getX() + (float)titleW + Space::s;
 
-	const float				  dotY		= (float)titleArea.getCentreY() - kDotSize * 0.5f;
-	const float				  dotX		= (float)titleArea.getX() + (float)titleW + Space::s;
-
-	g.setColour((mLoadedArticulation.has_value() && mSamplesReady) ? kReady : kNotReady);
+	g.setColour((mLoadedArticulation.has_value() && mSamplesReady) ? t.statusOk : t.statusError);
 	g.fillEllipse(dotX, dotY, kDotSize, kDotSize);
 }
 
