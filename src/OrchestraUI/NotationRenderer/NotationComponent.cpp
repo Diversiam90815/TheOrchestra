@@ -62,17 +62,24 @@ void NotationComponent::setClef(Clef clef)
 }
 
 
-void NotationComponent::autoSelectClef(const int midiNoteNumber)
+void NotationComponent::selectBestClef(const std::vector<Clef> &availableClefs, Clef preferredClef)
 {
-	// Auto-select clef so the note sits comfortably on the staff
-	// without excessive ledger lines.
-	// B3 (MIDI 59) and below → Bass clef
-	// C4 (MIDI 60, middle C) and above → Treble clef
-	// This is the standard split point used in grand staff notation.
-	if (midiNoteNumber >= 60)
-		mClef = Clef::Treble;
-	else
-		mClef = Clef::Bass;
+	static const std::vector<Clef> kFallback = { Clef::Treble, Clef::Bass };
+	const auto						&candidates = availableClefs.empty() ? kFallback : availableClefs;
 
+	Clef	  best		 = candidates.front();
+	int		  bestOverflow = mRenderer.getLedgerOverflow(mNote.midiNoteNumber, best);
+
+	for (Clef clef : candidates)
+	{
+		const int overflow = mRenderer.getLedgerOverflow(mNote.midiNoteNumber, clef);
+		if (overflow < bestOverflow || (overflow == bestOverflow && clef == preferredClef))
+		{
+			best		  = clef;
+			bestOverflow = overflow;
+		}
+	}
+
+	mClef = best;
 	repaint();
 }

@@ -10,20 +10,6 @@
 #include "Helper.h"
 
 
-static Clef stringToClef(const std::string &str)
-{
-	if (str == "Treble")
-		return Clef::Treble;
-	if (str == "Bass")
-		return Clef::Bass;
-	if (str == "Alto")
-		return Clef::Alto;
-	if (str == "Tenor")
-		return Clef::Tenor;
-	return Clef::Treble;
-}
-
-
 InstrumentHeaderPanel::InstrumentHeaderPanel() : OrchestraPanel("")
 {
 	mNameLabel.setName("InstrumentName");
@@ -57,7 +43,7 @@ void InstrumentHeaderPanel::setInstrument(const InstrumentProfile &instrument)
 		mTranspositionText = "";
 
 	if (!mClefs.empty())
-		mCurrentClef = stringToClef(mClefs[0]);
+		mCurrentClef = clefFromString(mClefs[0]);
 
 	// Load instrument image
 	juce::File imageFile = mFileManager.getInstrumentImage(TypeOfImage::InstrumentImage, instrument.getInstrumentID());
@@ -152,7 +138,7 @@ void InstrumentHeaderPanel::rebuildMetaTags()
 
 	for (size_t i = 0; i < mClefs.size(); ++i)
 	{
-		const Clef clef	   = stringToClef(mClefs[i]);
+		const Clef clef	   = clefFromString(mClefs[i]);
 		const bool isActive = clef == mCurrentClef;
 
 		auto	   btn	   = std::make_unique<juce::TextButton>(mClefs[i]);
