@@ -86,7 +86,14 @@ bool InstrumentController::loadInstrumentData()
 		// Iterate through families
 		for (auto &[familyName, familyData] : families.items())
 		{
-			Family			  familyEnum = familyMap[familyName];
+			const auto familyIt = familyMap.find(familyName);
+			if (familyIt == familyMap.end())
+			{
+				LOG_ERROR("Unknown family '{}' in instrument data - skipping!", familyName);
+				continue;
+			}
+
+			const Family	  familyEnum = familyIt->second;
 
 			// Read family-level playing techniques
 			PlayingTechniques familyTechniques;
@@ -109,8 +116,16 @@ bool InstrumentController::loadInstrumentData()
 			{
 				// Parse basic fields
 				std::string		  name				   = instrumentJson["name"];
-				int				  instrumentID		   = instrumentMap[name];
-				InstrumentID	  key				   = getInstrumentKey(familyEnum, instrumentID);
+
+				const auto		  instrumentIt		   = instrumentMap.find(name);
+				if (instrumentIt == instrumentMap.end())
+				{
+					LOG_ERROR("Unknown instrument '{}' in family '{}' - skipping!", name, familyName);
+					continue;
+				}
+
+				const int		  instrumentID		   = instrumentIt->second;
+				const InstrumentID key				   = getInstrumentKey(familyEnum, instrumentID);
 
 				// Parse range
 				InstrumentRange	  range				   = instrumentJson["range"].get<InstrumentRange>();
