@@ -57,57 +57,62 @@ juce::Font CustomLookAndFeel::getSerifFont(float height, bool semiBold) const
 
 void CustomLookAndFeel::drawLabel(juce::Graphics &g, juce::Label &label)
 {
-	juce::String labelName = label.getName();
+	const auto bounds = label.getLocalBounds();
 
-	if (labelName.contains("InstrumentName"))
+	switch (labelStyleOf(label))
 	{
+	case LabelStyle::InstrumentName:
 		g.fillAll(label.findColour(juce::Label::backgroundColourId));
 		g.setColour(mTheme.textPrimary);
 		g.setFont(instrumentNameFont);
-		g.drawText(label.getText(), label.getLocalBounds(), juce::Justification::centredLeft, true);
-	}
-	else if (labelName.contains("FamilySubtitle"))
-	{
+		g.drawText(label.getText(), bounds, juce::Justification::centredLeft, true);
+		break;
+
+	case LabelStyle::FamilySubtitle:
 		g.fillAll(label.findColour(juce::Label::backgroundColourId));
 		g.setColour(mTheme.textSecondary);
 		g.setFont(bodyFont);
-		g.drawText(label.getText(), label.getLocalBounds(), juce::Justification::centredLeft, false);
-	}
-	else if (labelName.contains("MetaInfo"))
-	{
-		// Non-interactive info pill (clefs, transposition)
-		auto bounds = label.getLocalBounds().toFloat().reduced(0.5f);
-		g.setColour(mTheme.surfaceElevated);
-		g.fillRoundedRectangle(bounds, Radius::sm);
+		g.drawText(label.getText(), bounds, juce::Justification::centredLeft, false);
+		break;
 
-		auto font = juce::Font(instrumentTypeface).withHeight(Type::bodySmall);
-		font.setExtraKerningFactor(0.02f);
-		g.setFont(font);
+	case LabelStyle::MetaInfo:
+		// Non-interactive info pill (transposition)
+		g.setColour(mTheme.surfaceElevated);
+		g.fillRoundedRectangle(bounds.toFloat().reduced(0.5f), Radius::sm);
+
+		g.setFont(getSerifFont(Type::bodySmall));
 		g.setColour(mTheme.textSecondary);
-		g.drawText(label.getText(), label.getLocalBounds(), juce::Justification::centred, true);
-	}
-	else if (labelName.contains("SectionTitle"))
-	{
+		g.drawText(label.getText(), bounds, juce::Justification::centred, true);
+		break;
+
+	case LabelStyle::SectionTitle:
 		g.fillAll(label.findColour(juce::Label::backgroundColourId));
 		g.setColour(mTheme.textTertiary);
 		g.setFont(sectionTitleFont);
-		g.drawText(label.getText().toUpperCase(), label.getLocalBounds(), juce::Justification::centredLeft, false);
-	}
-	else if (labelName.contains("Title") || labelName.contains("NoteName"))
-	{
+		g.drawText(label.getText().toUpperCase(), bounds, juce::Justification::centredLeft, false);
+		break;
+
+	case LabelStyle::NoteName:
 		g.fillAll(label.findColour(juce::Label::backgroundColourId));
 		g.setColour(mTheme.textPrimary);
-		auto font = juce::Font(instrumentTypeface).withHeight(Type::heading);
-		font.setExtraKerningFactor(0.003f);
-		g.setFont(font);
-		g.drawText(label.getText(), label.getLocalBounds(), juce::Justification::centred, true);
-	}
-	else
-	{
+		g.setFont(getSerifFont(Type::heading));
+		g.drawText(label.getText(), bounds, juce::Justification::centred, true);
+		break;
+
+	case LabelStyle::Status:
+		g.fillAll(label.findColour(juce::Label::backgroundColourId));
+		g.setColour(mTheme.textTertiary);
+		g.setFont(getSerifFont(Type::caption));
+		g.drawText(label.getText(), bounds, juce::Justification::centredLeft, true);
+		break;
+
+	case LabelStyle::Default:
+	default:
 		g.fillAll(label.findColour(juce::Label::backgroundColourId));
 		g.setColour(label.findColour(juce::Label::textColourId));
 		g.setFont(bodyFont);
-		g.drawText(label.getText(), label.getLocalBounds(), juce::Justification::centredLeft, false);
+		g.drawText(label.getText(), bounds, juce::Justification::centredLeft, false);
+		break;
 	}
 }
 
@@ -115,10 +120,9 @@ void CustomLookAndFeel::drawLabel(juce::Graphics &g, juce::Label &label)
 void CustomLookAndFeel::drawButtonBackground(
 	juce::Graphics &g, juce::Button &button, const juce::Colour &backgroundColour, bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown)
 {
-	auto	   bounds	  = button.getLocalBounds().toFloat().reduced(0.5f, 0.5f);
-	auto	   buttonName = button.getName();
+	auto	   bounds	= button.getLocalBounds().toFloat().reduced(0.5f, 0.5f);
 
-	const bool isActive	  = button.getToggleState();
+	const bool isActive = button.getToggleState();
 
 	if (isActive)
 		g.setColour(mTheme.accent);
@@ -128,7 +132,9 @@ void CustomLookAndFeel::drawButtonBackground(
 		g.setColour(mTheme.surfaceElevated);
 
 	// Clef / pitch-mode pills are tighter than the articulation toggles.
-	g.fillRoundedRectangle(bounds, buttonName.contains("MetaTag") ? Radius::sm : Radius::md);
+	const float radius = (buttonStyleOf(button) == ButtonStyle::MetaTag) ? Radius::sm : Radius::md;
+
+	g.fillRoundedRectangle(bounds, radius);
 }
 
 

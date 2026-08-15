@@ -55,7 +55,7 @@ void PianoRoll::init()
 }
 
 
-void PianoRoll::displayInstrument(InstrumentProfile &info)
+void PianoRoll::displayInstrument(const InstrumentProfile &info)
 {
 	if (!mPianoRoll)
 		return;
@@ -75,7 +75,7 @@ void PianoRoll::displayInstrument(InstrumentProfile &info)
 	// registers are its four open strings inside a much wider range.
 	if (!info.getRegisters().empty())
 	{
-		auto range = info.getRange();
+		const auto &range = info.getRange();
 		mPianoRoll->setPlayableRange(range.getWrittenLowNoteAsMidiValue(), range.getWrittenHighNoteAsMidiValue());
 		mPianoRoll->setMidiRanges(info.getRegisters());
 		resized();

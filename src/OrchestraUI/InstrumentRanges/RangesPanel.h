@@ -24,7 +24,10 @@ public:
 	void setPitchMode(PitchMode mode);
 
 private:
-	void			  updateDisplay();
+	void				 updateDisplay();
+
+	static constexpr int kNoteNameHeight	= 32;
+	static constexpr int kPitchModeLabelW	= 140;
 
 	NotationComponent mLowNotation;
 	NotationComponent mHighNotation;

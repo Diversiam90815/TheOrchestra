@@ -7,15 +7,16 @@
 
 #include "InstrumentHeaderPanel.h"
 #include "CustomLookAndFeel.h"
+#include "TextMeasure.h"
 #include "Helper.h"
 
 
 InstrumentHeaderPanel::InstrumentHeaderPanel() : OrchestraPanel("")
 {
-	mNameLabel.setName("InstrumentName");
+	setLabelStyle(mNameLabel, LabelStyle::InstrumentName);
 	addAndMakeVisible(mNameLabel);
 
-	mFamilyLabel.setName("FamilySubtitle");
+	setLabelStyle(mFamilyLabel, LabelStyle::FamilySubtitle);
 	addAndMakeVisible(mFamilyLabel);
 
 	addAndMakeVisible(mInstrumentImage);
@@ -94,32 +95,43 @@ void InstrumentHeaderPanel::resized()
 	// Meta tags row: [clef info labels] [transposition info] [Written | Sounding toggles]
 	rightSide.removeFromTop(Space::s);
 
-	int		  tagX	  = rightSide.getX();
-	const int tagY	  = rightSide.getY();
-	const int clefW	  = 88;
-	const int transW  = 116;
-	const int toggleW = 104;
+	int		  tagX = rightSide.getX();
+	const int tagY = rightSide.getY();
 
 	for (auto &btn : mClefButtons)
 	{
-		btn->setBounds(tagX, tagY, clefW, kTagHeight);
-		tagX += clefW + kTagGap;
+		const int w = pillWidth(btn->getButtonText());
+		btn->setBounds(tagX, tagY, w, kTagHeight);
+		tagX += w + kTagGap;
 	}
 
 	if (mTranspositionInfoLabel)
 	{
-		mTranspositionInfoLabel->setBounds(tagX, tagY, transW, kTagHeight);
-		tagX += transW + kTagGap;
+		const int w = pillWidth(mTranspositionInfoLabel->getText());
+		mTranspositionInfoLabel->setBounds(tagX, tagY, w, kTagHeight);
+		tagX += w + kTagGap;
 	}
 
 	if (mHasTransposition && mWrittenBtn && mSoundingBtn)
 	{
 		tagX += Space::s; // separator between info pills and the toggle pair
 
-		mWrittenBtn->setBounds(tagX, tagY, toggleW, kTagHeight);
-		tagX += toggleW + kTagGap;
-		mSoundingBtn->setBounds(tagX, tagY, toggleW, kTagHeight);
+		const int writtenW = pillWidth(mWrittenBtn->getButtonText());
+		mWrittenBtn->setBounds(tagX, tagY, writtenW, kTagHeight);
+		tagX += writtenW + kTagGap;
+
+		mSoundingBtn->setBounds(tagX, tagY, pillWidth(mSoundingBtn->getButtonText()), kTagHeight);
 	}
+}
+
+
+int InstrumentHeaderPanel::pillWidth(const juce::String &text) const
+{
+	auto	 *lnf  = dynamic_cast<CustomLookAndFeel *>(&const_cast<InstrumentHeaderPanel *>(this)->getLookAndFeel());
+	const auto font = lnf ? lnf->getSerifFont(Type::bodySmall) : juce::Font(Type::bodySmall);
+
+	// Measured rather than fixed, so longer labels ("Sounding", "in Bb") cannot clip.
+	return juce::jmax(kMinTagWidth, TextMeasure::lineWidth(font, text) + kTagPadX * 2);
 }
 
 
@@ -147,9 +159,9 @@ void InstrumentHeaderPanel::rebuildMetaTags()
 		const bool isActive = clef == mCurrentClef;
 
 		auto	   btn	   = std::make_unique<juce::TextButton>(mClefs[i]);
-		btn->setName("MetaTag");
+		setButtonStyle(*btn, ButtonStyle::MetaTag);
 		btn->setClickingTogglesState(true);
-		btn->setRadioGroupId(102);
+		btn->setRadioGroupId(RadioGroup::clef);
 		btn->setToggleState(isActive, juce::dontSendNotification);
 		btn->onClick = [this, clef]()
 		{
@@ -164,7 +176,8 @@ void InstrumentHeaderPanel::rebuildMetaTags()
 	// Create transposition info label if applicable
 	if (mHasTransposition && mTranspositionText.isNotEmpty())
 	{
-		mTranspositionInfoLabel = std::make_unique<juce::Label>("MetaInfo", mTranspositionText);
+		mTranspositionInfoLabel = std::make_unique<juce::Label>("transposition", mTranspositionText);
+		setLabelStyle(*mTranspositionInfoLabel, LabelStyle::MetaInfo);
 		mTranspositionInfoLabel->setJustificationType(juce::Justification::centred);
 		addAndMakeVisible(mTranspositionInfoLabel.get());
 	}
@@ -173,9 +186,9 @@ void InstrumentHeaderPanel::rebuildMetaTags()
 	if (mHasTransposition)
 	{
 		mWrittenBtn = std::make_unique<juce::TextButton>("Written");
-		mWrittenBtn->setName("MetaTag");
+		setButtonStyle(*mWrittenBtn, ButtonStyle::MetaTag);
 		mWrittenBtn->setClickingTogglesState(true);
-		mWrittenBtn->setRadioGroupId(101);
+		mWrittenBtn->setRadioGroupId(RadioGroup::pitchMode);
 		mWrittenBtn->setToggleState(true, juce::dontSendNotification);
 		mWrittenBtn->onClick = [this]()
 		{
@@ -186,9 +199,9 @@ void InstrumentHeaderPanel::rebuildMetaTags()
 		addAndMakeVisible(mWrittenBtn.get());
 
 		mSoundingBtn = std::make_unique<juce::TextButton>("Sounding");
-		mSoundingBtn->setName("MetaTag");
+		setButtonStyle(*mSoundingBtn, ButtonStyle::MetaTag);
 		mSoundingBtn->setClickingTogglesState(true);
-		mSoundingBtn->setRadioGroupId(101);
+		mSoundingBtn->setRadioGroupId(RadioGroup::pitchMode);
 		mSoundingBtn->setToggleState(false, juce::dontSendNotification);
 		mSoundingBtn->onClick = [this]()
 		{

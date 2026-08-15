@@ -9,6 +9,47 @@
 #include "CustomLookAndFeel.h"
 
 
+namespace
+{
+const juce::Identifier kLabelStyleProperty("orchestraLabelStyle");
+const juce::Identifier kButtonStyleProperty("orchestraButtonStyle");
+} // namespace
+
+
+void setLabelStyle(juce::Component &component, LabelStyle style)
+{
+	component.getProperties().set(kLabelStyleProperty, static_cast<int>(style));
+}
+
+
+LabelStyle labelStyleOf(const juce::Component &component)
+{
+	const auto &value = component.getProperties()[kLabelStyleProperty];
+
+	if (value.isVoid())
+		return LabelStyle::Default;
+
+	return static_cast<LabelStyle>(static_cast<int>(value));
+}
+
+
+void setButtonStyle(juce::Component &component, ButtonStyle style)
+{
+	component.getProperties().set(kButtonStyleProperty, static_cast<int>(style));
+}
+
+
+ButtonStyle buttonStyleOf(const juce::Component &component)
+{
+	const auto &value = component.getProperties()[kButtonStyleProperty];
+
+	if (value.isVoid())
+		return ButtonStyle::Default;
+
+	return static_cast<ButtonStyle>(static_cast<int>(value));
+}
+
+
 juce::Colour Theme::registerSwatch(int index) const
 {
 	if (index < 0 || index >= (int)registerBase.size())
@@ -88,6 +129,9 @@ const Theme &defaultTheme()
 		t.textPrimary	  = juce::Colour::fromRGB(250, 248, 242); // #FAF8F2, was #F5F2E9
 		t.textSecondary	  = juce::Colour::fromRGB(202, 198, 186); // #CAC6BA, was #B8B4A8
 		t.textTertiary	  = juce::Colour::fromRGB(158, 153, 142); // #9E998E, was #8C877D
+
+		t.statusOk		  = juce::Colour::fromRGB(88, 178, 96);	  // #58B260
+		t.statusError	  = juce::Colour::fromRGB(196, 74, 66);	  // #C44A42
 
 		t.tabInactive	  = juce::Colour::fromRGB(58, 54, 80);	  // #3A3650
 		t.sidebarHover	  = juce::Colour::fromRGB(35, 32, 64);	  // #232040
