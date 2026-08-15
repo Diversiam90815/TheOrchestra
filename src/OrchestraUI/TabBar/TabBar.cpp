@@ -8,6 +8,7 @@
 
 #include "TabBar.h"
 #include "CustomLookAndFeel.h"
+#include "TextMeasure.h"
 
 
 TabBar::TabBar()
@@ -34,50 +35,55 @@ void TabBar::setActiveTab(DetailTab tab)
 void TabBar::layoutTabs()
 {
 	auto *lf   = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
-	auto  font = lf ? lf->getSerifFont(12.5f, true) : juce::Font(12.5f);
+	auto  font = lf ? lf->getSerifFont(Type::bodySmall, true) : juce::Font(Type::bodySmall);
 
-	int x = kLeftInset;
+	int	  x	   = kLeftInset;
 	for (auto &tab : mTabs)
 	{
-		const int textW = font.getStringWidth(tab.label);
-		const int tabW	= textW + kTabPadX * 2;
-		tab.bounds		= juce::Rectangle<int>(x, 0, tabW, getHeight());
-		x += tabW + 2;	// 2px gap between tabs
+		const int tabW = TextMeasure::lineWidth(font, tab.label) + kTabPadX * 2;
+		tab.bounds	   = juce::Rectangle<int>(x, 0, tabW, getHeight());
+		x += tabW + kTabGap;
 	}
+}
+
+
+void TabBar::resized()
+{
+	layoutTabs();
+}
+
+
+void TabBar::lookAndFeelChanged()
+{
+	// Tab widths are measured from the font, so re-run when the font source changes.
+	layoutTabs();
 }
 
 
 void TabBar::paint(juce::Graphics &g)
 {
-	auto *lf = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	auto	   *lf = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	const auto &t  = themeFor(*this);
 
-	const juce::Colour barBg	 = lf ? lf->getToolbarColour() : juce::Colour::fromRGB(24, 21, 32);
-	const juce::Colour gold		 = lf ? lf->getAccentColour() : juce::Colour::fromRGB(196, 148, 58);
-	const juce::Colour inactive	 = lf ? lf->getTextTertiaryColour() : juce::Colour::fromRGB(107, 103, 96);
-	const juce::Colour divider	 = lf ? lf->getDividerColour(0.1f) : juce::Colour::fromRGB(196, 148, 58).withAlpha(0.1f);
-
-	g.fillAll(barBg);
-
-	layoutTabs();
+	g.fillAll(t.toolbar);
 
 	for (const auto &tab : mTabs)
 	{
 		const bool active = (tab.id == mActiveTab);
 
-		g.setColour(active ? gold : inactive);
-		g.setFont(lf ? lf->getSerifFont(12.5f, active) : juce::Font(12.5f));
+		g.setColour(active ? t.accent : t.textTertiary);
+		g.setFont(lf ? lf->getSerifFont(Type::bodySmall, active) : juce::Font(Type::bodySmall));
 		g.drawText(tab.label, tab.bounds, juce::Justification::centred, false);
 
 		if (active)
 		{
-			auto underline = juce::Rectangle<int>(tab.bounds.getX() + kTabPadX, getHeight() - 2, tab.bounds.getWidth() - kTabPadX * 2, 2);
-			g.setColour(gold);
-			g.fillRect(underline);
+			g.setColour(t.accent);
+			g.fillRect(tab.bounds.getX() + kTabPadX, getHeight() - 2, tab.bounds.getWidth() - kTabPadX * 2, 2);
 		}
 	}
 
 	// Bottom hairline
-	g.setColour(divider);
+	g.setColour(t.divider(0.1f));
 	g.fillRect(0, getHeight() - 1, getWidth(), 1);
 }
 

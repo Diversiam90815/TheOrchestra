@@ -14,23 +14,34 @@
 #include "InstrumentInfo.h"
 
 
-class OverviewPanel : public juce::Component
+class OverviewPanel : public juce::Component, public HasPreferredHeight
 {
 public:
 	OverviewPanel();
 	~OverviewPanel() override = default;
 
-	void setInstrument(const InstrumentProfile &instrument);
-	void setPitchMode(PitchMode mode);
+	void				 setInstrument(const InstrumentProfile &instrument);
+	void				 setPitchMode(PitchMode mode);
 
-	void resized() override;
+	void				 resized() override;
+
+	int					 getPreferredHeight(int width) const override;
 
 private:
-	RangesPanel	   mRanges;
-	QualitiesPanel mQualities;
+	/*
+	 @brief					Width of the fixed-ish range column at a given total
+							width. Flexes so the qualities column keeps a usable
+							measure on wide windows.
+	*/
+	int					 rangeColumnWidth(int width) const;
 
-	static constexpr int kRangeWidth = 330;
-	static constexpr int kColumnGap	 = 24;
-	static constexpr int kPadX		 = 26;
-	static constexpr int kPadY		 = 18;
+	RangesPanel			 mRanges;
+	QualitiesPanel		 mQualities;
+
+	static constexpr int kMinRangeWidth = 330;
+	static constexpr int kMaxRangeWidth = 440;
+	static constexpr int kColumnGap		= Space::xl;
+	static constexpr int kPadX			= Space::xl;
+	static constexpr int kPadY			= Space::l;
+	static constexpr int kMinRangeHeight = 190;
 };

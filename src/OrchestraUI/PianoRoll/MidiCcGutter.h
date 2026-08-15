@@ -39,6 +39,6 @@ private:
 	std::vector<CcLane>						mLanes;
 	std::vector<std::unique_ptr<CcSlider>>	mSliders;
 
-	static constexpr int kColumnWidth = 28;
-	static constexpr int kColumnGap	  = 10;
+	static constexpr int kColumnWidth = 38;
+	static constexpr int kColumnGap	  = Space::m;
 };

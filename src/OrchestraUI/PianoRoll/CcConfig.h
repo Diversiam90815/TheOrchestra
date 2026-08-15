@@ -8,6 +8,8 @@
 #pragma once
 
 #include "JuceIncludes.h"
+#include "Theme.h"
+
 #include <vector>
 
 
@@ -19,12 +21,14 @@ struct CcLane
 };
 
 
-// Default lanes: CC1 (mod wheel / dynamics) and CC11 (expression).
-// Colours follow the design: MOD = register-1 blue (#3D5EA5), EXPR = gold (#C4943A).
-inline std::vector<CcLane> getDefaultCcLanes()
+/*
+ @brief					Default lanes: CC1 (mod wheel / dynamics) and CC11
+						(expression). Fill colours come from the theme.
+*/
+inline std::vector<CcLane> getDefaultCcLanes(const Theme &theme = defaultTheme())
 {
 	return {
-		{ 1,  "MOD",  juce::Colour::fromRGB(61, 94, 165) },
-		{ 11, "EXPR", juce::Colour::fromRGB(196, 148, 58) },
+		{ 1,  "MOD",  theme.ccLaneFill(0) },
+		{ 11, "EXPR", theme.ccLaneFill(1) },
 	};
 }

@@ -46,6 +46,6 @@ private:
 	PianoRoll				 mPianoRoll;
 	std::vector<LegendEntry> mLegend;
 
-	static constexpr int	 kHeaderH	= 24;
-	static constexpr int	 kGutterGap = 14;
+	static constexpr int	 kHeaderH	= 30;
+	static constexpr int	 kGutterGap = Space::l;
 };

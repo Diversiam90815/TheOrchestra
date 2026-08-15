@@ -7,7 +7,14 @@
 
 #include "InstrumentDetailView.h"
 #include "CustomLookAndFeel.h"
+#include "TextMeasure.h"
 #include "Helper.h"
+
+
+namespace
+{
+const juce::String kBackLabel = juce::String::fromUTF8("\xE2\x80\xB9 Families"); // U+2039 chevron
+}
 
 
 //==============================================================================
@@ -18,55 +25,62 @@ void BreadcrumbBar::setPath(const juce::String &family, const juce::String &inst
 {
 	mFamily		= family;
 	mInstrument = instrument;
+	layout();
 	repaint();
+}
+
+
+void BreadcrumbBar::layout()
+{
+	auto *lf	= dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	auto  font	= lf ? lf->getSerifFont(Type::bodySmall) : juce::Font(Type::bodySmall);
+
+	const int x = Space::xl;
+	mBackBounds = juce::Rectangle<int>(x, 0, TextMeasure::lineWidth(font, kBackLabel) + Space::s, getHeight());
+	mDividerX	= mBackBounds.getRight() + Space::m;
+	mPathX		= mDividerX + Space::m;
+}
+
+
+void BreadcrumbBar::resized()
+{
+	layout();
 }
 
 
 void BreadcrumbBar::paint(juce::Graphics &g)
 {
-	auto			  *lf	   = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	auto	   *lf = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	const auto &t  = themeFor(*this);
 
-	const juce::Colour barBg   = lf ? lf->getToolbarColour() : juce::Colour::fromRGB(24, 21, 32);
-	const juce::Colour gold	   = lf ? lf->getAccentColour() : juce::Colour::fromRGB(196, 148, 58);
-	const juce::Colour primary = lf ? lf->getTextPrimaryColour() : juce::Colour::fromRGB(238, 233, 218);
-	const juce::Colour muted   = lf ? lf->getTextTertiaryColour() : juce::Colour::fromRGB(107, 103, 96);
-	const juce::Colour divider = lf ? lf->getDividerColour(0.1f) : juce::Colour::fromRGB(196, 148, 58).withAlpha(0.1f);
+	g.fillAll(t.toolbar);
 
-	g.fillAll(barBg);
-
-	auto	   area = getLocalBounds().reduced(22, 0);
-	const auto font = lf ? lf->getSerifFont(12.5f) : juce::Font(12.5f);
+	const auto font = lf ? lf->getSerifFont(Type::bodySmall) : juce::Font(Type::bodySmall);
 	g.setFont(font);
 
 	// Back link "< Families"
-	const juce::String back	 = juce::String::fromUTF8("\xE2\x80\xB9 Families"); // U+2039 chevron
-	const int		   backW = font.getStringWidth(back);
-	mBackBounds				 = juce::Rectangle<int>(area.getX(), 0, backW + 6, getHeight());
+	g.setColour(t.accent);
+	g.drawText(kBackLabel, mBackBounds, juce::Justification::centredLeft, false);
 
-	g.setColour(gold);
-	g.drawText(back, mBackBounds, juce::Justification::centredLeft, false);
-
-	int x = mBackBounds.getRight() + 12;
-
-	// vertical divider
-	g.setColour(lf ? lf->getDividerColour(0.2f) : juce::Colour::fromRGB(196, 148, 58).withAlpha(0.2f));
-	g.fillRect(x, getHeight() / 2 - 7, 1, 14);
-	x += 12;
+	// Vertical divider
+	g.setColour(t.divider(0.2f));
+	g.fillRect(mDividerX, getHeight() / 2 - 8, 1, 16);
 
 	// Family / Instrument
 	if (mFamily.isNotEmpty())
 	{
 		const juce::String famPart = mFamily + "  /  ";
-		g.setColour(muted);
-		g.drawText(famPart, juce::Rectangle<int>(x, 0, font.getStringWidth(famPart) + 4, getHeight()), juce::Justification::centredLeft, false);
-		x += font.getStringWidth(famPart);
+		const int		   famW	   = TextMeasure::lineWidth(font, famPart);
 
-		g.setColour(primary);
-		g.drawText(mInstrument, juce::Rectangle<int>(x, 0, getWidth() - x, getHeight()), juce::Justification::centredLeft, false);
+		g.setColour(t.textTertiary);
+		g.drawText(famPart, juce::Rectangle<int>(mPathX, 0, famW + Space::xs, getHeight()), juce::Justification::centredLeft, false);
+
+		g.setColour(t.textPrimary);
+		g.drawText(mInstrument, juce::Rectangle<int>(mPathX + famW, 0, getWidth() - mPathX - famW, getHeight()), juce::Justification::centredLeft, false);
 	}
 
-	// bottom hairline
-	g.setColour(divider);
+	// Bottom hairline
+	g.setColour(t.divider(0.1f));
 	g.fillRect(0, getHeight() - 1, getWidth(), 1);
 }
 
@@ -89,10 +103,16 @@ InstrumentDetailView::InstrumentDetailView()
 	addAndMakeVisible(mSampler);
 	addAndMakeVisible(mTabBar);
 
-	addChildComponent(mOverview);
-	addChildComponent(mTechniques);
-	addChildComponent(mRoles);
-	addChildComponent(mFamousWorks);
+	// One scroller for every tab body.
+	mBodyViewport.setViewedComponent(&mBodyHolder, false);
+	mBodyViewport.setScrollBarsShown(true, false);
+	mBodyViewport.setScrollBarThickness(Space::s);
+	addAndMakeVisible(mBodyViewport);
+
+	mBodyHolder.addChildComponent(mOverview);
+	mBodyHolder.addChildComponent(mTechniques);
+	mBodyHolder.addChildComponent(mRoles);
+	mBodyHolder.addChildComponent(mFamousWorks);
 	mOverview.setVisible(true);
 
 	addAndMakeVisible(mPianoRoll);
@@ -132,6 +152,9 @@ void InstrumentDetailView::setInstrument(const InstrumentProfile &instrument)
 void InstrumentDetailView::setAvailableArticulations(std::set<Articulation> available)
 {
 	mSampler.setAvailableArticulations(std::move(available));
+
+	// The sampler's height follows how many rows the articulations wrap into.
+	resized();
 }
 
 
@@ -166,20 +189,49 @@ void InstrumentDetailView::setPianoRollCcCallbacks(std::function<void(int, int)>
 }
 
 
+const HasPreferredHeight &InstrumentDetailView::activeBody() const
+{
+	switch (mCurrentTab)
+	{
+	case DetailTab::Techniques:	 return mTechniques;
+	case DetailTab::Roles:		 return mRoles;
+	case DetailTab::FamousWorks: return mFamousWorks;
+	case DetailTab::Overview:
+	default:					 return mOverview;
+	}
+}
+
+
+juce::Component &InstrumentDetailView::activeBodyComponent()
+{
+	switch (mCurrentTab)
+	{
+	case DetailTab::Techniques:	 return mTechniques;
+	case DetailTab::Roles:		 return mRoles;
+	case DetailTab::FamousWorks: return mFamousWorks;
+	case DetailTab::Overview:
+	default:					 return mOverview;
+	}
+}
+
+
 void InstrumentDetailView::showTab(DetailTab tab)
 {
+	mCurrentTab = tab;
+
 	mOverview.setVisible(tab == DetailTab::Overview);
 	mTechniques.setVisible(tab == DetailTab::Techniques);
 	mRoles.setVisible(tab == DetailTab::Roles);
 	mFamousWorks.setVisible(tab == DetailTab::FamousWorks);
+
+	mBodyViewport.setViewPosition(0, 0);
 	resized();
 }
 
 
 void InstrumentDetailView::paint(juce::Graphics &g)
 {
-	auto *lf = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
-	g.fillAll(lf ? lf->getBackgroundColour() : juce::Colour::fromRGB(18, 16, 26));
+	g.fillAll(themeFor(*this).background);
 }
 
 
@@ -187,25 +239,40 @@ void InstrumentDetailView::resized()
 {
 	auto area = getLocalBounds();
 
-	mBreadcrumb.setBounds(area.removeFromTop(kBreadcrumbH));
+	mBreadcrumb.setBounds(area.removeFromTop(Chrome::breadcrumbH));
+	mSidebar.setBounds(area.removeFromLeft(juce::jlimit(kMinSidebarW, kMaxSidebarW, juce::roundToInt(getWidth() * 0.16f))));
 
-	mSidebar.setBounds(area.removeFromLeft(kSidebarW));
+	// Detail column: each section takes the height it actually needs, and each
+	// slot carries its own gap below so the panels never touch.
+	auto	  detail	 = area;
+	const int detailW	 = detail.getWidth();
+	const int panelWidth = detailW - kPad * 2;
 
-	// Detail column
-	auto detail = area;
+	auto	  slot		 = [&detail](int height, int gap) { return detail.removeFromTop(height + gap).withTrimmedBottom(gap); };
 
-	mHeader.setBounds(detail.removeFromTop(kHeaderH).reduced(kPad, kPad));
-	mSampler.setBounds(detail.removeFromTop(kSamplerH).reduced(kPad, 0));
-	mTabBar.setBounds(detail.removeFromTop(kTabBarH));
+	mHeader.setBounds(slot(mHeader.getPreferredHeight(panelWidth), kPad).reduced(kPad, 0));
+	mSampler.setBounds(slot(mSampler.getPreferredHeight(panelWidth), kPad).reduced(kPad, 0));
+	mTabBar.setBounds(detail.removeFromTop(Chrome::tabBarH));
 
-	auto piano = detail.removeFromBottom(kPianoH).reduced(kPad + 12, kPad);
+	// The body asks for what it needs; the piano roll absorbs the slack up to
+	// its cap, so no gap is left pooling between them. When the window is too
+	// short for both, the piano keeps its minimum and the body scrolls.
+	const int bodyWidth	  = detail.getWidth() - kPad * 2;
+	const int bodyWanted  = activeBody().getPreferredHeight(bodyWidth);
+	const int available	  = detail.getHeight() - kPad * 2;
 
-	// Remaining space = the active tab body.
-	auto body  = detail;
-	mOverview.setBounds(body);
-	mTechniques.setBounds(body.reduced(kPad, kPad));
-	mRoles.setBounds(body.reduced(kPad, kPad));
-	mFamousWorks.setBounds(body.reduced(kPad, kPad));
+	const int pianoHeight = juce::jlimit(kPianoMinH, juce::jmin(kPianoMaxH, juce::jmax(kPianoMinH, available - kBodyMinH)), available - bodyWanted);
 
-	mPianoRoll.setBounds(piano);
+	mPianoRoll.setBounds(detail.removeFromBottom(pianoHeight + kPad).withTrimmedBottom(kPad).reduced(kPad + Space::s, 0));
+
+	auto body = detail.reduced(kPad, 0);
+	mBodyViewport.setBounds(body);
+
+	// Holder is as tall as the content wants, so the viewport scrolls only when
+	// the content genuinely does not fit.
+	const int holderWidth  = body.getWidth() - (bodyWanted > body.getHeight() ? Space::s : 0);
+	const int holderHeight = juce::jmax(body.getHeight(), activeBody().getPreferredHeight(holderWidth));
+
+	mBodyHolder.setSize(holderWidth, holderHeight);
+	activeBodyComponent().setBounds(mBodyHolder.getLocalBounds());
 }

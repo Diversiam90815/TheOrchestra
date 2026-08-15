@@ -10,6 +10,7 @@
 
 #include "JuceIncludes.h"
 #include "Parameters.h"
+#include "Theme.h"
 #include "FamilyCard.h"
 
 #include <functional>
@@ -40,12 +41,22 @@ private:
 		std::unique_ptr<FamilyCard> card;
 	};
 
+	// Every rect is computed once in resized() and only read by paint().
+	// Previously paint() re-derived the title offsets independently from
+	// resized(), and mGearBounds was written in paint() but consumed by
+	// mouseUp() - so the hit region was stale until the first repaint.
+	void				   layout();
+
 	std::vector<CardEntry> mCards;
 	juce::Rectangle<int>   mGearBounds;
+	juce::Rectangle<int>   mSearchBounds;
 	juce::Rectangle<int>   mContentBounds;
+	juce::Rectangle<int>   mTitleBounds;
+	juce::Rectangle<int>   mSubtitleBounds;
 
-	static constexpr int   kToolbarH   = 56;
-	static constexpr int   kMaxContentW = 620;
-	static constexpr int   kCardH	   = 74;
-	static constexpr int   kGridGap	   = 12;
+	static constexpr int   kMaxContentW = 760;
+	static constexpr int   kCardH		= 96;
+	static constexpr int   kGridGap		= Space::l;
+	static constexpr int   kTitleH		= 34;
+	static constexpr int   kSubtitleH	= 24;
 };

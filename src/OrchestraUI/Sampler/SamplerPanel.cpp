@@ -10,7 +10,7 @@
 #include "Helper.h"
 
 
-SamplerPanel::SamplerPanel() : OrchestraPanel("Sampler")
+SamplerPanel::SamplerPanel() : OrchestraPanel("SAMPLER")
 {
 	mStatusLabel.setName("StatusLabel");
 	addAndMakeVisible(mStatusLabel);
@@ -86,29 +86,53 @@ void SamplerPanel::onArticulationClicked(Articulation articulation)
 }
 
 
+int SamplerPanel::wrappedRowCount(int width) const
+{
+	if (mButtons.empty())
+		return 0;
+
+	const int contentWidth = width - kPadding * 2;
+	const int perRow	   = juce::jmax(1, (contentWidth + kGap) / (kButtonWidth + kGap));
+
+	return ((int)mButtons.size() + perRow - 1) / perRow;
+}
+
+
+int SamplerPanel::getPreferredHeight(int width) const
+{
+	const int rows = wrappedRowCount(width);
+
+	if (rows == 0)
+		return getChromeHeight() + kStatusHeight;
+
+	const int buttonBlock = rows * kButtonHeight + (rows - 1) * kGap;
+
+	return getChromeHeight() + buttonBlock + Space::m + kStatusHeight;
+}
+
+
 void SamplerPanel::resized()
 {
-	auto area = getContentArea();
+	auto area	= getContentArea();
 
-	// Layout buttons in a wrapping flow
-	const int btnW	 = 100;
-	const int btnH	 = 32;
-	const int gap	 = 8;
+	// Status label claims the bottom first, so a wrapped second button row can
+	// never collide with it.
+	auto status = area.removeFromBottom(kStatusHeight);
+	mStatusLabel.setBounds(status);
+
+	area.removeFromBottom(Space::m);
 
 	int x = area.getX();
 	int y = area.getY();
 
 	for (auto &btn : mButtons)
 	{
-		if (x + btnW > area.getRight() && x != area.getX())
+		if (x + kButtonWidth > area.getRight() && x != area.getX())
 		{
 			x = area.getX();
-			y += btnH + gap;
+			y += kButtonHeight + kGap;
 		}
-		btn->setBounds(x, y, btnW, btnH);
-		x += btnW + gap;
+		btn->setBounds(x, y, kButtonWidth, kButtonHeight);
+		x += kButtonWidth + kGap;
 	}
-
-	// Status label at bottom
-	mStatusLabel.setBounds(area.getX(), area.getBottom() - 18, area.getWidth(), 18);
 }

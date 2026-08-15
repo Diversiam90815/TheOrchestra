@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "JuceIncludes.h"
+#include "Theme.h"
 
 
 enum class DetailTab
@@ -34,6 +35,8 @@ public:
 	DetailTab getActiveTab() const { return mActiveTab; }
 
 	void	  paint(juce::Graphics &g) override;
+	void	  resized() override;
+	void	  lookAndFeelChanged() override;
 	void	  mouseUp(const juce::MouseEvent &e) override;
 
 private:
@@ -41,14 +44,18 @@ private:
 	{
 		DetailTab			 id;
 		juce::String		 label;
-		juce::Rectangle<int> bounds;	// filled in during paint/layout
+		juce::Rectangle<int> bounds;
 	};
 
-	void			layoutTabs();
+	// Tab widths are text-measured, so layout must re-run whenever the size or
+	// the font changes - not from paint(), which left mouseUp() hit-testing
+	// bounds that were only valid after the first repaint.
+	void				 layoutTabs();
 
 	std::vector<TabItem> mTabs;
 	DetailTab			 mActiveTab = DetailTab::Overview;
 
-	static constexpr int kTabPadX	= 15;
-	static constexpr int kLeftInset = 26;
+	static constexpr int kTabPadX	= Space::l;
+	static constexpr int kTabGap	= Space::xs;
+	static constexpr int kLeftInset = Space::xl;
 };

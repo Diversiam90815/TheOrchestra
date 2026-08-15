@@ -43,22 +43,19 @@ public:
 
 	void paint(juce::Graphics &g) override
 	{
-		auto *lf = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+		auto	   *lf	  = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+		const auto &t	  = themeFor(*this);
 
-		const juce::Colour trackBg	= lf ? lf->getCardColour() : juce::Colour::fromRGB(27, 23, 38);
-		const juce::Colour border	= lf ? lf->getDividerColour(0.14f) : juce::Colour::fromRGB(196, 148, 58).withAlpha(0.14f);
-		const juce::Colour textMuted = lf ? lf->getTextTertiaryColour() : juce::Colour::fromRGB(107, 103, 96);
-
-		auto track = getTrackBounds();
+		auto		track = getTrackBounds();
 
 		// Value readout
-		g.setColour(textMuted);
-		g.setFont(lf ? lf->getSerifFont(9.5f) : juce::Font(9.5f));
+		g.setColour(t.textTertiary);
+		g.setFont(lf ? lf->getSerifFont(Type::caption) : juce::Font(Type::caption));
 		g.drawText(juce::String(mValue), juce::Rectangle<int>(0, 0, getWidth(), kReadoutH), juce::Justification::centred, false);
 
 		// Track
-		g.setColour(trackBg);
-		g.fillRoundedRectangle(track, 8.0f);
+		g.setColour(t.surface);
+		g.fillRoundedRectangle(track, Radius::lg);
 
 		// Fill (anchored to bottom)
 		const float fillFraction = (float)mValue / 127.0f;
@@ -67,23 +64,23 @@ public:
 		{
 			juce::Rectangle<float> fill(track.getX(), track.getBottom() - fillH, track.getWidth(), fillH);
 			g.setColour(mLane.fill);
-			g.fillRoundedRectangle(fill, 8.0f);
+			g.fillRoundedRectangle(fill, Radius::lg);
 		}
 
 		// Border
-		g.setColour(border);
-		g.drawRoundedRectangle(track, 8.0f, 1.0f);
+		g.setColour(t.divider());
+		g.drawRoundedRectangle(track, Radius::lg, 1.0f);
 
 		// Label
-		g.setColour(textMuted);
-		g.setFont(lf ? lf->getSerifFont(8.5f, true) : juce::Font(8.5f));
+		g.setColour(t.textTertiary);
+		g.setFont(lf ? lf->getSerifFont(Type::micro, true) : juce::Font(Type::micro));
 		g.drawText(mLane.label, juce::Rectangle<int>(0, getHeight() - kLabelH, getWidth(), kLabelH), juce::Justification::centred, false);
 	}
 
 private:
 	juce::Rectangle<float> getTrackBounds() const
 	{
-		const float trackW = 16.0f;
+		const float trackW = 20.0f;
 		const float x	   = (getWidth() - trackW) * 0.5f;
 		const float top	   = (float)kReadoutH + 2.0f;
 		const float bottom = (float)(getHeight() - kLabelH) - 2.0f;
@@ -110,8 +107,8 @@ private:
 	int	   mValue	 = 0;
 	bool   mDragging = false;
 
-	static constexpr int kReadoutH = 14;
-	static constexpr int kLabelH   = 12;
+	static constexpr int kReadoutH = 18;
+	static constexpr int kLabelH   = 16;
 };
 
 

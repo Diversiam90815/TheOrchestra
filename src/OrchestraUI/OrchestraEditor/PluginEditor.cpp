@@ -40,7 +40,7 @@ OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : juce::AudioProcesso
 
 	setSize(kWidth, kHeight);
 	setResizable(true, true);
-	setResizeLimits(900, 500, 2560, 1600);
+	setResizeLimits(1100, 720, 2560, 1600);
 
 	// Start on the family switcher.
 	mFamilySwitcher.setSelectedFamily(mCurrentFamily);
@@ -129,7 +129,7 @@ void OrchestraEditor::onSettingsClicked()
 
 void OrchestraEditor::paint(juce::Graphics &g)
 {
-	g.fillAll(mCustomLookAndFeel.getBackgroundColour());
+	g.fillAll(mCustomLookAndFeel.getTheme().background);
 }
 
 
