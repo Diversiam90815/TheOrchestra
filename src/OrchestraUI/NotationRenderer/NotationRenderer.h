@@ -11,17 +11,8 @@
 #include <NotationFontData>
 
 #include "Logging.h"
+#include "NotationGeometry.h"
 
-
-enum class Clef
-{
-	Treble,
-	Bass,
-	Alto,
-	Tenor,
-};
-
-Clef clefFromString(const std::string &name);
 
 enum class Accidental
 {
@@ -31,15 +22,6 @@ enum class Accidental
 	Natural,
 	DoubleSharp,
 	DoubleFlat,
-};
-
-enum class OttavaType
-{
-	None,
-	Ottava8va,	// 8va  - display note one octave lower than actual
-	Ottava8vb,	// 8vb  - display note one octave higher than actual
-	Ottava15ma, // 15ma - display note two octaves lower than actual
-	Ottava15mb, // 15mb - display note two octaves higher than actual
 };
 
 
@@ -65,8 +47,6 @@ public:
 	void						setStafflineColour(juce::Colour colour);
 	void						setNoteColour(juce::Colour colour);
 
-	int							getLedgerOverflow(int midiNote, Clef clef);
-
 	static juce::Rectangle<int> getRecommendedBounds();
 
 private:
@@ -87,10 +67,6 @@ private:
 							notehead itself.
 	*/
 	void				   drawOttavaText(juce::Graphics &g, OttavaType ottava, float noteX, float noteY, float noteWidth);
-
-	OttavaType			   determineOttava(int midiNote, Clef clef);
-
-	int					   midiNoteToStaffPosition(const int midiNote, Clef clef);
 
 	float				   staffPositionToY(int staffPosition, juce::Rectangle<float> staffArea) const;
 
@@ -115,8 +91,7 @@ private:
 	static constexpr int   kGlyphAccidentalDoubleSharp = 0xE263;
 	static constexpr int   kGlyphAccidentalDoubleFlat  = 0xE264;
 
-	// Max ledger lines before triggering ottava
-	static constexpr int   kMaxLedgerLines			   = 3;
-
+	// Notehead position along the staff, leaving room for the clef to its left
+	// and the 8va/15ma marking to its right.
 	static constexpr float kNoteXFraction			   = 0.6f;
 };
