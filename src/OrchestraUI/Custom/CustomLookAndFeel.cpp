@@ -47,12 +47,12 @@ void CustomLookAndFeel::setFont()
 	textEditorFont	   = juce::Font(instrumentTypeface).withHeight(Type::body);
 	tooltipFont		   = juce::Font(instrumentTypeface).withHeight(Type::bodySmall);
 
-	instrumentNameFont.setExtraKerningFactor(0.005f);
-	sectionTitleFont.setExtraKerningFactor(0.1f);
-	bodyFont.setExtraKerningFactor(0.003f);
-	smallFont.setExtraKerningFactor(0.003f);
-	textEditorFont.setExtraKerningFactor(0.003f);
-	tooltipFont.setExtraKerningFactor(0.003f);
+	instrumentNameFont.setExtraKerningFactor(0.01f);
+	sectionTitleFont.setExtraKerningFactor(0.12f);
+	bodyFont.setExtraKerningFactor(0.02f);
+	smallFont.setExtraKerningFactor(0.02f);
+	textEditorFont.setExtraKerningFactor(0.02f);
+	tooltipFont.setExtraKerningFactor(0.02f);
 }
 
 
@@ -89,7 +89,7 @@ juce::Font CustomLookAndFeel::getInstrumentNameFont()
 juce::Font CustomLookAndFeel::getSerifFont(float height, bool semiBold) const
 {
 	juce::Font font = juce::Font(instrumentTypeface).withHeight(height);
-	font.setExtraKerningFactor(0.003f);
+	font.setExtraKerningFactor(0.02f);
 
 	// Source Serif 4 ships Regular only; synthesize a heavier weight for the design's 600-weight text.
 	if (semiBold)

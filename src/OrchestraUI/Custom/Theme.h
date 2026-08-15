@@ -44,14 +44,14 @@ constexpr float xl = 10.0f; // panels
 // may go below Type::micro
 namespace Type
 {
-constexpr float display	  = 36.0f; // instrument name
-constexpr float title	  = 28.0f; // view titles ("Choose a family")
-constexpr float heading	  = 21.0f; // card titles, note names
-constexpr float body	  = 18.0f; // primary reading text
-constexpr float bodySmall = 16.0f; // secondary reading text, breadcrumb, tabs
-constexpr float label	  = 14.0f; // uppercase eyebrows, pills, composer line
-constexpr float caption	  = 13.0f; // dense readouts
-constexpr float micro	  = 12.0f; // absolute floor
+constexpr float display	  = 38.0f; // instrument name
+constexpr float title	  = 30.0f; // view titles ("Choose a family")
+constexpr float heading	  = 22.0f; // card titles, note names
+constexpr float body	  = 19.0f; // primary reading text
+constexpr float bodySmall = 17.0f; // secondary reading text, breadcrumb, tabs
+constexpr float label	  = 15.0f; // uppercase eyebrows, pills, composer line
+constexpr float caption	  = 14.0f; // dense readouts
+constexpr float micro	  = 13.0f; // absolute floor
 } // namespace Type
 
 
