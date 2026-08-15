@@ -24,7 +24,7 @@ public:
 	void setPitchMode(PitchMode mode);
 
 private:
-	void updateDisplay();
+	void			  updateDisplay();
 
 	NotationComponent mLowNotation;
 	NotationComponent mHighNotation;

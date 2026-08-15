@@ -26,7 +26,7 @@ OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : juce::AudioProcesso
 	// --- Instrument detail (View B) ---
 	mDetailView.setInstrumentSelectedCallback([this](InstrumentID key) { changeInstrument(key); });
 	mDetailView.setBackToFamiliesCallback([this]() { showFamilySwitcher(); });
-	mDetailView.setArticulationChangedCallback([this](Articulation articulation) { mCoreManager->changeArticulation(mCurrentInstrument, articulation); });
+	mDetailView.setArticulationChangedCallback([this](Articulation articulation) { return mCoreManager->changeArticulation(mCurrentInstrument, articulation); });
 
 	// Piano roll wiring: keyboard state + CC send/reflect.
 	mDetailView.initPianoRoll(mCoreManager->getMidiKeyboardState());
@@ -108,6 +108,11 @@ void OrchestraEditor::changeInstrument(InstrumentID key)
 		return;
 
 	mCurrentInstrument = key;
+
+	// Resets the sampler (clears loaded sounds) before the new instrument's
+	// articulation is loaded. Without this, switching instruments left the
+	// previous instrument's samples loaded and still playable.
+	mCoreManager->changeInstrument(key);
 
 	mDetailView.setInstrument(instrument);
 

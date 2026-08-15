@@ -45,11 +45,10 @@ void InstrumentHeaderPanel::setInstrument(const InstrumentProfile &instrument)
 	mFamilyLabel.setText(familyName, juce::dontSendNotification);
 
 	// Store clefs and transposition info
-	mClefs			   = instrument.getClefs();
-	auto range		   = instrument.getRange();
-	mHasTransposition  = (range.getWrittenLowNote() != range.getSoundingLowNote())
-					  || (range.getWrittenHighNote() != range.getSoundingHighNote());
-	mCurrentPitchMode  = PitchMode::Written;
+	mClefs			  = instrument.getClefs();
+	auto range		  = instrument.getRange();
+	mHasTransposition = (range.getWrittenLowNote() != range.getSoundingLowNote()) || (range.getWrittenHighNote() != range.getSoundingHighNote());
+	mCurrentPitchMode = PitchMode::Written;
 
 	// Derive transposition label
 	if (mHasTransposition)
@@ -208,8 +207,8 @@ juce::String InstrumentHeaderPanel::deriveTranspositionLabel(const std::string &
 	if (writtenMidi <= 0 || soundingMidi <= 0)
 		return "Transposing";
 
-	int interval   = writtenMidi - soundingMidi;
-	int normalised = ((interval % 12) + 12) % 12;
+	int				   interval	  = writtenMidi - soundingMidi;
+	int				   normalised = ((interval % 12) + 12) % 12;
 
 	static const char *keyNames[] = {
 		"in C",	 // 0

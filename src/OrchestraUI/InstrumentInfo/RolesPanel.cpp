@@ -12,9 +12,7 @@
 #include "TextMeasure.h"
 
 
-RolesPanel::RolesPanel() : OrchestraPanel("ORCHESTRATION ROLES")
-{
-}
+RolesPanel::RolesPanel() : OrchestraPanel("ORCHESTRATION ROLES") {}
 
 
 void RolesPanel::setInstrument(const InstrumentProfile &instrument)

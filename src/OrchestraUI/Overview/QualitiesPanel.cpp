@@ -65,10 +65,10 @@ int QualitiesPanel::getPreferredHeight(int width) const
 
 void QualitiesPanel::paint(juce::Graphics &g)
 {
-	auto	   *lnf	 = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
-	const auto &t	 = themeFor(*this);
+	auto	   *lnf	   = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	const auto &t	   = themeFor(*this);
 
-	auto		area = getLocalBounds();
+	auto		area   = getLocalBounds();
 
 	// Header row: QUALITIES (left) + pitch-mode label (right)
 	auto		header = area.removeFromTop(kHeaderHeight);
@@ -91,7 +91,7 @@ void QualitiesPanel::paint(juce::Graphics &g)
 
 	for (size_t i = 0; i < mDescriptions.size(); ++i)
 	{
-		auto row = area.removeFromTop(heights[i]);
+		auto		row		= area.removeFromTop(heights[i]);
 
 		// Swatch aligned to the first line of the wrapped description.
 		const float swatchY = (float)row.getY() + font.getHeight() * 0.5f - kSwatch * 0.5f;

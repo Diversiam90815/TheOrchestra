@@ -9,9 +9,7 @@
 #include "CustomLookAndFeel.h"
 
 
-OrchestraPanel::OrchestraPanel(const juce::String &title) : mTitle(title)
-{
-}
+OrchestraPanel::OrchestraPanel(const juce::String &title) : mTitle(title) {}
 
 
 void OrchestraPanel::paint(juce::Graphics &g)

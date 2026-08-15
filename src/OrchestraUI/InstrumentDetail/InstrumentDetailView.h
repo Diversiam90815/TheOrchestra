@@ -37,8 +37,6 @@ public:
 	void				  mouseUp(const juce::MouseEvent &e) override;
 
 private:
-	// Computed in resized()/setPath(), not paint() - mouseUp() reads mBackBounds
-	// and would otherwise hit-test a rect that only existed after a repaint.
 	void				 layout();
 
 	juce::String		 mFamily;
@@ -74,38 +72,31 @@ public:
 	void	   resized() override;
 
 private:
-	void					   showTab(DetailTab tab);
+	void					  showTab(DetailTab tab);
 
-	/*
-	 @brief					The currently visible tab body, as its intrinsic-height
-							interface. Never null.
-	*/
-	const HasPreferredHeight  &activeBody() const;
-	juce::Component			  &activeBodyComponent();
+	const HasPreferredHeight &activeBody() const;
+	juce::Component			 &activeBodyComponent();
 
-	BreadcrumbBar			   mBreadcrumb;
-	InstrumentSidebar		   mSidebar;
-	InstrumentHeaderPanel	   mHeader;
-	SamplerPanel			   mSampler;
-	TabBar					   mTabBar;
+	BreadcrumbBar			  mBreadcrumb;
+	InstrumentSidebar		  mSidebar;
+	InstrumentHeaderPanel	  mHeader;
+	SamplerPanel			  mSampler;
+	TabBar					  mTabBar;
 
-	// The single scroller for tab bodies. Panels report their natural height and
-	// flow into mBodyHolder; nothing below owns a Viewport of its own.
-	juce::Viewport			   mBodyViewport;
-	juce::Component			   mBodyHolder;
+	juce::Viewport			  mBodyViewport;
+	juce::Component			  mBodyHolder;
 
-	// Tab bodies (only one visible at a time), parented to mBodyHolder
-	OverviewPanel			   mOverview;
-	TechniquesPanel			   mTechniques;
-	RolesPanel				   mRoles;
-	FamousWorksPanel		   mFamousWorks;
+	OverviewPanel			  mOverview;
+	TechniquesPanel			  mTechniques;
+	RolesPanel				  mRoles;
+	FamousWorksPanel		  mFamousWorks;
 
-	PianoRollWithCc			   mPianoRoll;
+	PianoRollWithCc			  mPianoRoll;
 
-	Family					   mCurrentFamily = Family::Strings;
-	DetailTab				   mCurrentTab	  = DetailTab::Overview;
+	Family					  mCurrentFamily = Family::Strings;
+	DetailTab				  mCurrentTab	 = DetailTab::Overview;
 
-	static constexpr int	   kMinSidebarW = 216;
-	static constexpr int	   kMaxSidebarW = 280;
-	static constexpr int	   kPad			= Space::l;
+	static constexpr int	  kMinSidebarW	 = 216;
+	static constexpr int	  kMaxSidebarW	 = 280;
+	static constexpr int	  kPad			 = Space::l;
 };

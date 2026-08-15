@@ -1,9 +1,7 @@
 /*
   ==============================================================================
 	Module			FamilyCard
-	Description		One family card on the family-switcher screen: tinted glyph
-					badge + name + instrument count. Clickable, with selected/hover
-					states.
+	Description		One family card on the family-switcher screen
   ==============================================================================
 */
 

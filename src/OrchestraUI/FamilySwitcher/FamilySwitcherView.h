@@ -1,8 +1,7 @@
 /*
   ==============================================================================
 	Module			FamilySwitcherView
-	Description		The entry screen. Toolbar (logo + search + settings),
-					a "Choose a family" title, and a 2x2 grid of family cards.
+	Description		The entry screen
   ==============================================================================
 */
 
@@ -27,12 +26,12 @@ public:
 	std::function<void(Family)> onFamilySelected;
 	std::function<void()>		onSettings;
 
-	void setFamilyCount(Family family, int count);
-	void setSelectedFamily(Family family);
+	void						setFamilyCount(Family family, int count);
+	void						setSelectedFamily(Family family);
 
-	void paint(juce::Graphics &g) override;
-	void resized() override;
-	void mouseUp(const juce::MouseEvent &e) override;
+	void						paint(juce::Graphics &g) override;
+	void						resized() override;
+	void						mouseUp(const juce::MouseEvent &e) override;
 
 private:
 	struct CardEntry
@@ -41,10 +40,6 @@ private:
 		std::unique_ptr<FamilyCard> card;
 	};
 
-	// Every rect is computed once in resized() and only read by paint().
-	// Previously paint() re-derived the title offsets independently from
-	// resized(), and mGearBounds was written in paint() but consumed by
-	// mouseUp() - so the hit region was stale until the first repaint.
 	void				   layout();
 
 	std::vector<CardEntry> mCards;

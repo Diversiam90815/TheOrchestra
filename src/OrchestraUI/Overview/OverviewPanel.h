@@ -20,19 +20,14 @@ public:
 	OverviewPanel();
 	~OverviewPanel() override = default;
 
-	void				 setInstrument(const InstrumentProfile &instrument);
-	void				 setPitchMode(PitchMode mode);
+	void setInstrument(const InstrumentProfile &instrument);
+	void setPitchMode(PitchMode mode);
 
-	void				 resized() override;
+	void resized() override;
 
-	int					 getPreferredHeight(int width) const override;
+	int	 getPreferredHeight(int width) const override;
 
 private:
-	/*
-	 @brief					Width of the fixed-ish range column at a given total
-							width. Flexes so the qualities column keeps a usable
-							measure on wide windows.
-	*/
 	int					 rangeColumnWidth(int width) const;
 
 	RangesPanel			 mRanges;

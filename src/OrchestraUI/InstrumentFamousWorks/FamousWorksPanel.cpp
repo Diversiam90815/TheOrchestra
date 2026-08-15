@@ -12,9 +12,7 @@
 #include "TextMeasure.h"
 
 
-FamousWorksPanel::FamousWorksPanel() : OrchestraPanel("FAMOUS WORKS")
-{
-}
+FamousWorksPanel::FamousWorksPanel() : OrchestraPanel("FAMOUS WORKS") {}
 
 
 void FamousWorksPanel::setInstrument(const InstrumentProfile &instrument)
@@ -77,7 +75,7 @@ void FamousWorksPanel::paint(juce::Graphics &g)
 	if (mWorks.empty())
 		return;
 
-	const auto &t			= themeFor(*this);
+	const auto &t			 = themeFor(*this);
 
 	auto		composerFont = lnf ? lnf->getSerifFont(Type::label) : juce::Font(Type::label);
 	composerFont.setExtraKerningFactor(0.10f);

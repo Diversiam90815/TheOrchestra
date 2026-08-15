@@ -11,10 +11,6 @@
 #include "CustomPianoRoll.h"
 
 
-// Derives from juce::Component directly: the old CustomComponent base called
-// setLookAndFeel() with its own CustomLookAndFeel instance, which hijacked the
-// LookAndFeel for this whole subtree and stopped themeFor() resolving the
-// editor's theme.
 class PianoRoll : public juce::Component, private juce::MidiKeyboardState::Listener, public juce::MidiInputCallback
 {
 public:
