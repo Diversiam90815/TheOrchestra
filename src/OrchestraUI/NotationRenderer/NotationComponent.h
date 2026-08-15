@@ -7,8 +7,6 @@
 
 #pragma once
 
-#include <vector>
-
 #include "NotationRenderer.h"
 
 
@@ -23,7 +21,7 @@ public:
 	void setNote(int midiNumber, Accidental accidental = Accidental::None);
 	void setNoteFromString(const std::string &noteName);
 	void setClef(Clef clef);
-	void selectBestClef(const std::vector<Clef> &availableClefs, Clef preferredClef);
+	void selectBestClef(Clef preferredClef);
 
 private:
 	NotationRenderer mRenderer;

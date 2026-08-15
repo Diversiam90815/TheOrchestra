@@ -43,6 +43,5 @@ private:
 	bool			  mHasTransposition = false;
 	PitchMode		  mPitchMode		= PitchMode::Written;
 
-	std::vector<Clef> mAvailableClefs;
 	Clef			  mPreferredClef = Clef::Treble;
 };
