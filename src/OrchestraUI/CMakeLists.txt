@@ -1,7 +1,6 @@
 set(TARGET_NAME TheOrchestraUI)
 
 set (ASSETS_DIR             ${PROJECT_SOURCE_DIR}/Assets)
-set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets")
 
 set (Custom_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/Custom )
 set (PianoRoll_Dir              ${CMAKE_CURRENT_SOURCE_DIR}/PianoRoll )
@@ -14,7 +13,6 @@ set (InstrumentRanges_Dir       ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentRanges )
 set (OrchestraEditor_Dir        ${CMAKE_CURRENT_SOURCE_DIR}/OrchestraEditor )
 set (Sampler_Dir                ${CMAKE_CURRENT_SOURCE_DIR}/Sampler )
 set (NotationRenderer_Dir       ${CMAKE_CURRENT_SOURCE_DIR}/NotationRenderer )
-set (Helper_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/Helper)
 set (FamilySwitcher_Dir         ${CMAKE_CURRENT_SOURCE_DIR}/FamilySwitcher )
 set (InstrumentDetail_Dir       ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentDetail )
 set (TabBar_Dir                 ${CMAKE_CURRENT_SOURCE_DIR}/TabBar )
@@ -33,7 +31,6 @@ set(ALL_PROJECT_DIRS
     ${OrchestraEditor_Dir}
     ${Sampler_Dir}
     ${NotationRenderer_Dir}
-    ${Helper_Dir}
     ${FamilySwitcher_Dir}
     ${InstrumentDetail_Dir}
     ${TabBar_Dir}
@@ -82,6 +79,7 @@ set(InstrumentRanges_Files
 
 set(OrchestraEditor_Files
     ${OrchestraEditor_Dir}/PluginEditor.h           ${OrchestraEditor_Dir}/PluginEditor.cpp
+    ${OrchestraEditor_Dir}/CreateEditor.cpp
 )
 
 set(Sampler_Files
@@ -91,10 +89,6 @@ set(Sampler_Files
 set(NotationRenderer_Files
     ${NotationRenderer_Dir}/NotationRenderer.h          ${NotationRenderer_Dir}/NotationRenderer.cpp
     ${NotationRenderer_Dir}/NotationComponent.h         ${NotationRenderer_Dir}/NotationComponent.cpp
-)
-
-set(Helper_Files
-    ${Helper_Dir}/CreateEditor.cpp
 )
 
 set(FamilySwitcher_Files
@@ -127,7 +121,6 @@ set(UI_PROJECT_FILES
     ${OrchestraEditor_Files}
     ${Sampler_Files}
     ${NotationRenderer_Files}
-    ${Helper_Files}
     ${FamilySwitcher_Files}
     ${InstrumentDetail_Files}
     ${TabBar_Files}

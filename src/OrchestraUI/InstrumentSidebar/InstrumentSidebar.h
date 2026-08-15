@@ -25,7 +25,7 @@ public:
 	void paint(juce::Graphics &g) override;
 	void resized() override;
 
-	void setFamily(Family family, const std::vector<std::pair<InstrumentID, std::string>> &instruments);
+	void setInstruments(const std::vector<std::pair<InstrumentID, std::string>> &instruments);
 	void setInstrumentSelectedCallback(InstrumentSelectedCallback callback);
 	void selectInstrument(InstrumentID id);
 

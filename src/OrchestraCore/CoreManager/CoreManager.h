@@ -43,8 +43,6 @@ public:
 
 	void					 processAudioBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
 
-	void					 setSamplesFolder(std::string &directory);
-
 private:
 	void									 logProjectInfo();
 
@@ -55,7 +53,5 @@ private:
 	std::unique_ptr<juce::MidiKeyboardState> mMidiKeyboardState;
 
 	juce::MidiMessageCollector				 mUiMidiCollector;
-	std::array<std::atomic<int>, 128>		 mCcValues;	  // last-seen value per CC number, -1 = unknown
-
-	int										 mCurrentInstrumentKey{0};
+	std::array<std::atomic<int>, 128>		 mCcValues; // last-seen value per CC number, -1 = unknown
 };
