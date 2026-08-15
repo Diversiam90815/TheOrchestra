@@ -54,9 +54,9 @@ private:
 	juce::Rectangle<int>   mTitleBounds;
 	juce::Rectangle<int>   mSubtitleBounds;
 
-	static constexpr int   kMaxContentW = 760;
-	static constexpr int   kCardH		= 96;
+	static constexpr int   kMaxContentW = 800;
+	static constexpr int   kCardH		= 104;
 	static constexpr int   kGridGap		= Space::l;
-	static constexpr int   kTitleH		= 34;
-	static constexpr int   kSubtitleH	= 24;
+	static constexpr int   kTitleH		= 40;
+	static constexpr int   kSubtitleH	= 28;
 };

@@ -51,8 +51,8 @@ private:
 
 	ArticulationChangedCallback					   mCallback;
 
-	static constexpr int						   kButtonWidth	 = 116;
-	static constexpr int						   kButtonHeight = 36;
+	static constexpr int						   kButtonWidth	 = 128;
+	static constexpr int						   kButtonHeight = 38;
 	static constexpr int						   kGap			 = Space::s;
-	static constexpr int						   kStatusHeight = 22;
+	static constexpr int						   kStatusHeight = 26;
 };

@@ -38,13 +38,38 @@ OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : juce::AudioProcesso
 
 	populateFamilyCounts();
 
-	setSize(kWidth, kHeight);
+	// Resize limits live on the hosting window (see applyViewSize) so there is
+	// only ever one constrainer in play.
 	setResizable(true, true);
-	setResizeLimits(1100, 720, 2560, 1600);
 
-	// Start on the family switcher.
+	// Start on the family switcher, at the family switcher's size.
 	mFamilySwitcher.setSelectedFamily(mCurrentFamily);
 	showFamilySwitcher();
+}
+
+
+bool OrchestraEditor::hasUserResized() const
+{
+	return mAppliedSize != juce::Point<int>(0, 0) && mAppliedSize != juce::Point<int>(getWidth(), getHeight());
+}
+
+
+void OrchestraEditor::applyViewSize(int width, int height, int minWidth, int minHeight)
+{
+	if (hasUserResized())
+		return;
+
+	// The window's constrainer works in window coordinates, so the content
+	// minimum has to be widened by the frame and title bar.
+	if (auto *window = dynamic_cast<juce::ResizableWindow *>(getTopLevelComponent()))
+	{
+		const auto border = window->getContentComponentBorder();
+
+		window->setResizeLimits(minWidth + border.getLeftAndRight(), minHeight + border.getTopAndBottom(), 2560, 1600);
+	}
+
+	setSize(width, height);
+	mAppliedSize = { width, height };
 }
 
 
@@ -95,6 +120,8 @@ void OrchestraEditor::showFamilySwitcher()
 {
 	mDetailView.setVisible(false);
 	mFamilySwitcher.setVisible(true);
+
+	applyViewSize(kFamilyWidth, kFamilyHeight, kFamilyMinWidth, kFamilyMinHeight);
 	resized();
 }
 
@@ -103,6 +130,8 @@ void OrchestraEditor::showInstrumentDetail()
 {
 	mFamilySwitcher.setVisible(false);
 	mDetailView.setVisible(true);
+
+	applyViewSize(kDetailWidth, kDetailHeight, kDetailMinWidth, kDetailMinHeight);
 	resized();
 }
 

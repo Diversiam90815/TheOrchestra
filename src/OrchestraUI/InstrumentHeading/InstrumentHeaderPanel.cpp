@@ -106,9 +106,9 @@ void InstrumentHeaderPanel::resized()
 
 	int		  tagX	  = rightSide.getX();
 	const int tagY	  = rightSide.getY();
-	const int clefW	  = 92;
-	const int transW  = 104;
-	const int toggleW = 92;
+	const int clefW	  = 104;
+	const int transW  = 116;
+	const int toggleW = 104;
 
 	for (auto &label : mClefLabels)
 	{

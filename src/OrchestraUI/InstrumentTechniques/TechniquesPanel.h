@@ -25,10 +25,12 @@ public:
 	*/
 	int						 getPreferredHeight(int width) const;
 
-	static constexpr int	 kNameHeight   = 24;
-	static constexpr int	 kPadX		   = Space::l;
-	static constexpr int	 kPadY		   = Space::m;
-	static constexpr int	 kMinHeight	   = 76;
+	// Deliberately tighter than the other cards - techniques are short labels
+	// with a one-line gloss, so they read better as a compact grid.
+	static constexpr int	 kNameHeight = 24;
+	static constexpr int	 kPadX		 = Space::m;
+	static constexpr int	 kPadY		 = Space::s + 2;
+	static constexpr int	 kMinHeight	 = 60;
 
 private:
 	std::string mName;
@@ -52,7 +54,7 @@ private:
 
 	std::vector<std::unique_ptr<TechniqueCard>> mCards;
 
-	static constexpr int	 kMinColumnWidth = 380;
+	static constexpr int	 kMinColumnWidth = 290;
 	static constexpr int	 kMaxColumns	 = 3;
 	static constexpr int	 kGap			 = Space::m;
 };

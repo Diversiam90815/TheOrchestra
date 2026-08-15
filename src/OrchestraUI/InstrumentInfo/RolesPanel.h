@@ -30,10 +30,10 @@ private:
 
 	std::vector<juce::String> mRoles;
 
-	static constexpr int	  kMinColumnWidth = 340;
+	static constexpr int	  kMinColumnWidth = 350;
 	static constexpr int	  kMaxColumns	  = 3;
 	static constexpr int	  kGap			  = Space::l;
-	static constexpr int	  kBulletGutter	  = Space::xl;
-	static constexpr float	  kBulletSize	  = 6.0f;
-	static constexpr int	  kMinCellHeight  = 44;
+	static constexpr int	  kBulletGutter	  = Space::xl + Space::xs;
+	static constexpr float	  kBulletSize	  = 7.0f;
+	static constexpr int	  kMinCellHeight  = 48;
 };

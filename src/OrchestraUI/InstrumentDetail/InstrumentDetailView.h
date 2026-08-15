@@ -105,10 +105,7 @@ private:
 	Family					   mCurrentFamily = Family::Strings;
 	DetailTab				   mCurrentTab	  = DetailTab::Overview;
 
-	static constexpr int	   kMinSidebarW	  = 200;
-	static constexpr int	   kMaxSidebarW	  = 264;
-	static constexpr int	   kPianoMinH	  = 168;
-	static constexpr int	   kPianoMaxH	  = 340;
-	static constexpr int	   kBodyMinH	  = 170;
-	static constexpr int	   kPad			  = Space::l;
+	static constexpr int	   kMinSidebarW = 216;
+	static constexpr int	   kMaxSidebarW = 280;
+	static constexpr int	   kPad			= Space::l;
 };

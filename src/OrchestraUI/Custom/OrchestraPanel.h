@@ -58,8 +58,8 @@ protected:
 	*/
 	int					 getChromeHeight() const;
 
-	static constexpr int kPadding	  = Space::xl;
-	static constexpr int kTitleHeight = 24;
+	static constexpr int kPadding	  = Space::l + Space::xs;
+	static constexpr int kTitleHeight = 22;
 	static constexpr int kTitleGap	  = Space::m;
 
 private:
