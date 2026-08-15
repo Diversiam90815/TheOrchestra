@@ -108,7 +108,7 @@ bool CoreManager::changeArticulation(InstrumentID key, Articulation articulation
 }
 
 
-void CoreManager::changeSamplesFolder(std::string &samplesFolder)
+void CoreManager::changeSamplesFolder(const std::string &samplesFolder)
 {
 	if (mSampler)
 		mSampler->reloadSamples(samplesFolder);

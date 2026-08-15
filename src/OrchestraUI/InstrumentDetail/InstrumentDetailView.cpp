@@ -191,7 +191,7 @@ void InstrumentDetailView::setPianoRollCcCallbacks(std::function<void(int, int)>
 }
 
 
-const HasPreferredHeight &InstrumentDetailView::activeBody() const
+juce::Component &InstrumentDetailView::activeBodyComponent()
 {
 	switch (mCurrentTab)
 	{
@@ -204,16 +204,13 @@ const HasPreferredHeight &InstrumentDetailView::activeBody() const
 }
 
 
-juce::Component &InstrumentDetailView::activeBodyComponent()
+const HasPreferredHeight &InstrumentDetailView::activeBody() const
 {
-	switch (mCurrentTab)
-	{
-	case DetailTab::Techniques: return mTechniques;
-	case DetailTab::Roles: return mRoles;
-	case DetailTab::FamousWorks: return mFamousWorks;
-	case DetailTab::Overview:
-	default: return mOverview;
-	}
+	// Every tab body is both a Component and a HasPreferredHeight; resolve the
+	// component once and cross-cast rather than repeating the switch.
+	auto &body = const_cast<InstrumentDetailView *>(this)->activeBodyComponent();
+
+	return dynamic_cast<const HasPreferredHeight &>(body);
 }
 
 
