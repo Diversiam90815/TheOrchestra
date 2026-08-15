@@ -22,6 +22,7 @@ public:
 
 	void setInstrument(const InstrumentProfile &instrument);
 	void setPitchMode(PitchMode mode);
+	void setClef(Clef clef);
 
 	void resized() override;
 

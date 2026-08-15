@@ -29,6 +29,12 @@ void OverviewPanel::setPitchMode(PitchMode mode)
 }
 
 
+void OverviewPanel::setClef(Clef clef)
+{
+	mRanges.setClef(clef);
+}
+
+
 int OverviewPanel::rangeColumnWidth(int width) const
 {
 	return juce::jlimit(kMinRangeWidth, kMaxRangeWidth, juce::roundToInt((width - kPadX * 2) * 0.32f));

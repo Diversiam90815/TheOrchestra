@@ -120,6 +120,7 @@ InstrumentDetailView::InstrumentDetailView()
 
 	// Written/Sounding toggle from the header drives the overview (notation + qualities).
 	mHeader.setPitchModeChangedCallback([this](PitchMode mode) { mOverview.setPitchMode(mode); });
+	mHeader.setClefChangedCallback([this](Clef clef) { mOverview.setClef(clef); });
 
 	// Tab switching (progressive disclosure - one body at a time).
 	mTabBar.onTabChanged = [this](DetailTab tab) { showTab(tab); };
@@ -137,6 +138,7 @@ void InstrumentDetailView::setInstrument(const InstrumentProfile &instrument)
 {
 	mHeader.setInstrument(instrument);
 	mOverview.setInstrument(instrument);
+	mOverview.setClef(mHeader.getCurrentClef());
 	mTechniques.setInstrument(instrument);
 	mRoles.setInstrument(instrument);
 	mFamousWorks.setInstrument(instrument);
