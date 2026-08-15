@@ -6,7 +6,6 @@
 */
 
 #pragma once
-#include <assert.h>
 
 #include "CustomPianoRoll.h"
 
