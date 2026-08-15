@@ -44,29 +44,29 @@ public:
 	static constexpr int kMinTagWidth  = 72;
 
 private:
-	void									  rebuildMetaTags();
-	int										  pillWidth(const juce::String &text) const;
-	juce::String							  deriveTranspositionLabel(const std::string &writtenLow, const std::string &soundingLow) const;
+	void										   rebuildMetaTags();
+	int											   pillWidth(const juce::String &text) const;
+	juce::String								   deriveTranspositionLabel(const std::string &writtenLow, const std::string &soundingLow) const;
 
-	juce::DrawableImage						  mInstrumentImage;
-	juce::Label								  mNameLabel;
-	juce::Label								  mFamilyLabel;
+	juce::DrawableImage							   mInstrumentImage;
+	juce::Label									   mNameLabel;
+	juce::Label									   mFamilyLabel;
 
 	std::vector<std::unique_ptr<juce::TextButton>> mClefButtons;
-	std::unique_ptr<juce::Label>			  mTranspositionInfoLabel;
+	std::unique_ptr<juce::Label>				   mTranspositionInfoLabel;
 
 	// Written/Sounding toggle buttons (include transposition in text)
-	std::unique_ptr<juce::TextButton>		  mWrittenBtn;
-	std::unique_ptr<juce::TextButton>		  mSoundingBtn;
+	std::unique_ptr<juce::TextButton>			   mWrittenBtn;
+	std::unique_ptr<juce::TextButton>			   mSoundingBtn;
 
-	InstrumentClefs							  mClefs;
-	juce::String							  mTranspositionText;
-	bool									  mHasTransposition = false;
-	PitchMode								  mCurrentPitchMode = PitchMode::Written;
-	Clef									  mCurrentClef		= Clef::Treble;
+	InstrumentClefs								   mClefs;
+	juce::String								   mTranspositionText;
+	bool										   mHasTransposition = false;
+	PitchMode									   mCurrentPitchMode = PitchMode::Written;
+	Clef										   mCurrentClef		 = Clef::Treble;
 
-	ClefChangedCallback						  mClefChangedCallback;
-	PitchModeChangedCallback				  mPitchModeChangedCallback;
+	ClefChangedCallback							   mClefChangedCallback;
+	PitchModeChangedCallback					   mPitchModeChangedCallback;
 
-	FileManager								  mFileManager;
+	FileManager									   mFileManager;
 };

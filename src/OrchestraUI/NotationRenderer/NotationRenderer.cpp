@@ -111,8 +111,8 @@ OttavaType NotationRenderer::determineOttava(int midiNote, Clef clef)
 	// Staff positions: 0 = top line, 8 = bottom line
 	// Ledger lines above: position < 0 (every 2 positions = 1 ledger line)
 	// Ledger lines below: position > 8 (every 2 positions = 1 ledger line)
-	const int staffPos	   = midiNoteToStaffPosition(midiNote, clef);
-	const int threshold	   = kMaxLedgerLines * 2;
+	const int staffPos	= midiNoteToStaffPosition(midiNote, clef);
+	const int threshold = kMaxLedgerLines * 2;
 
 	if (staffPos < -threshold)
 	{

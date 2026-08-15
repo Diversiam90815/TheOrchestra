@@ -58,8 +58,8 @@ juce::Rectangle<int> GridFlow::cellBounds(juce::Rectangle<int> area, int index, 
 	if (columns <= 0 || heights.empty())
 		return {};
 
-	const int col	   = index % columns;
-	const int row	   = index / columns;
+	const int col = index % columns;
+	const int row = index / columns;
 
 	if (row >= (int)heights.size())
 		return {};
@@ -70,5 +70,5 @@ juce::Rectangle<int> GridFlow::cellBounds(juce::Rectangle<int> area, int index, 
 	for (int r = 0; r < row; ++r)
 		y += heights[(size_t)r] + gap;
 
-	return { area.getX() + col * (colWidth + gap), y, colWidth, heights[(size_t)row] };
+	return {area.getX() + col * (colWidth + gap), y, colWidth, heights[(size_t)row]};
 }

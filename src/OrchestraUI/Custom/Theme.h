@@ -88,8 +88,8 @@ constexpr int articulation = 200;
 } // namespace RadioGroup
 
 
-void	   setLabelStyle(juce::Component &component, LabelStyle style);
-LabelStyle labelStyleOf(const juce::Component &component);
+void		setLabelStyle(juce::Component &component, LabelStyle style);
+LabelStyle	labelStyleOf(const juce::Component &component);
 
 void		setButtonStyle(juce::Component &component, ButtonStyle style);
 ButtonStyle buttonStyleOf(const juce::Component &component);

@@ -10,11 +10,11 @@
 #include "Helper.h"
 #include "nlohmann/json.hpp"
 
-constexpr auto RANGE_WRITTEN	   = "written";
-constexpr auto RANGE_DISPLAYED	   = "displayed";
-constexpr auto RANGE_SOUNDING	   = "sounding";
-constexpr auto RANGE_LOW		   = "low";
-constexpr auto RANGE_HIGH		   = "high";
+constexpr auto RANGE_WRITTEN   = "written";
+constexpr auto RANGE_DISPLAYED = "displayed";
+constexpr auto RANGE_SOUNDING  = "sounding";
+constexpr auto RANGE_LOW	   = "low";
+constexpr auto RANGE_HIGH	   = "high";
 
 
 struct InstrumentRange
@@ -31,10 +31,10 @@ struct InstrumentRange
 	int				   getSoundingHighNoteAsMidiValue() const { return soundingHighNoteValue; }
 	int				   getSoundingLowNoteAsMidiValue() const { return soundingLowNoteValue; }
 
-	bool		operator==(const InstrumentRange &other) const { return this->writtenLow == other.writtenLow && this->writtenHigh == other.writtenHigh; }
+	bool			   operator==(const InstrumentRange &other) const { return this->writtenLow == other.writtenLow && this->writtenHigh == other.writtenHigh; }
 
-	friend void from_json(const nlohmann::json &j, InstrumentRange &range);
-	friend void to_json(nlohmann::json &j, const InstrumentRange &range);
+	friend void		   from_json(const nlohmann::json &j, InstrumentRange &range);
+	friend void		   to_json(nlohmann::json &j, const InstrumentRange &range);
 
 private:
 	std::string writtenHigh{""};
@@ -54,9 +54,9 @@ inline void from_json(const nlohmann::json &j, InstrumentRange &range)
 	// Parse written range (required)
 	if (j.contains(RANGE_WRITTEN))
 	{
-		const auto &written	  = j[RANGE_WRITTEN];
-		range.writtenLow	  = written[RANGE_LOW].get<std::string>();
-		range.writtenHigh	  = written[RANGE_HIGH].get<std::string>();
+		const auto &written		   = j[RANGE_WRITTEN];
+		range.writtenLow		   = written[RANGE_LOW].get<std::string>();
+		range.writtenHigh		   = written[RANGE_HIGH].get<std::string>();
 		range.writtenLowNoteValue  = turnNotenameIntoMidinumber(range.writtenLow);
 		range.writtenHighNoteValue = turnNotenameIntoMidinumber(range.writtenHigh);
 	}
@@ -71,18 +71,18 @@ inline void from_json(const nlohmann::json &j, InstrumentRange &range)
 
 	if (soundingKey != nullptr)
 	{
-		const auto &sounding	   = j[soundingKey];
-		range.soundingLow		   = sounding[RANGE_LOW].get<std::string>();
-		range.soundingHigh		   = sounding[RANGE_HIGH].get<std::string>();
-		range.soundingLowNoteValue  = turnNotenameIntoMidinumber(range.soundingLow);
+		const auto &sounding		= j[soundingKey];
+		range.soundingLow			= sounding[RANGE_LOW].get<std::string>();
+		range.soundingHigh			= sounding[RANGE_HIGH].get<std::string>();
+		range.soundingLowNoteValue	= turnNotenameIntoMidinumber(range.soundingLow);
 		range.soundingHighNoteValue = turnNotenameIntoMidinumber(range.soundingHigh);
 	}
 	else
 	{
 		// Default to written range (non-transposing instruments)
-		range.soundingLow		   = range.writtenLow;
-		range.soundingHigh		   = range.writtenHigh;
-		range.soundingLowNoteValue  = range.writtenLowNoteValue;
+		range.soundingLow			= range.writtenLow;
+		range.soundingHigh			= range.writtenHigh;
+		range.soundingLowNoteValue	= range.writtenLowNoteValue;
 		range.soundingHighNoteValue = range.writtenHighNoteValue;
 	}
 }

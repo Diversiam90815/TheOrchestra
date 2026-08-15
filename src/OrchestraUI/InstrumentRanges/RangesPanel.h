@@ -26,25 +26,25 @@ public:
 private:
 	void				 updateDisplay();
 
-	static constexpr int kNoteNameHeight	= 32;
-	static constexpr int kPitchModeLabelW	= 140;
+	static constexpr int kNoteNameHeight  = 32;
+	static constexpr int kPitchModeLabelW = 140;
 
-	NotationComponent mLowNotation;
-	NotationComponent mHighNotation;
+	NotationComponent	 mLowNotation;
+	NotationComponent	 mHighNotation;
 
-	juce::Label		  mLowLabel;
-	juce::Label		  mHighLabel;
-	juce::Label		  mLowNoteName;
-	juce::Label		  mHighNoteName;
-	juce::Label		  mPitchModeLabel;
+	juce::Label			 mLowLabel;
+	juce::Label			 mHighLabel;
+	juce::Label			 mLowNoteName;
+	juce::Label			 mHighNoteName;
+	juce::Label			 mPitchModeLabel;
 
 	// Stored instrument range data
-	std::string		  mWrittenLow;
-	std::string		  mWrittenHigh;
-	std::string		  mSoundingLow;
-	std::string		  mSoundingHigh;
-	bool			  mHasTransposition = false;
-	PitchMode		  mPitchMode		= PitchMode::Written;
+	std::string			 mWrittenLow;
+	std::string			 mWrittenHigh;
+	std::string			 mSoundingLow;
+	std::string			 mSoundingHigh;
+	bool				 mHasTransposition = false;
+	PitchMode			 mPitchMode		   = PitchMode::Written;
 
-	Clef			  mPreferredClef = Clef::Treble;
+	Clef				 mPreferredClef	   = Clef::Treble;
 };

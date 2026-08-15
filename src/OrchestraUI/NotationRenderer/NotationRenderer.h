@@ -70,13 +70,13 @@ public:
 	static juce::Rectangle<int> getRecommendedBounds();
 
 private:
-	void				 loadNotationFont();
+	void				   loadNotationFont();
 
-	void				 drawStaff(juce::Graphics &g, juce::Rectangle<float> staffArea);
-	void				 drawClef(juce::Graphics &g, juce::Rectangle<float> staffArea, Clef clef);
-	void				 drawNote(juce::Graphics &g, juce::Rectangle<float> staffArea, const NoteDescriptor &note, Clef clef, OttavaType ottava);
-	void				 drawLedgerLines(juce::Graphics &g, juce::Rectangle<float> staffArea, int staffPosition, float noteX);
-	void				 drawAccidental(juce::Graphics &g, float x, float y, Accidental accidental);
+	void				   drawStaff(juce::Graphics &g, juce::Rectangle<float> staffArea);
+	void				   drawClef(juce::Graphics &g, juce::Rectangle<float> staffArea, Clef clef);
+	void				   drawNote(juce::Graphics &g, juce::Rectangle<float> staffArea, const NoteDescriptor &note, Clef clef, OttavaType ottava);
+	void				   drawLedgerLines(juce::Graphics &g, juce::Rectangle<float> staffArea, int staffPosition, float noteX);
+	void				   drawAccidental(juce::Graphics &g, float x, float y, Accidental accidental);
 
 	/*
 	 @brief					Draws the "8va"/"8vb" marking beside the notehead.
@@ -86,37 +86,37 @@ private:
 							could land on top of - and be hidden behind - the
 							notehead itself.
 	*/
-	void				 drawOttavaText(juce::Graphics &g, OttavaType ottava, float noteX, float noteY, float noteWidth);
+	void				   drawOttavaText(juce::Graphics &g, OttavaType ottava, float noteX, float noteY, float noteWidth);
 
-	OttavaType			 determineOttava(int midiNote, Clef clef);
+	OttavaType			   determineOttava(int midiNote, Clef clef);
 
-	int					 midiNoteToStaffPosition(const int midiNote, Clef clef);
+	int					   midiNoteToStaffPosition(const int midiNote, Clef clef);
 
-	float				 staffPositionToY(int staffPosition, juce::Rectangle<float> staffArea) const;
+	float				   staffPositionToY(int staffPosition, juce::Rectangle<float> staffArea) const;
 
 
-	juce::Font			 mNotationFont;
-	juce::Colour		 mStaffLineColor			 = juce::Colours::grey;
-	juce::Colour		 mNoteColor					 = juce::Colours::white;
+	juce::Font			   mNotationFont;
+	juce::Colour		   mStaffLineColor			   = juce::Colours::grey;
+	juce::Colour		   mNoteColor				   = juce::Colours::white;
 
-	const float			 mStaffLineSpacing			 = 9.5f;								 // Space between staff lines in px
-	const float			 mStaffLineThickness		 = 1.5f;
+	const float			   mStaffLineSpacing		   = 9.5f; // Space between staff lines in px
+	const float			   mStaffLineThickness		   = 1.5f;
 
 	// SMuFL codepoints (Bravura font)
-	static constexpr int kGlyphNoteheadBlack		 = 0xE0A4;
-	static constexpr int kGlyphNoteheadHalf			 = 0xE0A3;
-	static constexpr int kGlyphNoteheadWhole		 = 0xE0A2;
-	static constexpr int kGlyphClefG				 = 0xE050; // Treble clef
-	static constexpr int kGlyphClefF				 = 0xE062; // Bass clef
-	static constexpr int kGlyphClefC				 = 0xE05C; // Alto/Tenor clef
-	static constexpr int kGlyphAccidentalSharp		 = 0xE262;
-	static constexpr int kGlyphAccidentalFlat		 = 0xE260;
-	static constexpr int kGlyphAccidentalNatural	 = 0xE261;
-	static constexpr int kGlyphAccidentalDoubleSharp = 0xE263;
-	static constexpr int kGlyphAccidentalDoubleFlat	 = 0xE264;
+	static constexpr int   kGlyphNoteheadBlack		   = 0xE0A4;
+	static constexpr int   kGlyphNoteheadHalf		   = 0xE0A3;
+	static constexpr int   kGlyphNoteheadWhole		   = 0xE0A2;
+	static constexpr int   kGlyphClefG				   = 0xE050; // Treble clef
+	static constexpr int   kGlyphClefF				   = 0xE062; // Bass clef
+	static constexpr int   kGlyphClefC				   = 0xE05C; // Alto/Tenor clef
+	static constexpr int   kGlyphAccidentalSharp	   = 0xE262;
+	static constexpr int   kGlyphAccidentalFlat		   = 0xE260;
+	static constexpr int   kGlyphAccidentalNatural	   = 0xE261;
+	static constexpr int   kGlyphAccidentalDoubleSharp = 0xE263;
+	static constexpr int   kGlyphAccidentalDoubleFlat  = 0xE264;
 
 	// Max ledger lines before triggering ottava
-	static constexpr int kMaxLedgerLines			 = 3;
+	static constexpr int   kMaxLedgerLines			   = 3;
 
-	static constexpr float kNoteXFraction			 = 0.6f;
+	static constexpr float kNoteXFraction			   = 0.6f;
 };
