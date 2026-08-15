@@ -21,15 +21,15 @@ struct InstrumentRange
 {
 	InstrumentRange() = default;
 
-	std::string getWrittenHighNote() const { return writtenHigh; }
-	std::string getWrittenLowNote() const { return writtenLow; }
-	const int	getWrittenHighNoteAsMidiValue() const { return writtenHighNoteValue; }
-	const int	getWrittenLowNoteAsMidiValue() const { return writtenLowNoteValue; }
+	const std::string &getWrittenHighNote() const { return writtenHigh; }
+	const std::string &getWrittenLowNote() const { return writtenLow; }
+	int				   getWrittenHighNoteAsMidiValue() const { return writtenHighNoteValue; }
+	int				   getWrittenLowNoteAsMidiValue() const { return writtenLowNoteValue; }
 
-	std::string getSoundingHighNote() const { return soundingHigh; }
-	std::string getSoundingLowNote() const { return soundingLow; }
-	const int	getSoundingHighNoteAsMidiValue() const { return soundingHighNoteValue; }
-	const int	getSoundingLowNoteAsMidiValue() const { return soundingLowNoteValue; }
+	const std::string &getSoundingHighNote() const { return soundingHigh; }
+	const std::string &getSoundingLowNote() const { return soundingLow; }
+	int				   getSoundingHighNoteAsMidiValue() const { return soundingHighNoteValue; }
+	int				   getSoundingLowNoteAsMidiValue() const { return soundingLowNoteValue; }
 
 	bool		operator==(const InstrumentRange &other) const { return this->writtenLow == other.writtenLow && this->writtenHigh == other.writtenHigh; }
 

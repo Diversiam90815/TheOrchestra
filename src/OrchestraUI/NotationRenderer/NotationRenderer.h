@@ -96,8 +96,8 @@ private:
 
 
 	juce::Font			 mNotationFont;
-	juce::Colour		 mStaffLineColor			 = juce::Colour::fromRGB(107, 103, 96);	 // textTertiary
-	juce::Colour		 mNoteColor					 = juce::Colour::fromRGB(238, 233, 218); // textPrimary
+	juce::Colour		 mStaffLineColor			 = juce::Colours::grey;
+	juce::Colour		 mNoteColor					 = juce::Colours::white;
 
 	const float			 mStaffLineSpacing			 = 9.5f;								 // Space between staff lines in px
 	const float			 mStaffLineThickness		 = 1.5f;

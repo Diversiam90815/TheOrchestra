@@ -49,15 +49,16 @@ public:
 	{
 	}
 
-	std::string			getName() const { return mName; }
-	InstrumentRange		getRange() const { return mRange; }
-	InstrumentRegisters getRegisters() const { return mRegisters; }
-	OrchestrationRoles	getRoles() const { return mRoles; }
-	SignatureWorks		getFamousWorks() const { return mFamousWorks; }
-	PlayingTechniques	getTechniques() const { return mPlayingTechniques; }
-	InstrumentID		getInstrumentID() const { return mID; }
-	InstrumentClefs		getClefs() const { return mClefs; }
-	bool				isRhythmicPercussion() const { return mIsRhythmicPercussion; }
+	const std::string		  &getName() const { return mName; }
+	const InstrumentRange	  &getRange() const { return mRange; }
+	const InstrumentRegisters &getRegisters() const { return mRegisters; }
+	const OrchestrationRoles  &getRoles() const { return mRoles; }
+	const SignatureWorks	  &getFamousWorks() const { return mFamousWorks; }
+	const PlayingTechniques	  &getTechniques() const { return mPlayingTechniques; }
+	const InstrumentClefs	  &getClefs() const { return mClefs; }
+
+	InstrumentID			   getInstrumentID() const { return mID; }
+	bool					   isRhythmicPercussion() const { return mIsRhythmicPercussion; }
 
 	bool				isValid() const { return !mName.empty() && mID != 0; }
 
@@ -75,5 +76,5 @@ private:
 
 	InstrumentID		mID					  = 0;	   // 3 digit key defining the instrument (see Helper.h)
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(InstrumentProfile, mName, mRange, mRegisters, mRoles, mFamousWorks, mPlayingTechniques, mIsRhythmicPercussion, mID)
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(InstrumentProfile, mName, mRange, mRegisters, mRoles, mFamousWorks, mPlayingTechniques, mClefs, mIsRhythmicPercussion, mID)
 };

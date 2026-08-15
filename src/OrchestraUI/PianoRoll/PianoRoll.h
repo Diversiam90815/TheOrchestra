@@ -17,7 +17,7 @@ public:
 	~PianoRoll();
 
 	void init();
-	void displayInstrument(InstrumentProfile &info);
+	void displayInstrument(const InstrumentProfile &info);
 
 	void setKeyboardState(juce::MidiKeyboardState &state);
 

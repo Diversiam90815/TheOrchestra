@@ -31,9 +31,7 @@ void PianoRollWithCc::initPianoRoll()
 
 void PianoRollWithCc::displayInstrument(const InstrumentProfile &instrument)
 {
-	// PianoRoll::displayInstrument takes a non-const ref; work on a copy.
-	InstrumentProfile copy = instrument;
-	mPianoRoll.displayInstrument(copy);
+	mPianoRoll.displayInstrument(instrument);
 
 	// Build the register legend (swatch colour + start-note name) from real data.
 	mLegend.clear();

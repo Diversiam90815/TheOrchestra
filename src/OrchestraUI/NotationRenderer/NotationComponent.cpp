@@ -6,6 +6,7 @@
 */
 
 #include "NotationComponent.h"
+#include "Theme.h"
 
 
 NotationComponent::NotationComponent()
@@ -20,6 +21,10 @@ void NotationComponent::paint(juce::Graphics &g)
 {
 	// Transparent background - inherits panel colour
 	g.fillAll(juce::Colours::transparentBlack);
+
+	const auto &t = themeFor(*this);
+	mRenderer.setStafflineColour(t.textTertiary);
+	mRenderer.setNoteColour(t.textPrimary);
 
 	// Render the notation
 	mRenderer.renderStaffWithNote(g, getLocalBounds(), mNote, mClef);

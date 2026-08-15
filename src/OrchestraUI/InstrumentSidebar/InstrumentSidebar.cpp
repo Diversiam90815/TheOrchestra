@@ -27,7 +27,7 @@ void InstrumentSidebar::paint(juce::Graphics &g)
 	g.fillAll(t.background);
 
 	// Right border
-	g.setColour(juce::Colours::white.withAlpha(0.04f));
+	g.setColour(t.divider(0.14f));
 	g.fillRect(getWidth() - 1, 0, 1, getHeight());
 }
 
