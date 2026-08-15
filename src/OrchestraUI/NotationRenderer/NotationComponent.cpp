@@ -12,7 +12,7 @@ NotationComponent::NotationComponent()
 {
 	mNote.midiNoteNumber = 60; // Middle C
 	mNote.accidental	 = Accidental::None;
-	setSize(100, 80);
+	setSize(152, 116);
 }
 
 

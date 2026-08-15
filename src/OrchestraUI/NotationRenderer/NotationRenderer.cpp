@@ -38,9 +38,6 @@ void NotationRenderer::renderStaffWithNote(juce::Graphics &g, juce::Rectangle<in
 	drawStaff(g, staffArea);
 	drawClef(g, staffArea, clef);
 	drawNote(g, staffArea, note, clef, ottava);
-
-	if (ottava != OttavaType::None)
-		drawOttavaText(g, staffArea, ottava);
 }
 
 
@@ -58,7 +55,7 @@ void NotationRenderer::setNoteColour(juce::Colour colour)
 
 juce::Rectangle<int> NotationRenderer::getRecommendedBounds()
 {
-	return juce::Rectangle<int>(0, 0, 100, 80);
+	return juce::Rectangle<int>(0, 0, 152, 116);
 }
 
 
@@ -182,31 +179,29 @@ void NotationRenderer::drawNote(juce::Graphics &g, juce::Rectangle<float> staffA
 	juce::String noteGlyph = juce::String::charToString(kGlyphNoteheadBlack);
 	float		 noteWidth = mStaffLineSpacing * 2.5f;
 	g.drawText(noteGlyph, noteX - (noteWidth * 0.5f), noteY - (mStaffLineSpacing * 1.5f), noteWidth, mStaffLineSpacing * 3.0f, juce::Justification::centred);
+
+	if (ottava != OttavaType::None)
+		drawOttavaText(g, ottava, noteX, noteY, noteWidth);
 }
 
 
-void NotationRenderer::drawOttavaText(juce::Graphics &g, juce::Rectangle<float> staffArea, OttavaType ottava)
+void NotationRenderer::drawOttavaText(juce::Graphics &g, OttavaType ottava, float noteX, float noteY, float noteWidth)
 {
-	g.setColour(mNoteColor.withAlpha(0.7f));
+	g.setColour(mNoteColor.withAlpha(0.75f));
 
-	auto textFont = juce::Font(11.0f);
+	auto textFont = juce::Font(juce::FontOptions(12.5f));
 	textFont.setExtraKerningFactor(0.02f);
 	g.setFont(textFont);
 
 	juce::String text = (ottava == OttavaType::Ottava8va) ? "8va" : "8vb";
 
-	if (ottava == OttavaType::Ottava8va)
-	{
-		// Draw above the staff
-		float y = staffArea.getY() - 16.0f;
-		g.drawText(text, staffArea.getCentreX() * 1.0f, y, 40.0f, 14.0f, juce::Justification::centred);
-	}
-	else
-	{
-		// Draw below the staff
-		float y = staffArea.getBottom() + 4.0f;
-		g.drawText(text, staffArea.getCentreX() * 1.0f, y, 40.0f, 14.0f, juce::Justification::centred);
-	}
+	// Immediately to the right of the notehead, vertically centred on it -
+	// previously this was centred over the whole staff at a fixed position
+	// above/below it, independent of where the note actually landed, so it
+	// could end up drawn behind the notehead instead of legible beside it.
+	float x = noteX + (noteWidth * 0.5f) + 3.0f;
+	float y = noteY - 7.0f;
+	g.drawText(text, x, y, 32.0f, 14.0f, juce::Justification::centredLeft);
 }
 
 
