@@ -46,7 +46,6 @@ public:
 private:
 	void										   rebuildMetaTags();
 	int											   pillWidth(const juce::String &text) const;
-	juce::String								   deriveTranspositionLabel(const std::string &writtenLow, const std::string &soundingLow) const;
 
 	juce::DrawableImage							   mInstrumentImage;
 	juce::Label									   mNameLabel;

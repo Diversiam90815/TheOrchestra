@@ -39,7 +39,7 @@ void InstrumentHeaderPanel::setInstrument(const InstrumentProfile &instrument)
 
 	// Derive transposition label
 	if (mHasTransposition)
-		mTranspositionText = deriveTranspositionLabel(range.getWrittenLowNote(), range.getSoundingLowNote());
+		mTranspositionText = juce::String(deriveTranspositionLabel(range.getWrittenLowNote(), range.getSoundingLowNote()));
 	else
 		mTranspositionText = "";
 
@@ -211,48 +211,6 @@ void InstrumentHeaderPanel::rebuildMetaTags()
 		};
 		addAndMakeVisible(mSoundingBtn.get());
 	}
-}
-
-
-juce::String InstrumentHeaderPanel::deriveTranspositionLabel(const std::string &writtenLow, const std::string &soundingLow) const
-{
-	int writtenMidi	 = turnNotenameIntoMidinumber(writtenLow);
-	int soundingMidi = turnNotenameIntoMidinumber(soundingLow);
-
-	// turnNotenameIntoMidinumber signals failure with -1; MIDI 0 (C-1) is a valid note.
-	if (writtenMidi < 0 || soundingMidi < 0)
-		return "Transposing";
-
-	int				   interval	  = writtenMidi - soundingMidi;
-	int				   normalised = ((interval % 12) + 12) % 12;
-
-	static const char *keyNames[] = {
-		"in C",	 // 0
-		"in B",	 // 1
-		"in Bb", // 2  (Clarinet, Trumpet)
-		"in A",	 // 3
-		"in Ab", // 4
-		"in G",	 // 5  (Alto Flute)
-		"in Gb", // 6
-		"in F",	 // 7  (French Horn, Cor Anglais)
-		"in E",	 // 8
-		"in Eb", // 9  (Alto Sax, Eb Clarinet)
-		"in D",	 // 10
-		"in Db", // 11
-	};
-
-	juce::String label = keyNames[normalised];
-
-	// Check for octave transposition
-	if (normalised == 0 && interval != 0)
-	{
-		if (interval > 0)
-			label = "8vb";
-		else
-			label = "8va";
-	}
-
-	return label;
 }
 
 
