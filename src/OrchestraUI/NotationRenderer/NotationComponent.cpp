@@ -74,11 +74,11 @@ void NotationComponent::selectBestClef(Clef preferredClef)
 	constexpr int		  kPreferenceTolerance = 4;
 
 	Clef				  best				   = kAllClefs[0];
-	int					  bestOverflow		   = mRenderer.getLedgerOverflow(mNote.midiNoteNumber, best);
+	int					  bestOverflow		   = ledgerOverflow(mNote.midiNoteNumber, best);
 
 	for (Clef clef : kAllClefs)
 	{
-		const int overflow = mRenderer.getLedgerOverflow(mNote.midiNoteNumber, clef);
+		const int overflow = ledgerOverflow(mNote.midiNoteNumber, clef);
 		if (overflow < bestOverflow)
 		{
 			best		 = clef;
@@ -86,7 +86,7 @@ void NotationComponent::selectBestClef(Clef preferredClef)
 		}
 	}
 
-	const int preferredOverflow = mRenderer.getLedgerOverflow(mNote.midiNoteNumber, preferredClef);
+	const int preferredOverflow = ledgerOverflow(mNote.midiNoteNumber, preferredClef);
 	if (preferredOverflow <= bestOverflow + kPreferenceTolerance)
 		best = preferredClef;
 

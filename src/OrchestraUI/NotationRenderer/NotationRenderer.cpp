@@ -8,21 +8,6 @@
 #include "NotationRenderer.h"
 
 
-Clef clefFromString(const std::string &name)
-{
-	if (name == "Treble")
-		return Clef::Treble;
-	if (name == "Bass")
-		return Clef::Bass;
-	if (name == "Alto")
-		return Clef::Alto;
-	if (name == "Tenor")
-		return Clef::Tenor;
-
-	return Clef::Treble;
-}
-
-
 NotationRenderer::NotationRenderer()
 {
 	loadNotationFont();
@@ -68,19 +53,6 @@ void NotationRenderer::setNoteColour(juce::Colour colour)
 }
 
 
-int NotationRenderer::getLedgerOverflow(int midiNote, Clef clef)
-{
-	int staffPos = midiNoteToStaffPosition(midiNote, clef);
-
-	if (staffPos < 0)
-		return -staffPos;
-	if (staffPos > 8)
-		return staffPos - 8;
-
-	return 0;
-}
-
-
 juce::Rectangle<int> NotationRenderer::getRecommendedBounds()
 {
 	return juce::Rectangle<int>(0, 0, 160, 128);
@@ -103,30 +75,6 @@ void NotationRenderer::loadNotationFont()
 	mNotationFont = juce::Font(typeface);
 	mNotationFont.setHeight(40.0f);
 	LOG_INFO("Bravura font loaded successfully from binary data");
-}
-
-
-OttavaType NotationRenderer::determineOttava(int midiNote, Clef clef)
-{
-	// Staff positions: 0 = top line, 8 = bottom line
-	// Ledger lines above: position < 0 (every 2 positions = 1 ledger line)
-	// Ledger lines below: position > 8 (every 2 positions = 1 ledger line)
-	const int staffPos	= midiNoteToStaffPosition(midiNote, clef);
-	const int threshold = kMaxLedgerLines * 2;
-
-	if (staffPos < -threshold)
-	{
-		const int afterOneOctave = midiNoteToStaffPosition(midiNote - 12, clef);
-		return (afterOneOctave < -threshold) ? OttavaType::Ottava15ma : OttavaType::Ottava8va;
-	}
-
-	if (staffPos > 8 + threshold)
-	{
-		const int afterOneOctave = midiNoteToStaffPosition(midiNote + 12, clef);
-		return (afterOneOctave > 8 + threshold) ? OttavaType::Ottava15mb : OttavaType::Ottava8vb;
-	}
-
-	return OttavaType::None;
 }
 
 
@@ -189,19 +137,11 @@ void NotationRenderer::drawNote(juce::Graphics &g, juce::Rectangle<float> staffA
 {
 	// If ottava is active, shift the displayed note toward the staff by one
 	// or two octaves.
-	int displayMidi = note.midiNoteNumber;
-	if (ottava == OttavaType::Ottava8va)
-		displayMidi -= 12;
-	else if (ottava == OttavaType::Ottava8vb)
-		displayMidi += 12;
-	else if (ottava == OttavaType::Ottava15ma)
-		displayMidi -= 24;
-	else if (ottava == OttavaType::Ottava15mb)
-		displayMidi += 24;
+	const int displayMidi	= note.midiNoteNumber + ottavaDisplacement(ottava);
 
-	int	  staffPosition = midiNoteToStaffPosition(displayMidi, clef);
-	float noteX			= staffArea.getX() + staffArea.getWidth() * kNoteXFraction;
-	float noteY			= staffPositionToY(staffPosition, staffArea);
+	int		  staffPosition = midiNoteToStaffPosition(displayMidi, clef);
+	float	  noteX			= staffArea.getX() + staffArea.getWidth() * kNoteXFraction;
+	float	  noteY			= staffPositionToY(staffPosition, staffArea);
 
 	// Draw ledger lines if needed
 	if (note.showLedgerLines)
@@ -300,79 +240,6 @@ void NotationRenderer::drawAccidental(juce::Graphics &g, float x, float y, Accid
 
 	juce::String glyph = juce::String::charToString(glyphCode);
 	g.drawText(glyph, x - 10.0f, y - (mStaffLineSpacing * 1.5f), 20.0f, mStaffLineSpacing * 3.0f, juce::Justification::centred);
-}
-
-
-int NotationRenderer::midiNoteToStaffPosition(const int midiNote, Clef clef)
-{
-	// Convert midi note to diatonic staff position
-	// Staff position 0 = top line, increasing downward
-
-	// 1 -	Get note class (C=0, C#=1, D=2,..)
-	int				 noteClass				 = midiNote % 12;
-	int				 octave					 = (midiNote / 12) - 1; // Midi Octave: C4 = oct. 4
-
-	// 2 -	Map chromatic note class to diatonic position within octave
-	//		C=0, D=1, E=2, F=3,..
-	static const int chromaticToDiatonic[12] = {
-		0, // C
-		0, // C# (display as C)
-		1, // D
-		1, // D# (display as D)
-		2, // E
-		3, // F
-		3, // F# (display as F)
-		4, // G
-		4, // G# (display as G)
-		5, // A
-		5, // A# (display as A)
-		6  // B
-	};
-
-	int diatonicNote			 = chromaticToDiatonic[noteClass];
-
-	// 3 -	Calculate absolute diatonic positon (C0 = pos 0)
-	int absoluteDiatonicPosition = octave * 7 + diatonicNote;
-
-	// 4 -	Calculate staff position relative to clef
-	int referencePosition		 = 0; // Position on staff for reference note
-	int referenceDiatonicPos	 = 0; // Absolute diatonic position of reference
-
-	switch (clef)
-	{
-	case Clef::Treble:
-		// F5 is on top line (position 0)
-		// F5 = MIDI 77, octave 5, F = diatonic 3
-		referencePosition	 = 0;
-		referenceDiatonicPos = 5 * 7 + 3; // Octave 5, F
-		break;
-
-	case Clef::Bass:
-		// A3 is on top line (position 0)
-		// A3 = MIDI 57, octave 3, A = diatonic 5
-		referencePosition	 = 0;
-		referenceDiatonicPos = 3 * 7 + 5; // Octave 3, A
-		break;
-
-	case Clef::Alto:
-		// C4 is on middle line (position 4)
-		// C4 = MIDI 60, octave 4, C = diatonic 0
-		referencePosition	 = 4;
-		referenceDiatonicPos = 4 * 7 + 0; // Octave 4, C
-		break;
-
-	case Clef::Tenor:
-		// A3 is on middle line (position 4)
-		// A3 = MIDI 57, octave 3, A = diatonic 5
-		referencePosition	 = 4;
-		referenceDiatonicPos = 3 * 7 + 5; // Octave 3, A
-		break;
-	}
-
-	// calculate staff position (going down from reference = positive positions)
-	int staffPosition = referencePosition + (referenceDiatonicPos - absoluteDiatonicPosition);
-
-	return staffPosition;
 }
 
 
