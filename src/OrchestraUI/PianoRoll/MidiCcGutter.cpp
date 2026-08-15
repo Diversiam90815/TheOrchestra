@@ -107,8 +107,8 @@ private:
 	int	   mValue	 = 0;
 	bool   mDragging = false;
 
-	static constexpr int kReadoutH = 18;
-	static constexpr int kLabelH   = 16;
+	static constexpr int kReadoutH = 20;
+	static constexpr int kLabelH   = 18;
 };
 
 

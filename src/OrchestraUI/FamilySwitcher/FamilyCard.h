@@ -31,7 +31,7 @@ public:
 	void				 mouseExit(const juce::MouseEvent &) override;
 	void				 mouseUp(const juce::MouseEvent &e) override;
 
-	static constexpr int kBadgeSize = 48;
+	static constexpr int kBadgeSize = 54;
 
 private:
 	Family		 mFamily;

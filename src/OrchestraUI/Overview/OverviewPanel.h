@@ -38,10 +38,10 @@ private:
 	RangesPanel			 mRanges;
 	QualitiesPanel		 mQualities;
 
-	static constexpr int kMinRangeWidth = 330;
-	static constexpr int kMaxRangeWidth = 440;
-	static constexpr int kColumnGap		= Space::xl;
-	static constexpr int kPadX			= Space::xl;
-	static constexpr int kPadY			= Space::l;
-	static constexpr int kMinRangeHeight = 190;
+	static constexpr int kMinRangeWidth	 = 350;
+	static constexpr int kMaxRangeWidth	 = 460;
+	static constexpr int kColumnGap		 = Space::xl;
+	static constexpr int kPadX			 = Space::xl;
+	static constexpr int kPadY			 = Space::l;
+	static constexpr int kMinRangeHeight = 210;
 };

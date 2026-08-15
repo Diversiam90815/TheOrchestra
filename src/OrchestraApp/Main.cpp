@@ -27,12 +27,12 @@ public:
 		mDeviceManager.addAudioCallback(&mPlayer);
 
 		setUsingNativeTitleBar(true);
-		setContentOwned(editor.get(), true);
 
-		// Mirrors OrchestraEditor's own limits - previously this pinned the
-		// window and silently overrode the editor's setResizeLimits call.
+		// resizeToFitWhenContentChangesSize: the editor sizes itself per view
+		// (family switcher vs instrument detail) and the window follows. The
+		// editor also owns the resize limits, so there is only one constrainer.
+		setContentOwned(editor.get(), true);
 		setResizable(true, true);
-		setResizeLimits(1100, 720, 2560, 1600);
 		centreWithSize(getWidth(), getHeight());
 		setVisible(true);
 

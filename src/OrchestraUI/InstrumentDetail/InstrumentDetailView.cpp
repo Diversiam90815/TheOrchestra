@@ -254,24 +254,20 @@ void InstrumentDetailView::resized()
 	mSampler.setBounds(slot(mSampler.getPreferredHeight(panelWidth), kPad).reduced(kPad, 0));
 	mTabBar.setBounds(detail.removeFromTop(Chrome::tabBarH));
 
-	// The body asks for what it needs; the piano roll absorbs the slack up to
-	// its cap, so no gap is left pooling between them. When the window is too
-	// short for both, the piano keeps its minimum and the body scrolls.
-	const int bodyWidth	  = detail.getWidth() - kPad * 2;
-	const int bodyWanted  = activeBody().getPreferredHeight(bodyWidth);
-	const int available	  = detail.getHeight() - kPad * 2;
-
-	const int pianoHeight = juce::jlimit(kPianoMinH, juce::jmin(kPianoMaxH, juce::jmax(kPianoMinH, available - kBodyMinH)), available - bodyWanted);
-
-	mPianoRoll.setBounds(detail.removeFromBottom(pianoHeight + kPad).withTrimmedBottom(kPad).reduced(kPad + Space::s, 0));
+	// The piano roll is a constant height - it is an instrument, not a panel, so
+	// it must look identical at every window size. Everything left over goes to
+	// the tab body, which scrolls when its content does not fit.
+	mPianoRoll.setBounds(detail.removeFromBottom(Chrome::pianoRollH + kPad).withTrimmedBottom(kPad).reduced(kPad + Space::s, 0));
 
 	auto body = detail.reduced(kPad, 0);
 	mBodyViewport.setBounds(body);
 
 	// Holder is as tall as the content wants, so the viewport scrolls only when
-	// the content genuinely does not fit.
-	const int holderWidth  = body.getWidth() - (bodyWanted > body.getHeight() ? Space::s : 0);
-	const int holderHeight = juce::jmax(body.getHeight(), activeBody().getPreferredHeight(holderWidth));
+	// the content genuinely does not fit. Reserve scrollbar width in that case
+	// so the reflow does not then change the answer.
+	const bool needsScroll = activeBody().getPreferredHeight(body.getWidth()) > body.getHeight();
+	const int  holderWidth = body.getWidth() - (needsScroll ? Space::m : 0);
+	const int  holderHeight = juce::jmax(body.getHeight(), activeBody().getPreferredHeight(holderWidth));
 
 	mBodyHolder.setSize(holderWidth, holderHeight);
 	activeBodyComponent().setBounds(mBodyHolder.getLocalBounds());
