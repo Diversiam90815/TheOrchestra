@@ -71,7 +71,16 @@ private:
 	void				 drawNote(juce::Graphics &g, juce::Rectangle<float> staffArea, const NoteDescriptor &note, Clef clef, OttavaType ottava);
 	void				 drawLedgerLines(juce::Graphics &g, juce::Rectangle<float> staffArea, int staffPosition, float noteX);
 	void				 drawAccidental(juce::Graphics &g, float x, float y, Accidental accidental);
-	void				 drawOttavaText(juce::Graphics &g, juce::Rectangle<float> staffArea, OttavaType ottava);
+
+	/*
+	 @brief					Draws the "8va"/"8vb" marking beside the notehead.
+	 @param					[IN] x / y of the notehead the marking belongs to.
+							Previously this was centred over the whole staff
+							regardless of where the note actually sat, so it
+							could land on top of - and be hidden behind - the
+							notehead itself.
+	*/
+	void				 drawOttavaText(juce::Graphics &g, OttavaType ottava, float noteX, float noteY, float noteWidth);
 
 	OttavaType			 determineOttava(int midiNote, Clef clef);
 
@@ -84,7 +93,7 @@ private:
 	juce::Colour		 mStaffLineColor			 = juce::Colour::fromRGB(107, 103, 96);	 // textTertiary
 	juce::Colour		 mNoteColor					 = juce::Colour::fromRGB(238, 233, 218); // textPrimary
 
-	const float			 mStaffLineSpacing			 = 8.0f;								 // Space between staff lines in px
+	const float			 mStaffLineSpacing			 = 9.5f;								 // Space between staff lines in px
 	const float			 mStaffLineThickness		 = 1.5f;
 
 	// SMuFL codepoints (Bravura font)

@@ -82,12 +82,12 @@ const Theme &defaultTheme()
 		t.toolbar		  = juce::Colour::fromRGB(24, 21, 32);	  // #181520
 		t.pianoWell		  = juce::Colour::fromRGB(10, 9, 14);	  // #0A090E
 
-		t.accent		  = juce::Colour::fromRGB(214, 164, 68);  // #D6A444
+		t.accent		  = juce::Colour::fromRGB(226, 174, 74);  // #E2AE4A, was #D6A444
 		t.accentDim		  = juce::Colour::fromRGB(138, 104, 40);  // #8A6828
 
-		t.textPrimary	  = juce::Colour::fromRGB(245, 242, 233); // #F5F2E9
-		t.textSecondary	  = juce::Colour::fromRGB(184, 180, 168); // #B8B4A8
-		t.textTertiary	  = juce::Colour::fromRGB(140, 135, 125); // #8C877D
+		t.textPrimary	  = juce::Colour::fromRGB(250, 248, 242); // #FAF8F2, was #F5F2E9
+		t.textSecondary	  = juce::Colour::fromRGB(202, 198, 186); // #CAC6BA, was #B8B4A8
+		t.textTertiary	  = juce::Colour::fromRGB(158, 153, 142); // #9E998E, was #8C877D
 
 		t.tabInactive	  = juce::Colour::fromRGB(58, 54, 80);	  // #3A3650
 		t.sidebarHover	  = juce::Colour::fromRGB(35, 32, 64);	  // #232040

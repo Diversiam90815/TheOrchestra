@@ -39,11 +39,11 @@ namespace Type
 constexpr float display	  = 38.0f; // instrument name
 constexpr float title	  = 30.0f; // view titles ("Choose a family")
 constexpr float heading	  = 22.0f; // card titles, note names
-constexpr float body	  = 19.0f; // primary reading text
-constexpr float bodySmall = 17.0f; // secondary reading text, breadcrumb, tabs
-constexpr float label	  = 15.0f; // uppercase eyebrows, pills, composer line
-constexpr float caption	  = 14.0f; // dense readouts
-constexpr float micro	  = 13.0f; // absolute floor
+constexpr float body	  = 20.0f; // primary reading text
+constexpr float bodySmall = 18.0f; // secondary reading text, breadcrumb, tabs
+constexpr float label	  = 16.0f; // uppercase eyebrows, pills, composer line
+constexpr float caption	  = 15.0f; // dense readouts
+constexpr float micro	  = 14.0f; // absolute floor
 } // namespace Type
 
 
@@ -53,7 +53,10 @@ constexpr int toolbarH	  = 68; // family switcher toolbar
 constexpr int breadcrumbH = 56;
 constexpr int tabBarH	  = 52;
 constexpr int sidebarRowH = 56;
-constexpr int pianoRollH  = 218;
+
+// Fixed regardless of window size - the piano roll is an instrument, not a
+// panel that should grow or shrink with the rest of the layout.
+constexpr int pianoRollH  = 160;
 } // namespace Chrome
 
 
