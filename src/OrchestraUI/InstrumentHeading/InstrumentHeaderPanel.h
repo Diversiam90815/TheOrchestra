@@ -32,12 +32,12 @@ public:
 
 	int					 getPreferredHeight(int width) const override;
 
-	static constexpr int kImageWidth  = 96;
-	static constexpr int kImageHeight = 90;
-	static constexpr int kNameHeight  = 42;
-	static constexpr int kFamilyHeight = 24;
-	static constexpr int kTagHeight	  = 28;
-	static constexpr int kTagGap	  = Space::s;
+	static constexpr int kImageWidth   = 100;
+	static constexpr int kImageHeight  = 94;
+	static constexpr int kNameHeight   = 46;
+	static constexpr int kFamilyHeight = 28;
+	static constexpr int kTagHeight	   = 32;
+	static constexpr int kTagGap	   = Space::s;
 
 private:
 	void		 rebuildMetaTags();

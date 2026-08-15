@@ -46,7 +46,7 @@ void TechniqueCard::paint(juce::Graphics &g)
 
 	auto textArea = getLocalBounds().reduced(kPadX, kPadY);
 
-	auto nameFont = lnf ? lnf->getSerifFont(Type::heading) : juce::Font(Type::heading);
+	auto nameFont = lnf ? lnf->getSerifFont(Type::body, true) : juce::Font(Type::body);
 	g.setColour(t.textPrimary);
 	g.setFont(nameFont);
 	g.drawText(mName, textArea.removeFromTop(kNameHeight), juce::Justification::centredLeft, true);

@@ -84,12 +84,14 @@ const Theme &defaultTheme()
 		t.toolbar		  = juce::Colour::fromRGB(24, 21, 32);	 // #181520
 		t.pianoWell		  = juce::Colour::fromRGB(10, 9, 14);	 // #0A090E
 
-		t.accent		  = juce::Colour::fromRGB(196, 148, 58); // #C4943A
+		// Brightened from the original design pass - the muted text read as too
+		// low-contrast against the near-black background, especially textTertiary.
+		t.accent		  = juce::Colour::fromRGB(214, 164, 68);	// #D6A444, was #C4943A
 		t.accentDim		  = juce::Colour::fromRGB(138, 104, 40); // #8A6828
 
-		t.textPrimary	  = juce::Colour::fromRGB(238, 233, 218); // #EEE9DA
-		t.textSecondary	  = juce::Colour::fromRGB(158, 154, 142); // #9E9A8E
-		t.textTertiary	  = juce::Colour::fromRGB(107, 103, 96);	 // #6B6760
+		t.textPrimary	  = juce::Colour::fromRGB(245, 242, 233); // #F5F2E9, was #EEE9DA
+		t.textSecondary	  = juce::Colour::fromRGB(184, 180, 168); // #B8B4A8, was #9E9A8E
+		t.textTertiary	  = juce::Colour::fromRGB(140, 135, 125);	 // #8C877D, was #6B6760
 
 		t.tabInactive	  = juce::Colour::fromRGB(58, 54, 80);	// #3A3650
 		t.sidebarHover	  = juce::Colour::fromRGB(35, 32, 64);	// #232040

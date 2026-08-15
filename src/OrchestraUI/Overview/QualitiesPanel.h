@@ -36,9 +36,9 @@ private:
 	bool					  mHasTransposition = false;
 	PitchMode				  mPitchMode		= PitchMode::Written;
 
-	static constexpr int	  kHeaderHeight	 = 22;
-	static constexpr int	  kSwatch		 = 10;
-	static constexpr int	  kTextInset	 = Space::xl;
+	static constexpr int	  kHeaderHeight	 = 24;
+	static constexpr int	  kSwatch		 = 11;
+	static constexpr int	  kTextInset	 = Space::xl + Space::xs;
 	static constexpr int	  kRowGap		 = Space::m;
-	static constexpr int	  kMinRowHeight	 = 24;
+	static constexpr int	  kMinRowHeight	 = 26;
 };

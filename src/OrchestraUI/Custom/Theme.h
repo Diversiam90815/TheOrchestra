@@ -41,27 +41,28 @@ constexpr float xl = 10.0f; // panels
 
 
 // Type scale. Nothing in the UI may use a size outside this list, and nothing
-// may go below Type::micro - the previous design drifted down to 8.5px.
+// may go below Type::micro
 namespace Type
 {
-constexpr float display	  = 34.0f; // instrument name
-constexpr float title	  = 24.0f; // view titles ("Choose a family")
-constexpr float heading	  = 19.0f; // card titles, note names
-constexpr float body	  = 16.0f; // primary reading text
-constexpr float bodySmall = 14.0f; // secondary reading text, breadcrumb, tabs
-constexpr float label	  = 13.0f; // uppercase eyebrows, pills, composer line
-constexpr float caption	  = 12.0f; // dense readouts
-constexpr float micro	  = 11.0f; // absolute floor
+constexpr float display	  = 36.0f; // instrument name
+constexpr float title	  = 28.0f; // view titles ("Choose a family")
+constexpr float heading	  = 21.0f; // card titles, note names
+constexpr float body	  = 18.0f; // primary reading text
+constexpr float bodySmall = 16.0f; // secondary reading text, breadcrumb, tabs
+constexpr float label	  = 14.0f; // uppercase eyebrows, pills, composer line
+constexpr float caption	  = 13.0f; // dense readouts
+constexpr float micro	  = 12.0f; // absolute floor
 } // namespace Type
 
 
 // Fixed chrome heights. Bars stay fixed; everything between them is intrinsic.
 namespace Chrome
 {
-constexpr int toolbarH	  = 64; // family switcher toolbar
-constexpr int breadcrumbH = 52;
-constexpr int tabBarH	  = 48;
-constexpr int sidebarRowH = 52;
+constexpr int toolbarH	  = 68; // family switcher toolbar
+constexpr int breadcrumbH = 56;
+constexpr int tabBarH	  = 52;
+constexpr int sidebarRowH = 56;
+constexpr int pianoRollH  = 218;
 } // namespace Chrome
 
 
@@ -79,13 +80,13 @@ struct Theme
 	juce::Colour				pianoWell;		 // #0A090E piano-roll well
 
 	// Accent
-	juce::Colour				accent;			 // #C4943A
-	juce::Colour				accentDim;		 // #8A6828
+	juce::Colour				accent;	   // #C4943A
+	juce::Colour				accentDim; // #8A6828
 
 	// Text
-	juce::Colour				textPrimary;	 // #EEE9DA
-	juce::Colour				textSecondary;	 // #9E9A8E
-	juce::Colour				textTertiary;	 // #6B6760
+	juce::Colour				textPrimary;   // #EEE9DA
+	juce::Colour				textSecondary; // #9E9A8E
+	juce::Colour				textTertiary;  // #6B6760
 
 	// Interactive
 	juce::Colour				tabInactive;	 // #3A3650
@@ -133,12 +134,12 @@ struct Theme
 namespace Keys
 {
 inline const juce::Colour whiteInRange	  = juce::Colour::fromRGB(242, 237, 226); // warm ivory
-inline const juce::Colour whiteOutOfRange = juce::Colour::fromRGB(110, 106, 98);	 // firmly dimmed
+inline const juce::Colour whiteOutOfRange = juce::Colour::fromRGB(110, 106, 98);  // firmly dimmed
 inline const juce::Colour blackInRange	  = juce::Colour::fromRGB(20, 17, 24);
-inline const juce::Colour blackOutOfRange = juce::Colour::fromRGB(42, 39, 48);	 // lighter, so contrast inverts
+inline const juce::Colour blackOutOfRange = juce::Colour::fromRGB(42, 39, 48);	  // lighter, so contrast inverts
 
-constexpr float			  whiteTint		  = 0.32f; // register blend into whiteInRange
-constexpr float			  blackBrightness = 0.28f; // HSB brightness for a tinted black key
+constexpr float			  whiteTint		  = 0.32f;								  // register blend into whiteInRange
+constexpr float			  blackBrightness = 0.28f;								  // HSB brightness for a tinted black key
 constexpr float			  blackSaturation = 0.85f;
 } // namespace Keys
 

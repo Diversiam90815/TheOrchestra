@@ -35,9 +35,9 @@ private:
 
 	std::vector<WorkData> mWorks;
 
-	static constexpr int  kMinColumnWidth = 330;
+	static constexpr int  kMinColumnWidth = 340;
 	static constexpr int  kMaxColumns	  = 3;
 	static constexpr int  kGap			  = Space::l;
-	static constexpr int  kComposerHeight = 20;
-	static constexpr int  kMinCellHeight  = 62;
+	static constexpr int  kComposerHeight = 22;
+	static constexpr int  kMinCellHeight  = 68;
 };
