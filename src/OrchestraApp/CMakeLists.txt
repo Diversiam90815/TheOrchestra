@@ -29,12 +29,11 @@ if(ENABLE_FORMAT)
 endif()
 
 if(ENABLE_DOXYGEN)
-	Doxygen(Chess_Engine ${SOURCE_DIR})
+	Doxygen(TheOrchestraApp ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
 target_include_directories(${TARGET_NAME} PUBLIC ${PROJECT_BINARY_DIR})
 
-include(ProjectOptions)
 set_common_target_options(${TARGET_NAME})
 
 set (PROJECT_LIBS   TheOrchestraCore 
