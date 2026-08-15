@@ -42,7 +42,7 @@ public:
 					  const OrchestrationRoles	&roles,
 					  const SignatureWorks		&works,
 					  const PlayingTechniques	&techniques,
-					  const InstrumentClefs		&clefs			  = {},
+					  const InstrumentClefs		&clefs				  = {},
 					  bool						 isRhythmicPercussion = false)
 		: mName(name), mRange(range), mRegisters(registers), mRoles(roles), mFamousWorks(works), mPlayingTechniques(techniques), mClefs(clefs), mID(id),
 		  mIsRhythmicPercussion(isRhythmicPercussion)
@@ -60,9 +60,9 @@ public:
 	InstrumentID			   getInstrumentID() const { return mID; }
 	bool					   isRhythmicPercussion() const { return mIsRhythmicPercussion; }
 
-	bool				isValid() const { return !mName.empty() && mID != 0; }
+	bool					   isValid() const { return !mName.empty() && mID != 0; }
 
-	bool				operator==(const InstrumentProfile &other) const { return this->mID == other.mID; }
+	bool					   operator==(const InstrumentProfile &other) const { return this->mID == other.mID; }
 
 private:
 	std::string			mName;						   // Name of the instrument

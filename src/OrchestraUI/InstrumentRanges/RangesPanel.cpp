@@ -36,21 +36,21 @@ RangesPanel::RangesPanel() : OrchestraPanel("Range")
 
 void RangesPanel::setInstrument(const InstrumentProfile &instrument)
 {
-	auto range		  = instrument.getRange();
+	auto range				  = instrument.getRange();
 
-	mWrittenLow		  = range.getWrittenLowNote();
-	mWrittenHigh	  = range.getWrittenHighNote();
-	mSoundingLow	  = range.getSoundingLowNote();
-	mSoundingHigh	  = range.getSoundingHighNote();
+	mWrittenLow				  = range.getWrittenLowNote();
+	mWrittenHigh			  = range.getWrittenHighNote();
+	mSoundingLow			  = range.getSoundingLowNote();
+	mSoundingHigh			  = range.getSoundingHighNote();
 
 	// Detect transposition: written and sounding ranges differ
-	mHasTransposition = (mWrittenLow != mSoundingLow) || (mWrittenHigh != mSoundingHigh);
-	mPitchMode		  = PitchMode::Written;
+	mHasTransposition		  = (mWrittenLow != mSoundingLow) || (mWrittenHigh != mSoundingHigh);
+	mPitchMode				  = PitchMode::Written;
 
 	// The instrument's primary (first-declared) clef is the starting
 	// preference, matching the pill that starts selected in the header.
 	const auto &declaredClefs = instrument.getClefs();
-	mPreferredClef			   = declaredClefs.empty() ? Clef::Treble : clefFromString(declaredClefs.front());
+	mPreferredClef			  = declaredClefs.empty() ? Clef::Treble : clefFromString(declaredClefs.front());
 
 	updateDisplay();
 	resized();
@@ -121,21 +121,21 @@ void RangesPanel::resized()
 	//   Notation (centered, takes most space)
 	//   Note name (bottom)
 
-	const auto notation = NotationRenderer::getRecommendedBounds();
+	const auto notation	 = NotationRenderer::getRecommendedBounds();
 
-	const int  gutter	= Space::xl;
-	const int  halfW	= (area.getWidth() - gutter) / 2;
+	const int  gutter	 = Space::xl;
+	const int  halfW	 = (area.getWidth() - gutter) / 2;
 	const int  notationW = notation.getWidth();
 	const int  notationH = notation.getHeight();
-	const int  labelH	= kTitleHeight;
-	const int  nameH	= kNoteNameHeight;
-	const int  innerGap	= Space::xs;
+	const int  labelH	 = kTitleHeight;
+	const int  nameH	 = kNoteNameHeight;
+	const int  innerGap	 = Space::xs;
 
 	// Total content height for centering
-	int		  stackH	= labelH + innerGap + notationH + innerGap + nameH;
-	int		  topMargin = juce::jmax(0, (area.getHeight() - stackH) / 2);
+	int		   stackH	 = labelH + innerGap + notationH + innerGap + nameH;
+	int		   topMargin = juce::jmax(0, (area.getHeight() - stackH) / 2);
 
-	auto	  leftCol	= area.removeFromLeft(halfW);
+	auto	   leftCol	 = area.removeFromLeft(halfW);
 	area.removeFromLeft(gutter);
 	auto rightCol = area;
 

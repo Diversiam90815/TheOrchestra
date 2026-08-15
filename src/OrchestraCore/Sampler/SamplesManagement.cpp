@@ -277,7 +277,7 @@ int SamplesManagement::getIndexOfDynamics(const std::string &dynamicString)
 std::vector<Sample> SamplesManagement::getSamplesForInstrument(const InstrumentID &instrumentKey) const
 {
 	auto it = mInstrumentSamples.find(instrumentKey);
-	
+
 	if (it != mInstrumentSamples.end())
 		return it->second;
 

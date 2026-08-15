@@ -27,12 +27,12 @@ public:
 	PianoRoll &getPianoRollForMidiInput() { return mDetailView.getPianoRoll(); }
 
 private:
-	void changeFamily(Family family);
-	void changeInstrument(InstrumentID key);
-	void showFamilySwitcher();
-	void showInstrumentDetail();
-	void onSettingsClicked();
-	void populateFamilyCounts();
+	void				 changeFamily(Family family);
+	void				 changeInstrument(InstrumentID key);
+	void				 showFamilySwitcher();
+	void				 showInstrumentDetail();
+	void				 onSettingsClicked();
+	void				 populateFamilyCounts();
 
 	/*
 	 @brief					Resizes the window to a view's natural size.
@@ -45,16 +45,16 @@ private:
 	 @param					[IN] width / height the view wants.
 	 @param					[IN] minWidth / minHeight below which it breaks.
 	*/
-	void applyViewSize(int width, int height, int minWidth, int minHeight);
+	void				 applyViewSize(int width, int height, int minWidth, int minHeight);
 
 	/*
 	 @brief					True once the window differs from the size this
 							class last applied, i.e. the user dragged it.
 	*/
-	bool hasUserResized() const;
+	bool				 hasUserResized() const;
 
-	CoreManager		 *mCoreManager;
-	OrchestraProcessor &audioProcessor;
+	CoreManager			*mCoreManager;
+	OrchestraProcessor	&audioProcessor;
 
 	CustomLookAndFeel	 mCustomLookAndFeel;
 
@@ -76,7 +76,7 @@ private:
 
 	// The size this class last applied; if the window no longer matches it, the
 	// user has taken over.
-	juce::Point<int>	 mAppliedSize { 0, 0 };
+	juce::Point<int>	 mAppliedSize{0, 0};
 
 	InstrumentID		 mCurrentInstrument = 0;
 	Family				 mCurrentFamily		= Family::Strings;

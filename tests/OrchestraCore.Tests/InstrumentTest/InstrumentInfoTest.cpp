@@ -48,7 +48,7 @@ TEST_F(InstrumentRangeTest, DeserializesWrittenRangeFromJSON)
 
 	EXPECT_EQ(range.getWrittenLowNote(), "C3");
 	EXPECT_EQ(range.getWrittenHighNote(), "C6");
-	EXPECT_EQ(range.getWrittenLowNoteAsMidiValue(), 48);	// C3 MIDI note
+	EXPECT_EQ(range.getWrittenLowNoteAsMidiValue(), 48);  // C3 MIDI note
 	EXPECT_EQ(range.getWrittenHighNoteAsMidiValue(), 84); // C6 MIDI note
 }
 

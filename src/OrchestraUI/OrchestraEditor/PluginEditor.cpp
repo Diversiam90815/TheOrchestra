@@ -69,7 +69,7 @@ void OrchestraEditor::applyViewSize(int width, int height, int minWidth, int min
 	}
 
 	setSize(width, height);
-	mAppliedSize = { width, height };
+	mAppliedSize = {width, height};
 }
 
 
@@ -81,7 +81,7 @@ OrchestraEditor::~OrchestraEditor()
 
 void OrchestraEditor::populateFamilyCounts()
 {
-	for (auto family : { Family::Woodwinds, Family::Brass, Family::Strings, Family::Percussion })
+	for (auto family : {Family::Woodwinds, Family::Brass, Family::Strings, Family::Percussion})
 	{
 		const int count = (int)mCoreManager->getInstrumentsForFamily(family).size();
 		mFamilySwitcher.setFamilyCount(family, count);
