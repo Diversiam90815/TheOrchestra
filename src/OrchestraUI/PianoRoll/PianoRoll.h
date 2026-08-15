@@ -6,20 +6,18 @@
 */
 
 #pragma once
-#include <assert.h>
 
 #include "CustomPianoRoll.h"
-#include "CustomComponent.h"
 
 
-class PianoRoll : public CustomComponent, private juce::MidiKeyboardState::Listener, public juce::MidiInputCallback
+class PianoRoll : public juce::Component, private juce::MidiKeyboardState::Listener, public juce::MidiInputCallback
 {
 public:
 	PianoRoll() = default;
 	~PianoRoll();
 
-	void init() override;
-	void displayInstrument(InstrumentProfile &info) override;
+	void init();
+	void displayInstrument(const InstrumentProfile &info);
 
 	void setKeyboardState(juce::MidiKeyboardState &state);
 

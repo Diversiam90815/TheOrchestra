@@ -7,13 +7,6 @@ set(APP_FILES    ${CMAKE_CURRENT_SOURCE_DIR}/Main.cpp)
 source_group("App"              FILES ${APP_FILES})
 
 
-CPMAddPackage(
-        NAME JUCE
-        GITHUB_REPOSITORY juce-framework/JUCE
-        GIT_TAG 8.0.3
-        VERSION 8.0.3
-)
-
 juce_add_gui_app(${TARGET_NAME}
     COMPANY_NAME "DiversiamProduction"
     PLUGIN_MANUFACTURER_CODE 3160
@@ -36,12 +29,11 @@ if(ENABLE_FORMAT)
 endif()
 
 if(ENABLE_DOXYGEN)
-	Doxygen(Chess_Engine ${SOURCE_DIR})
+	Doxygen(TheOrchestraApp ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
 target_include_directories(${TARGET_NAME} PUBLIC ${PROJECT_BINARY_DIR})
 
-include(ProjectOptions)
 set_common_target_options(${TARGET_NAME})
 
 set (PROJECT_LIBS   TheOrchestraCore 
@@ -49,6 +41,9 @@ set (PROJECT_LIBS   TheOrchestraCore
 )
 
 target_link_libraries(${TARGET_NAME} PRIVATE ${PROJECT_LIBS} )
+
+include(Assets)
+copy_assets_to_target(${TARGET_NAME})
 
 include(GNUInstallDirs)
 

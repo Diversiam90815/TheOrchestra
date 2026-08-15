@@ -20,8 +20,8 @@ struct InstrumentRegister
 {
 	InstrumentRegister() = default;
 
-	std::string getLowerRange() const { return lowerNote; }
-	std::string getHigherRange() const { return higherNote; }
+	std::string getWrittenLowNote() const { return lowerNote; }
+	std::string getWrittenHighNote() const { return higherNote; }
 	int			getHigherNoteValue() const { return higherNoteValue; }
 	int			getLowerNoteValue() const { return lowerNoteValue; }
 	std::string getDescription() const { return description; }
@@ -55,7 +55,7 @@ inline void from_json(const nlohmann::json &j, InstrumentRegister &quality)
 
 inline void to_json(nlohmann::json &j, const InstrumentRegister &quality)
 {
-	j[REG_QUAL_RANGE][REG_QUAL_RANGE_LOW]  = quality.getLowerRange();
-	j[REG_QUAL_RANGE][REG_QUAL_RANGE_HIGH] = quality.getHigherRange();
+	j[REG_QUAL_RANGE][REG_QUAL_RANGE_LOW]  = quality.getWrittenLowNote();
+	j[REG_QUAL_RANGE][REG_QUAL_RANGE_HIGH] = quality.getWrittenHighNote();
 	j[REG_QUAL_DESC]					   = quality.getDescription();
 }

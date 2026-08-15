@@ -1,7 +1,7 @@
 set(CPM_DOWNLOAD_VERSION 0.40.2)
 
 if(NOT LIB_DIR)
-  set(LIB_DIR ${CMAKE_CURRENT_SOURCE_DIR}/libs)
+  message(FATAL_ERROR "LIB_DIR is not set. It must be defined once, as an absolute path, in the root CMakeLists.txt before include(cpm).")
 endif()
 set(CPM_DOWNLOAD_LOCATION "${LIB_DIR}/cpm/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
 

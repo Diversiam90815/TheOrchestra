@@ -18,16 +18,6 @@ std::string FileManager::getDefaultSamplesFolderPath()
 }
 
 
-std::string FileManager::getInstrumentDataJSONPath()
-{
-	std::filesystem::path projectDir = getAssetsFolder();
-
-	std::filesystem::path dataDir	 = projectDir / InstrumentDataFolderName / InstrumentsDataFileName;
-
-	return dataDir.string();
-}
-
-
 std::vector<std::string> FileManager::getInstrumentsImages(InstrumentID instrumentKey)
 {
 	std::string familyName	   = getFamilyNameFromKey(instrumentKey);
@@ -41,39 +31,15 @@ juce::File FileManager::getInstrumentImage(TypeOfImage type, InstrumentID instru
 {
 	auto		images = getInstrumentsImages(instrumentKey);
 
-	std::string filter = "";
+	std::string filter;
 	switch (type)
 	{
-	case (TypeOfImage::InstrumentImage):
-	{
-		filter = "instrument";
-		break;
-	}
-	case (TypeOfImage::LowerRangeNotation):
-	{
-		filter = "range_low";
-		break;
-	}
-	case (TypeOfImage::UpperRangeNotation):
-	{
-		filter = "range_high";
-		break;
-	}
-	case (TypeOfImage::TranspositionLowerNotation):
-	{
-		filter = "transposition_low";
-		break;
-	}
-	case (TypeOfImage::TranspositionHigherNotation):
-	{
-		filter = "transposition_high";
-		break;
-	}
+	case TypeOfImage::InstrumentImage: filter = "instrument"; break;
 	default: return juce::File();
 	}
 
-	// Find an image within the folder that has the name "instrument"
-	auto it = std::find_if(images.begin(), images.end(), [&filter](const juce::String &imagePath) { return imagePath.containsIgnoreCase(filter); });
+	// Find an image within the folder whose name matches the filter
+	auto it = std::find_if(images.begin(), images.end(), [&filter](const std::string &imagePath) { return juce::String(imagePath).containsIgnoreCase(filter); });
 
 	// Check if it was found
 	if (it != images.end())
@@ -88,16 +54,20 @@ juce::File FileManager::getInstrumentImage(TypeOfImage type, InstrumentID instru
 
 std::filesystem::path FileManager::getProjectsAppDataPath()
 {
-	// Get the APPDATA environment variable
-	const char *appDataEnv = std::getenv("APPDATA");
-	if (appDataEnv == nullptr)
+	const auto appDataDir = juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory);
+
+	if (appDataDir == juce::File())
 	{
-		throw std::runtime_error("APPDATA environment variable is not set");
+		throw std::runtime_error("Could not resolve the user application data directory");
 	}
 
-	std::filesystem::path appDataPath(appDataEnv);
+	std::filesystem::path appDataPath(appDataDir.getFullPathName().toStdString());
 
-	std::filesystem::path projectAppDataPath = appDataPath / ProjectName;
+	// Test binaries get their own AppData namespace so running them never reads or overwrites a real user's saved settings.
+	auto				  exeName			 = juce::File::getSpecialLocation(juce::File::currentExecutableFile).getFileNameWithoutExtension();
+	const char			 *projectName		 = exeName.containsIgnoreCase("Tests") ? TestProjectName : ProjectName;
+
+	std::filesystem::path projectAppDataPath = appDataPath / projectName;
 
 	if (!std::filesystem::exists(projectAppDataPath))
 	{
@@ -123,14 +93,6 @@ std::filesystem::path FileManager::getLoggingPath()
 }
 
 
-std::filesystem::path FileManager::getProjectDirectory()
-{
-	std::filesystem::path cwd		 = std::filesystem::current_path();
-	std::filesystem::path projectDir = cwd.parent_path().parent_path().parent_path().parent_path(); // TODO: Use built folder instead of project folder for assets
-	return projectDir;
-}
-
-
 std::filesystem::path FileManager::getExecutableDirectory()
 {
 	auto exePath = juce::File::getSpecialLocation(juce::File::currentExecutableFile);
@@ -140,7 +102,9 @@ std::filesystem::path FileManager::getExecutableDirectory()
 
 std::filesystem::path FileManager::getAssetsFolder()
 {
-	return getProjectDirectory() / AssetsFolderName;
+	// Assets are copied next to the executable at build time (see cmake/Assets.cmake), so resolve relative to it
+	// rather than the current working directory, which varies depending on how the process is launched.
+	return getExecutableDirectory() / AssetsFolderName;
 }
 
 
@@ -165,7 +129,7 @@ std::vector<std::string> FileManager::getInstrumentImages(const std::string &fam
 	std::filesystem::path	 imagesDir	= projectDir / ImageFolderName / family / instrumentName;
 
 	std::vector<std::string> images;
-	images.reserve(4); // there should be 3-4 images in the folder
+	images.reserve(2); // currently just the instrument photo
 
 	if (std::filesystem::exists(imagesDir) && std::filesystem::is_directory(imagesDir))
 	{

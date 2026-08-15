@@ -76,69 +76,25 @@ TEST_F(HelperTest, GetFamilyNameFromKey)
 }
 
 
-TEST_F(HelperTest, GetLowerOrHigherNoteValidRange)
+TEST_F(HelperTest, LookupsFromUnknownKeysReturnEmptyRatherThanThrowing)
 {
-	std::string range	   = "C3 - E6";
-
-	std::string lowerNote  = getLowerOrHigherNote(range, true);
-	std::string higherNote = getLowerOrHigherNote(range, false);
-
-	EXPECT_EQ(lowerNote, "C3") << "Should extract lower note correctly";
-	EXPECT_EQ(higherNote, "E6") << "Should extract higher note correctly";
+	// These used to call map::at and throw std::out_of_range with no handler above them.
+	EXPECT_NO_THROW({
+		EXPECT_TRUE(getInstrumentNameFromKey(999).empty()) << "Unknown instrument key should yield an empty name";
+		EXPECT_TRUE(getFamilyNameFromKey(999).empty()) << "Unknown family digit should yield an empty name";
+	});
 }
 
 
-TEST_F(HelperTest, GetLowerOrHigherNoteWithSpaces)
+TEST_F(HelperTest, GetInstrumentKeyFromUnknownNamesReturnsZero)
 {
-	std::string range	   = "  G4  -  A7  ";
+	std::string unknownFamily	  = "Synthesizers";
+	std::string unknownInstrument = "Theremin";
+	std::string knownFamily		  = StringsName;
+	std::string knownInstrument	  = ViolinName;
 
-	std::string lowerNote  = getLowerOrHigherNote(range, true);
-	std::string higherNote = getLowerOrHigherNote(range, false);
-
-	EXPECT_EQ(lowerNote, "G4") << "Should trim whitespace from lower note";
-	EXPECT_EQ(higherNote, "A7") << "Should trim whitespace from higher note";
-}
-
-
-TEST_F(HelperTest, GetLowerOrHigherNoteInvalidRange)
-{
-	std::string invalidRange = "InvalidRange";
-
-	std::string result		 = getLowerOrHigherNote(invalidRange, true);
-	EXPECT_TRUE(result.empty()) << "Should return empty string for invalid range";
-}
-
-
-TEST_F(HelperTest, SplitColonizedStrings)
-{
-	std::string colonized = "Left Part : Right Part";
-
-	std::string leftPart  = splitColonizedStrings(colonized, true);
-	std::string rightPart = splitColonizedStrings(colonized, false);
-
-	EXPECT_EQ(leftPart, "Left Part") << "Should extract left part correctly";
-	EXPECT_EQ(rightPart, "Right Part") << "Should extract right part correctly";
-}
-
-
-TEST_F(HelperTest, SplitColonizedStringsWithSpaces)
-{
-	std::string colonized = "  First  :  Second  ";
-
-	std::string leftPart  = splitColonizedStrings(colonized, true);
-	std::string rightPart = splitColonizedStrings(colonized, false);
-
-	EXPECT_EQ(leftPart, "First") << "Should trim whitespace from left part";
-	EXPECT_EQ(rightPart, "Second") << "Should trim whitespace from right part";
-}
-
-
-TEST_F(HelperTest, SplitColonizedStringsInvalid)
-{
-	std::string invalid = "NoColonHere";
-
-	std::string result	= splitColonizedStrings(invalid, true);
-	EXPECT_TRUE(result.empty()) << "Should return empty for strings without colon";
+	EXPECT_EQ(getInstrumentKey(unknownFamily, knownInstrument), 0) << "Unknown family should yield key 0";
+	EXPECT_EQ(getInstrumentKey(knownFamily, unknownInstrument), 0) << "Unknown instrument should yield key 0";
 }
 
 

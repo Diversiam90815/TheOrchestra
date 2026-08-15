@@ -4,7 +4,6 @@ CPMAddPackage(
         NAME GOOGLETEST
         GITHUB_REPOSITORY google/googletest
         VERSION 1.15.2
-        SOURCE_DIR ${LIB_DIR}/googletest
         OPTIONS
         "INSTALL_GTEST OFF"
         "INSTALL_GMOCK OFF"

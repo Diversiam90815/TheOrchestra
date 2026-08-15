@@ -8,6 +8,8 @@
 #pragma once
 
 #include <memory>
+#include <array>
+#include <atomic>
 
 #include "JuceIncludes.h"
 #include "InstrumentController.h"
@@ -22,21 +24,24 @@ public:
 	CoreManager();
 	~CoreManager() = default;
 
-	void					 init();
-	void					 prepareAudio(double sampleRate, int samplesPerblock);
+	void											  init();
+	void											  prepareAudio(double sampleRate, int samplesPerblock);
 
-	juce::MidiKeyboardState &getMidiKeyboardState();
+	juce::MidiKeyboardState							 &getMidiKeyboardState();
 
-	void					 changeInstrument(InstrumentID key);
-	void					 changeArticulation(InstrumentID key, Articulation articulation);
-	void					 changeSamplesFolder(std::string &samplesFolder);
-	InstrumentProfile		 getInstrument(InstrumentID key);
+	void											  sendControllerChange(int ccNumber, int value);
+	int												  getLastControllerValue(int ccNumber) const;
 
-	std::set<Articulation>	 getAvailableArticulations(InstrumentID instrumentKey);
+	void											  changeInstrument(InstrumentID key);
+	bool											  changeArticulation(InstrumentID key, Articulation articulation);
+	void											  changeSamplesFolder(const std::string &samplesFolder);
+	InstrumentProfile								  getInstrument(InstrumentID key);
 
-	void					 processAudioBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
+	std::vector<std::pair<InstrumentID, std::string>> getInstrumentsForFamily(Family family);
 
-	void					 setSamplesFolder(std::string &directory);
+	std::set<Articulation>							  getAvailableArticulations(InstrumentID instrumentKey);
+
+	void											  processAudioBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
 
 private:
 	void									 logProjectInfo();
@@ -47,5 +52,6 @@ private:
 	std::unique_ptr<OrchestraSampler>		 mSampler;
 	std::unique_ptr<juce::MidiKeyboardState> mMidiKeyboardState;
 
-	int										 mCurrentInstrumentKey{0};
+	juce::MidiMessageCollector				 mUiMidiCollector;
+	std::array<std::atomic<int>, 128>		 mCcValues; // last-seen value per CC number, -1 = unknown
 };

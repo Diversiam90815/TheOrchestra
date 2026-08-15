@@ -27,12 +27,16 @@ public:
 		mDeviceManager.addAudioCallback(&mPlayer);
 
 		setUsingNativeTitleBar(true);
+
+		// resizeToFitWhenContentChangesSize: the editor sizes itself per view
+		// (family switcher vs instrument detail) and the window follows. The
+		// editor also owns the resize limits, so there is only one constrainer.
 		setContentOwned(editor.get(), true);
-		setResizable(false, false);
+		setResizable(true, true);
 		centreWithSize(getWidth(), getHeight());
 		setVisible(true);
 
-		mDeviceManager.addMidiInputCallback({}, &editor->mPianoRollView);
+		mDeviceManager.addMidiInputCallback({}, &editor->getPianoRollForMidiInput());
 
 		LOG_INFO("Mainwindow setup finished!");
 	}

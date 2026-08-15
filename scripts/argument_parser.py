@@ -45,8 +45,7 @@ def create_argument_parser() -> argparse.ArgumentParser:
     
     parser.add_argument(
         "-t", "--runtest",
-        default=False,
-        type=bool,
+        action="store_true",
         help="Run only the CMake test suite. Defaults to False"
     )
     return parser

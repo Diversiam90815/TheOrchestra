@@ -12,23 +12,30 @@ function(set_common_target_options target)
         JUCE_USE_OBOE_STABILIZED_CALLBACK=1
         JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=1
 
-        ENV_DEVELOPMENT
-        _CRT_SECURE_NO_WARNINGS
-
         "$<$<CONFIG:Debug>:_DEBUG>"
         "$<$<CONFIG:Release>:NDEBUG>"
     )
 
-    target_compile_options(${target}
-        PRIVATE
-            $<$<CONFIG:Release>:/Oi;/Gy>
-            $<$<CONFIG:Debug>:/Od;/Z7>
-            /sdl
-            /MP
-            /WX-
-            /wd4146
-            /wd4996
-            ${DEFAULT_CXX_DEBUG_INFORMATION_FORMAT}
-            ${DEFAULT_CXX_EXCEPTION_HANDLING}
-    )
+    if(MSVC)
+        target_compile_definitions(${target} PUBLIC _CRT_SECURE_NO_WARNINGS)
+
+        target_compile_options(${target}
+            PRIVATE
+                $<$<CONFIG:Release>:/Oi;/Gy>
+                $<$<CONFIG:Debug>:/Od;/Z7>
+                /sdl        # additional security checks
+                /MP         # parallel compilation
+                /wd4146     # unary minus on unsigned type (JUCE / nlohmann)
+                /wd4996     # deprecated CRT functions
+        )
+    else()
+        target_compile_options(${target}
+            PRIVATE
+                $<$<CONFIG:Release>:-O2>
+                $<$<CONFIG:Debug>:-O0;-g>
+                -Wall
+                -Wextra
+                -Wno-unused-parameter
+        )
+    endif()
 endfunction()

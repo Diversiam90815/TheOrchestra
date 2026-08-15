@@ -1,7 +1,6 @@
 set(TARGET_NAME TheOrchestraCore)
 
 set (ASSETS_DIR             ${PROJECT_SOURCE_DIR}/Assets)
-set (ASSETS_DEST_DIR        "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets")
 
 set (INSTRUMENT_DIR         ${CMAKE_CURRENT_SOURCE_DIR}/InstrumentInfo )
 set (PROCESSOR_DIR          ${CMAKE_CURRENT_SOURCE_DIR}/AudioProcessor )
@@ -92,14 +91,15 @@ source_group("User Config"      FILES ${USER_CONFIG_FILES})
 CPMAddPackage(
     NAME Logger
     GITHUB_REPOSITORY Diversiam90815/Logger
-    VERSION 1.3.81
+    VERSION 2.0.86
 )
 
 CPMAddPackage(
-    NAME JUCE
-    GITHUB_REPOSITORY juce-framework/JUCE
-    GIT_TAG 8.0.3
-    VERSION 8.0.3
+    NAME nlohmann_json
+    GITHUB_REPOSITORY nlohmann/json
+    VERSION 3.12.0
+    OPTIONS
+        "JSON_Install OFF"
 )
 
 add_library(${TARGET_NAME} STATIC ${CORE_PROJECT_FILES})
@@ -116,7 +116,7 @@ if(ENABLE_FORMAT)
 endif()
 
 if(ENABLE_DOXYGEN)
-	Doxygen(Chess_Engine ${SOURCE_DIR})
+	Doxygen(TheOrchestraCore ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
 
@@ -125,7 +125,6 @@ target_include_directories(${TARGET_NAME} PUBLIC
         ${ALL_PROJECT_DIRS}
 )
 
-include(ProjectOptions)
 set_common_target_options(${TARGET_NAME})
 
 juce_add_binary_data(InstrumentData
@@ -138,22 +137,8 @@ set (PROJECT_LIBS   juce::juce_audio_utils
                     juce::juce_audio_plugin_client
                     juce::juce_core
                     Logger
+                    nlohmann_json::nlohmann_json
                     InstrumentData
 )
 
 target_link_libraries(${TARGET_NAME} PUBLIC ${PROJECT_LIBS} )
-
-
-add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${ASSETS_DIR}/Samples
-    "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets/Samples"
-    COMMENT "Copying Samples to build directory..."
-)
-
-add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${ASSETS_DIR}/Images
-    "$<TARGET_FILE_DIR:${TARGET_NAME}>/Assets/Images"
-    COMMENT "Copying Images to build directory..."
-)

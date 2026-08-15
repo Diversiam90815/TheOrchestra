@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 	Module			PluginEditor
-	Description		User Interface
+	Description		Main UI - view router between the family switcher and the instrument detail view
   ==============================================================================
 */
 
@@ -9,15 +9,9 @@
 
 #include "PluginProcessor.h"
 
-#include "PianoRoll.h"
-#include "MenuBar.h"
-#include "InstrumentRangesView.h"
-#include "RegisterView.h"
-#include "TechniquesView.h"
-#include "InformationView.h"
-#include "FamousWorksView.h"
-#include "InstrumentView.h"
-#include "SamplerView.h"
+#include "CustomLookAndFeel.h"
+#include "FamilySwitcherView.h"
+#include "InstrumentDetailView.h"
 
 
 class OrchestraEditor : public juce::AudioProcessorEditor
@@ -26,67 +20,64 @@ public:
 	OrchestraEditor(OrchestraProcessor &);
 	~OrchestraEditor() override;
 
-	void paint(juce::Graphics &) override;
-	void resized() override;
+	void	   paint(juce::Graphics &) override;
+	void	   resized() override;
 
-	void init();
-	void showUI();
+	// The underlying PianoRoll implements juce::MidiInputCallback; the app registers it for MIDI-in.
+	PianoRoll &getPianoRollForMidiInput() { return mDetailView.getPianoRoll(); }
 
 private:
-	void				   changeInstrument(InstrumentID key);
+	void				 changeFamily(Family family);
+	void				 changeInstrument(InstrumentID key);
+	void				 showFamilySwitcher();
+	void				 showInstrumentDetail();
+	void				 onSettingsClicked();
+	void				 populateFamilyCounts();
 
-	CoreManager			  *mCoreManager;
+	/*
+	 @brief					Resizes the window to a view's natural size.
 
-	OrchestraProcessor	  &audioProcessor;
+							The family switcher needs far less room than the
+							instrument detail, so each view carries its own size
+							and minimum. Once the user has resized the window
+							themselves this becomes a no-op - their choice wins
+							from then on.
+	 @param					[IN] width / height the view wants.
+	 @param					[IN] minWidth / minHeight below which it breaks.
+	*/
+	void				 applyViewSize(int width, int height, int minWidth, int minHeight);
 
-	PianoRoll			   mPianoRollView;
-	MenuBar				   mMenuBar;
+	/*
+	 @brief					True once the window differs from the size this
+							class last applied, i.e. the user dragged it.
+	*/
+	bool				 hasUserResized() const;
 
-	juce::MenuBarComponent mMenuBarComponent;
+	CoreManager			*mCoreManager;
+	OrchestraProcessor	&audioProcessor;
 
-	CustomLookAndFeel	   mCustomLookAndFeel;
+	CustomLookAndFeel	 mCustomLookAndFeel;
 
-	InstrumentView		   mInstrumentView;
-	InstrumentRangesView   mRangesView;
-	RegisterView		   mQualitiesView;
-	TechniquesView		   mTechniquesView;
-	InformationView		   mInfoView;
-	FamousWorksView		   mFamousWorksView;
-	SamplerView			   mSamplerView;
+	// The two top-level views (toggled by the router)
+	FamilySwitcherView	 mFamilySwitcher;
+	InstrumentDetailView mDetailView;
 
-	const int			   mInstrumentViewX	  = 443;
-	const int			   mInstrumentViewY	  = 49;
+	// Per-view window sizes. The family switcher is a four-card chooser and
+	// does not need the detail view's footprint.
+	static constexpr int kFamilyWidth	  = 820;
+	static constexpr int kFamilyHeight	  = 640;
+	static constexpr int kFamilyMinWidth  = 700;
+	static constexpr int kFamilyMinHeight = 520;
 
-	const int			   mRangesViewX		  = 16;
-	const int			   mRangesViewY		  = 145;
+	static constexpr int kDetailWidth	  = 1480;
+	static constexpr int kDetailHeight	  = 940;
+	static constexpr int kDetailMinWidth  = 1240;
+	static constexpr int kDetailMinHeight = 860;
 
-	const int			   mQualitiesViewX	  = 325;
-	const int			   mQualitiesViewY	  = 145;
+	// The size this class last applied; if the window no longer matches it, the
+	// user has taken over.
+	juce::Point<int>	 mAppliedSize{0, 0};
 
-	const int			   mTechniquesViewX	  = 650;
-	const int			   mTechniquesViewY	  = 145;
-
-	const int			   mInfoViewX		  = 654;
-	const int			   mInfoViewY		  = 389;
-
-	const int			   mFamousWorksViewX  = 962;
-	const int			   mFamousWorksViewY  = 145;
-
-	const int			   mSamplerViewX	  = 335;
-	const int			   mSamplerViewY	  = 459;
-
-	const int			   mPianoRollX		  = 0;
-	const int			   mPianoRollY		  = 586;
-	const int			   mPianoRollHeight	  = 114;
-
-	const int			   mMenuBarX		  = 0;
-	const int			   mMenuBarY		  = 0;
-	const int			   mMenuBarHeight	  = 30;
-
-	const int			   mWidth			  = 1200;
-	const int			   mHeight			  = 700;
-
-	InstrumentID		   mCurrentInstrument = 0;
-
-	friend class MainWindow;
+	InstrumentID		 mCurrentInstrument = 0;
+	Family				 mCurrentFamily		= Family::Strings;
 };
