@@ -200,7 +200,7 @@ void NotationRenderer::drawNote(juce::Graphics &g, juce::Rectangle<float> staffA
 		displayMidi += 24;
 
 	int	  staffPosition = midiNoteToStaffPosition(displayMidi, clef);
-	float noteX			= staffArea.getCentreX() * 1.2f;
+	float noteX			= staffArea.getX() + staffArea.getWidth() * kNoteXFraction;
 	float noteY			= staffPositionToY(staffPosition, staffArea);
 
 	// Draw ledger lines if needed
