@@ -45,7 +45,8 @@ void InstrumentHeaderPanel::setInstrument(const InstrumentProfile &instrument)
 	if (!mClefs.empty())
 		mCurrentClef = clefFromString(mClefs[0]);
 
-	// Load instrument image
+	mInstrumentImage.setImage(juce::Image());
+
 	juce::File imageFile = mFileManager.getInstrumentImage(TypeOfImage::InstrumentImage, instrument.getInstrumentID());
 	if (imageFile.existsAsFile())
 	{
@@ -54,6 +55,10 @@ void InstrumentHeaderPanel::setInstrument(const InstrumentProfile &instrument)
 		{
 			img = img.rescaled(kImageWidth, kImageHeight, juce::Graphics::highResamplingQuality);
 			mInstrumentImage.setImage(img);
+		}
+		else
+		{
+			LOG_WARNING("Could not decode instrument image: {}", imageFile.getFullPathName().toStdString());
 		}
 	}
 
@@ -201,7 +206,8 @@ juce::String InstrumentHeaderPanel::deriveTranspositionLabel(const std::string &
 	int writtenMidi	 = turnNotenameIntoMidinumber(writtenLow);
 	int soundingMidi = turnNotenameIntoMidinumber(soundingLow);
 
-	if (writtenMidi <= 0 || soundingMidi <= 0)
+	// turnNotenameIntoMidinumber signals failure with -1; MIDI 0 (C-1) is a valid note.
+	if (writtenMidi < 0 || soundingMidi < 0)
 		return "Transposing";
 
 	int				   interval	  = writtenMidi - soundingMidi;
