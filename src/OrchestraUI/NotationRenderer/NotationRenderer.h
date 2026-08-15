@@ -117,4 +117,6 @@ private:
 
 	// Max ledger lines before triggering ottava
 	static constexpr int kMaxLedgerLines			 = 3;
+
+	static constexpr float kNoteXFraction			 = 0.6f;
 };
