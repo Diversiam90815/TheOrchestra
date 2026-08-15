@@ -127,7 +127,7 @@ void InstrumentHeaderPanel::resized()
 
 int InstrumentHeaderPanel::pillWidth(const juce::String &text) const
 {
-	auto	 *lnf  = dynamic_cast<CustomLookAndFeel *>(&const_cast<InstrumentHeaderPanel *>(this)->getLookAndFeel());
+	auto	  *lnf	= dynamic_cast<CustomLookAndFeel *>(&const_cast<InstrumentHeaderPanel *>(this)->getLookAndFeel());
 	const auto font = lnf ? lnf->getSerifFont(Type::bodySmall) : juce::Font(Type::bodySmall);
 
 	// Measured rather than fixed, so longer labels ("Sounding", "in Bb") cannot clip.
@@ -155,10 +155,10 @@ void InstrumentHeaderPanel::rebuildMetaTags()
 
 	for (size_t i = 0; i < mClefs.size(); ++i)
 	{
-		const Clef clef	   = clefFromString(mClefs[i]);
+		const Clef clef		= clefFromString(mClefs[i]);
 		const bool isActive = clef == mCurrentClef;
 
-		auto	   btn	   = std::make_unique<juce::TextButton>(mClefs[i]);
+		auto	   btn		= std::make_unique<juce::TextButton>(mClefs[i]);
 		setButtonStyle(*btn, ButtonStyle::MetaTag);
 		btn->setClickingTogglesState(true);
 		btn->setRadioGroupId(RadioGroup::clef);

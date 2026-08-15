@@ -21,15 +21,15 @@ public:
 
 	std::function<void(Family)> onClicked;
 
-	void				 setCount(int count);
-	void				 setSelected(bool selected);
+	void						setCount(int count);
+	void						setSelected(bool selected);
 
-	void				 paint(juce::Graphics &g) override;
-	void				 mouseEnter(const juce::MouseEvent &) override;
-	void				 mouseExit(const juce::MouseEvent &) override;
-	void				 mouseUp(const juce::MouseEvent &e) override;
+	void						paint(juce::Graphics &g) override;
+	void						mouseEnter(const juce::MouseEvent &) override;
+	void						mouseExit(const juce::MouseEvent &) override;
+	void						mouseUp(const juce::MouseEvent &e) override;
 
-	static constexpr int kBadgeSize = 54;
+	static constexpr int		kBadgeSize = 54;
 
 private:
 	Family		 mFamily;

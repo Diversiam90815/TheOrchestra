@@ -24,24 +24,24 @@ public:
 	CoreManager();
 	~CoreManager() = default;
 
-	void					 init();
-	void					 prepareAudio(double sampleRate, int samplesPerblock);
+	void											  init();
+	void											  prepareAudio(double sampleRate, int samplesPerblock);
 
-	juce::MidiKeyboardState &getMidiKeyboardState();
+	juce::MidiKeyboardState							 &getMidiKeyboardState();
 
-	void					 sendControllerChange(int ccNumber, int value);
-	int						 getLastControllerValue(int ccNumber) const;
+	void											  sendControllerChange(int ccNumber, int value);
+	int												  getLastControllerValue(int ccNumber) const;
 
-	void					 changeInstrument(InstrumentID key);
-	bool					 changeArticulation(InstrumentID key, Articulation articulation);
-	void					 changeSamplesFolder(const std::string &samplesFolder);
-	InstrumentProfile		 getInstrument(InstrumentID key);
+	void											  changeInstrument(InstrumentID key);
+	bool											  changeArticulation(InstrumentID key, Articulation articulation);
+	void											  changeSamplesFolder(const std::string &samplesFolder);
+	InstrumentProfile								  getInstrument(InstrumentID key);
 
 	std::vector<std::pair<InstrumentID, std::string>> getInstrumentsForFamily(Family family);
 
-	std::set<Articulation>	 getAvailableArticulations(InstrumentID instrumentKey);
+	std::set<Articulation>							  getAvailableArticulations(InstrumentID instrumentKey);
 
-	void					 processAudioBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
+	void											  processAudioBlock(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
 
 private:
 	void									 logProjectInfo();

@@ -69,12 +69,12 @@ void NotationComponent::setClef(Clef clef)
 
 void NotationComponent::selectBestClef(Clef preferredClef)
 {
-	static constexpr Clef kAllClefs[] = { Clef::Treble, Clef::Bass, Clef::Alto, Clef::Tenor };
+	static constexpr Clef kAllClefs[]		   = {Clef::Treble, Clef::Bass, Clef::Alto, Clef::Tenor};
 
-	constexpr int kPreferenceTolerance = 4;
+	constexpr int		  kPreferenceTolerance = 4;
 
-	Clef		  best			= kAllClefs[0];
-	int			  bestOverflow	= mRenderer.getLedgerOverflow(mNote.midiNoteNumber, best);
+	Clef				  best				   = kAllClefs[0];
+	int					  bestOverflow		   = mRenderer.getLedgerOverflow(mNote.midiNoteNumber, best);
 
 	for (Clef clef : kAllClefs)
 	{

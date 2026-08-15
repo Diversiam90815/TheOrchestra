@@ -64,8 +64,8 @@ std::filesystem::path FileManager::getProjectsAppDataPath()
 	std::filesystem::path appDataPath(appDataDir.getFullPathName().toStdString());
 
 	// Test binaries get their own AppData namespace so running them never reads or overwrites a real user's saved settings.
-	auto				  exeName	  = juce::File::getSpecialLocation(juce::File::currentExecutableFile).getFileNameWithoutExtension();
-	const char			 *projectName = exeName.containsIgnoreCase("Tests") ? TestProjectName : ProjectName;
+	auto				  exeName			 = juce::File::getSpecialLocation(juce::File::currentExecutableFile).getFileNameWithoutExtension();
+	const char			 *projectName		 = exeName.containsIgnoreCase("Tests") ? TestProjectName : ProjectName;
 
 	std::filesystem::path projectAppDataPath = appDataPath / projectName;
 
