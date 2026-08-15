@@ -30,6 +30,8 @@ public:
 	void				 setClefChangedCallback(ClefChangedCallback callback);
 	void				 setPitchModeChangedCallback(PitchModeChangedCallback callback);
 
+	Clef				 getCurrentClef() const { return mCurrentClef; }
+
 	int					 getPreferredHeight(int width) const override;
 
 	static constexpr int kImageWidth   = 100;
@@ -47,8 +49,7 @@ private:
 	juce::Label								  mNameLabel;
 	juce::Label								  mFamilyLabel;
 
-	// Info labels (non-interactive) for clefs and transposition
-	std::vector<std::unique_ptr<juce::Label>> mClefLabels;
+	std::vector<std::unique_ptr<juce::TextButton>> mClefButtons;
 	std::unique_ptr<juce::Label>			  mTranspositionInfoLabel;
 
 	// Written/Sounding toggle buttons (include transposition in text)
