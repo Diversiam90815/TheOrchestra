@@ -6,12 +6,17 @@
 */
 
 #include "PianoRoll.h"
+#include "Logging.h"
 
 
 PianoRoll::~PianoRoll()
 {
-	mPianoRoll->removeAllChangeListeners();
-	mPianoState->removeListener(this);
+	if (mPianoRoll)
+		mPianoRoll->removeAllChangeListeners();
+
+	if (mPianoState)
+		mPianoState->removeListener(this);
+
 	mPianoRoll.reset();
 }
 
@@ -28,24 +33,22 @@ void PianoRoll::resized()
 
 void PianoRoll::handleIncomingMidiMessage(juce::MidiInput *source, const juce::MidiMessage &message)
 {
+	if (!mPianoState)
+		return;
+
 	mPianoState->processNextMidiEvent(message);
-
-	if (message.isNoteOn())
-	{
-		mPianoState->noteOn(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
-	}
-
-	else if (message.isNoteOff())
-	{
-		mPianoState->noteOff(message.getChannel(), message.getNoteNumber(), message.getFloatVelocity());
-	}
 }
 
 
 void PianoRoll::init()
 {
+	jassert(mPianoState != nullptr); // PianoState should be set before calling init!
+
 	if (!mPianoState)
-		assert(false); // PianoState should be set before call init!
+	{
+		LOG_ERROR("PianoRoll::init called before setKeyboardState - piano roll will not be created.");
+		return;
+	}
 
 	mPianoRoll = std::make_unique<CustomPianoRoll>(*mPianoState, juce::MidiKeyboardComponent::horizontalKeyboard);
 	showPianoRoll();
@@ -54,6 +57,9 @@ void PianoRoll::init()
 
 void PianoRoll::displayInstrument(InstrumentProfile &info)
 {
+	if (!mPianoRoll)
+		return;
+
 	// Strategy 1: Rhythmic percussion uses displayedRange
 	if (info.isRhythmicPercussion())
 	{
