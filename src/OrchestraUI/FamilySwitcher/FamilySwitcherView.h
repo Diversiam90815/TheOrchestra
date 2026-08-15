@@ -44,7 +44,6 @@ private:
 
 	std::vector<CardEntry> mCards;
 	juce::Rectangle<int>   mGearBounds;
-	juce::Rectangle<int>   mSearchBounds;
 	juce::Rectangle<int>   mContentBounds;
 	juce::Rectangle<int>   mTitleBounds;
 	juce::Rectangle<int>   mSubtitleBounds;
