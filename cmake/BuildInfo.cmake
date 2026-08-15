@@ -2,28 +2,38 @@ set(BUILDINFO_TEMPLATE_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/buildinfo")
 string(TIMESTAMP TIMESTAMP)
 
-find_program(GIT_PATH git REQUIRED)
+# Not REQUIRED: building from a source archive without git should still work,
+# it just leaves the commit fields empty.
+find_program(GIT_PATH git)
 
-# Full SHA
-execute_process(
-    COMMAND ${GIT_PATH} rev-parse HEAD
-    OUTPUT_VARIABLE COMMIT_SHA
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+if(NOT GIT_PATH)
+    message(WARNING "git not found - build info will not contain commit details.")
+    set(COMMIT_SHA "unknown")
+    set(COMMIT_SHA_SHORT "unknown")
+    set(GIT_BRANCH "unknown")
+else()
 
-# Short SHA
-execute_process(
-    COMMAND ${GIT_PATH} rev-parse --short=7 HEAD
-    OUTPUT_VARIABLE COMMIT_SHA_SHORT
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+    # Full SHA
+    execute_process(
+        COMMAND ${GIT_PATH} rev-parse HEAD
+        OUTPUT_VARIABLE COMMIT_SHA
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
 
-# Branch name
-execute_process(
-    COMMAND ${GIT_PATH} rev-parse --abbrev-ref HEAD
-    OUTPUT_VARIABLE GIT_BRANCH
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-)
+    # Short SHA
+    execute_process(
+        COMMAND ${GIT_PATH} rev-parse --short=7 HEAD
+        OUTPUT_VARIABLE COMMIT_SHA_SHORT
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    # Branch name
+    execute_process(
+        COMMAND ${GIT_PATH} rev-parse --abbrev-ref HEAD
+        OUTPUT_VARIABLE GIT_BRANCH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+endif()
 
 set(CMAKE_INFO        "${CMAKE_VERSION}")
 set(GENERATOR         "${CMAKE_GENERATOR}")
