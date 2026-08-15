@@ -67,7 +67,7 @@ void InstrumentHeaderPanel::setInstrument(const InstrumentProfile &instrument)
 		juce::Image img = juce::ImageFileFormat::loadFrom(imageFile);
 		if (img.isValid())
 		{
-			img = img.rescaled(90, 84, juce::Graphics::highResamplingQuality);
+			img = img.rescaled(kImageWidth, kImageHeight, juce::Graphics::highResamplingQuality);
 			mInstrumentImage.setImage(img);
 		}
 	}
@@ -78,55 +78,57 @@ void InstrumentHeaderPanel::setInstrument(const InstrumentProfile &instrument)
 }
 
 
+int InstrumentHeaderPanel::getPreferredHeight(int /*width*/) const
+{
+	const int textStack = kNameHeight + kFamilyHeight + Space::s + kTagHeight;
+
+	return getChromeHeight() + juce::jmax(kImageHeight, textStack);
+}
+
+
 void InstrumentHeaderPanel::resized()
 {
-	auto area = getLocalBounds().reduced(kPadding);
+	auto area	   = getLocalBounds().reduced(kPadding);
 
 	// Image on the left, vertically centered
-	auto imageArea = area.removeFromLeft(90);
-	mInstrumentImage.setBounds(imageArea.withHeight(84).withY(imageArea.getY() + (imageArea.getHeight() - 84) / 2));
-	area.removeFromLeft(16); // gap
+	auto imageArea = area.removeFromLeft(kImageWidth);
+	mInstrumentImage.setBounds(imageArea.withSizeKeepingCentre(kImageWidth, kImageHeight));
+	area.removeFromLeft(Space::xl);
 
 	// Right side: name, family, meta tags stacked
 	auto rightSide = area;
 
-	// Name at top
-	mNameLabel.setBounds(rightSide.removeFromTop(36));
-
-	// Family subtitle
-	mFamilyLabel.setBounds(rightSide.removeFromTop(20));
+	mNameLabel.setBounds(rightSide.removeFromTop(kNameHeight));
+	mFamilyLabel.setBounds(rightSide.removeFromTop(kFamilyHeight));
 
 	// Meta tags row: [clef info labels] [transposition info] [Written | Sounding toggles]
-	rightSide.removeFromTop(8);
-	int tagX = rightSide.getX();
-	const int tagH = 24;
-	const int tagGap = 6;
+	rightSide.removeFromTop(Space::s);
 
-	// Clef info labels (non-interactive)
+	int		  tagX	  = rightSide.getX();
+	const int tagY	  = rightSide.getY();
+	const int clefW	  = 92;
+	const int transW  = 104;
+	const int toggleW = 92;
+
 	for (auto &label : mClefLabels)
 	{
-		int w = 80;
-		label->setBounds(tagX, rightSide.getY(), w, tagH);
-		tagX += w + tagGap;
+		label->setBounds(tagX, tagY, clefW, kTagHeight);
+		tagX += clefW + kTagGap;
 	}
 
-	// Transposition info label
 	if (mTranspositionInfoLabel)
 	{
-		int w = 90;
-		mTranspositionInfoLabel->setBounds(tagX, rightSide.getY(), w, tagH);
-		tagX += w + tagGap;
+		mTranspositionInfoLabel->setBounds(tagX, tagY, transW, kTagHeight);
+		tagX += transW + kTagGap;
 	}
 
-	// Written/Sounding toggle buttons
 	if (mHasTransposition && mWrittenBtn && mSoundingBtn)
 	{
-		tagX += 4; // small separator
+		tagX += Space::s; // separator between info pills and the toggle pair
 
-		int ww = 80;
-		mWrittenBtn->setBounds(tagX, rightSide.getY(), ww, tagH);
-		tagX += ww + tagGap;
-		mSoundingBtn->setBounds(tagX, rightSide.getY(), ww, tagH);
+		mWrittenBtn->setBounds(tagX, tagY, toggleW, kTagHeight);
+		tagX += toggleW + kTagGap;
+		mSoundingBtn->setBounds(tagX, tagY, toggleW, kTagHeight);
 	}
 }
 

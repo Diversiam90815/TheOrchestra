@@ -7,6 +7,7 @@
 
 #include "PianoRollWithCc.h"
 #include "CustomLookAndFeel.h"
+#include "TextMeasure.h"
 
 
 PianoRollWithCc::PianoRollWithCc()
@@ -37,14 +38,13 @@ void PianoRollWithCc::displayInstrument(const InstrumentProfile &instrument)
 	// Build the register legend (swatch colour + start-note name) from real data.
 	mLegend.clear();
 
-	auto *lf	 = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
-	auto  colours = lf ? lf->getQualityColours() : std::vector<juce::Colour>{};
-
+	const auto &t		  = themeFor(*this);
 	const auto &registers = instrument.getRegisters();
+
 	for (size_t i = 0; i < registers.size() && i < 4; ++i)
 	{
 		LegendEntry entry;
-		entry.colour = (i < colours.size()) ? colours[i] : juce::Colours::grey;
+		entry.colour = t.registerSwatch((int)i);
 		entry.note	 = juce::String(registers[i].getWrittenLowNote());
 		mLegend.push_back(entry);
 	}
@@ -62,31 +62,31 @@ void PianoRollWithCc::setCcCallbacks(std::function<void(int, int)> onSend, std::
 
 void PianoRollWithCc::paint(juce::Graphics &g)
 {
-	auto *lf = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	auto	   *lf	   = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	const auto &t	   = themeFor(*this);
 
-	const juce::Colour textMuted = lf ? lf->getTextTertiaryColour() : juce::Colour::fromRGB(107, 103, 96);
-
-	auto header = juce::Rectangle<int>(0, 0, getWidth(), kHeaderH);
+	auto		header = juce::Rectangle<int>(0, 0, getWidth(), kHeaderH);
 
 	// "PIANO ROLL" section label (left)
-	g.setColour(textMuted);
-	g.setFont(lf ? lf->getSerifFont(11.0f, true) : juce::Font(11.0f));
+	g.setColour(t.textTertiary);
+	g.setFont(lf ? lf->getSerifFont(Type::label, true) : juce::Font(Type::label));
 	g.drawText("PIANO ROLL", header, juce::Justification::centredLeft, false);
 
 	// Register legend (right): swatch + start-note, right-aligned.
 	if (!mLegend.empty())
 	{
-		g.setFont(lf ? lf->getSerifFont(11.0f) : juce::Font(11.0f));
+		const auto font = lf ? lf->getSerifFont(Type::bodySmall) : juce::Font(Type::bodySmall);
+		g.setFont(font);
 
-		const int   swatch	= 8;
-		const int   gap		= 5;
-		const int   itemGap	= 12;
-		const int   textPad	= 4;
+		const int swatch  = 10;
+		const int gap	  = Space::s;
+		const int itemGap = Space::l;
+		const int textPad = Space::xs;
 
 		// Measure total width, then lay out from the right edge.
-		int totalW = 0;
+		int		  totalW  = 0;
 		for (const auto &e : mLegend)
-			totalW += swatch + gap + g.getCurrentFont().getStringWidth(e.note) + itemGap;
+			totalW += swatch + gap + TextMeasure::lineWidth(font, e.note) + itemGap;
 		totalW -= itemGap;
 
 		int x = getWidth() - totalW;
@@ -98,8 +98,8 @@ void PianoRollWithCc::paint(juce::Graphics &g)
 			g.fillRoundedRectangle((float)x, (float)(y - swatch / 2), (float)swatch, (float)swatch, 2.0f);
 			x += swatch + gap;
 
-			g.setColour(textMuted);
-			const int tw = g.getCurrentFont().getStringWidth(e.note);
+			g.setColour(t.textTertiary);
+			const int tw = TextMeasure::lineWidth(font, e.note);
 			g.drawText(e.note, juce::Rectangle<int>(x, 0, tw + textPad, kHeaderH), juce::Justification::centredLeft, false);
 			x += tw + itemGap;
 		}

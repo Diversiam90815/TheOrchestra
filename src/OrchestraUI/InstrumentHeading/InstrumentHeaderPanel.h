@@ -18,20 +18,29 @@ using ClefChangedCallback	  = std::function<void(Clef)>;
 using PitchModeChangedCallback = std::function<void(PitchMode)>;
 
 
-class InstrumentHeaderPanel : public OrchestraPanel
+class InstrumentHeaderPanel : public OrchestraPanel, public HasPreferredHeight
 {
 public:
 	InstrumentHeaderPanel();
 	~InstrumentHeaderPanel() override = default;
 
-	void setInstrument(const InstrumentProfile &instrument) override;
-	void resized() override;
+	void				 setInstrument(const InstrumentProfile &instrument) override;
+	void				 resized() override;
 
-	void setClefChangedCallback(ClefChangedCallback callback);
-	void setPitchModeChangedCallback(PitchModeChangedCallback callback);
+	void				 setClefChangedCallback(ClefChangedCallback callback);
+	void				 setPitchModeChangedCallback(PitchModeChangedCallback callback);
+
+	int					 getPreferredHeight(int width) const override;
+
+	static constexpr int kImageWidth  = 96;
+	static constexpr int kImageHeight = 90;
+	static constexpr int kNameHeight  = 42;
+	static constexpr int kFamilyHeight = 24;
+	static constexpr int kTagHeight	  = 28;
+	static constexpr int kTagGap	  = Space::s;
 
 private:
-	void		rebuildMetaTags();
+	void		 rebuildMetaTags();
 	juce::String deriveTranspositionLabel(const std::string &writtenLow, const std::string &soundingLow) const;
 
 	juce::DrawableImage mInstrumentImage;

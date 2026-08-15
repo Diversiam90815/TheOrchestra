@@ -14,23 +14,22 @@ FamilySwitcherView::FamilySwitcherView()
 {
 	struct Def
 	{
-		Family		 family;
-		const char	*name;
-		const char	*letter;
-		juce::Colour badgeBg;
-		juce::Colour glyph;
+		Family		family;
+		const char *name;
+		const char *letter;
 	};
 
+	// Badge and glyph colours come from the theme, keyed by family.
 	const std::vector<Def> defs = {
-		{ Family::Woodwinds,  "Woodwinds",	"W", juce::Colour::fromRGB(42, 75, 140).withAlpha(0.28f),  juce::Colour::fromRGB(124, 159, 224) },
-		{ Family::Brass,	  "Brass",		"B", juce::Colour::fromRGB(176, 120, 24).withAlpha(0.30f), juce::Colour::fromRGB(227, 177, 92) },
-		{ Family::Strings,	  "Strings",	"S", juce::Colour::fromRGB(196, 148, 58).withAlpha(0.24f), juce::Colour::fromRGB(196, 148, 58) },
-		{ Family::Percussion, "Percussion", "P", juce::Colour::fromRGB(140, 42, 43).withAlpha(0.30f),  juce::Colour::fromRGB(217, 134, 135) },
+		{ Family::Woodwinds,  "Woodwinds",	"W" },
+		{ Family::Brass,	  "Brass",		"B" },
+		{ Family::Strings,	  "Strings",	"S" },
+		{ Family::Percussion, "Percussion", "P" },
 	};
 
 	for (const auto &d : defs)
 	{
-		auto card		 = std::make_unique<FamilyCard>(d.family, d.name, d.letter, d.badgeBg, d.glyph);
+		auto card		= std::make_unique<FamilyCard>(d.family, d.name, d.letter);
 		card->onClicked = [this](Family f)
 		{
 			if (onFamilySelected)
@@ -57,102 +56,99 @@ void FamilySwitcherView::setSelectedFamily(Family family)
 }
 
 
-void FamilySwitcherView::paint(juce::Graphics &g)
+void FamilySwitcherView::layout()
 {
-	auto *lf = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
-
-	const juce::Colour bg		 = lf ? lf->getBackgroundColour() : juce::Colour::fromRGB(18, 16, 26);
-	const juce::Colour toolbar	 = lf ? lf->getToolbarColour() : juce::Colour::fromRGB(24, 21, 32);
-	const juce::Colour gold		 = lf ? lf->getAccentColour() : juce::Colour::fromRGB(196, 148, 58);
-	const juce::Colour primary	 = lf ? lf->getTextPrimaryColour() : juce::Colour::fromRGB(238, 233, 218);
-	const juce::Colour secondary = lf ? lf->getTextSecondaryColour() : juce::Colour::fromRGB(158, 154, 142);
-	const juce::Colour muted	 = lf ? lf->getTextTertiaryColour() : juce::Colour::fromRGB(107, 103, 96);
-	const juce::Colour divider	 = lf ? lf->getDividerColour(0.14f) : gold.withAlpha(0.14f);
-
-	g.fillAll(bg);
-
-	// Toolbar background (full width)
-	auto toolbarArea = juce::Rectangle<int>(0, 0, getWidth(), kToolbarH);
-	g.setColour(toolbar);
-	g.fillRect(toolbarArea);
-	g.setColour(divider);
-	g.fillRect(0, kToolbarH - 1, getWidth(), 1);
-
-	const int cx = mContentBounds.getX();
-	const int cr = mContentBounds.getRight();
-
-	// Logo lockup (left): a small note glyph + wordmark
-	{
-		const int   cyMid = kToolbarH / 2;
-		auto		note  = juce::Rectangle<float>((float)cx, (float)(cyMid - 8), 16.0f, 16.0f);
-		g.setColour(gold);
-
-		// note head
-		g.fillEllipse(note.getX(), note.getBottom() - 6.0f, 6.0f, 6.0f);
-
-		// stem
-		g.drawLine(note.getX() + 6.0f, note.getBottom() - 3.0f, note.getX() + 6.0f, note.getY(), 1.6f);
-
-		g.setColour(primary);
-		auto font = lf ? lf->getSerifFont(12.0f, true) : juce::Font(12.0f);
-		g.setFont(font);
-		g.drawText("THE ORCHESTRA", juce::Rectangle<int>(cx + 24, 0, 200, kToolbarH), juce::Justification::centredLeft, false);
-	}
-
-	// Right icons: search (magnifier) + settings (gear)
-	{
-		const int cyMid = kToolbarH / 2;
-
-		// Settings gear (rightmost, clickable)
-		mGearBounds = juce::Rectangle<int>(cr - 20, cyMid - 10, 20, 20);
-		g.setColour(muted);
-		auto gc = mGearBounds.toFloat().reduced(2.0f);
-		g.drawEllipse(gc.reduced(3.0f), 1.4f);
-		g.drawEllipse(gc.reduced(7.0f), 1.4f);
-
-		// Search magnifier (left of gear)
-		auto search = juce::Rectangle<float>((float)(cr - 52), (float)(cyMid - 8), 16.0f, 16.0f);
-		g.drawEllipse(search.getX(), search.getY(), 11.0f, 11.0f, 1.6f);
-		g.drawLine(search.getX() + 10.0f, search.getY() + 10.0f, search.getX() + 15.0f, search.getY() + 15.0f, 1.6f);
-	}
-
-	// Title block
-	{
-		auto titleY = kToolbarH + 26;
-		g.setColour(primary);
-		g.setFont(lf ? lf->getSerifFont(22.0f) : juce::Font(22.0f));
-		g.drawText("Choose a family", juce::Rectangle<int>(cx, titleY, mContentBounds.getWidth(), 30), juce::Justification::topLeft, false);
-
-		g.setColour(secondary);
-		g.setFont(lf ? lf->getSerifFont(12.0f) : juce::Font(12.0f));
-		g.drawText("Four families, each with their own voice and range.", juce::Rectangle<int>(cx, titleY + 32, mContentBounds.getWidth(), 20),
-				   juce::Justification::topLeft, false);
-	}
-}
-
-
-void FamilySwitcherView::resized()
-{
-	const int contentW = juce::jmin(kMaxContentW, getWidth() - 80);
+	const int contentW = juce::jmin(kMaxContentW, getWidth() - Space::huge * 2);
 	const int cx	   = (getWidth() - contentW) / 2;
 
-	mContentBounds = juce::Rectangle<int>(cx, 0, contentW, getHeight());
+	mContentBounds	   = juce::Rectangle<int>(cx, 0, contentW, getHeight());
 
-	// Grid begins below the toolbar + title block.
-	const int gridTop = kToolbarH + 26 + 32 + 20 + 24;
+	// Toolbar icons, right-aligned.
+	const int cyMid	   = Chrome::toolbarH / 2;
+	const int cr	   = mContentBounds.getRight();
+	mGearBounds		   = juce::Rectangle<int>(cr - Space::xl, cyMid - Space::m, Space::xl, Space::xl);
+	mSearchBounds	   = juce::Rectangle<int>(mGearBounds.getX() - Space::xxl - Space::l, cyMid - Space::s, Space::l + 2, Space::l + 2);
 
-	const int cardW	  = (contentW - kGridGap) / 2;
+	// Title block, then the grid. One derivation, read by both layout and paint.
+	// The block is centred in the space below the toolbar rather than pinned to
+	// the top, which otherwise left the lower half of the screen empty.
+	const int blockH  = kTitleH + Space::xs + kSubtitleH + Space::xl + kCardH * 2 + kGridGap;
+	const int belowH  = getHeight() - Chrome::toolbarH;
+
+	int		  y		  = Chrome::toolbarH + juce::jmax(Space::xxl, (belowH - blockH) / 2);
+
+	mTitleBounds	  = juce::Rectangle<int>(cx, y, contentW, kTitleH);
+	y += kTitleH + Space::xs;
+	mSubtitleBounds = juce::Rectangle<int>(cx, y, contentW, kSubtitleH);
+	y += kSubtitleH + Space::xl;
+
+	const int cardW = (contentW - kGridGap) / 2;
 
 	for (size_t i = 0; i < mCards.size(); ++i)
 	{
 		const int col = (int)i % 2;
 		const int row = (int)i / 2;
 
-		const int x = cx + col * (cardW + kGridGap);
-		const int y = gridTop + row * (kCardH + kGridGap);
-
-		mCards[i].card->setBounds(x, y, cardW, kCardH);
+		mCards[i].card->setBounds(cx + col * (cardW + kGridGap), y + row * (kCardH + kGridGap), cardW, kCardH);
 	}
+}
+
+
+void FamilySwitcherView::paint(juce::Graphics &g)
+{
+	auto	   *lf = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	const auto &t  = themeFor(*this);
+
+	g.fillAll(t.background);
+
+	// Toolbar background (full width)
+	g.setColour(t.toolbar);
+	g.fillRect(0, 0, getWidth(), Chrome::toolbarH);
+	g.setColour(t.divider());
+	g.fillRect(0, Chrome::toolbarH - 1, getWidth(), 1);
+
+	// Logo lockup (left): a small note glyph + wordmark
+	{
+		const int cx	= mContentBounds.getX();
+		const int cyMid = Chrome::toolbarH / 2;
+		auto	  note	= juce::Rectangle<float>((float)cx, (float)(cyMid - 9), 18.0f, 18.0f);
+
+		g.setColour(t.accent);
+		g.fillEllipse(note.getX(), note.getBottom() - 7.0f, 7.0f, 7.0f);
+		g.drawLine(note.getX() + 7.0f, note.getBottom() - 3.5f, note.getX() + 7.0f, note.getY(), 1.8f);
+
+		g.setColour(t.textPrimary);
+		g.setFont(lf ? lf->getSerifFont(Type::bodySmall, true) : juce::Font(Type::bodySmall));
+		g.drawText("THE ORCHESTRA", juce::Rectangle<int>(cx + Space::xxl, 0, 240, Chrome::toolbarH), juce::Justification::centredLeft, false);
+	}
+
+	// Right icons: search (decorative) + settings gear (clickable)
+	{
+		g.setColour(t.textTertiary);
+
+		auto gc = mGearBounds.toFloat().reduced(2.0f);
+		g.drawEllipse(gc.reduced(3.0f), 1.5f);
+		g.drawEllipse(gc.reduced(7.0f), 1.5f);
+
+		auto s = mSearchBounds.toFloat();
+		g.drawEllipse(s.getX(), s.getY(), 12.0f, 12.0f, 1.7f);
+		g.drawLine(s.getX() + 11.0f, s.getY() + 11.0f, s.getX() + 17.0f, s.getY() + 17.0f, 1.7f);
+	}
+
+	// Title block
+	g.setColour(t.textPrimary);
+	g.setFont(lf ? lf->getSerifFont(Type::title) : juce::Font(Type::title));
+	g.drawText("Choose a family", mTitleBounds, juce::Justification::topLeft, false);
+
+	g.setColour(t.textSecondary);
+	g.setFont(lf ? lf->getSerifFont(Type::body) : juce::Font(Type::body));
+	g.drawText("Four families, each with their own voice and range.", mSubtitleBounds, juce::Justification::topLeft, false);
+}
+
+
+void FamilySwitcherView::resized()
+{
+	layout();
 }
 
 

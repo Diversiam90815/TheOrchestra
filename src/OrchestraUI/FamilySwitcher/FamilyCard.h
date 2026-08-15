@@ -18,25 +18,25 @@
 class FamilyCard : public juce::Component
 {
 public:
-	FamilyCard(Family family, const juce::String &name, const juce::String &letter, juce::Colour badgeBg, juce::Colour glyphColour);
+	FamilyCard(Family family, const juce::String &name, const juce::String &letter);
 	~FamilyCard() override = default;
 
 	std::function<void(Family)> onClicked;
 
-	void setCount(int count);
-	void setSelected(bool selected);
+	void				 setCount(int count);
+	void				 setSelected(bool selected);
 
-	void paint(juce::Graphics &g) override;
-	void mouseEnter(const juce::MouseEvent &) override;
-	void mouseExit(const juce::MouseEvent &) override;
-	void mouseUp(const juce::MouseEvent &e) override;
+	void				 paint(juce::Graphics &g) override;
+	void				 mouseEnter(const juce::MouseEvent &) override;
+	void				 mouseExit(const juce::MouseEvent &) override;
+	void				 mouseUp(const juce::MouseEvent &e) override;
+
+	static constexpr int kBadgeSize = 48;
 
 private:
 	Family		 mFamily;
 	juce::String mName;
 	juce::String mLetter;
-	juce::Colour mBadgeBg;
-	juce::Colour mGlyphColour;
 	int			 mCount	   = 0;
 	bool		 mSelected = false;
 	bool		 mHover	   = false;

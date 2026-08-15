@@ -7,12 +7,13 @@
 
 #include "InstrumentSidebar.h"
 #include "CustomLookAndFeel.h"
+#include "Theme.h"
 
 
 InstrumentSidebar::InstrumentSidebar()
 {
 	mListBox.setModel(this);
-	mListBox.setRowHeight(44);
+	mListBox.setRowHeight(Chrome::sidebarRowH);
 	mListBox.setColour(juce::ListBox::backgroundColourId, juce::Colours::transparentBlack);
 	mListBox.setColour(juce::ListBox::outlineColourId, juce::Colours::transparentBlack);
 	addAndMakeVisible(mListBox);
@@ -21,11 +22,9 @@ InstrumentSidebar::InstrumentSidebar()
 
 void InstrumentSidebar::paint(juce::Graphics &g)
 {
-	auto *lnf = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
-	if (lnf)
-		g.fillAll(lnf->getBackgroundColour());
-	else
-		g.fillAll(juce::Colour(18, 16, 26));
+	const auto &t = themeFor(*this);
+
+	g.fillAll(t.background);
 
 	// Right border
 	g.setColour(juce::Colours::white.withAlpha(0.04f));
@@ -35,7 +34,7 @@ void InstrumentSidebar::paint(juce::Graphics &g)
 
 void InstrumentSidebar::resized()
 {
-	mListBox.setBounds(getLocalBounds().withTrimmedTop(8).withTrimmedBottom(8));
+	mListBox.setBounds(getLocalBounds().withTrimmedTop(Space::m).withTrimmedBottom(Space::m));
 }
 
 
@@ -89,61 +88,41 @@ void InstrumentSidebar::paintListBoxItem(int rowNumber, juce::Graphics &g, int w
 	if (rowNumber < 0 || rowNumber >= static_cast<int>(mInstruments.size()))
 		return;
 
-	auto *lnf	   = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
-	bool isSelected = mInstruments[rowNumber].first == mSelectedID;
+	auto	   *lnf		   = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	const auto &t		   = themeFor(*this);
+
+	const bool	isSelected = mInstruments[rowNumber].first == mSelectedID;
 
 	// Background
-	if (isSelected && lnf)
+	if (isSelected)
 	{
-		g.setColour(lnf->getSidebarSelectedColour());
+		g.setColour(t.sidebarSelected);
 		g.fillRect(0, 0, width, height);
 
 		// Gold left accent bar
-		g.setColour(lnf->getAccentColour());
+		g.setColour(t.accent);
 		g.fillRect(0, 0, 3, height);
 	}
 
 	// Icon placeholder
-	const int iconSize = 30;
-	const int iconX	   = 12;
+	const int iconSize = 34;
+	const int iconX	   = Space::m;
 	const int iconY	   = (height - iconSize) / 2;
 
-	if (lnf)
-		g.setColour(isSelected ? lnf->getSurfaceElevatedColour() : lnf->getSurfaceColour());
-	else
-		g.setColour(juce::Colour(30, 27, 42));
-
-	g.fillRoundedRectangle(static_cast<float>(iconX), static_cast<float>(iconY),
-						   static_cast<float>(iconSize), static_cast<float>(iconSize), 6.0f);
+	g.setColour(isSelected ? t.surfaceElevated : t.surface);
+	g.fillRoundedRectangle((float)iconX, (float)iconY, (float)iconSize, (float)iconSize, Radius::md);
 
 	// Icon text (first 2 letters)
 	auto name = mInstruments[rowNumber].second;
-	if (lnf)
-		g.setColour(isSelected ? lnf->getAccentColour() : lnf->getTextSecondaryColour());
-	else
-		g.setColour(juce::Colour(158, 154, 142));
-
-	g.setFont(juce::Font(14.0f));
-	g.drawText(juce::String(name.substr(0, 2)),
-			   iconX, iconY, iconSize, iconSize,
-			   juce::Justification::centred, false);
+	g.setColour(isSelected ? t.accent : t.textSecondary);
+	g.setFont(lnf ? lnf->getSerifFont(Type::bodySmall) : juce::Font(Type::bodySmall));
+	g.drawText(juce::String(name.substr(0, 2)), iconX, iconY, iconSize, iconSize, juce::Justification::centred, false);
 
 	// Instrument name
-	const int textX = iconX + iconSize + 12;
-	if (lnf)
-	{
-		g.setColour(isSelected ? lnf->getTextPrimaryColour() : lnf->getTextSecondaryColour());
-		auto nameFont = juce::Font(lnf->getInstrumentTypeface()).withHeight(15.0f);
-		nameFont.setExtraKerningFactor(0.003f);
-		g.setFont(nameFont);
-	}
-	else
-	{
-		g.setColour(juce::Colour(238, 233, 218));
-		g.setFont(juce::Font(16.0f));
-	}
-
-	g.drawText(name, textX, 0, width - textX - 8, height, juce::Justification::centredLeft, true);
+	const int textX = iconX + iconSize + Space::m;
+	g.setColour(isSelected ? t.textPrimary : t.textSecondary);
+	g.setFont(lnf ? lnf->getSerifFont(Type::body) : juce::Font(Type::body));
+	g.drawText(name, textX, 0, width - textX - Space::s, height, juce::Justification::centredLeft, true);
 }
 
 

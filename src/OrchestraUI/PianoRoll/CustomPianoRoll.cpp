@@ -8,17 +8,70 @@
 #include "CustomPianoRoll.h"
 
 
+namespace
+{
+bool isWhiteKey(int midiNoteNumber)
+{
+	switch (midiNoteNumber % 12)
+	{
+	case 0:
+	case 2:
+	case 4:
+	case 5:
+	case 7:
+	case 9:
+	case 11: return true;
+	default: return false;
+	}
+}
+} // namespace
+
+
 CustomPianoRoll::CustomPianoRoll(juce::MidiKeyboardState &state, juce::KeyboardComponentBase::Orientation orientation) : juce::MidiKeyboardComponent(state, orientation)
 {
 	setOctaveForMiddleC(4);
+	setScrollButtonsVisible(false);
+	setBlackNoteLengthProportion(0.62f);
+	applyThemeColours();
 }
 
 
-void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour lineColour, juce::Colour textColour)
+void CustomPianoRoll::applyThemeColours()
 {
-	mCurrentKeyType = PianoKey::whiteKey;
+	const auto &t = themeFor(*this);
 
-	if (!mRangesSet.load())
+	setColour(whiteNoteColourId, t.pianoWell);
+	setColour(blackNoteColourId, Keys::blackInRange);
+	setColour(keySeparatorLineColourId, t.background);
+	setColour(textLabelColourId, t.background.withAlpha(0.55f));
+	setColour(shadowColourId, juce::Colours::transparentBlack);
+}
+
+
+void CustomPianoRoll::lookAndFeelChanged()
+{
+	applyThemeColours();
+}
+
+
+void CustomPianoRoll::fitKeysToWidth()
+{
+	int whiteKeys = 0;
+	for (int note = getRangeStart(); note <= getRangeEnd(); ++note)
+		if (isWhiteKey(note))
+			++whiteKeys;
+
+	if (whiteKeys <= 0 || getWidth() <= 0)
+		return;
+
+	setKeyWidth(juce::jmax(kMinKeyWidth, (float)getWidth() / (float)whiteKeys));
+}
+
+
+void CustomPianoRoll::drawWhiteNote(
+	int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour lineColour, juce::Colour textColour)
+{
+	if (!mRangesSet)
 	{
 		auto c = juce::Colours::transparentWhite;
 
@@ -31,13 +84,13 @@ void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, juce::Graphics &g, juce:
 	}
 	else
 	{
-		juce::Colour noteColour = getNoteColour(midiNoteNumber);
+		juce::Colour noteColour = getNoteColour(midiNoteNumber, PianoKey::whiteKey);
 
+		// Interaction states are applied on top of the register tint so both read.
 		if (isDown)
-			noteColour = noteColour.interpolatedWith(findColour(keyDownOverlayColourId), 0.8f);
-
-		if (isOver)
-			noteColour = noteColour.brighter(0.1f);
+			noteColour = noteColour.interpolatedWith(findColour(keyDownOverlayColourId), 0.7f);
+		else if (isOver)
+			noteColour = noteColour.brighter(0.12f);
 
 		g.setColour(noteColour);
 	}
@@ -57,7 +110,7 @@ void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, juce::Graphics &g, juce:
 		auto fontHeight = juce::jmin(12.0f, getKeyWidth() * 0.9f);
 
 		g.setColour(textColour);
-		g.setFont(juce::Font(fontHeight).withHorizontalScale(0.8f));
+		g.setFont(juce::Font(juce::FontOptions().withHeight(fontHeight).withHorizontalScale(0.8f)));
 
 		switch (currentOrientation)
 		{
@@ -96,119 +149,84 @@ void CustomPianoRoll::drawWhiteNote(int midiNoteNumber, juce::Graphics &g, juce:
 
 void CustomPianoRoll::drawBlackNote(int midiNoteNumber, juce::Graphics &g, juce::Rectangle<float> area, bool isDown, bool isOver, juce::Colour noteFillColour)
 {
-	mCurrentKeyType				   = PianoKey::blackKey;
+	juce::Colour baseColour = juce::Colours::black;
 
-	juce::Colour baseColour		   = juce::Colours::black;
-	juce::Colour noteOverlayColour = getNoteColour(midiNoteNumber).withAlpha(0.4f);
-
-	if (mRangesSet.load())
+	if (mRangesSet)
 	{
+		// Drawn opaquely. The previous version alpha-blended an already
+		// near-black colour onto black, which erased the register entirely.
+		baseColour = getNoteColour(midiNoteNumber, PianoKey::blackKey);
+
 		if (isDown)
-		{
-			baseColour = baseColour.overlaidWith(noteOverlayColour.brighter(0.5f)); // Less brightening when down
-		}
+			baseColour = baseColour.brighter(0.5f);
 		else if (isOver)
-		{
-			baseColour = baseColour.overlaidWith(noteOverlayColour.brighter(0.4f)); // Very subtle brightening when over
-		}
-		else
-		{
-			baseColour = baseColour.overlaidWith(noteOverlayColour); // Normal state
-		}
+			baseColour = baseColour.brighter(0.25f);
 	}
 	else
 	{
 		if (isDown)
-		{
 			baseColour = baseColour.overlaidWith(findColour(keyDownOverlayColourId));
-		}
 		if (isOver)
-		{
 			baseColour = baseColour.overlaidWith(findColour(mouseOverKeyOverlayColourId));
-		}
 	}
 
-	// Set the color and fill the key area
 	g.setColour(baseColour);
 	g.fillRect(area);
 
-	// Drawing border for key down state
 	if (isDown)
 	{
 		g.setColour(noteFillColour);
-		g.drawRect(area, 1.0f); // Specify thickness if needed
-	}
-	else
-	{
-		// Optionally draw a subtle highlight at the top for additional feedback
-		g.setColour(baseColour);
-		float sideIndent = 1.0f / 8.0f;
-		float topIndent	 = 7.0f / 8.0f;
-		float w			 = area.getWidth();
-		float h			 = area.getHeight();
-
-		switch (getOrientation())
-		{
-		case horizontalKeyboard: g.fillRect(area.reduced(w * sideIndent, 0).removeFromTop(h * topIndent)); break;
-		case verticalKeyboardFacingLeft: g.fillRect(area.reduced(0, h * sideIndent).removeFromRight(w * topIndent)); break;
-		case verticalKeyboardFacingRight: g.fillRect(area.reduced(0, h * sideIndent).removeFromLeft(w * topIndent)); break;
-		default: break;
-		}
+		g.drawRect(area, 1.0f);
 	}
 }
 
 
-juce::Colour CustomPianoRoll::getNoteColour(int midiNoteNumber)
+int CustomPianoRoll::getRegisterIndex(int midiNoteNumber) const
 {
-	auto qualityColours = mCustomLookAndFeel.getQualityColours();
-
-	if (mMidiRanges.size() > qualityColours.size())
-	{
-		jassertfalse;
-		if (mCurrentKeyType.load() == PianoKey::whiteKey)
-			return juce::Colours::transparentWhite;
-		if (mCurrentKeyType.load() == PianoKey::blackKey)
-			return juce::Colours::black;
-	}
-
-	// Check which range the midiNoteNumber falls into
 	for (size_t i = 0; i < mMidiRanges.size(); ++i)
 	{
 		const auto &range = mMidiRanges[i];
+
 		if (midiNoteNumber >= range.first && midiNoteNumber <= range.second)
-		{
-			auto colour = qualityColours[i];
-
-			// Soften the color: use lower alpha for a gentle tint effect
-			if (mCurrentKeyType.load() == PianoKey::whiteKey)
-			{
-				// Blend register colour gently with white
-				auto whiteBase = juce::Colour(245, 240, 232); // warm white key base
-				return whiteBase.interpolatedWith(colour, 0.18f);
-			}
-			else
-			{
-				// Black keys: very subtle overlay
-				return juce::Colours::black.interpolatedWith(colour, 0.12f);
-			}
-		}
+			return (int)i;
 	}
 
-	// Out of range: dimmed
-	if (mRangesSet.load())
-	{
-		if (mCurrentKeyType.load() == PianoKey::whiteKey)
-			return juce::Colour(200, 192, 176); // dimmed warm white
-		if (mCurrentKeyType.load() == PianoKey::blackKey)
-			return juce::Colour(30, 25, 35);	// dimmed dark
-	}
+	return -1;
+}
 
-	if (mCurrentKeyType.load() == PianoKey::whiteKey)
-		return juce::Colours::transparentWhite;
-	if (mCurrentKeyType.load() == PianoKey::blackKey)
-		return juce::Colours::black;
 
-	return {};
+bool CustomPianoRoll::isPlayable(int midiNoteNumber) const
+{
+	return midiNoteNumber >= mPlayableRange.first && midiNoteNumber <= mPlayableRange.second;
+}
+
+
+void CustomPianoRoll::setPlayableRange(int lowNote, int highNote)
+{
+	mPlayableRange = { lowNote, highNote };
+}
+
+
+juce::Colour CustomPianoRoll::getNoteColour(int midiNoteNumber, PianoKey keyType) const
+{
+	const auto &t		 = themeFor(*this);
+	const bool	isWhite	 = (keyType == PianoKey::whiteKey);
+
+	if (!mRangesSet)
+		return isWhite ? juce::Colours::transparentWhite : juce::Colours::black;
+
+	// Inside a register: take its colour.
+	if (const int index = getRegisterIndex(midiNoteNumber); index >= 0)
+		return isWhite ? t.whiteKeyForRegister(index) : t.blackKeyForRegister(index);
+
+	// Playable but not in any register: natural key colour, so the full span
+	// still reads as playable.
+	if (isPlayable(midiNoteNumber))
+		return isWhite ? Keys::whiteInRange : Keys::blackInRange;
+
+	// Out of range: pushed hard away from the in-range colours so the playable
+	// span reads as one solid block.
+	return isWhite ? Keys::whiteOutOfRange : Keys::blackOutOfRange;
 }
 
 
@@ -218,15 +236,27 @@ bool CustomPianoRoll::setMidiRanges(const InstrumentRegisters &qualities)
 	mMidiRanges.clear();
 
 	for (const auto &quality : qualities)
+		mMidiRanges.push_back(std::make_pair(quality.getLowerNoteValue(), quality.getHigherNoteValue()));
+
+	// More registers than the palette has colours would silently repeat a
+	// colour, so clamp and flag it rather than mis-colouring.
+	if (mMidiRanges.size() > defaultTheme().registerBase.size())
 	{
-		int startMidi = quality.getLowerNoteValue();
-		int endMidi	  = quality.getHigherNoteValue();
-		mMidiRanges.push_back(std::make_pair(startMidi, endMidi));
+		jassertfalse;
+		mMidiRanges.resize(defaultTheme().registerBase.size());
 	}
 
-	bool result = !mMidiRanges.empty();
-	mRangesSet	= result;
-	return result;
+	mRangesSet = !mMidiRanges.empty();
+
+	// Registers are written-pitch, so widen the playable span to cover them all
+	// in case the caller has not set it yet.
+	for (const auto &r : mMidiRanges)
+	{
+		mPlayableRange.first  = mPlayableRange.first == 0 ? r.first : juce::jmin(mPlayableRange.first, r.first);
+		mPlayableRange.second = juce::jmax(mPlayableRange.second, r.second);
+	}
+
+	return mRangesSet;
 }
 
 
@@ -238,10 +268,9 @@ bool CustomPianoRoll::setMidiRanges(const InstrumentRange &range)
 	int startMidi = range.getSoundingLowNote().empty() ? range.getWrittenLowNoteAsMidiValue() : range.getSoundingLowNoteAsMidiValue();
 	int endMidi	  = range.getSoundingHighNote().empty() ? range.getWrittenHighNoteAsMidiValue() : range.getSoundingHighNoteAsMidiValue();
 
-
 	mMidiRanges.push_back(std::make_pair(startMidi, endMidi));
+	setPlayableRange(startMidi, endMidi);
 
-	bool result = !mMidiRanges.empty();
-	mRangesSet	= result;
-	return result;
+	mRangesSet = !mMidiRanges.empty();
+	return mRangesSet;
 }

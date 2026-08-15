@@ -16,37 +16,28 @@ OrchestraPanel::OrchestraPanel(const juce::String &title) : mTitle(title)
 
 void OrchestraPanel::paint(juce::Graphics &g)
 {
-	auto bounds = getLocalBounds().toFloat();
+	auto	   *lnf	   = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
+	const auto &t	   = themeFor(*this);
 
-	// Draw rounded rectangle background
-	juce::Path path;
-	path.addRoundedRectangle(bounds, kCornerRadius);
+	auto		bounds = getLocalBounds().toFloat();
 
-	auto *lnf = dynamic_cast<CustomLookAndFeel *>(&getLookAndFeel());
-	if (lnf)
-		g.setColour(lnf->getSurfaceColour());
-	else
-		g.setColour(juce::Colour(30, 27, 42));
+	g.setColour(t.surface);
+	g.fillRoundedRectangle(bounds, Radius::xl);
 
-	g.fillPath(path);
-
-	// Draw section title if present
 	if (mTitle.isNotEmpty())
 	{
-		auto titleArea = bounds.removeFromTop(static_cast<float>(kTitleHeight + kPadding))
-							 .reduced(static_cast<float>(kPadding), 0.0f)
-							 .withTrimmedTop(static_cast<float>(kPadding));
+		auto titleArea = getLocalBounds().reduced(kPadding, 0).withY(kPadding).withHeight(kTitleHeight);
 
-		if (lnf)
-			g.setColour(lnf->getTextTertiaryColour());
-		else
-			g.setColour(juce::Colour(107, 103, 96));
-
-		auto titleFont = lnf ? lnf->getSectionTitleFont()
-						   : juce::Font(12.0f);
-		g.setFont(titleFont);
+		g.setColour(t.textTertiary);
+		g.setFont(lnf ? lnf->getSectionTitleFont() : juce::Font(Type::label));
 		g.drawText(mTitle.toUpperCase(), titleArea, juce::Justification::centredLeft, false);
 	}
+}
+
+
+int OrchestraPanel::getChromeHeight() const
+{
+	return kPadding * 2 + (mTitle.isNotEmpty() ? kTitleHeight + kTitleGap : 0);
 }
 
 
@@ -55,7 +46,7 @@ juce::Rectangle<int> OrchestraPanel::getContentArea() const
 	auto area = getLocalBounds().reduced(kPadding);
 
 	if (mTitle.isNotEmpty())
-		area.removeFromTop(kTitleHeight);
+		area.removeFromTop(kTitleHeight + kTitleGap);
 
 	return area;
 }

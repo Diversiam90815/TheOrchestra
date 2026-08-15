@@ -18,7 +18,11 @@ PianoRoll::~PianoRoll()
 
 void PianoRoll::resized()
 {
-	mPianoRoll->setBoundsRelative(0.0f, 0.0f, 1.0f, 1.0f);
+	if (!mPianoRoll)
+		return;
+
+	mPianoRoll->setBounds(getLocalBounds());
+	mPianoRoll->fitKeysToWidth();
 }
 
 
@@ -54,20 +58,28 @@ void PianoRoll::displayInstrument(InstrumentProfile &info)
 	if (info.isRhythmicPercussion())
 	{
 		mPianoRoll->setMidiRanges(info.getRange());
+		resized();
 		repaint();
 		return;
 	}
 
-	// Strategy 2: Try to use registers for color-coded ranges
+	// Strategy 2: Try to use registers for color-coded ranges.
+	// Registers hold written-pitch values, so the playable span is taken from
+	// the written range to match. They do not always partition it - a violin's
+	// registers are its four open strings inside a much wider range.
 	if (!info.getRegisters().empty())
 	{
+		auto range = info.getRange();
+		mPianoRoll->setPlayableRange(range.getWrittenLowNoteAsMidiValue(), range.getWrittenHighNoteAsMidiValue());
 		mPianoRoll->setMidiRanges(info.getRegisters());
+		resized();
 		repaint();
 		return;
 	}
 
 	// Strategy 3: Fallback to full range (e.g., for strings)
 	mPianoRoll->setMidiRanges(info.getRange());
+	resized();
 	repaint();
 }
 
