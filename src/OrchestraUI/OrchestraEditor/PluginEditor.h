@@ -64,10 +64,10 @@ private:
 
 	// Per-view window sizes. The family switcher is a four-card chooser and
 	// does not need the detail view's footprint.
-	static constexpr int kFamilyWidth	  = 1040;
-	static constexpr int kFamilyHeight	  = 760;
-	static constexpr int kFamilyMinWidth  = 880;
-	static constexpr int kFamilyMinHeight = 620;
+	static constexpr int kFamilyWidth	  = 820;
+	static constexpr int kFamilyHeight	  = 640;
+	static constexpr int kFamilyMinWidth  = 700;
+	static constexpr int kFamilyMinHeight = 520;
 
 	static constexpr int kDetailWidth	  = 1480;
 	static constexpr int kDetailHeight	  = 940;
