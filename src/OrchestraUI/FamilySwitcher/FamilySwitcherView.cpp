@@ -62,11 +62,10 @@ void FamilySwitcherView::layout()
 
 	mContentBounds	   = juce::Rectangle<int>(cx, 0, contentW, getHeight());
 
-	// Toolbar icons, right-aligned.
+	// Toolbar icon, right-aligned.
 	const int cyMid	   = Chrome::toolbarH / 2;
 	const int cr	   = mContentBounds.getRight();
 	mGearBounds		   = juce::Rectangle<int>(cr - Space::xl, cyMid - Space::m, Space::xl, Space::xl);
-	mSearchBounds	   = juce::Rectangle<int>(mGearBounds.getX() - Space::xxl - Space::l, cyMid - Space::s, Space::l + 2, Space::l + 2);
 
 	// Title block, then the grid. One derivation, read by both layout and paint.
 	// The block is centred in the space below the toolbar rather than pinned to
@@ -121,17 +120,14 @@ void FamilySwitcherView::paint(juce::Graphics &g)
 		g.drawText("THE ORCHESTRA", juce::Rectangle<int>(cx + Space::xxl, 0, 240, Chrome::toolbarH), juce::Justification::centredLeft, false);
 	}
 
-	// Right icons: search (decorative) + settings gear (clickable)
+	// Settings gear (clickable) - the search icon was decorative and did
+	// nothing when clicked, so it has been removed rather than left as a trap.
 	{
 		g.setColour(t.textTertiary);
 
 		auto gc = mGearBounds.toFloat().reduced(2.0f);
 		g.drawEllipse(gc.reduced(3.0f), 1.5f);
 		g.drawEllipse(gc.reduced(7.0f), 1.5f);
-
-		auto s = mSearchBounds.toFloat();
-		g.drawEllipse(s.getX(), s.getY(), 12.0f, 12.0f, 1.7f);
-		g.drawLine(s.getX() + 11.0f, s.getY() + 11.0f, s.getX() + 17.0f, s.getY() + 17.0f, 1.7f);
 	}
 
 	// Title block
