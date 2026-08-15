@@ -21,6 +21,8 @@ enum class Clef
 	Tenor,
 };
 
+Clef clefFromString(const std::string &name);
+
 enum class Accidental
 {
 	None,
@@ -60,6 +62,8 @@ public:
 
 	void						setStafflineColour(juce::Colour colour);
 	void						setNoteColour(juce::Colour colour);
+
+	int							getLedgerOverflow(int midiNote, Clef clef);
 
 	static juce::Rectangle<int> getRecommendedBounds();
 

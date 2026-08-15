@@ -8,6 +8,21 @@
 #include "NotationRenderer.h"
 
 
+Clef clefFromString(const std::string &name)
+{
+	if (name == "Treble")
+		return Clef::Treble;
+	if (name == "Bass")
+		return Clef::Bass;
+	if (name == "Alto")
+		return Clef::Alto;
+	if (name == "Tenor")
+		return Clef::Tenor;
+
+	return Clef::Treble;
+}
+
+
 NotationRenderer::NotationRenderer()
 {
 	loadNotationFont();
@@ -50,6 +65,19 @@ void NotationRenderer::setStafflineColour(juce::Colour colour)
 void NotationRenderer::setNoteColour(juce::Colour colour)
 {
 	mNoteColor = colour;
+}
+
+
+int NotationRenderer::getLedgerOverflow(int midiNote, Clef clef)
+{
+	int staffPos = midiNoteToStaffPosition(midiNote, clef);
+
+	if (staffPos < 0)
+		return -staffPos;
+	if (staffPos > 8)
+		return staffPos - 8;
+
+	return 0;
 }
 
 
