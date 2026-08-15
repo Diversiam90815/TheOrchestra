@@ -47,13 +47,10 @@ void RangesPanel::setInstrument(const InstrumentProfile &instrument)
 	mHasTransposition = (mWrittenLow != mSoundingLow) || (mWrittenHigh != mSoundingHigh);
 	mPitchMode		  = PitchMode::Written;
 
-	mAvailableClefs.clear();
-	for (const auto &clefName : instrument.getClefs())
-		mAvailableClefs.push_back(clefFromString(clefName));
-
 	// The instrument's primary (first-declared) clef is the starting
 	// preference, matching the pill that starts selected in the header.
-	mPreferredClef = mAvailableClefs.empty() ? Clef::Treble : mAvailableClefs.front();
+	const auto &declaredClefs = instrument.getClefs();
+	mPreferredClef			   = declaredClefs.empty() ? Clef::Treble : clefFromString(declaredClefs.front());
 
 	updateDisplay();
 	resized();
@@ -97,8 +94,8 @@ void RangesPanel::updateDisplay()
 	mLowNotation.setNoteFromString(low);
 	mHighNotation.setNoteFromString(high);
 
-	mLowNotation.selectBestClef(mAvailableClefs, mPreferredClef);
-	mHighNotation.selectBestClef(mAvailableClefs, mPreferredClef);
+	mLowNotation.selectBestClef(mPreferredClef);
+	mHighNotation.selectBestClef(mPreferredClef);
 
 	repaint();
 }
