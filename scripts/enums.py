@@ -9,15 +9,6 @@ class Architecture(Enum):
         return self.value
 
 
-class Environment(Enum):
-    Development     = "ENV_DEVELOPMENT"
-    Staging         = "ENV_STAGING"
-    Production      = "ENV_PRODUCTION"
-
-    def __str__(self) -> str:
-        return self.value
-
-
 class Configuration(Enum):
     Debug           = "Debug"
     Release         = "Release"
