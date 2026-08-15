@@ -1,0 +1,24 @@
+name: macOS Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: lukka/get-cmake@latest
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Ninja
+        run: pip install ninja
+
+      - name: Configure and build
+        run: python build.py --prepare
