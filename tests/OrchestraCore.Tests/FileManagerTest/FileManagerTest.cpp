@@ -59,17 +59,21 @@ TEST_F(FileManagerTest, LoggingPathCreated)
 }
 
 
-TEST_F(FileManagerTest, GetInstrumentImagesAllTypesNoCrash)
+TEST_F(FileManagerTest, GetInstrumentImageNoCrash)
 {
 	int instrumentKey = 301; // Violin (used elsewhere in tests)
 
+	EXPECT_NO_THROW({ juce::File a = fm.getInstrumentImage(TypeOfImage::InstrumentImage, instrumentKey); }) << "Getting the instrument image should not throw!";
+}
+
+
+TEST_F(FileManagerTest, GetInstrumentImageForUnknownKeyReturnsEmptyFile)
+{
+	// 999 is not a valid family/instrument combination.
 	EXPECT_NO_THROW({
-		juce::File a = fm.getInstrumentImage(TypeOfImage::InstrumentImage, instrumentKey);
-		juce::File b = fm.getInstrumentImage(TypeOfImage::LowerRangeNotation, instrumentKey);
-		juce::File c = fm.getInstrumentImage(TypeOfImage::UpperRangeNotation, instrumentKey);
-		juce::File d = fm.getInstrumentImage(TypeOfImage::TranspositionLowerNotation, instrumentKey);
-		juce::File e = fm.getInstrumentImage(TypeOfImage::TranspositionHigherNotation, instrumentKey);
-	}) << "Getting Instrument images should not throw!";
+		juce::File file = fm.getInstrumentImage(TypeOfImage::InstrumentImage, 999);
+		EXPECT_EQ(file, juce::File()) << "An unknown instrument key should yield an empty file!";
+	}) << "An unknown instrument key should not throw!";
 }
 
 } // namespace FileManagerTests

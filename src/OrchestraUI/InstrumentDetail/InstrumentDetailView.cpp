@@ -130,7 +130,7 @@ InstrumentDetailView::InstrumentDetailView()
 void InstrumentDetailView::setFamily(Family family, const std::vector<std::pair<InstrumentID, std::string>> &instruments)
 {
 	mCurrentFamily = family;
-	mSidebar.setFamily(family, instruments); // auto-selects first instrument (fires callback)
+	mSidebar.setInstruments(instruments); // auto-selects first instrument (fires callback)
 }
 
 

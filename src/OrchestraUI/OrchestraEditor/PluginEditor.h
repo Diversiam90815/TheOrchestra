@@ -80,6 +80,4 @@ private:
 
 	InstrumentID		 mCurrentInstrument = 0;
 	Family				 mCurrentFamily		= Family::Strings;
-
-	friend class MainWindow;
 };

@@ -38,7 +38,7 @@ void InstrumentSidebar::resized()
 }
 
 
-void InstrumentSidebar::setFamily(Family family, const std::vector<std::pair<InstrumentID, std::string>> &instruments)
+void InstrumentSidebar::setInstruments(const std::vector<std::pair<InstrumentID, std::string>> &instruments)
 {
 	mInstruments = instruments;
 	mListBox.updateContent();
