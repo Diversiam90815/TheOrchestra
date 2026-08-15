@@ -36,8 +36,10 @@ enum class Accidental
 enum class OttavaType
 {
 	None,
-	Ottava8va, // 8va - display note an octave lower than actual
-	Ottava8vb, // 8vb - display note an octave higher than actual
+	Ottava8va,	// 8va  - display note one octave lower than actual
+	Ottava8vb,	// 8vb  - display note one octave higher than actual
+	Ottava15ma, // 15ma - display note two octaves lower than actual
+	Ottava15mb, // 15mb - display note two octaves higher than actual
 };
 
 

@@ -123,8 +123,8 @@ void RangesPanel::resized()
 
 	const int gutter	= Space::xl;
 	const int halfW		= (area.getWidth() - gutter) / 2;
-	const int notationW = 152; // widened for the larger staff/clef/notehead and the 8va/8vb margin beside the note
-	const int notationH = 116;
+	const int notationW = 160; // room for the wider "15ma"/"15mb" escalation label
+	const int notationH = 128; // headroom for two-octave-shifted extreme notes (e.g. piccolo top, double bass bottom)
 	const int labelH	= 22;
 	const int nameH		= 32;
 	const int innerGap	= Space::xs;
