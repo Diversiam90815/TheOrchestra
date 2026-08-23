@@ -15,7 +15,7 @@
 
 namespace
 {
-// Chromatic note class 
+// Chromatic note class
 constexpr std::array<int, 12> kChromaticToDiatonic	  = {0, 0, 1, 1, 2, 3, 3, 4, 4, 5, 5, 6};
 
 constexpr int				  kDiatonicStepsPerOctave = 7;

@@ -74,7 +74,26 @@ void SamplerPanel::onArticulationClicked(Articulation articulation)
 
 	mSelected			= articulation;
 	mLoadedArticulation = articulation;
-	mSamplesReady		= mCallback ? mCallback(articulation) : false;
+	mSamplesReady		= false;
+	mLoading			= true;
+
+	// Show the pending state before asking, since the answer now arrives later.
+	updateStatus();
+	repaint();
+
+	if (mCallback)
+		mCallback(articulation);
+}
+
+
+void SamplerPanel::setLoadResult(Articulation articulation, bool ready)
+{
+	// A result for an articulation the user has already moved away from is stale.
+	if (!mLoadedArticulation.has_value() || *mLoadedArticulation != articulation)
+		return;
+
+	mLoading	  = false;
+	mSamplesReady = ready;
 
 	updateStatus();
 	repaint();
@@ -96,6 +115,12 @@ void SamplerPanel::updateStatus()
 	else
 	{
 		auto selectedName = articulationReverseMap.count(mSelected) ? articulationReverseMap.at(mSelected) : "Unknown";
+
+		if (mLoading)
+		{
+			mStatusLabel.setText(juce::String(selectedName) + " loading...", juce::dontSendNotification);
+			return;
+		}
 
 		text = juce::String(selectedName) + (mSamplesReady ? " loaded" : " failed to load") + " - " + juce::String((int)mAvailable.size()) + " articulations available";
 	}

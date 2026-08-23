@@ -178,6 +178,12 @@ void InstrumentDetailView::setArticulationChangedCallback(ArticulationChangedCal
 }
 
 
+void InstrumentDetailView::setArticulationLoadResult(Articulation articulation, bool ready)
+{
+	mSampler.setLoadResult(articulation, ready);
+}
+
+
 void InstrumentDetailView::initPianoRoll(juce::MidiKeyboardState &state)
 {
 	mPianoRoll.setKeyboardState(state);

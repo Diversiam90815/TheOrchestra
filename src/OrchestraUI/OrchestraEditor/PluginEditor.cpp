@@ -26,7 +26,13 @@ OrchestraEditor::OrchestraEditor(OrchestraProcessor &proc) : juce::AudioProcesso
 	// --- Instrument detail (View B) ---
 	mDetailView.setInstrumentSelectedCallback([this](InstrumentID key) { changeInstrument(key); });
 	mDetailView.setBackToFamiliesCallback([this]() { showFamilySwitcher(); });
-	mDetailView.setArticulationChangedCallback([this](Articulation articulation) { return mCoreManager->changeArticulation(mCurrentInstrument, articulation); });
+	// Loading happens off the message thread; the panel is updated when it finishes.
+	mDetailView.setArticulationChangedCallback(
+		[this](Articulation articulation)
+		{
+			mCoreManager->changeArticulationAsync(mCurrentInstrument, articulation,
+												  [this, articulation](bool ready) { mDetailView.setArticulationLoadResult(articulation, ready); });
+		});
 
 	// Piano roll wiring: keyboard state + CC send/reflect.
 	mDetailView.initPianoRoll(mCoreManager->getMidiKeyboardState());
