@@ -1,17 +1,17 @@
 /*
   ==============================================================================
-	Module			OrchestraSound
+	Module			SampleSound
 	Description		Custom sound class holding multiple dynamic layers & round-robins per single MIDI note/range
   ==============================================================================
 */
 
-#include "OrchestraSound.h"
+#include "SampleSound.h"
 
 
-OrchestraSound::OrchestraSound(int noteRangeStart, int noteRangeEnd, int rootNote) : noteRangeStart(noteRangeStart), noteRangeEnd(noteRangeEnd), rootNote(rootNote) {}
+SampleSound::SampleSound(int noteRangeStart, int noteRangeEnd, int rootNote) : noteRangeStart(noteRangeStart), noteRangeEnd(noteRangeEnd), rootNote(rootNote) {}
 
 
-void OrchestraSound::addDynamicLayer(Dynamics dynamicValue, juce::OwnedArray<juce::AudioBuffer<float>> &&rrSamples)
+void SampleSound::addDynamicLayer(Dynamics dynamicValue, juce::OwnedArray<juce::AudioBuffer<float>> &&rrSamples)
 {
 	auto *layer				 = new DynamicLayer();
 	layer->dynamicValue		 = dynamicValue;
@@ -20,25 +20,25 @@ void OrchestraSound::addDynamicLayer(Dynamics dynamicValue, juce::OwnedArray<juc
 }
 
 
-bool OrchestraSound::appliesToNote(int midiNoteNumber)
+bool SampleSound::appliesToNote(int midiNoteNumber)
 {
 	return (midiNoteNumber >= noteRangeStart) && (midiNoteNumber <= noteRangeEnd);
 }
 
 
-bool OrchestraSound::appliesToChannel(int midiChannel)
+bool SampleSound::appliesToChannel(int midiChannel)
 {
 	return true; // Skip for now
 }
 
 
-int OrchestraSound::getRootNote() const
+int SampleSound::getRootNote() const
 {
 	return rootNote;
 }
 
 
-void OrchestraSound::setArticulation(const Articulation art)
+void SampleSound::setArticulation(const Articulation art)
 {
 	if (articulation != art)
 	{
@@ -47,7 +47,7 @@ void OrchestraSound::setArticulation(const Articulation art)
 }
 
 
-Articulation OrchestraSound::getArticulation() const
+Articulation SampleSound::getArticulation() const
 {
 	return articulation;
 }

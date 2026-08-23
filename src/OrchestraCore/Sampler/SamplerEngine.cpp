@@ -1,15 +1,15 @@
 /*
   ==============================================================================
-	Module			OrchestraSampler
+	Module			SamplerEngine
 	Description		Sampling the instrument and making them ready for playback
   ==============================================================================
 */
 
-#include "OrchestraSampler.h"
+#include "SamplerEngine.h"
 #include "InstrumentController.h" // For note ranges
 
 
-OrchestraSampler::~OrchestraSampler()
+SamplerEngine::~SamplerEngine()
 {
 	mLoadPool.removeAllJobs(true, 5000);
 
@@ -19,26 +19,24 @@ OrchestraSampler::~OrchestraSampler()
 }
 
 
-void OrchestraSampler::init(InstrumentController &controller)
+void SamplerEngine::init(InstrumentController &controller)
 {
 	mInstrumentController = &controller;
 
-	mSamplesManager		  = std::make_unique<SamplesManagement>();
+	mSamplesManager		  = std::make_unique<SampleCatalog>();
 	mSamplesManager->init();
 
-	// registerBasicFormats() only covers WAV and AIFF; the sample pack is FLAC.
 	mFormatManager.registerBasicFormats();
-	mFormatManager.registerFormat(new juce::FlacAudioFormat(), false);
 
 	// Add voices to the synthesiser
 	for (int i = 0; i < kNumVoices; ++i)
 	{
-		mSampler.addVoice(new OrchestraVoice(&mControllerState));
+		mSampler.addVoice(new ArticulationVoice(&mControllerState));
 	}
 }
 
 
-std::set<Articulation> OrchestraSampler::getAvailableArticulationsForInstrument(const InstrumentID key)
+std::set<Articulation> SamplerEngine::getAvailableArticulationsForInstrument(const InstrumentID key)
 {
 	auto				   samples = mSamplesManager->getSamplesForInstrument(key);
 
@@ -53,7 +51,7 @@ std::set<Articulation> OrchestraSampler::getAvailableArticulationsForInstrument(
 }
 
 
-std::vector<juce::SynthesiserSound::Ptr> OrchestraSampler::buildSounds(const InstrumentID key, Articulation articulationUsed)
+std::vector<juce::SynthesiserSound::Ptr> SamplerEngine::buildSounds(const InstrumentID key, Articulation articulationUsed)
 {
 	std::vector<juce::SynthesiserSound::Ptr> built;
 
@@ -80,8 +78,8 @@ std::vector<juce::SynthesiserSound::Ptr> OrchestraSampler::buildSounds(const Ins
 		const int rangeLow		   = noteRanges[midiNote].first;
 		const int rangeHigh		   = noteRanges[midiNote].second;
 
-		auto	  orchestraSound   = juce::SynthesiserSound::Ptr(new OrchestraSound(rangeLow, rangeHigh, midiNote));
-		auto	 *asOrchestraSound = static_cast<OrchestraSound *>(orchestraSound.get());
+		auto	  orchestraSound   = juce::SynthesiserSound::Ptr(new SampleSound(rangeLow, rangeHigh, midiNote));
+		auto	 *asOrchestraSound = static_cast<SampleSound *>(orchestraSound.get());
 
 		asOrchestraSound->setArticulation(articulationUsed);
 
@@ -118,7 +116,7 @@ std::vector<juce::SynthesiserSound::Ptr> OrchestraSampler::buildSounds(const Ins
 }
 
 
-void OrchestraSampler::installSounds(std::vector<juce::SynthesiserSound::Ptr> sounds)
+void SamplerEngine::installSounds(std::vector<juce::SynthesiserSound::Ptr> sounds)
 {
 	reset();
 
@@ -133,19 +131,19 @@ void OrchestraSampler::installSounds(std::vector<juce::SynthesiserSound::Ptr> so
 }
 
 
-void OrchestraSampler::addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed)
+void SamplerEngine::addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed)
 {
 	installSounds(buildSounds(key, articulationUsed));
 }
 
 
-void OrchestraSampler::loadInstrumentAsync(const InstrumentID key, Articulation articulationUsed, SampleLoadCallback onComplete)
+void SamplerEngine::loadInstrumentAsync(const InstrumentID key, Articulation articulationUsed, SampleLoadCallback onComplete)
 {
 	const int generation = mLoadGeneration.fetch_add(1) + 1;
 
 	reset();
 
-	juce::WeakReference<OrchestraSampler> weakThis(this);
+	juce::WeakReference<SamplerEngine> weakThis(this);
 
 	mLoadPool.addJob(
 		[weakThis, key, articulationUsed, generation, onComplete]() mutable
@@ -174,7 +172,7 @@ void OrchestraSampler::loadInstrumentAsync(const InstrumentID key, Articulation 
 }
 
 
-void OrchestraSampler::process(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
+void SamplerEngine::process(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages)
 {
 	if (!getSamplesAreReady())
 		return;
@@ -199,7 +197,7 @@ void OrchestraSampler::process(juce::AudioBuffer<float> &buffer, juce::MidiBuffe
 }
 
 
-void OrchestraSampler::prepare(double sampleRate, int samplesPerBlock)
+void SamplerEngine::prepare(double sampleRate, int samplesPerBlock)
 {
 	juce::ignoreUnused(samplesPerBlock);
 
@@ -207,7 +205,7 @@ void OrchestraSampler::prepare(double sampleRate, int samplesPerBlock)
 }
 
 
-void OrchestraSampler::reset()
+void SamplerEngine::reset()
 {
 	setSamplesAreReady(false);
 
@@ -216,7 +214,7 @@ void OrchestraSampler::reset()
 }
 
 
-bool OrchestraSampler::reloadSamples(std::string samplesDirectory)
+bool SamplerEngine::reloadSamples(std::string samplesDirectory)
 {
 	// Path to samples have been reset, so we will trigger a reload
 	mSamplesManager->setSampleDirectory(samplesDirectory);
@@ -225,7 +223,7 @@ bool OrchestraSampler::reloadSamples(std::string samplesDirectory)
 }
 
 
-std::map<int, std::map<int, std::vector<juce::File>>> OrchestraSampler::createDynamicMap(std::vector<Sample> &samples)
+std::map<int, std::map<int, std::vector<juce::File>>> SamplerEngine::createDynamicMap(std::vector<Sample> &samples)
 {
 	// Group the samples by midinote -> dynamic -> files
 	std::map<int, std::map<int, std::vector<juce::File>>> noteDynMap;
@@ -243,7 +241,7 @@ std::map<int, std::map<int, std::vector<juce::File>>> OrchestraSampler::createDy
 }
 
 
-std::vector<Sample> OrchestraSampler::filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed)
+std::vector<Sample> SamplerEngine::filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed)
 {
 	std::vector<Sample> filteredSamples;
 	std::ranges::copy_if(allSamples, std::back_inserter(filteredSamples), [articulationUsed](const Sample &sample) { return sample.articulation == articulationUsed; });
@@ -251,7 +249,7 @@ std::vector<Sample> OrchestraSampler::filterArticulation(std::vector<Sample> &al
 }
 
 
-std::vector<int> OrchestraSampler::createNoteList(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap)
+std::vector<int> SamplerEngine::createNoteList(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap)
 {
 	// Extract all unique MIDI notes into a sorted list
 	std::vector<int> noteList;
@@ -266,7 +264,7 @@ std::vector<int> OrchestraSampler::createNoteList(std::map<int, std::map<int, st
 }
 
 
-std::map<int, std::pair<int, int>> OrchestraSampler::createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap, const int key)
+std::map<int, std::pair<int, int>> SamplerEngine::createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap, const int key)
 {
 	auto noteList = createNoteList(noteDynamicMap);
 	if (noteList.empty())
@@ -303,7 +301,7 @@ std::map<int, std::pair<int, int>> OrchestraSampler::createNoteRangeMap(std::map
 }
 
 
-std::pair<int, int> OrchestraSampler::getRangesOfInstrument(const InstrumentID key)
+std::pair<int, int> SamplerEngine::getRangesOfInstrument(const InstrumentID key)
 {
 	if (mInstrumentController == nullptr)
 		return {};
@@ -320,7 +318,7 @@ std::pair<int, int> OrchestraSampler::getRangesOfInstrument(const InstrumentID k
 }
 
 
-void OrchestraSampler::setSamplesAreReady(bool value)
+void SamplerEngine::setSamplesAreReady(bool value)
 {
 	if (mSamplesAreReady.load() != value)
 	{
@@ -329,7 +327,7 @@ void OrchestraSampler::setSamplesAreReady(bool value)
 }
 
 
-bool OrchestraSampler::getSamplesAreReady()
+bool SamplerEngine::getSamplesAreReady()
 {
 	return mSamplesAreReady.load();
 }

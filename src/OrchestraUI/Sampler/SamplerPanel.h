@@ -8,7 +8,7 @@
 #pragma once
 
 #include "OrchestraPanel.h"
-#include "OrchestraSampler.h"
+#include "SamplerEngine.h"
 
 #include <functional>
 #include <optional>

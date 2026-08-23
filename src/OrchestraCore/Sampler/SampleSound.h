@@ -1,6 +1,6 @@
 /*
   ==============================================================================
-	Module			OrchestraSound
+	Module			SampleSound
 	Description		Custom sound class holding multiple dynamic layers & round-robins per single MIDI note/range
   ==============================================================================
 */
@@ -11,22 +11,15 @@
 
 #include "JuceIncludes.h"
 #include "Parameters.h"
-#include "SamplesManagement.h"
+#include "SampleCatalog.h"
+#include "SamplerStructs.h"
 
 
-struct DynamicLayer
-{
-	Dynamics								   dynamicValue;
-	juce::OwnedArray<juce::AudioBuffer<float>> roundRobinSamples;
-	std::atomic<unsigned>					   roundRobinCounter{0};
-};
-
-
-class OrchestraSound : public juce::SynthesiserSound
+class SampleSound : public juce::SynthesiserSound
 {
 public:
-	OrchestraSound(int noteRangeStart, int noteRangeEnd, int rootNote);
-	~OrchestraSound() = default;
+	SampleSound(int noteRangeStart, int noteRangeEnd, int rootNote);
+	~SampleSound() = default;
 
 	void						   addDynamicLayer(Dynamics dynamicValue, juce::OwnedArray<juce::AudioBuffer<float>> &&rrSamples);
 

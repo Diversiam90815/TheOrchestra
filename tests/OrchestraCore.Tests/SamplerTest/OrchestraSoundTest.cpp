@@ -7,7 +7,8 @@
 
 #include <gtest/gtest.h>
 
-#include "OrchestraSound.h"
+#include "SampleSound.h"
+
 
 namespace SamplerTests
 {
@@ -15,12 +16,12 @@ namespace SamplerTests
 class OrchestraSoundTest : public ::testing::Test
 {
 protected:
-	std::unique_ptr<OrchestraSound> mSound;
+	std::unique_ptr<SampleSound> mSound;
 
 	void							SetUp() override
 	{
 		// Create a sound with note range C3 (60) to C5 (84), root note C4 (72)
-		mSound = std::make_unique<OrchestraSound>(60, 84, 72);
+		mSound = std::make_unique<SampleSound>(60, 84, 72);
 	}
 
 	void TearDown() override { mSound.reset(); }

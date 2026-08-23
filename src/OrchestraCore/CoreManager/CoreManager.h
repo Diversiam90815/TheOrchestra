@@ -13,7 +13,7 @@
 
 #include "JuceIncludes.h"
 #include "InstrumentController.h"
-#include "OrchestraSampler.h"
+#include "SamplerEngine.h"
 #include "Logging.h"
 #include "buildinfo.h"
 

@@ -1,18 +1,15 @@
 /*
   ==============================================================================
-	Module			SamplesManagement
-	Description		Managing the samples
+	Module			SamplerStructs
+	Description		Helper structs used for the Sampler modules
   ==============================================================================
 */
 
 #pragma once
 
-#include "JuceIncludes.h"
 
-#include "FileManager.h"
 #include "Parameters.h"
-#include "Helper.h"
-#include "UserConfig.h"
+#include "JuceIncludes.h"
 
 
 struct Sample
@@ -51,38 +48,24 @@ struct PercussionSample : public Sample
 };
 
 
-class SamplesManagement
+struct DynamicLayer
 {
-public:
-	SamplesManagement()	 = default;
-	~SamplesManagement() = default;
-
-	void				init();
-
-	std::vector<Sample> getSamplesForInstrument(const InstrumentID &instrumentKey) const;
-
-	void				setSampleDirectory(std::string directory);
-
-	void				loadSamples(); // TODO: Make async
-	void				reloadSamples();
-
-private:
-	void										parseRhythmicPercussionFiles(const juce::File &instrument);
-	void										parseInstrumentSamples(const juce::File &instrumentFolder, std::string &sectionName);
-
-	void										addPercussionSamples(const juce::File &file, const InstrumentID &key, Articulation articulation);
-	void										addSample(const juce::File &file, const InstrumentID &key, Articulation articulation);
-
-	int											getIndexOfDynamics(const std::string &dynamicsString);
-
-	int											parseRoundRobin(const std::string &token);
+	Dynamics								   dynamicValue;
+	juce::OwnedArray<juce::AudioBuffer<float>> roundRobinSamples;
+	std::atomic<unsigned>					   roundRobinCounter{0};
+};
 
 
-	std::string									mSampleDirectory;	// Folder of the samples folder ( /Assets/Samples)
+// Last-seen value of the continuous controllers the sampler responds to.
+struct ControllerState
+{
+	std::atomic<float> cc1{0.0f};	 // modulation
+	std::atomic<float> cc11{127.0f}; // expression
+};
 
-	std::map<InstrumentID, std::vector<Sample>> mInstrumentSamples; // Map of the instrument and their assigned 'Sample'
 
-	FileManager									mFileManager;
-
-	UserConfig									mUserConfig;
+struct StereoSample
+{
+	float left	= 0.0f;
+	float right = 0.0f;
 };
