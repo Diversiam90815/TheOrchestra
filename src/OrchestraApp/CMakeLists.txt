@@ -9,9 +9,6 @@ source_group("App"              FILES ${APP_FILES})
 
 juce_add_gui_app(${TARGET_NAME}
     COMPANY_NAME "DiversiamProduction"
-    PLUGIN_MANUFACTURER_CODE 3160
-    PLUGIN_CODE IOTO
-    FORMATS Standalone
     PRODUCT_NAME ${TARGET_NAME}
     ICON_BIG ${ASSETS_DIR}/Logo/TheOrchestraLogo.png
 )
