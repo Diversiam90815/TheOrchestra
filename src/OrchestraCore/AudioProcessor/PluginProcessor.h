@@ -13,6 +13,18 @@
 class OrchestraEditor;
 
 
+namespace PluginState
+{
+constexpr auto Tag				= "OrchestraState";
+constexpr auto VersionAttr		= "version";
+constexpr auto InstrumentAttr	= "instrument";
+constexpr auto ArticulationAttr = "articulation";
+
+constexpr int  StateVersion		= 1;
+} // namespace PluginState
+
+
+
 class OrchestraProcessor : public juce::AudioProcessor
 {
 public:
