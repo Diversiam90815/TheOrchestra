@@ -175,17 +175,6 @@ constexpr auto Fortississimo = "fff";
 
 
 //==============================================================================
-//                          MIDI
-//==============================================================================
-
-constexpr int kModWheelCc	= 1;  // drives the dynamic-layer crossfade
-constexpr int kExpressionCc = 11; // drives output level
-
-constexpr int kMinCcValue	= 0;
-constexpr int kMaxCcValue	= 127;
-
-
-//==============================================================================
 //                          FOLDERS / FILES
 //==============================================================================
 
@@ -207,13 +196,3 @@ constexpr auto ConfigFile		= "config.json";
 // The key is 3 digit int where the first digit represents the family and the other 2 digits represent the instrument. Usually, if the instrument digit remains below 10, the middle
 // digit remains 0.
 using InstrumentID = int;
-
-
-namespace OrchestraVoiceConstant
-{
-static constexpr int   MaxDynamicLayers = 8;
-
-static constexpr float AttackSeconds	= 0.002f;
-static constexpr float ShortRelease		= 0.010f;
-static constexpr float SustainRelease	= 0.120f;
-} // namespace OrchestraVoiceConstant

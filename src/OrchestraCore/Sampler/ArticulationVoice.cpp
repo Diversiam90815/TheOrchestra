@@ -35,7 +35,7 @@ void ArticulationVoice::startNote(int midiNoteNumber, float velocity, juce::Synt
 	// Short articulations are one-shots shaped by velocity; sustained notes are shaped by mCC1/mCC11.
 	mNoteGain			  = mIsShortArticulation ? velocity : 1.0f;
 
-	const int layerCount  = juce::jmin(orchestraSound->dynamicLayers.size(), OrchestraVoiceConstant::MaxDynamicLayers);
+	const int layerCount  = juce::jmin(orchestraSound->dynamicLayers.size(), ArticulationVoiceConstants::MaxDynamicLayers);
 	mNumLayerBuffers	  = layerCount;
 
 	for (int d = 0; d < layerCount; ++d)
@@ -68,10 +68,10 @@ void ArticulationVoice::startNote(int midiNoteNumber, float velocity, juce::Synt
 	mCC1.setCurrentAndTargetValue(initialCC1);
 	mCC11.setCurrentAndTargetValue(initialCC11);
 
-	mAdsrParams.attack	= OrchestraVoiceConstant::AttackSeconds; // short fade-in so note-on does not click
+	mAdsrParams.attack	= ArticulationVoiceConstants::AttackSeconds; // short fade-in so note-on does not click
 	mAdsrParams.decay	= 0.0f;
 	mAdsrParams.sustain = 1.0f;
-	mAdsrParams.release = mIsShortArticulation ? OrchestraVoiceConstant::ShortRelease : OrchestraVoiceConstant::SustainRelease;
+	mAdsrParams.release = mIsShortArticulation ? ArticulationVoiceConstants::ShortRelease : ArticulationVoiceConstants::SustainRelease;
 
 	mAdsr.setSampleRate(sr);
 	mAdsr.setParameters(mAdsrParams);
@@ -101,10 +101,10 @@ void ArticulationVoice::stopNote(float velocity, bool allowTailOff)
 
 void ArticulationVoice::controllerMoved(int controllerNumber, int newControllerValue)
 {
-	if (controllerNumber == kModWheelCc)
+	if (controllerNumber == MIDI::ModWheelCC)
 		mCC1.setTargetValue(static_cast<float>(newControllerValue));
 
-	else if (controllerNumber == kExpressionCc)
+	else if (controllerNumber == MIDI::ExpressionCC)
 		mCC11.setTargetValue(static_cast<float>(newControllerValue));
 }
 
