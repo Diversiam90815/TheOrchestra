@@ -56,11 +56,11 @@ void OrchestraProcessor::processBlock(juce::AudioBuffer<float> &buffer, juce::Mi
 
 void OrchestraProcessor::getStateInformation(juce::MemoryBlock &destData)
 {
-	juce::ValueTree state(ProcessorConstant::StateTag);
+	juce::ValueTree state(PluginState::Tag);
 
-	state.setProperty(ProcessorConstant::StateVersionAttr, ProcessorConstant::StateVersion, nullptr);
-	state.setProperty(ProcessorConstant::InstrumentAttr, mCoreManager->getCurrentInstrument(), nullptr);
-	state.setProperty(ProcessorConstant::ArticulationAttr, static_cast<int>(mCoreManager->getCurrentArticulation()), nullptr);
+	state.setProperty(PluginState::VersionAttr, PluginState::StateVersion, nullptr);
+	state.setProperty(PluginState::InstrumentAttr, mCoreManager->getCurrentInstrument(), nullptr);
+	state.setProperty(PluginState::ArticulationAttr, static_cast<int>(mCoreManager->getCurrentArticulation()), nullptr);
 
 	if (auto xml = state.createXml())
 		copyXmlToBinary(*xml, destData);
@@ -76,26 +76,26 @@ void OrchestraProcessor::setStateInformation(const void *data, int sizeInBytes)
 
 	const auto state = juce::ValueTree::fromXml(*xml);
 
-	if (!state.isValid() || !state.hasType(ProcessorConstant::StateTag))
+	if (!state.isValid() || !state.hasType(PluginState::Tag))
 	{
 		LOG_WARNING("Ignoring plugin state: unexpected root tag");
 		return;
 	}
 
-	const int version = state.getProperty(ProcessorConstant::StateVersionAttr, 0);
+	const int version = state.getProperty(PluginState::VersionAttr, 0);
 
-	if (version > ProcessorConstant::StateVersion)
+	if (version > PluginState::StateVersion)
 	{
-		LOG_WARNING("Ignoring plugin state written by a newer version ({} > {})", version, ProcessorConstant::StateVersion);
+		LOG_WARNING("Ignoring plugin state written by a newer version ({} > {})", version, PluginState::StateVersion);
 		return;
 	}
 
-	const InstrumentID instrument = state.getProperty(ProcessorConstant::InstrumentAttr, 0);
+	const InstrumentID instrument = state.getProperty(PluginState::InstrumentAttr, 0);
 
 	if (instrument <= 0)
 		return;
 
-	const auto articulation = static_cast<Articulation>(static_cast<int>(state.getProperty(ProcessorConstant::ArticulationAttr, static_cast<int>(Articulation::sustain))));
+	const auto articulation = static_cast<Articulation>(static_cast<int>(state.getProperty(PluginState::ArticulationAttr, static_cast<int>(Articulation::sustain))));
 
 	LOG_INFO("Restoring plugin state: instrument {}, articulation {}", instrument, static_cast<int>(articulation));
 

@@ -65,7 +65,7 @@ std::filesystem::path FileManager::getProjectsAppDataPath()
 
 	// Test binaries get their own AppData namespace so running them never reads or overwrites a real user's saved settings.
 	auto				  exeName			 = juce::File::getSpecialLocation(juce::File::currentExecutableFile).getFileNameWithoutExtension();
-	const char			 *projectName		 = exeName.containsIgnoreCase("Tests") ? TestProjectName : ProjectName;
+	const char			 *projectName		 = exeName.containsIgnoreCase("Tests") ? Files::TestProjectName : Files::ProjectName;
 
 	std::filesystem::path projectAppDataPath = appDataPath / projectName;
 
@@ -82,7 +82,7 @@ std::filesystem::path FileManager::getLoggingPath()
 {
 	std::filesystem::path projectAppDataPath = getProjectsAppDataPath();
 
-	std::filesystem::path logFolder			 = projectAppDataPath / LogFolderName;
+	std::filesystem::path logFolder			 = projectAppDataPath / Files::LogFolderName;
 
 	if (!std::filesystem::exists(logFolder))
 	{
@@ -111,8 +111,8 @@ std::vector<std::filesystem::path> FileManager::getAssetsFolderCandidates()
 	candidates.push_back(getExecutableDirectory() / AssetsFolderName);
 
 	// An installed plugin: shared first, then per-user.
-	candidates.push_back(toPath(juce::File::getSpecialLocation(juce::File::commonApplicationDataDirectory)) / ProjectName / AssetsFolderName);
-	candidates.push_back(toPath(juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory)) / ProjectName / AssetsFolderName);
+	candidates.push_back(toPath(juce::File::getSpecialLocation(juce::File::commonApplicationDataDirectory)) / Files::ProjectName / AssetsFolderName);
+	candidates.push_back(toPath(juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory)) / Files::ProjectName / AssetsFolderName);
 
 	return candidates;
 }
@@ -141,7 +141,7 @@ std::filesystem::path FileManager::getConfigFilePath()
 {
 	std::filesystem::path projectAppDataPath = getProjectsAppDataPath();
 
-	std::filesystem::path configFolder		 = projectAppDataPath / ConfigFolderName;
+	std::filesystem::path configFolder		 = projectAppDataPath / Files::ConfigFolderName;
 
 	if (!std::filesystem::exists(configFolder))
 	{

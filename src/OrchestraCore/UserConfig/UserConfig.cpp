@@ -104,6 +104,6 @@ bool UserConfig::saveConfigFile()
 std::string UserConfig::getConfigFullPath()
 {
 	std::filesystem::path configDir = mFileManager.getConfigFilePath();
-	std::filesystem::path fullPath	= configDir / ConfigFile;
+	std::filesystem::path fullPath	= configDir / Files::ConfigFile;
 	return fullPath.string();
 }
