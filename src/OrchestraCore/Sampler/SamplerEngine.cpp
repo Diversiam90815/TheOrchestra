@@ -186,10 +186,10 @@ void SamplerEngine::process(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &
 
 		const float value = static_cast<float>(m.getControllerValue());
 
-		if (m.getControllerNumber() == kModWheelCc)
+		if (m.getControllerNumber() == MIDI::ModWheelCC)
 			mControllerState.cc1.store(value, std::memory_order_relaxed);
 
-		else if (m.getControllerNumber() == kExpressionCc)
+		else if (m.getControllerNumber() == MIDI::ExpressionCC)
 			mControllerState.cc11.store(value, std::memory_order_relaxed);
 	}
 

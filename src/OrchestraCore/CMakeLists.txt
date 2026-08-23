@@ -34,6 +34,7 @@ set(INSTRUMENT_FILES
 )
 
 set(SAMPLER_FILES
+    ${SAMPLER_DIR}/SamplerConstants.h 
     ${SAMPLER_DIR}/SamplerStructs.h 
     ${SAMPLER_DIR}/SamplerEngine.h          ${SAMPLER_DIR}/SamplerEngine.cpp
     ${SAMPLER_DIR}/SampleCatalog.h          ${SAMPLER_DIR}/SampleCatalog.cpp

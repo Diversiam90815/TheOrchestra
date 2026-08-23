@@ -14,6 +14,7 @@
 #include "SampleSound.h"
 #include "Parameters.h"
 #include "SamplerStructs.h"
+#include "SamplerConstants.h"
 
 
 class ArticulationVoice : public juce::SynthesiserVoice
@@ -61,5 +62,5 @@ private:
 	juce::ADSR																			   mAdsr;
 	juce::ADSR::Parameters																   mAdsrParams;
 
-	std::array<const juce::AudioBuffer<float> *, OrchestraVoiceConstant::MaxDynamicLayers> mLayerBuffers{};
+	std::array<const juce::AudioBuffer<float> *, ArticulationVoiceConstants::MaxDynamicLayers> mLayerBuffers{};
 };

@@ -83,9 +83,9 @@ class VoiceBehaviourTest : public ::testing::Test
 {
 protected:
 	std::unique_ptr<ArticulationVoice> mVoice;
-	std::unique_ptr<SampleSound> mSound;
+	std::unique_ptr<SampleSound>	   mSound;
 
-	void							SetUp() override
+	void							   SetUp() override
 	{
 		mVoice = std::make_unique<ArticulationVoice>();
 
@@ -254,12 +254,12 @@ TEST_F(VoiceBehaviourTest, NullLayerStillOccupiesItsSlot)
 
 TEST_F(VoiceBehaviourTest, LayerCountIsClampedToCapacity)
 {
-	for (int i = 0; i < OrchestraVoiceConstant::MaxDynamicLayers + 4; ++i)
+	for (int i = 0; i < ArticulationVoiceConstants::MaxDynamicLayers + 4; ++i)
 		addLayer(*mSound, Dynamics::mezzoForte, {0.1f});
 
 	mVoice->startNote(kRootNote, 1.0f, mSound.get(), 8192);
 
-	EXPECT_EQ(mVoice->getNumDynamicLayers(), OrchestraVoiceConstant::MaxDynamicLayers) << "Layer count must never exceed the fixed capacity";
+	EXPECT_EQ(mVoice->getNumDynamicLayers(), ArticulationVoiceConstants::MaxDynamicLayers) << "Layer count must never exceed the fixed capacity";
 }
 
 
@@ -287,7 +287,7 @@ TEST_F(VoiceBehaviourTest, OutputIsIdenticalAcrossBlockSizes)
 		voice.startNote(kRootNote, 1.0f, &sound, 8192);
 
 		// Start a controller ramp; this is what used to move at a block-dependent rate.
-		voice.controllerMoved(kModWheelCc, kMaxCcValue);
+		voice.controllerMoved(MIDI::ModWheelCC, MIDI::MaxCCValue);
 
 		return renderInChunks(voice, total, blockSize);
 	};
@@ -322,7 +322,7 @@ TEST_F(VoiceBehaviourTest, ControllerRampReachesTargetInTheSameTimeRegardlessOfB
 		voice.startNote(kRootNote, 1.0f, &sound, 8192);
 
 		// Expression starts at full; ramp it down and see where it lands.
-		voice.controllerMoved(kExpressionCc, kMinCcValue);
+		voice.controllerMoved(MIDI::ExpressionCC, MIDI::MinCCValue);
 
 		const auto rendered = renderInChunks(voice, total, blockSize);
 		return rendered.back();
