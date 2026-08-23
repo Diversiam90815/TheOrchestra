@@ -135,7 +135,6 @@ juce_add_binary_data(InstrumentData
 )
 
 set (PROJECT_LIBS   juce::juce_audio_utils
-                    juce::juce_audio_plugin_client
                     juce::juce_core
                     Logger
                     nlohmann_json::nlohmann_json
