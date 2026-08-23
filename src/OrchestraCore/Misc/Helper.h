@@ -57,9 +57,9 @@ inline const std::map<Articulation, std::string> articulationReverseMap = {
 	{Articulation::tremolo, TremoloArticulation},	  {Articulation::hits, HitsArticulation},		  {Articulation::rolls, RollsArticulation}};
 
 
-inline const std::map<std::string, Dynamics, std::less<>> dynamicMap	   = {{PianissimoDynamic, Dynamics::pianissimo}, {PianoDynamic, Dynamics::piano},
-																			  {MezzoPianoDynamic, Dynamics::mezzoPiano}, {MezzoForteDynamic, Dynamics::mezzoForte},
-																			  {ForteDynamic, Dynamics::forte},			 {FortissimoDynamic, Dynamics::fortissimo}};
+inline const std::map<std::string, Dynamics, std::less<>> dynamicMap = {
+	{PianissimoDynamic, Dynamics::pianissimo}, {PianoDynamic, Dynamics::piano},			  {MezzoPianoDynamic, Dynamics::mezzoPiano},	  {MezzoForteDynamic, Dynamics::mezzoForte},
+	{ForteDynamic, Dynamics::forte},		   {FortissimoDynamic, Dynamics::fortissimo}, {FortississimoDynamic, Dynamics::fortississimo}};
 
 
 // Some samples have the velocity layer in their name instead of the dynamic value, so we set them to default values

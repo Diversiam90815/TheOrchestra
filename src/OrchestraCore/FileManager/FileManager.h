@@ -9,6 +9,7 @@
 
 #include <string>
 #include <filesystem>
+#include <vector>
 #include <cstdlib>
 
 #include "Parameters.h"
@@ -36,15 +37,18 @@ public:
 	std::filesystem::path getConfigFilePath();
 
 private:
-	std::filesystem::path	 getExecutableDirectory(); // Gets the directory containing the executable
-	std::filesystem::path	 getAssetsFolder();		   // Gets the assets folder
+	std::filesystem::path			   getExecutableDirectory(); // Gets the directory containing the executable
+	std::filesystem::path			   getAssetsFolder();		 // Gets the assets folder
 
-	std::vector<std::string> getInstrumentsImages(InstrumentID instrumentKey);
+	// Places the assets may live, in priority order. See getAssetsFolder().
+	std::vector<std::filesystem::path> getAssetsFolderCandidates();
 
-	std::vector<std::string> getInstrumentImages(const std::string &family, const std::string &instrumentName);
+	std::vector<std::string>		   getInstrumentsImages(InstrumentID instrumentKey);
+
+	std::vector<std::string>		   getInstrumentImages(const std::string &family, const std::string &instrumentName);
 
 
-	std::string				 AssetsFolderName = "Assets";
-	std::string				 SampleFolderName = "Samples";
-	std::string				 ImageFolderName  = "Images";
+	std::string						   AssetsFolderName = "Assets";
+	std::string						   SampleFolderName = "Samples";
+	std::string						   ImageFolderName	= "Images";
 };

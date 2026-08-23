@@ -14,7 +14,7 @@ constexpr double kDefaultSampleRate = 44100.0; // Used for MidiMessageCollector:
 
 
 CoreManager::CoreManager()
-	: mInstrumentController(std::make_unique<InstrumentController>()), mSampler(std::make_unique<OrchestraSampler>()),
+	: mInstrumentController(std::make_unique<InstrumentController>()), mSampler(std::make_unique<SamplerEngine>()),
 	  mMidiKeyboardState(std::make_unique<juce::MidiKeyboardState>())
 {
 	for (auto &cc : mCcValues)
@@ -91,6 +91,8 @@ void CoreManager::changeInstrument(InstrumentID key)
 
 	mSampler->reset();
 
+	mCurrentInstrument = key;
+
 	// TODO: maybe preload default articulation
 
 	LOG_INFO("Instrument changed successfully to key {}", key);
@@ -102,9 +104,40 @@ bool CoreManager::changeArticulation(InstrumentID key, Articulation articulation
 	mSampler->addSoundsFromInstrumentToSampler(key, articulation);
 
 	const bool ready = mSampler->getSamplesAreReady();
+
+	if (ready)
+	{
+		mCurrentInstrument	 = key;
+		mCurrentArticulation = articulation;
+	}
 	LOG_INFO("Instrument key {} changed to articulation {} (ready={})", key, static_cast<int>(articulation), ready);
 
 	return ready;
+}
+
+
+void CoreManager::changeArticulationAsync(InstrumentID key, Articulation articulation, SampleLoadCallback onComplete)
+{
+	mSampler->loadInstrumentAsync(key, articulation,
+								  [this, key, articulation, onComplete](bool ready)
+								  {
+									  if (ready)
+									  {
+										  mCurrentInstrument   = key;
+										  mCurrentArticulation = articulation;
+									  }
+
+									  LOG_INFO("Instrument key {} changed to articulation {} (ready={})", key, static_cast<int>(articulation), ready);
+
+									  if (onComplete)
+										  onComplete(ready);
+								  });
+}
+
+
+bool CoreManager::isLoadingSamples() const
+{
+	return mSampler->isLoading();
 }
 
 
