@@ -9,6 +9,7 @@ set(SamplerTest_Files
     SamplerTest/OrchestraSoundTest.cpp
     SamplerTest/OrchestraVoiceTest.cpp
     SamplerTest/SamplerIntegrationTest.cpp
+    SamplerTest/VoiceBehaviourTest.cpp
 )
 
 
