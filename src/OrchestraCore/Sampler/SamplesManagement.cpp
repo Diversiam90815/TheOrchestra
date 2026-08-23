@@ -5,11 +5,11 @@
   ==============================================================================
 */
 
+#include <filesystem>
+
 #include "SamplesManagement.h"
 #include "InstrumentController.h"
 #include "Helper.h"
-
-#include <filesystem>
 
 
 void SamplesManagement::init()
@@ -25,29 +25,6 @@ void SamplesManagement::init()
 	}
 
 	loadSamples();
-}
-
-
-juce::File SamplesManagement::getInstrumentSamplesPath(const InstrumentID &instrumentKey)
-{
-	juce::File sampleDirectoryFile = (juce::File)mSampleDirectory;
-
-	for (const auto &section : sampleDirectoryFile.findChildFiles(juce::File::findDirectories, false))
-	{
-		std::string sectionName = section.getFileName().toStdString();
-
-		for (const auto &instrument : section.findChildFiles(juce::File::findDirectories, false))
-		{
-			std::string instrumentName = instrument.getFileName().toStdString();
-
-			int			currentKey	   = getInstrumentKey(sectionName, instrumentName);
-			if (currentKey == instrumentKey)
-			{
-				return instrument;
-			}
-		}
-	}
-	return juce::File();
 }
 
 
@@ -113,15 +90,16 @@ void SamplesManagement::parseRhythmicPercussionFiles(const juce::File &instrumen
 	{
 		std::string	 articulationStr = articulationFolder.getFileName().toStdString();
 		Articulation articulationValue{};
-		try
+
+		const auto	 articulationIt = articulationMap.find(articulationStr);
+
+		if (articulationIt == articulationMap.end())
 		{
-			articulationValue = articulationMap.at(articulationStr);
-		}
-		catch (std::exception &e)
-		{
-			LOG_ERROR("Could not locate articulation for {}. Error: {}", articulationStr, e.what());
+			LOG_ERROR("Could not locate articulation for {}", articulationStr);
 			continue;
 		}
+
+		articulationValue = articulationIt->second;
 
 		for (const auto &file : articulationFolder.findChildFiles(juce::File::findFiles, false))
 		{
@@ -141,15 +119,15 @@ void SamplesManagement::parseInstrumentSamples(const juce::File &instrumentFolde
 		std::string	 articulationStr = articulationFolder.getFileName().toStdString();
 		Articulation articulationValue{};
 
-		try
+		const auto	 articulationIt = articulationMap.find(articulationStr);
+
+		if (articulationIt == articulationMap.end())
 		{
-			articulationValue = articulationMap.at(articulationStr);
-		}
-		catch (std::exception &e)
-		{
-			LOG_ERROR("Could not locate articulation for {}. Error: {}", articulationStr, e.what());
+			LOG_ERROR("Could not locate articulation for {}", articulationStr);
 			continue;
 		}
+
+		articulationValue = articulationIt->second;
 
 		for (const auto &file : articulationFolder.findChildFiles(juce::File::findFiles, false))
 		{
@@ -174,23 +152,13 @@ void SamplesManagement::addPercussionSamples(const juce::File &file, const Instr
 	std::string dynamicString	 = parts[1].toStdString();
 	std::string roundRobinString = parts[2].toStdString();
 
-	int			roundRobin		 = 0;
-	try
-	{
-		roundRobin = stoi(roundRobinString);
-	}
-	catch (std::exception &e)
-	{
-		LOG_WARNING("Failed to parse round robin value: {}, Error: {}", roundRobinString, e.what());
-		roundRobin = 1; // Default to first round robin
-	}
+	const int	roundRobin		 = parseRoundRobin(roundRobinString);
+	int			dynamic			 = getIndexOfDynamics(dynamicString);
 
-	int			dynamic		   = getIndexOfDynamics(dynamicString);
-
-	std::string instrumentName = file.getParentDirectory().getParentDirectory().getFileName().toStdString();
+	std::string instrumentName	 = file.getParentDirectory().getParentDirectory().getFileName().toStdString();
 
 	// For percussion, we'll determine the MIDI note based on a mapping
-	int			midiNote	   = turnNotenameIntoMidinumber(note);
+	int			midiNote		 = turnNotenameIntoMidinumber(note);
 	if (midiNote == -1)
 	{
 		LOG_WARNING("Invalid note name for percussion: {}, defaulting to C3 (60)", note);
@@ -201,13 +169,9 @@ void SamplesManagement::addPercussionSamples(const juce::File &file, const Instr
 
 	// Set percussion element name if we have more than 3 parts in the filename
 	if (parts.size() > 3)
-	{
 		sampleInfo.percussionElementName = parts[3].toStdString();
-	}
 	else
-	{
 		sampleInfo.percussionElementName = instrumentName;
-	}
 
 	mInstrumentSamples[key].emplace_back(sampleInfo);
 
@@ -230,9 +194,7 @@ void SamplesManagement::addSample(const juce::File &file, const InstrumentID &ke
 	std::string dynamicString	 = parts[1].toStdString();
 	std::string roundRobinString = parts[2].toStdString();
 
-	int			roundRobin		 = 0;
-	roundRobin					 = stoi(roundRobinString);
-
+	const int	roundRobin		 = parseRoundRobin(roundRobinString);
 	int			dynamic			 = getIndexOfDynamics(dynamicString);
 
 	std::string instrumentName	 = file.getParentDirectory().getParentDirectory().getFileName().toStdString();
@@ -271,6 +233,20 @@ int SamplesManagement::getIndexOfDynamics(const std::string &dynamicString)
 	}
 
 	return dynamic;
+}
+
+
+int SamplesManagement::parseRoundRobin(const std::string &token)
+{
+	try
+	{
+		return std::stoi(token);
+	}
+	catch (const std::exception &e)
+	{
+		LOG_WARNING("Failed to parse round robin value: {}, Error: {}", token, e.what());
+		return 1;
+	}
 }
 
 

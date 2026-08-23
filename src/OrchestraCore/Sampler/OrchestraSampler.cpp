@@ -11,6 +11,9 @@
 
 OrchestraSampler::~OrchestraSampler()
 {
+	mLoadPool.removeAllJobs(true, 5000);
+
+	mSampler.allNotesOff(0, false);
 	mSampler.clearSounds();
 	mSampler.clearVoices();
 }
@@ -23,13 +26,14 @@ void OrchestraSampler::init(InstrumentController &controller)
 	mSamplesManager		  = std::make_unique<SamplesManagement>();
 	mSamplesManager->init();
 
+	// registerBasicFormats() only covers WAV and AIFF; the sample pack is FLAC.
 	mFormatManager.registerBasicFormats();
+	mFormatManager.registerFormat(new juce::FlacAudioFormat(), false);
 
 	// Add voices to the synthesiser
-	const int numVoices = 64;
-	for (int i = 0; i < numVoices; ++i)
+	for (int i = 0; i < kNumVoices; ++i)
 	{
-		mSampler.addVoice(new OrchestraVoice());
+		mSampler.addVoice(new OrchestraVoice(&mControllerState));
 	}
 }
 
@@ -49,17 +53,16 @@ std::set<Articulation> OrchestraSampler::getAvailableArticulationsForInstrument(
 }
 
 
-void OrchestraSampler::addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed)
+std::vector<juce::SynthesiserSound::Ptr> OrchestraSampler::buildSounds(const InstrumentID key, Articulation articulationUsed)
 {
-	std::vector<juce::SamplerSound> sounds;
-	reset();
+	std::vector<juce::SynthesiserSound::Ptr> built;
 
-	auto samples = mSamplesManager->getSamplesForInstrument(key);
+	auto									 samples = mSamplesManager->getSamplesForInstrument(key);
 
 	if (samples.empty())
 	{
 		LOG_WARNING("No samples found for instrument key {}", key);
-		return;
+		return built;
 	}
 
 	auto filteredSamples = filterArticulation(samples, articulationUsed);
@@ -67,21 +70,24 @@ void OrchestraSampler::addSoundsFromInstrumentToSampler(const InstrumentID key, 
 	auto noteRanges		 = createNoteRangeMap(noteDynamicMap, key);
 
 	if (noteRanges.empty())
-		return;
+		return built;
+
+	built.reserve(noteDynamicMap.size());
 
 	for (auto &notePair : noteDynamicMap)
 	{
-		int	 midiNote		= notePair.first;
-		int	 rangeLow		= noteRanges[midiNote].first;
-		int	 rangeHigh		= noteRanges[midiNote].second;
+		const int midiNote		   = notePair.first;
+		const int rangeLow		   = noteRanges[midiNote].first;
+		const int rangeHigh		   = noteRanges[midiNote].second;
 
-		auto orchestraSound = std::make_unique<OrchestraSound>(rangeLow, rangeHigh, midiNote);
+		auto	  orchestraSound   = juce::SynthesiserSound::Ptr(new OrchestraSound(rangeLow, rangeHigh, midiNote));
+		auto	 *asOrchestraSound = static_cast<OrchestraSound *>(orchestraSound.get());
 
-		orchestraSound->setArticulation(articulationUsed);
+		asOrchestraSound->setArticulation(articulationUsed);
 
 		for (auto &dynPair : notePair.second)
 		{
-			int										   dynValue	  = dynPair.first;
+			const int								   dynValue	  = dynPair.first;
 			auto									  &fileVector = dynPair.second;
 
 			juce::OwnedArray<juce::AudioBuffer<float>> rrBuffers;
@@ -89,6 +95,7 @@ void OrchestraSampler::addSoundsFromInstrumentToSampler(const InstrumentID key, 
 			for (auto &file : fileVector)
 			{
 				std::unique_ptr<juce::AudioFormatReader> reader(mFormatManager.createReaderFor(file));
+
 				if (reader)
 				{
 					auto *newBuffer = new juce::AudioBuffer<float>((int)reader->numChannels, (int)reader->lengthInSamples);
@@ -101,18 +108,69 @@ void OrchestraSampler::addSoundsFromInstrumentToSampler(const InstrumentID key, 
 				}
 			}
 
-			auto mappedDyn = static_cast<Dynamics>(dynValue);
-			orchestraSound->addDynamicLayer(mappedDyn, std::move(rrBuffers));
+			asOrchestraSound->addDynamicLayer(static_cast<Dynamics>(dynValue), std::move(rrBuffers));
 		}
 
-		mSampler.addSound(orchestraSound.release());
+		built.push_back(orchestraSound);
 	}
+
+	return built;
+}
+
+
+void OrchestraSampler::installSounds(std::vector<juce::SynthesiserSound::Ptr> sounds)
+{
+	reset();
+
+	for (auto &sound : sounds)
+		mSampler.addSound(sound.get());
 
 	if (mSampler.getNumSounds() > 0)
 	{
 		setSamplesAreReady(true);
-		LOG_INFO("Samples for instrument (Key : {}) are loaded! (NumSounds = {})", key, mSampler.getNumSounds());
+		LOG_INFO("Samples loaded! (NumSounds = {})", mSampler.getNumSounds());
 	}
+}
+
+
+void OrchestraSampler::addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed)
+{
+	installSounds(buildSounds(key, articulationUsed));
+}
+
+
+void OrchestraSampler::loadInstrumentAsync(const InstrumentID key, Articulation articulationUsed, SampleLoadCallback onComplete)
+{
+	const int generation = mLoadGeneration.fetch_add(1) + 1;
+
+	reset();
+
+	juce::WeakReference<OrchestraSampler> weakThis(this);
+
+	mLoadPool.addJob(
+		[weakThis, key, articulationUsed, generation, onComplete]() mutable
+		{
+			if (weakThis == nullptr)
+				return;
+
+			auto sounds = weakThis->buildSounds(key, articulationUsed);
+
+			juce::MessageManager::callAsync(
+				[weakThis, sounds = std::move(sounds), generation, onComplete]() mutable
+				{
+					if (weakThis == nullptr)
+						return;
+
+					// A newer request has already been issued; this result is stale.
+					if (generation != weakThis->mLoadGeneration.load())
+						return;
+
+					weakThis->installSounds(std::move(sounds));
+
+					if (onComplete)
+						onComplete(weakThis->getSamplesAreReady());
+				});
+		});
 }
 
 
@@ -121,12 +179,30 @@ void OrchestraSampler::process(juce::AudioBuffer<float> &buffer, juce::MidiBuffe
 	if (!getSamplesAreReady())
 		return;
 
+	for (const auto meta : midiMessages)
+	{
+		const auto m = meta.getMessage();
+
+		if (!m.isController())
+			continue;
+
+		const float value = static_cast<float>(m.getControllerValue());
+
+		if (m.getControllerNumber() == kModWheelCc)
+			mControllerState.cc1.store(value, std::memory_order_relaxed);
+
+		else if (m.getControllerNumber() == kExpressionCc)
+			mControllerState.cc11.store(value, std::memory_order_relaxed);
+	}
+
 	mSampler.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
 
 void OrchestraSampler::prepare(double sampleRate, int samplesPerBlock)
 {
+	juce::ignoreUnused(samplesPerBlock);
+
 	mSampler.setCurrentPlaybackSampleRate(sampleRate);
 }
 
@@ -134,14 +210,9 @@ void OrchestraSampler::prepare(double sampleRate, int samplesPerBlock)
 void OrchestraSampler::reset()
 {
 	setSamplesAreReady(false);
+
+	mSampler.allNotesOff(0, false);
 	mSampler.clearSounds();
-}
-
-
-bool OrchestraSampler::loadSamples()
-{
-	mSamplesManager->loadSamples();
-	return true;
 }
 
 
@@ -237,13 +308,13 @@ std::pair<int, int> OrchestraSampler::getRangesOfInstrument(const InstrumentID k
 	if (mInstrumentController == nullptr)
 		return {};
 
-	auto instrument		 = mInstrumentController->getInstrument(key);
-	auto range			 = instrument.getRange();
-	auto higherNote		 = range.getWrittenHighNote();
-	auto lowerNote		 = range.getWrittenLowNote();
+	auto  instrument	  = mInstrumentController->getInstrument(key);
+	auto &range			  = instrument.getRange();
+	auto &higherNote	  = range.getWrittenHighNote();
+	auto &lowerNote		  = range.getWrittenLowNote();
 
-	int	 lowerNoteValue	 = turnNotenameIntoMidinumber(lowerNote);
-	int	 higherNoteValue = turnNotenameIntoMidinumber(higherNote);
+	int	  lowerNoteValue  = turnNotenameIntoMidinumber(lowerNote);
+	int	  higherNoteValue = turnNotenameIntoMidinumber(higherNote);
 
 	return std::pair<int, int>(lowerNoteValue, higherNoteValue);
 }

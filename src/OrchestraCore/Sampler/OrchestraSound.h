@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <atomic>
+
 #include "JuceIncludes.h"
 #include "Parameters.h"
 #include "SamplesManagement.h"
@@ -16,6 +18,7 @@ struct DynamicLayer
 {
 	Dynamics								   dynamicValue;
 	juce::OwnedArray<juce::AudioBuffer<float>> roundRobinSamples;
+	std::atomic<unsigned>					   roundRobinCounter{0};
 };
 
 
@@ -38,14 +41,9 @@ public:
 	juce::OwnedArray<DynamicLayer> dynamicLayers;
 
 private:
-	static juce::BigInteger getNoteRangeBit(int start, int end);
+	Articulation articulation = Articulation::sustain; // Default value -> will be set at creation
 
-	Articulation			articulation = Articulation::sustain; // Default value -> will be set at creation
-
-
-	int						noteRangeStart;
-
-	int						noteRangeEnd;
-
-	int						rootNote;
+	int			 noteRangeStart;
+	int			 noteRangeEnd;
+	int			 rootNote;
 };

@@ -30,9 +30,6 @@ struct Sample
 	Dynamics	 dynamic;
 	Articulation articulation;
 	juce::File	 file;
-
-	int			 rangeLow  = 0;
-	int			 rangeHigh = 0;
 };
 
 
@@ -71,16 +68,14 @@ public:
 
 private:
 	void										parseRhythmicPercussionFiles(const juce::File &instrument);
-
 	void										parseInstrumentSamples(const juce::File &instrumentFolder, std::string &sectionName);
 
 	void										addPercussionSamples(const juce::File &file, const InstrumentID &key, Articulation articulation);
-
 	void										addSample(const juce::File &file, const InstrumentID &key, Articulation articulation);
 
-	juce::File									getInstrumentSamplesPath(const InstrumentID &instrumentKey);
-
 	int											getIndexOfDynamics(const std::string &dynamicsString);
+
+	int											parseRoundRobin(const std::string &token);
 
 
 	std::string									mSampleDirectory;	// Folder of the samples folder ( /Assets/Samples)
