@@ -62,6 +62,7 @@ public:
 	void	   setInstrumentSelectedCallback(InstrumentSelectedCallback cb);
 	void	   setBackToFamiliesCallback(std::function<void()> cb);
 	void	   setArticulationChangedCallback(ArticulationChangedCallback cb);
+	void	   setArticulationLoadResult(Articulation articulation, bool ready);
 
 	// Piano roll wiring
 	void	   initPianoRoll(juce::MidiKeyboardState &state);

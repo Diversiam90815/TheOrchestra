@@ -15,7 +15,9 @@
 #include <set>
 
 
-using ArticulationChangedCallback = std::function<bool(Articulation)>;
+// Loading is asynchronous now, so the panel is told the outcome later via setLoadResult()
+// rather than the callback returning it.
+using ArticulationChangedCallback = std::function<void(Articulation)>;
 
 
 class SamplerPanel : public OrchestraPanel, public HasPreferredHeight
@@ -28,6 +30,8 @@ public:
 
 	void setAvailableArticulations(std::set<Articulation> available);
 	void setArticulationChangedCallback(ArticulationChangedCallback callback);
+
+	void setLoadResult(Articulation articulation, bool ready);
 
 	void paint(juce::Graphics &g) override;
 	void resized() override;
@@ -47,6 +51,7 @@ private:
 
 	std::optional<Articulation>					   mLoadedArticulation;
 	bool										   mSamplesReady = false;
+	bool										   mLoading		 = false;
 
 	ArticulationChangedCallback					   mCallback;
 
