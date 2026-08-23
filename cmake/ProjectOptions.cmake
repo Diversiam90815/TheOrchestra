@@ -7,14 +7,20 @@ function(set_common_target_options target)
         JUCE_LOAD_CURL_SYMBOLS_LAZILY=1
         JUCE_WASAPI=1
         JUCE_DIRECTSOUND=1
-        JUCE_ASIO=0
-        JUCE_USE_ANDROID_OBOE=1
-        JUCE_USE_OBOE_STABILIZED_CALLBACK=1
-        JUCE_USE_CUSTOM_PLUGIN_STANDALONE_APP=1
+        JUCE_ASIO=$<BOOL:${ENABLE_ASIO}>
 
         "$<$<CONFIG:Debug>:_DEBUG>"
         "$<$<CONFIG:Release>:NDEBUG>"
     )
+
+    # ASIO needs the SDK headers on the include path; JUCE picks them up from there.
+    if(ENABLE_ASIO)
+        if(NOT ASIO_SDK_PATH OR NOT EXISTS "${ASIO_SDK_PATH}/common/iasiodrv.h")
+            message(FATAL_ERROR "ENABLE_ASIO is ON but ASIO_SDK_PATH does not point at an ASIO SDK: ${ASIO_SDK_PATH}")
+        endif()
+
+        target_include_directories(${target} PUBLIC "${ASIO_SDK_PATH}/common")
+    endif()
 
     if(MSVC)
         target_compile_definitions(${target} PUBLIC _CRT_SECURE_NO_WARNINGS)

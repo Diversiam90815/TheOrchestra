@@ -2,8 +2,6 @@ set(BUILDINFO_TEMPLATE_DIR ${CMAKE_CURRENT_LIST_DIR})
 set(DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/buildinfo")
 string(TIMESTAMP TIMESTAMP)
 
-# Not REQUIRED: building from a source archive without git should still work,
-# it just leaves the commit fields empty.
 find_program(GIT_PATH git)
 
 if(NOT GIT_PATH)
@@ -46,12 +44,6 @@ set(SYS_VER           "${CMAKE_SYSTEM_VERSION}")
 set(SYS_CPU           "${CMAKE_SYSTEM_PROCESSOR}")
 set(HOST_SYS          "${CMAKE_HOST_SYSTEM_NAME}")
 set(HOST_VER          "${CMAKE_HOST_SYSTEM_VERSION}")
-
-site_name(BUILD_HOST)
-set(BUILD_USER "$ENV{USERNAME}")
-if(NOT BUILD_USER)
-  set(BUILD_USER "$ENV{USER}")
-endif()
 
 configure_file("${BUILDINFO_TEMPLATE_DIR}/buildinfo.h.in" "${DESTINATION}/buildinfo.h" @ONLY)
 
