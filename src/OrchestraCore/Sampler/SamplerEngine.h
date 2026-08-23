@@ -1,6 +1,6 @@
 /*
   ==============================================================================
-	Module			OrchestraSampler
+	Module			SamplerEngine
 	Description		Sampling the instrument and making them ready for playback
   ==============================================================================
 */
@@ -12,23 +12,24 @@
 #include <vector>
 
 #include "JuceIncludes.h"
-#include "SamplesManagement.h"
+#include "SampleCatalog.h"
 #include "Logging.h"
-#include "OrchestraVoice.h"
+#include "ArticulationVoice.h"
 #include "Helper.h"
 #include "InstrumentController.h"
+#include "SamplerStructs.h"
 
 
 using SampleLoadCallback = std::function<void(bool)>;
 
 
-class OrchestraSampler
+class SamplerEngine
 {
 public:
 	static constexpr int kNumVoices = 64;
 
-	OrchestraSampler()				= default;
-	~OrchestraSampler();
+	SamplerEngine()				= default;
+	~SamplerEngine();
 
 	void				   init(InstrumentController &controller);
 
@@ -69,7 +70,7 @@ private:
 
 	juce::AudioFormatManager							  mFormatManager;
 
-	std::unique_ptr<SamplesManagement>					  mSamplesManager;
+	std::unique_ptr<SampleCatalog>					  mSamplesManager;
 
 	std::atomic<bool>									  mSamplesAreReady		= false;
 
@@ -79,5 +80,5 @@ private:
 
 	std::atomic<int>									  mLoadGeneration{0};
 
-	JUCE_DECLARE_WEAK_REFERENCEABLE(OrchestraSampler)
+	JUCE_DECLARE_WEAK_REFERENCEABLE(SamplerEngine)
 };

@@ -1,6 +1,6 @@
 /*
   ==============================================================================
-	Module			OrchestraVoice
+	Module			ArticulationVoice
 	Description		Custom voice that picks which dynamic layer & round-robin is being played
   ==============================================================================
 */
@@ -11,28 +11,16 @@
 #include <atomic>
 
 #include "JuceIncludes.h"
-#include "OrchestraSound.h"
+#include "SampleSound.h"
+#include "Parameters.h"
+#include "SamplerStructs.h"
 
 
-// Last-seen value of the continuous controllers the sampler responds to.
-struct ControllerState
-{
-	std::atomic<float> cc1{0.0f};	 // modulation
-	std::atomic<float> cc11{127.0f}; // expression
-};
-
-struct StereoSample
-{
-	float left	= 0.0f;
-	float right = 0.0f;
-};
-
-
-class OrchestraVoice : public juce::SynthesiserVoice
+class ArticulationVoice : public juce::SynthesiserVoice
 {
 public:
-	explicit OrchestraVoice(const ControllerState *controllerState = nullptr);
-	~OrchestraVoice() override = default;
+	explicit ArticulationVoice(const ControllerState *controllerState = nullptr);
+	~ArticulationVoice() override = default;
 
 	bool canPlaySound(juce::SynthesiserSound *sound) override;
 

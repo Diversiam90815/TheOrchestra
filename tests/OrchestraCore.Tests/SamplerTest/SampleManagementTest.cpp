@@ -7,7 +7,7 @@
 
 #include <gtest/gtest.h>
 
-#include "SamplesManagement.h"
+#include "SampleCatalog.h"
 
 
 namespace SamplerTests
@@ -16,10 +16,10 @@ namespace SamplerTests
 class SamplesManagementTest : public ::testing::Test
 {
 protected:
-	std::unique_ptr<SamplesManagement> mSamplesManager;
+	std::unique_ptr<SampleCatalog> mSamplesManager;
 
 
-	void							   SetUp() override { mSamplesManager = std::make_unique<SamplesManagement>(); }
+	void							   SetUp() override { mSamplesManager = std::make_unique<SampleCatalog>(); }
 
 	void							   TearDown() override { mSamplesManager.reset(); }
 };

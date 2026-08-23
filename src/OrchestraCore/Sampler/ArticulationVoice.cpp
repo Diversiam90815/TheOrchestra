@@ -1,27 +1,27 @@
 /*
   ==============================================================================
-	Module			OrchestraVoice
+	Module			ArticulationVoice
 	Description		Custom voice that picks which dynamic layer & round-robin is being played
   ==============================================================================
 */
 
-#include "OrchestraVoice.h"
+#include "ArticulationVoice.h"
 
 
-OrchestraVoice::OrchestraVoice(const ControllerState *controllerState) : mControllerState(controllerState) {}
+ArticulationVoice::ArticulationVoice(const ControllerState *controllerState) : mControllerState(controllerState) {}
 
 
-bool OrchestraVoice::canPlaySound(juce::SynthesiserSound *sound)
+bool ArticulationVoice::canPlaySound(juce::SynthesiserSound *sound)
 {
-	return dynamic_cast<OrchestraSound *>(sound) != nullptr;
+	return dynamic_cast<SampleSound *>(sound) != nullptr;
 }
 
 
-void OrchestraVoice::startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound *sound, int currentPitchWheelPosition)
+void ArticulationVoice::startNote(int midiNoteNumber, float velocity, juce::SynthesiserSound *sound, int currentPitchWheelPosition)
 {
 	juce::ignoreUnused(currentPitchWheelPosition);
 
-	auto *orchestraSound = static_cast<OrchestraSound *>(sound);
+	auto *orchestraSound = static_cast<SampleSound *>(sound);
 
 	if (orchestraSound == nullptr)
 		return;
@@ -79,7 +79,7 @@ void OrchestraVoice::startNote(int midiNoteNumber, float velocity, juce::Synthes
 }
 
 
-void OrchestraVoice::stopNote(float velocity, bool allowTailOff)
+void ArticulationVoice::stopNote(float velocity, bool allowTailOff)
 {
 	juce::ignoreUnused(velocity);
 
@@ -99,7 +99,7 @@ void OrchestraVoice::stopNote(float velocity, bool allowTailOff)
 }
 
 
-void OrchestraVoice::controllerMoved(int controllerNumber, int newControllerValue)
+void ArticulationVoice::controllerMoved(int controllerNumber, int newControllerValue)
 {
 	if (controllerNumber == kModWheelCc)
 		mCC1.setTargetValue(static_cast<float>(newControllerValue));
@@ -109,7 +109,7 @@ void OrchestraVoice::controllerMoved(int controllerNumber, int newControllerValu
 }
 
 
-void OrchestraVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
+void ArticulationVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int startSample, int numSamples)
 {
 	if (!mIsPlaying || mNumLayerBuffers == 0)
 		return;
@@ -191,7 +191,7 @@ void OrchestraVoice::renderNextBlock(juce::AudioBuffer<float> &outputBuffer, int
 }
 
 
-int OrchestraVoice::pickRoundRobin(DynamicLayer &layer)
+int ArticulationVoice::pickRoundRobin(DynamicLayer &layer)
 {
 	const int numRoundRobins = layer.roundRobinSamples.size();
 
@@ -204,7 +204,7 @@ int OrchestraVoice::pickRoundRobin(DynamicLayer &layer)
 }
 
 
-float OrchestraVoice::mapDynamicPosition()
+float ArticulationVoice::mapDynamicPosition()
 {
 	if (mNumLayerBuffers < 1)
 		return -1.0f;
@@ -219,7 +219,7 @@ float OrchestraVoice::mapDynamicPosition()
 }
 
 
-inline float OrchestraVoice::readHermite(const juce::AudioBuffer<float> &buffer, int channel, int pos, float frac)
+inline float ArticulationVoice::readHermite(const juce::AudioBuffer<float> &buffer, int channel, int pos, float frac)
 {
 	const int	 numSamples = buffer.getNumSamples();
 	const float *data		= buffer.getReadPointer(channel);
@@ -238,7 +238,7 @@ inline float OrchestraVoice::readHermite(const juce::AudioBuffer<float> &buffer,
 }
 
 
-inline StereoSample OrchestraVoice::readFrame(const juce::AudioBuffer<float> *buffer, int pos, float frac)
+inline StereoSample ArticulationVoice::readFrame(const juce::AudioBuffer<float> *buffer, int pos, float frac)
 {
 	StereoSample out;
 

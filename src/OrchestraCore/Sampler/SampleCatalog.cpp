@@ -1,18 +1,18 @@
 /*
   ==============================================================================
-	Module			SamplesManagement
+	Module			SampleCatalog
 	Description		Managing the samples
   ==============================================================================
 */
 
 #include <filesystem>
 
-#include "SamplesManagement.h"
+#include "SampleCatalog.h"
 #include "InstrumentController.h"
 #include "Helper.h"
 
 
-void SamplesManagement::init()
+void SampleCatalog::init()
 {
 	mUserConfig.init();
 	mSampleDirectory = mUserConfig.getSavedSamplesFolder();
@@ -28,7 +28,7 @@ void SamplesManagement::init()
 }
 
 
-void SamplesManagement::loadSamples()
+void SampleCatalog::loadSamples()
 {
 	juce::File sampleDirectoryFile = (juce::File)mSampleDirectory;
 
@@ -73,14 +73,14 @@ void SamplesManagement::loadSamples()
 }
 
 
-void SamplesManagement::reloadSamples()
+void SampleCatalog::reloadSamples()
 {
 	mInstrumentSamples.clear();
 	loadSamples();
 }
 
 
-void SamplesManagement::parseRhythmicPercussionFiles(const juce::File &instrument)
+void SampleCatalog::parseRhythmicPercussionFiles(const juce::File &instrument)
 {
 	std::string instrumentName	   = instrument.getFileName().toStdString();
 	std::string tmpPercSectionName = "Percussion";
@@ -109,7 +109,7 @@ void SamplesManagement::parseRhythmicPercussionFiles(const juce::File &instrumen
 }
 
 
-void SamplesManagement::parseInstrumentSamples(const juce::File &instrumentFolder, std::string &sectionName)
+void SampleCatalog::parseInstrumentSamples(const juce::File &instrumentFolder, std::string &sectionName)
 {
 	std::string instrumentName = instrumentFolder.getFileName().toStdString();
 	int			instrumentKey  = getInstrumentKey(sectionName, instrumentName);
@@ -137,7 +137,7 @@ void SamplesManagement::parseInstrumentSamples(const juce::File &instrumentFolde
 }
 
 
-void SamplesManagement::addPercussionSamples(const juce::File &file, const InstrumentID &key, Articulation articulation)
+void SampleCatalog::addPercussionSamples(const juce::File &file, const InstrumentID &key, Articulation articulation)
 {
 	juce::String	  filename = file.getFileNameWithoutExtension();
 	juce::StringArray parts	   = juce::StringArray::fromTokens(filename, "_", "");
@@ -179,7 +179,7 @@ void SamplesManagement::addPercussionSamples(const juce::File &file, const Instr
 }
 
 
-void SamplesManagement::addSample(const juce::File &file, const InstrumentID &key, Articulation articulation)
+void SampleCatalog::addSample(const juce::File &file, const InstrumentID &key, Articulation articulation)
 {
 	juce::String	  filename = file.getFileNameWithoutExtension();
 	juce::StringArray parts	   = juce::StringArray::fromTokens(filename, "_", "");
@@ -207,7 +207,7 @@ void SamplesManagement::addSample(const juce::File &file, const InstrumentID &ke
 }
 
 
-int SamplesManagement::getIndexOfDynamics(const std::string &dynamicString)
+int SampleCatalog::getIndexOfDynamics(const std::string &dynamicString)
 {
 	int dynamic = 0;
 
@@ -236,7 +236,7 @@ int SamplesManagement::getIndexOfDynamics(const std::string &dynamicString)
 }
 
 
-int SamplesManagement::parseRoundRobin(const std::string &token)
+int SampleCatalog::parseRoundRobin(const std::string &token)
 {
 	try
 	{
@@ -250,7 +250,7 @@ int SamplesManagement::parseRoundRobin(const std::string &token)
 }
 
 
-std::vector<Sample> SamplesManagement::getSamplesForInstrument(const InstrumentID &instrumentKey) const
+std::vector<Sample> SampleCatalog::getSamplesForInstrument(const InstrumentID &instrumentKey) const
 {
 	auto it = mInstrumentSamples.find(instrumentKey);
 
@@ -262,7 +262,7 @@ std::vector<Sample> SamplesManagement::getSamplesForInstrument(const InstrumentI
 }
 
 
-void SamplesManagement::setSampleDirectory(std::string directory)
+void SampleCatalog::setSampleDirectory(std::string directory)
 {
 	if (directory.empty())
 	{
