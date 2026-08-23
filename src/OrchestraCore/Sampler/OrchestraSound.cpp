@@ -51,11 +51,3 @@ Articulation OrchestraSound::getArticulation() const
 {
 	return articulation;
 }
-
-
-juce::BigInteger OrchestraSound::getNoteRangeBit(int start, int end)
-{
-	juce::BigInteger notes;
-	notes.setRange(start, end - start + 1, true);
-	return notes;
-}
