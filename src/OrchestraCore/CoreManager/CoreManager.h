@@ -56,7 +56,7 @@ private:
 	Logging									 mLogger;
 
 	std::unique_ptr<InstrumentController>	 mInstrumentController;
-	std::unique_ptr<SamplerEngine>			 mSampler;
+	std::shared_ptr<SamplerEngine>			 mSampler;
 	std::unique_ptr<juce::MidiKeyboardState> mMidiKeyboardState;
 
 	juce::MidiMessageCollector				 mUiMidiCollector;

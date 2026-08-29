@@ -34,23 +34,10 @@ private:
 	void				 onSettingsClicked();
 	void				 populateFamilyCounts();
 
-	/*
-	 @brief					Resizes the window to a view's natural size.
+	void				 handleSamplesFolderChosen(const juce::File &selectedFolder);
+	void				 handleSamplesReloadComplete(bool success);
 
-							The family switcher needs far less room than the
-							instrument detail, so each view carries its own size
-							and minimum. Once the user has resized the window
-							themselves this becomes a no-op - their choice wins
-							from then on.
-	 @param					[IN] width / height the view wants.
-	 @param					[IN] minWidth / minHeight below which it breaks.
-	*/
 	void				 applyViewSize(int width, int height, int minWidth, int minHeight);
-
-	/*
-	 @brief					True once the window differs from the size this
-							class last applied, i.e. the user dragged it.
-	*/
 	bool				 hasUserResized() const;
 
 	CoreManager			*mCoreManager;

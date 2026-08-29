@@ -63,6 +63,7 @@ public:
 	void	   setBackToFamiliesCallback(std::function<void()> cb);
 	void	   setArticulationChangedCallback(ArticulationChangedCallback cb);
 	void	   setArticulationLoadResult(Articulation articulation, bool ready);
+	void	   setCatalogLoading(bool loading) { mSampler.setCatalogLoading(loading); }
 
 	// Piano roll wiring
 	void	   initPianoRoll(juce::MidiKeyboardState &state);

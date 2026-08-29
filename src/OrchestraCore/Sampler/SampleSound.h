@@ -21,7 +21,7 @@ public:
 	SampleSound(int noteRangeStart, int noteRangeEnd, int rootNote);
 	~SampleSound() = default;
 
-	void						   addDynamicLayer(Dynamics dynamicValue, juce::OwnedArray<juce::AudioBuffer<float>> &&rrSamples);
+	void						   addDynamicLayer(Dynamics dynamicValue, std::vector<std::unique_ptr<juce::AudioBuffer<float>>> &&rrSamples);
 
 	bool						   appliesToNote(int midiNoteNumber) override;
 	bool						   appliesToChannel(int midiChannel) override; // TODO: Create settings to store value

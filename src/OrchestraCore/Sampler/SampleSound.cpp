@@ -11,7 +11,7 @@
 SampleSound::SampleSound(int noteRangeStart, int noteRangeEnd, int rootNote) : noteRangeStart(noteRangeStart), noteRangeEnd(noteRangeEnd), rootNote(rootNote) {}
 
 
-void SampleSound::addDynamicLayer(Dynamics dynamicValue, juce::OwnedArray<juce::AudioBuffer<float>> &&rrSamples)
+void SampleSound::addDynamicLayer(Dynamics dynamicValue, std::vector<std::unique_ptr<juce::AudioBuffer<float>>> &&rrSamples)
 {
 	auto *layer				 = new DynamicLayer();
 	layer->dynamicValue		 = dynamicValue;
