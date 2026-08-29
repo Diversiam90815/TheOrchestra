@@ -34,41 +34,12 @@ void SampleCatalog::loadSamples()
 
 	for (const auto &section : sampleDirectoryFile.findChildFiles(juce::File::findDirectories, false))
 	{
-		for (const auto &instrument : section.findChildFiles(juce::File::findDirectories, false))
-		{
-			std::string sectionStr = section.getFileName().toStdString();
+		std::string sectionStr = section.getFileName().toStdString();
 
-			if (sectionStr == "Percussion")
-			{
-				for (const auto &percussionType : section.findChildFiles(juce::File::findDirectories, false))
-				{
-					std::string percussionTypeStr = percussionType.getFileName().toStdString();
-
-					if (percussionTypeStr == "Rhythmic")
-					{
-						for (const auto &instrument : percussionType.findChildFiles(juce::File::findDirectories, false))
-						{
-							parseRhythmicPercussionFiles(instrument);
-						}
-					}
-					else if (percussionTypeStr == "Melodic")
-					{
-						for (const auto &instrument : percussionType.findChildFiles(juce::File::findDirectories, false))
-						{
-							parseInstrumentSamples(instrument, sectionStr);
-						}
-					}
-				}
-			}
-			else
-			{
-				// Handle non-percussion instruments
-				for (const auto &instrument : section.findChildFiles(juce::File::findDirectories, false))
-				{
-					parseInstrumentSamples(instrument, sectionStr);
-				}
-			}
-		}
+		if (sectionStr == "Percussion")
+			loadPercussionSection(section);
+		else
+			loadStandardSection(section, sectionStr);
 	}
 }
 
@@ -109,7 +80,7 @@ void SampleCatalog::parseRhythmicPercussionFiles(const juce::File &instrument)
 }
 
 
-void SampleCatalog::parseInstrumentSamples(const juce::File &instrumentFolder, std::string &sectionName)
+void SampleCatalog::parseInstrumentSamples(const juce::File &instrumentFolder, const std::string &sectionName)
 {
 	std::string instrumentName = instrumentFolder.getFileName().toStdString();
 	int			instrumentKey  = getInstrumentKey(sectionName, instrumentName);
@@ -132,6 +103,33 @@ void SampleCatalog::parseInstrumentSamples(const juce::File &instrumentFolder, s
 		for (const auto &file : articulationFolder.findChildFiles(juce::File::findFiles, false))
 		{
 			addSample(file, instrumentKey, articulationValue);
+		}
+	}
+}
+
+
+void SampleCatalog::loadStandardSection(const juce::File &section, const std::string &sectionName)
+{
+	for (const auto &instrument : section.findChildFiles(juce::File::findDirectories, false))
+		parseInstrumentSamples(instrument, sectionName);
+}
+
+
+void SampleCatalog::loadPercussionSection(const juce::File &section)
+{
+	for (const auto &percussionType : section.findChildFiles(juce::File::findDirectories, false))
+	{
+		std::string percussionTypeStr = percussionType.getFileName().toStdString();
+
+		if (percussionTypeStr == "Rhythmic")
+		{
+			for (const auto &instrument : percussionType.findChildFiles(juce::File::findDirectories, false))
+				parseRhythmicPercussionFiles(instrument);
+		}
+		else if (percussionTypeStr == "Melodic")
+		{
+			for (const auto &instrument : percussionType.findChildFiles(juce::File::findDirectories, false))
+				parseInstrumentSamples(instrument, "Percussion");
 		}
 	}
 }
