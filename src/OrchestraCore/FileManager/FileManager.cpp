@@ -10,11 +10,18 @@
 
 std::string FileManager::getDefaultSamplesFolderPath()
 {
-	std::filesystem::path projectDir = getAssetsFolder();
+	const auto toPath = [](const juce::File &file) { return std::filesystem::path(file.getFullPathName().toStdString()); };
 
-	std::filesystem::path samplesDir = projectDir / SampleFolderName;
+	std::filesystem::path shared = toPath(juce::File::getSpecialLocation(juce::File::commonApplicationDataDirectory))
+									/ Files::ProjectName / AssetsFolderName / SampleFolderName;
 
-	return samplesDir.string();
+	if (std::filesystem::is_directory(shared))
+		return shared.string();
+
+	std::filesystem::path perUser = toPath(juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory))
+									 / Files::ProjectName / AssetsFolderName / SampleFolderName;
+
+	return perUser.string();
 }
 
 
@@ -120,10 +127,6 @@ std::vector<std::filesystem::path> FileManager::getAssetsFolderCandidates()
 
 std::filesystem::path FileManager::getAssetsFolder()
 {
-	// Resolved rather than assumed, because the same core library gets loaded two very different
-	// ways. In the standalone app the assets sit next to the executable, copied there at build
-	// time. In a plugin the host owns the process, and the sample pack is far too large to bundle
-	// inside a .vst3 - so an installed plugin reads it from a shared location instead.
 	for (const auto &candidate : getAssetsFolderCandidates())
 	{
 		std::error_code ec;
@@ -132,7 +135,6 @@ std::filesystem::path FileManager::getAssetsFolder()
 			return candidate;
 	}
 
-	// Nothing on disk yet: fall back to the build-time layout so diagnostics point somewhere sane.
 	return getExecutableDirectory() / AssetsFolderName;
 }
 
