@@ -5,10 +5,8 @@
 
 **The Orchestra** is a C++20 / JUCE desktop application for studying the instruments of the symphony
 orchestra. Pick a family, pick an instrument, and see its range on a real staff, its registers coloured
-along a piano roll, the techniques it supports, the roles it plays, and the repertoire it is known for,
+along a piano roll, the techniques it supports, the roles it typically plays, and the repertoire it is known for,
 then play it back from the sampler with your MIDI keyboard.
-
-It is built as an orchestration reference that you can hear, rather than one you only read.
 
 
 ## Showcase
@@ -73,31 +71,14 @@ keeps every panel independently constructible and testable.
 routes MIDI. The same editor is created by `OrchestraProcessor::createEditor`, so the UI is not coupled to
 the standalone host.
 
-### Design system
-
-The UI is built on a small set of shared primitives rather than per-component styling:
-
-- **`Theme.h`** is the single source of truth for the palette, spacing scale, type scale, corner radii and
-  chrome heights. Components resolve it via `themeFor(*this)`; nothing hardcodes a colour.
-- **`OrchestraPanel`** is the base class for every panel: rounded surface, optional uppercase title, and a
-  consistent content area inset.
-- **`HasPreferredHeight`** lets a panel report the height it needs for a given width. The detail view sums
-  these to size its scroll content, so panels grow with their text instead of being clipped or padded to a
-  guessed height.
-- **`GridFlow`** implements one responsive column rule shared by every card grid.
-- **`TextMeasure`** wraps JUCE text measurement so panels can size themselves to real text metrics.
-- **`CustomLookAndFeel`** paints labels and buttons from typed `LabelStyle` / `ButtonStyle` tags rather than
-  from stringly-typed component names.
-
 
 ## Building
 
 ### Prerequisites
 
-- CMake 3.25+
+- CMake 4.0+
 - A C++20 compiler
 - Python 3.10+ (for the build script)
-- Git
 
 Dependencies (JUCE 8.0.3, nlohmann/json, GoogleTest and the logger) are fetched automatically by
 [CPM](https://github.com/cpm-cmake/CPM.cmake) into `libs/cpm-cache` on first configure.
@@ -105,7 +86,7 @@ Dependencies (JUCE 8.0.3, nlohmann/json, GoogleTest and the logger) are fetched 
 ### Platform support
 
 Developed and tested on **Windows** with MSVC. The CMake now guards its MSVC-only compiler flags and all
-filesystem paths resolve through JUCE's cross-platform APIs, so a macOS or Linux build is expected to work.
+filesystem paths resolve through JUCE's cross-platform APIs.
 
 ### Quick start
 
@@ -173,9 +154,6 @@ ctest --test-dir build/x64 -C Debug --output-on-failure
 The sample library lives in `Assets/Samples/` and is copied next to the executable at build time, so the
 app finds it without an install step. You can point the app at a different sample folder from the settings
 control on the family switcher; the choice is persisted via `UserConfig`.
-
-> **Note:** the sample pack is currently committed to the repository and is roughly 1.3 GB, which makes
-> cloning slow.
 
 
 ## Repository layout
