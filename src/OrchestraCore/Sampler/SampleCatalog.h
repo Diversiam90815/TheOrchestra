@@ -18,10 +18,10 @@
 #include "Helper.h"
 #include "UserConfig.h"
 #include "SamplerStructs.h"
+#include "SamplerTypes.h"
 
 
-namespace fs			  = std::filesystem;
-using CatalogLoadCallback = std::function<void(bool success)>;
+namespace fs = std::filesystem;
 
 
 class SampleCatalog
@@ -36,8 +36,8 @@ public:
 
 	void				setSampleDirectory(std::string directory);
 
-	void				loadSamplesAsync(CatalogLoadCallback onComplete = nullptr);
-	void				reloadSamplesAsync(CatalogLoadCallback onComplete = nullptr);
+	void				loadSamplesAsync(SampleLoadCallback onComplete = nullptr);
+	void				reloadSamplesAsync(SampleLoadCallback onComplete = nullptr);
 
 	bool				isLoading() const { return mIsLoading.load(); }
 

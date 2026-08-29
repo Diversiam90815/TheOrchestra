@@ -19,9 +19,7 @@
 #include "Helper.h"
 #include "InstrumentController.h"
 #include "SamplerStructs.h"
-
-
-using SampleLoadCallback = std::function<void(bool)>;
+#include "SamplerTypes.h"
 
 
 class SamplerEngine : public std::enable_shared_from_this<SamplerEngine>
@@ -53,34 +51,34 @@ public:
 	bool				   reloadSamples(std::string samplesDirectory, SampleLoadCallback onComplete = nullptr);
 
 private:
-	void												runBuildOnBackgroundThread(InstrumentID key, Articulation articulationUsed, int generation, SampleLoadCallback onComplete);
-	void												installBuildResult(std::vector<juce::SynthesiserSound::Ptr> sounds, int generation, SampleLoadCallback onComplete);
+	void									 runBuildOnBackgroundThread(InstrumentID key, Articulation articulationUsed, int generation, SampleLoadCallback onComplete);
+	void									 installBuildResult(std::vector<juce::SynthesiserSound::Ptr> sounds, int generation, SampleLoadCallback onComplete);
 
-	std::map<int, std::map<int, std::vector<fs::path>>> createDynamicMap(std::vector<Sample> &samples);
-	std::vector<int>									createNoteList(std::map<int, std::map<int, std::vector<fs::path>>> &noteDynamicMap);
-	std::map<int, std::pair<int, int>>					createNoteRangeMap(std::map<int, std::map<int, std::vector<fs::path>>> &noteDynamicMap, const int key);
+	NoteDynamicMap							 createDynamicMap(std::vector<Sample> &samples);
+	std::vector<int>						 createNoteList(NoteDynamicMap &noteDynamicMap);
+	std::map<int, std::pair<int, int>>		 createNoteRangeMap(NoteDynamicMap &noteDynamicMap, const int key);
 
-	std::vector<Sample>									filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed);
+	std::vector<Sample>						 filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed);
 
-	std::pair<int, int>									getRangesOfInstrument(const InstrumentID key);
+	std::pair<int, int>						 getRangesOfInstrument(const InstrumentID key);
 
-	std::vector<juce::SynthesiserSound::Ptr>			buildSounds(const InstrumentID key, Articulation articulationUsed);
-	void												installSounds(std::vector<juce::SynthesiserSound::Ptr> sounds);
+	std::vector<juce::SynthesiserSound::Ptr> buildSounds(const InstrumentID key, Articulation articulationUsed);
+	void									 installSounds(std::vector<juce::SynthesiserSound::Ptr> sounds);
 
 
-	juce::Synthesiser									mSampler;
+	juce::Synthesiser						 mSampler;
 
-	ControllerState										mControllerState;
+	ControllerState							 mControllerState;
 
-	juce::AudioFormatManager							mFormatManager;
+	juce::AudioFormatManager				 mFormatManager;
 
-	std::unique_ptr<SampleCatalog>						mSamplesManager;
+	std::unique_ptr<SampleCatalog>			 mSamplesManager;
 
-	std::atomic<bool>									mSamplesAreReady	  = false;
+	std::atomic<bool>						 mSamplesAreReady	   = false;
 
-	InstrumentController							   *mInstrumentController = nullptr;
+	InstrumentController					*mInstrumentController = nullptr;
 
-	std::thread											mLoadThread;		// Background sample-build worker
-	std::atomic<bool>									mIsBuilding{false}; // True while buildSounds() is running
-	std::atomic<int>									mLoadGeneration{0}; // Guards against installing a stale result if a newer load supersedes this one
+	std::thread								 mLoadThread;		 // Background sample-build worker
+	std::atomic<bool>						 mIsBuilding{false}; // True while buildSounds() is running
+	std::atomic<int>						 mLoadGeneration{0}; // Guards against installing a stale result if a newer load supersedes this one
 };

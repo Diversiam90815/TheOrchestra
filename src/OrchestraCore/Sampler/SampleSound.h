@@ -13,6 +13,7 @@
 #include "Parameters.h"
 #include "SampleCatalog.h"
 #include "SamplerStructs.h"
+#include "SamplerTypes.h"
 
 
 class SampleSound : public juce::SynthesiserSound
@@ -21,7 +22,7 @@ public:
 	SampleSound(int noteRangeStart, int noteRangeEnd, int rootNote);
 	~SampleSound() = default;
 
-	void						   addDynamicLayer(Dynamics dynamicValue, std::vector<std::unique_ptr<juce::AudioBuffer<float>>> &&rrSamples);
+	void						   addDynamicLayer(Dynamics dynamicValue, RoundRobinBuffers &&rrSamples);
 
 	bool						   appliesToNote(int midiNoteNumber) override;
 	bool						   appliesToChannel(int midiChannel) override; // TODO: Create settings to store value
