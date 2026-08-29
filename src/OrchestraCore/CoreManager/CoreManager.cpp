@@ -14,8 +14,7 @@ constexpr double kDefaultSampleRate = 44100.0; // Used for MidiMessageCollector:
 
 
 CoreManager::CoreManager()
-	: mInstrumentController(std::make_unique<InstrumentController>()), mSampler(std::make_shared<SamplerEngine>()),
-	  mMidiKeyboardState(std::make_unique<juce::MidiKeyboardState>())
+	: mInstrumentController(std::make_unique<InstrumentController>()), mSampler(std::make_shared<SamplerEngine>()), mMidiKeyboardState(std::make_unique<juce::MidiKeyboardState>())
 {
 	for (auto &cc : mCcValues)
 		cc.store(-1);
@@ -201,10 +200,6 @@ void CoreManager::logProjectInfo()
 
 	LOG_INFO("Generator:\t\t {}", BuildInfo::Generator);
 	LOG_INFO("CPP Version:\t\t {}", BuildInfo::CxxStandard);
-
-	LOG_INFO("System Name:\t\t {}", BuildInfo::SystemName);
-	LOG_INFO("System Version:\t\t {}", BuildInfo::SystemVersion);
-	LOG_INFO("System CPU:\t\t {}", BuildInfo::SystemCPU);
 
 	LOG_INFO("Compiler:\t\t {}", BuildInfo::CompilerID);
 	LOG_INFO("Compiler Version:\t {}", BuildInfo::CompilerVersion);

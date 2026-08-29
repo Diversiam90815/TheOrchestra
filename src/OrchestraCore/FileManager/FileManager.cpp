@@ -10,9 +10,9 @@
 
 std::string FileManager::getDefaultSamplesFolderPath()
 {
-	const auto			  toPath = [](const juce::File &file) { return std::filesystem::path(file.getFullPathName().toStdString()); };
+	const auto toPath = [](const juce::File &file) { return std::filesystem::path(file.getFullPathName().toStdString()); };
 
-	fs::path shared = toPath(juce::File::getSpecialLocation(juce::File::commonApplicationDataDirectory)) / Files::ProjectName / AssetsFolderName / SampleFolderName;
+	fs::path   shared = toPath(juce::File::getSpecialLocation(juce::File::commonApplicationDataDirectory)) / Files::ProjectName / AssetsFolderName / SampleFolderName;
 
 	if (std::filesystem::is_directory(shared))
 		return shared.string();
@@ -32,28 +32,17 @@ std::vector<std::string> FileManager::getInstrumentsImages(InstrumentID instrume
 }
 
 
-juce::File FileManager::getInstrumentImage(TypeOfImage type, InstrumentID instrumentKey)
+juce::File FileManager::getInstrumentImage(InstrumentID instrumentKey)
 {
-	auto		images = getInstrumentsImages(instrumentKey);
-
-	std::string filter;
-	switch (type)
-	{
-	case TypeOfImage::InstrumentImage: filter = "instrument"; break;
-	default: return juce::File();
-	}
+	auto images = getInstrumentsImages(instrumentKey);
 
 	// Find an image within the folder whose name matches the filter
-	auto it = std::find_if(images.begin(), images.end(), [&filter](const std::string &imagePath) { return juce::String(imagePath).containsIgnoreCase(filter); });
+	auto it		= std::find_if(images.begin(), images.end(), [](const std::string &imagePath) { return juce::String(imagePath).containsIgnoreCase(InstrumentImageFilter); });
 
-	// Check if it was found
 	if (it != images.end())
-	{
-		juce::File path = juce::File(*it);
-		return path;
-	}
+		return juce::File(*it);
 
-	return juce::File(); // return empty file it not found
+	return juce::File();
 }
 
 
@@ -154,19 +143,19 @@ std::vector<std::string> FileManager::getInstrumentImages(const std::string &fam
 	std::vector<std::string> images;
 	images.reserve(2); // currently just the instrument photo
 
-	if (fs::exists(imagesDir) && fs::is_directory(imagesDir))
+	if (!fs::exists(imagesDir) || !fs::is_directory(imagesDir))
+		return images;
+
+	for (const auto &entry : fs::directory_iterator(imagesDir))
 	{
-		for (const auto &entry : fs::directory_iterator(imagesDir))
+		if (!entry.is_regular_file())
+			continue;
+
+		auto ext = entry.path().extension().string();
+		std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+		if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
 		{
-			if (entry.is_regular_file())
-			{
-				auto ext = entry.path().extension().string();
-				std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-				if (ext == ".png" || ext == ".jpg" || ext == ".jpeg")
-				{
-					images.push_back(entry.path().string());
-				}
-			}
+			images.push_back(entry.path().string());
 		}
 	}
 

@@ -30,25 +30,25 @@ public:
 	SamplerEngine()					= default;
 	~SamplerEngine();
 
-	void				   init(InstrumentController &controller, SampleLoadCallback onCatalogReady = nullptr);
+	void			init(InstrumentController &controller, SampleLoadCallback onCatalogReady = nullptr);
 
-	ArticulationSet		   getAvailableArticulationsForInstrument(const InstrumentID key);
+	ArticulationSet getAvailableArticulationsForInstrument(const InstrumentID key);
 
-	void				   addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed);
+	void			addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed);
 
-	void				   loadInstrumentAsync(const InstrumentID key, Articulation articulationUsed, SampleLoadCallback onComplete);
+	void			loadInstrumentAsync(const InstrumentID key, Articulation articulationUsed, SampleLoadCallback onComplete);
 
-	bool				   isLoading() const { return mIsBuilding.load(); }
+	bool			isLoading() const { return mIsBuilding.load(); }
 
-	void				   process(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
-	void				   prepare(double sampleRate, int samplesPerBlock);
+	void			process(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
+	void			prepare(double sampleRate, int samplesPerBlock);
 
-	void				   reset();
+	void			reset();
 
-	bool				   getSamplesAreReady();
-	void				   setSamplesAreReady(bool value);
+	bool			getSamplesAreReady();
+	void			setSamplesAreReady(bool value);
 
-	bool				   reloadSamples(std::string samplesDirectory, SampleLoadCallback onComplete = nullptr);
+	bool			reloadSamples(std::string samplesDirectory, SampleLoadCallback onComplete = nullptr);
 
 private:
 	void									 runBuildOnBackgroundThread(InstrumentID key, Articulation articulationUsed, int generation, SampleLoadCallback onComplete);

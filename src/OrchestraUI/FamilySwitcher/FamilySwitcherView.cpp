@@ -122,19 +122,19 @@ void FamilySwitcherView::paint(juce::Graphics &g)
 
 	// Settings gear (clickable)
 	{
-		auto		 gb		   = mGearBounds.toFloat().reduced(4.0f);
-		auto		 c		   = gb.getCentre();
-		const float	 rOut	   = gb.getWidth() * 0.5f * 0.78f;
-		const float	 rIn	   = rOut * 0.5f;
-		const float	 toothSize = rOut * 0.62f;
-		const int	 numTeeth  = 8;
+		auto		gb		  = mGearBounds.toFloat().reduced(4.0f);
+		auto		c		  = gb.getCentre();
+		const float rOut	  = gb.getWidth() * 0.5f * 0.78f;
+		const float rIn		  = rOut * 0.5f;
+		const float toothSize = rOut * 0.62f;
+		const int	numTeeth  = 8;
 
-		juce::Path gear;
+		juce::Path	gear;
 		gear.addEllipse(juce::Rectangle<float>(rOut * 2.0f, rOut * 2.0f).withCentre(c));
 
 		for (int i = 0; i < numTeeth; ++i)
 		{
-			const float angle		 = juce::MathConstants<float>::twoPi * (float)i / (float)numTeeth;
+			const float angle		= juce::MathConstants<float>::twoPi * (float)i / (float)numTeeth;
 			const auto	toothCentre = c.getPointOnCircumference(rOut, angle);
 
 			juce::Path	tooth;
