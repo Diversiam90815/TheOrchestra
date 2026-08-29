@@ -1,0 +1,114 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            os: windows-latest
+          - name: macOS
+            os: macos-latest
+          - name: Linux
+            os: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install JUCE build dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libasound2-dev libjack-jackd2-dev \
+            libx11-dev libxcomposite-dev libxcursor-dev libxext-dev \
+            libxinerama-dev libxrandr-dev libxrender-dev \
+            libfreetype6-dev libfontconfig1-dev \
+            libglu1-mesa-dev mesa-common-dev
+
+      - name: Setup MSVC environment
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - uses: lukka/get-cmake@latest
+
+      - name: Cache CPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: libs/cpm-cache
+          key: cpm-${{ runner.os }}-${{ hashFiles('src/CMakeLists.txt', 'cmake/Testing.cmake', 'cmake/cpm.cmake') }}
+          restore-keys: cpm-${{ runner.os }}-
+
+      - name: Configure
+        run: cmake --preset ci
+
+      - name: Build
+        run: cmake --build --preset ci
+
+      - name: Test
+        run: ctest --preset ci
+
+      - name: Upload VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: TheOrchestra-VST3-${{ matrix.name }}
+          path: build/ci/src/OrchestraPlugin/TheOrchestraPlugin_artefacts/**/VST3/
+          if-no-files-found: error
+
+  validate:
+    name: pluginval (${{ matrix.name }})
+    needs: build
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            os: windows-latest
+            url: https://github.com/Tracktion/pluginval/releases/download/v1.0.3/pluginval_Windows.zip
+          - name: macOS
+            os: macos-latest
+            url: https://github.com/Tracktion/pluginval/releases/download/v1.0.3/pluginval_macOS.zip
+
+    steps:
+      - name: Download the built VST3
+        uses: actions/download-artifact@v4
+        with:
+          name: TheOrchestra-VST3-${{ matrix.name }}
+          path: vst3
+
+      - name: Fetch pluginval
+        shell: bash
+        run: |
+          curl -sSL "${{ matrix.url }}" -o pluginval.zip
+          unzip -q pluginval.zip
+
+      - name: Validate
+        shell: bash
+        run: |
+          PLUGIN=$(find vst3 -name "*.vst3" -maxdepth 4 | head -1)
+          echo "Validating: $PLUGIN"
+
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            ./pluginval.exe --strictness-level 10 --verbose --validate "$PLUGIN"
+          else
+            pluginval.app/Contents/MacOS/pluginval --strictness-level 10 --verbose --validate "$PLUGIN"
+          fi

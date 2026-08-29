@@ -1,0 +1,66 @@
+name: Static Analysis
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: analysis-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    name: clang-format
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install clang-format
+        run: pip install clang-format==22.1.8
+
+      - name: Check formatting
+        run: |
+          FILES=$(find src tests -type f \( -name '*.cpp' -o -name '*.h' \))
+          echo "$FILES" | wc -l | xargs echo "Checking files:"
+          clang-format --dry-run --Werror --style=file $FILES
+
+  cppcheck:
+    name: cppcheck
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cppcheck ninja-build \
+            libasound2-dev libjack-jackd2-dev \
+            libx11-dev libxcomposite-dev libxcursor-dev libxext-dev \
+            libxinerama-dev libxrandr-dev libxrender-dev \
+            libfreetype6-dev libfontconfig1-dev \
+            libglu1-mesa-dev mesa-common-dev
+
+      - uses: lukka/get-cmake@latest
+
+      - name: Cache CPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: libs/cpm-cache
+          key: cpm-analysis-${{ hashFiles('src/CMakeLists.txt', 'cmake/Testing.cmake', 'cmake/cpm.cmake') }}
+          restore-keys: cpm-analysis-
+
+      - name: Configure and build with cppcheck
+        run: |
+          cmake --preset ci-analysis
+          cmake --build --preset ci-analysis
