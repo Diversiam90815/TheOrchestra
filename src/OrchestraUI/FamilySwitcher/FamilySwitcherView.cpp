@@ -120,14 +120,34 @@ void FamilySwitcherView::paint(juce::Graphics &g)
 		g.drawText("THE ORCHESTRA", juce::Rectangle<int>(cx + Space::xxl, 0, 240, Chrome::toolbarH), juce::Justification::centredLeft, false);
 	}
 
-	// Settings gear (clickable) - the search icon was decorative and did
-	// nothing when clicked, so it has been removed rather than left as a trap.
+	// Settings gear (clickable)
 	{
-		g.setColour(t.textTertiary);
+		auto		 gb		   = mGearBounds.toFloat().reduced(4.0f);
+		auto		 c		   = gb.getCentre();
+		const float	 rOut	   = gb.getWidth() * 0.5f * 0.78f;
+		const float	 rIn	   = rOut * 0.5f;
+		const float	 toothSize = rOut * 0.62f;
+		const int	 numTeeth  = 8;
 
-		auto gc = mGearBounds.toFloat().reduced(2.0f);
-		g.drawEllipse(gc.reduced(3.0f), 1.5f);
-		g.drawEllipse(gc.reduced(7.0f), 1.5f);
+		juce::Path gear;
+		gear.addEllipse(juce::Rectangle<float>(rOut * 2.0f, rOut * 2.0f).withCentre(c));
+
+		for (int i = 0; i < numTeeth; ++i)
+		{
+			const float angle		 = juce::MathConstants<float>::twoPi * (float)i / (float)numTeeth;
+			const auto	toothCentre = c.getPointOnCircumference(rOut, angle);
+
+			juce::Path	tooth;
+			tooth.addRectangle(juce::Rectangle<float>(toothSize, toothSize).withCentre(toothCentre));
+			tooth.applyTransform(juce::AffineTransform::rotation(angle, toothCentre.x, toothCentre.y));
+			gear.addPath(tooth);
+		}
+
+		g.setColour(t.textTertiary);
+		g.fillPath(gear);
+
+		g.setColour(t.toolbar);
+		g.fillEllipse(juce::Rectangle<float>(rIn * 2.0f, rIn * 2.0f).withCentre(c));
 	}
 
 	// Title block
