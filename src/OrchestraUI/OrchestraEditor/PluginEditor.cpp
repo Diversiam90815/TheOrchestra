@@ -140,9 +140,6 @@ void OrchestraEditor::changeInstrument(InstrumentID key)
 
 	mCurrentInstrument = key;
 
-	// Resets the sampler (clears loaded sounds) before the new instrument's
-	// articulation is loaded. Without this, switching instruments left the
-	// previous instrument's samples loaded and still playable.
 	mCoreManager->changeInstrument(key);
 
 	mDetailView.setInstrument(instrument);

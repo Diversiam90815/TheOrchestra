@@ -12,40 +12,43 @@
 #include <string>
 #include <string_view>
 
-#include "JuceIncludes.h"
 #include "Parameters.h"
 
 
+// A string-keyed lookup map with transparent comparison
+template <typename Value>
+using StringKeyedMap						  = std::map<std::string, Value, std::less<>>;
 
-inline const std::map<std::string, Family, std::less<>> familyMap = {
+
+inline const StringKeyedMap<Family> familyMap = {
 	{FamilyNames::Strings, Family::Strings}, {FamilyNames::Woodwinds, Family::Woodwinds}, {FamilyNames::Brass, Family::Brass}, {FamilyNames::Percussion, Family::Percussion}};
 
 
-inline const std::map<std::string, int, std::less<>>		  instrumentMap	  = {{InstrumentNames::Strings::Violin, static_cast<int>(Strings::Violin)},
-																				 {InstrumentNames::Strings::Viola, static_cast<int>(Strings::Viola)},
-																				 {InstrumentNames::Strings::Violoncello, static_cast<int>(Strings::Violoncello)},
-																				 {InstrumentNames::Strings::DoubleBass, static_cast<int>(Strings::DoubleBass)},
-																				 {InstrumentNames::Brass::FrenchHorn, static_cast<int>(Brass::FrenchHorn)},
-																				 {InstrumentNames::Brass::TenorTrombone, static_cast<int>(Brass::TenorTrombone)},
-																				 {InstrumentNames::Brass::BassTrombone, static_cast<int>(Brass::BassTrombone)},
-																				 {InstrumentNames::Brass::Cimbasso, static_cast<int>(Brass::Cimbasso)},
-																				 {InstrumentNames::Brass::Trumpet, static_cast<int>(Brass::Trumpet)},
-																				 {InstrumentNames::Brass::Tuba, static_cast<int>(Brass::Tuba)},
-																				 {InstrumentNames::Woodwinds::Flute, static_cast<int>(Woodwinds::Flute)},
-																				 {InstrumentNames::Woodwinds::Clarinet, static_cast<int>(Woodwinds::Clarinet)},
-																				 {InstrumentNames::Woodwinds::Oboe, static_cast<int>(Woodwinds::Oboe)},
-																				 {InstrumentNames::Woodwinds::BassClarinet, static_cast<int>(Woodwinds::BassClarinet)},
-																				 {InstrumentNames::Woodwinds::Piccolo, static_cast<int>(Woodwinds::Piccolo)},
-																				 {InstrumentNames::Woodwinds::CorAnglais, static_cast<int>(Woodwinds::CorAnglais)},
-																				 {InstrumentNames::Woodwinds::Bassoon, static_cast<int>(Woodwinds::Bassoon)},
-																				 {InstrumentNames::Woodwinds::Contrabassoon, static_cast<int>(Woodwinds::Contrabassoon)},
-																				 {InstrumentNames::Percussion::Timpani, static_cast<int>(Percussion::Timpani)},
-																				 {InstrumentNames::Percussion::Celeste, static_cast<int>(Percussion::Celeste)},
-																				 {InstrumentNames::Percussion::Marimba, static_cast<int>(Percussion::Marimba)},
-																				 {InstrumentNames::Percussion::Harp, static_cast<int>(Percussion::Harp)}};
+inline const StringKeyedMap<int>		  instrumentMap	  = {{InstrumentNames::Strings::Violin, static_cast<int>(Strings::Violin)},
+															 {InstrumentNames::Strings::Viola, static_cast<int>(Strings::Viola)},
+															 {InstrumentNames::Strings::Violoncello, static_cast<int>(Strings::Violoncello)},
+															 {InstrumentNames::Strings::DoubleBass, static_cast<int>(Strings::DoubleBass)},
+															 {InstrumentNames::Brass::FrenchHorn, static_cast<int>(Brass::FrenchHorn)},
+															 {InstrumentNames::Brass::TenorTrombone, static_cast<int>(Brass::TenorTrombone)},
+															 {InstrumentNames::Brass::BassTrombone, static_cast<int>(Brass::BassTrombone)},
+															 {InstrumentNames::Brass::Cimbasso, static_cast<int>(Brass::Cimbasso)},
+															 {InstrumentNames::Brass::Trumpet, static_cast<int>(Brass::Trumpet)},
+															 {InstrumentNames::Brass::Tuba, static_cast<int>(Brass::Tuba)},
+															 {InstrumentNames::Woodwinds::Flute, static_cast<int>(Woodwinds::Flute)},
+															 {InstrumentNames::Woodwinds::Clarinet, static_cast<int>(Woodwinds::Clarinet)},
+															 {InstrumentNames::Woodwinds::Oboe, static_cast<int>(Woodwinds::Oboe)},
+															 {InstrumentNames::Woodwinds::BassClarinet, static_cast<int>(Woodwinds::BassClarinet)},
+															 {InstrumentNames::Woodwinds::Piccolo, static_cast<int>(Woodwinds::Piccolo)},
+															 {InstrumentNames::Woodwinds::CorAnglais, static_cast<int>(Woodwinds::CorAnglais)},
+															 {InstrumentNames::Woodwinds::Bassoon, static_cast<int>(Woodwinds::Bassoon)},
+															 {InstrumentNames::Woodwinds::Contrabassoon, static_cast<int>(Woodwinds::Contrabassoon)},
+															 {InstrumentNames::Percussion::Timpani, static_cast<int>(Percussion::Timpani)},
+															 {InstrumentNames::Percussion::Celeste, static_cast<int>(Percussion::Celeste)},
+															 {InstrumentNames::Percussion::Marimba, static_cast<int>(Percussion::Marimba)},
+															 {InstrumentNames::Percussion::Harp, static_cast<int>(Percussion::Harp)}};
 
 
-inline const std::map<std::string, Articulation, std::less<>> articulationMap = {
+inline const StringKeyedMap<Articulation> articulationMap = {
 	{ArticulationNames::Sustain, Articulation::sustain},	 {ArticulationNames::Staccato, Articulation::staccato}, {ArticulationNames::Spiccato, Articulation::spiccato},
 	{ArticulationNames::Pizzicato, Articulation::pizzicato}, {ArticulationNames::Muted, Articulation::mute},		{ArticulationNames::Vibrato, Articulation::vibrato},
 	{ArticulationNames::Tremolo, Articulation::tremolo},	 {ArticulationNames::Hits, Articulation::hits},			{ArticulationNames::Rolls, Articulation::rolls}};
@@ -57,15 +60,14 @@ inline const std::map<Articulation, std::string> articulationReverseMap = {
 	{Articulation::tremolo, ArticulationNames::Tremolo},	 {Articulation::hits, ArticulationNames::Hits},			{Articulation::rolls, ArticulationNames::Rolls}};
 
 
-inline const std::map<std::string, Dynamics, std::less<>> dynamicMap = {
+inline const StringKeyedMap<Dynamics> dynamicMap = {
 	{DynamicNames::Pianissimo, Dynamics::pianissimo},	   {DynamicNames::Piano, Dynamics::piano}, {DynamicNames::MezzoPiano, Dynamics::mezzoPiano},
 	{DynamicNames::MezzoForte, Dynamics::mezzoForte},	   {DynamicNames::Forte, Dynamics::forte}, {DynamicNames::Fortissimo, Dynamics::fortissimo},
 	{DynamicNames::Fortississimo, Dynamics::fortississimo}};
 
 
 // Some samples have the velocity layer in their name instead of the dynamic value, so we set them to default values
-inline const std::map<std::string, Dynamics, std::less<>> velocityLayerMap = {
-	{"v1", Dynamics::mezzoPiano}, {"v2", Dynamics::mezzoForte}, {"v3", Dynamics::forte}, {"v4", Dynamics::fortissimo}};
+inline const StringKeyedMap<Dynamics>	   velocityLayerMap = {{"v1", Dynamics::mezzoPiano}, {"v2", Dynamics::mezzoForte}, {"v3", Dynamics::forte}, {"v4", Dynamics::fortissimo}};
 
 
 inline const std::map<Family, std::string> reverseFamilyMap = {

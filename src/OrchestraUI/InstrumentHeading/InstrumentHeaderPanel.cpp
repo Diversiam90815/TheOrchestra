@@ -46,7 +46,7 @@ void InstrumentHeaderPanel::setInstrument(const InstrumentProfile &instrument)
 	if (!mClefs.empty())
 		mCurrentClef = clefFromString(mClefs[0]);
 
-	juce::File imageFile = mFileManager.getInstrumentImage(TypeOfImage::InstrumentImage, instrument.getInstrumentID());
+	juce::File imageFile = mFileManager.getInstrumentImage(instrument.getInstrumentID());
 	mInstrumentImage.setImageFile(imageFile);
 
 	if (imageFile.existsAsFile() && !mInstrumentImage.hasImage())

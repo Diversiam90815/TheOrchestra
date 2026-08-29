@@ -20,12 +20,6 @@
 namespace fs = std::filesystem;
 
 
-enum class TypeOfImage
-{
-	InstrumentImage = 1
-};
-
-
 class FileManager
 {
 public:
@@ -34,7 +28,7 @@ public:
 
 	std::string						getDefaultSamplesFolderPath();
 
-	juce::File						getInstrumentImage(TypeOfImage type, InstrumentID instrumentKey);
+	juce::File						getInstrumentImage(InstrumentID instrumentKey);
 
 	fs::path						getProjectsAppDataPath();
 	fs::path						getLoggingPath();
@@ -55,7 +49,8 @@ private:
 
 	std::vector<std::string> getInstrumentImages(const std::string &family, const std::string &instrumentName);
 
-	std::string				 AssetsFolderName = "Assets";
-	std::string				 SampleFolderName = "Samples";
-	std::string				 ImageFolderName  = "Images";
+	static constexpr auto	 AssetsFolderName	   = "Assets";
+	static constexpr auto	 SampleFolderName	   = "Samples";
+	static constexpr auto	 ImageFolderName	   = "Images";
+	static constexpr auto	 InstrumentImageFilter = "instrument";
 };
