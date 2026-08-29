@@ -13,11 +13,23 @@
 class OrchestraEditor;
 
 
+namespace PluginState
+{
+constexpr auto Tag				= "OrchestraState";
+constexpr auto VersionAttr		= "version";
+constexpr auto InstrumentAttr	= "instrument";
+constexpr auto ArticulationAttr = "articulation";
+
+constexpr int  StateVersion		= 1;
+} // namespace PluginState
+
+
+
 class OrchestraProcessor : public juce::AudioProcessor
 {
 public:
 	OrchestraProcessor();
-	~OrchestraProcessor() = default;
+	~OrchestraProcessor() override = default;
 
 	CoreManager &getCoreManager();
 
@@ -35,15 +47,18 @@ private:
 	bool						 acceptsMidi() const override { return true; }
 	bool						 producesMidi() const override { return false; }
 	bool						 isMidiEffect() const override { return false; }
-	double						 getTailLengthSeconds() const override { return 0.0; }
+	double						 getTailLengthSeconds() const override { return ArticulationVoiceConstants::SustainRelease; }
+
 	int							 getNumPrograms() override { return 1; }
 	int							 getCurrentProgram() override { return 0; }
 	void						 setCurrentProgram(int index) override {}
 	const juce::String			 getProgramName(int index) override { return {}; }
 	void						 changeProgramName(int index, const juce::String &newName) override {}
-	void						 getStateInformation(juce::MemoryBlock &destData) override {}
-	void						 setStateInformation(const void *data, int sizeInBytes) override {}
 
+	void						 getStateInformation(juce::MemoryBlock &destData) override;
+	void						 setStateInformation(const void *data, int sizeInBytes) override;
 
 	std::unique_ptr<CoreManager> mCoreManager;
+
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(OrchestraProcessor)
 };

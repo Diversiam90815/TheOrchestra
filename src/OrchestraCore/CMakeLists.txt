@@ -34,10 +34,13 @@ set(INSTRUMENT_FILES
 )
 
 set(SAMPLER_FILES
-    ${SAMPLER_DIR}/OrchestraSampler.h       ${SAMPLER_DIR}/OrchestraSampler.cpp
-    ${SAMPLER_DIR}/SamplesManagement.h      ${SAMPLER_DIR}/SamplesManagement.cpp
-    ${SAMPLER_DIR}/OrchestraSound.h         ${SAMPLER_DIR}/OrchestraSound.cpp
-    ${SAMPLER_DIR}/OrchestraVoice.h         ${SAMPLER_DIR}/OrchestraVoice.cpp
+    ${SAMPLER_DIR}/SamplerTypes.h 
+    ${SAMPLER_DIR}/SamplerConstants.h 
+    ${SAMPLER_DIR}/SamplerStructs.h 
+    ${SAMPLER_DIR}/SamplerEngine.h          ${SAMPLER_DIR}/SamplerEngine.cpp
+    ${SAMPLER_DIR}/SampleCatalog.h          ${SAMPLER_DIR}/SampleCatalog.cpp
+    ${SAMPLER_DIR}/SampleSound.h            ${SAMPLER_DIR}/SampleSound.cpp
+    ${SAMPLER_DIR}/ArticulationVoice.h      ${SAMPLER_DIR}/ArticulationVoice.cpp
 )
 
 set(PROCESSOR_FILES
@@ -134,7 +137,6 @@ juce_add_binary_data(InstrumentData
 )
 
 set (PROJECT_LIBS   juce::juce_audio_utils
-                    juce::juce_audio_plugin_client
                     juce::juce_core
                     Logger
                     nlohmann_json::nlohmann_json
@@ -142,3 +144,9 @@ set (PROJECT_LIBS   juce::juce_audio_utils
 )
 
 target_link_libraries(${TARGET_NAME} PUBLIC ${PROJECT_LIBS} )
+
+include(GNUInstallDirs)
+
+install(TARGETS ${TARGET_NAME}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)

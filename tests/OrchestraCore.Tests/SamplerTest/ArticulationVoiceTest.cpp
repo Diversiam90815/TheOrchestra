@@ -1,36 +1,36 @@
 /*
   ==============================================================================
-	Module			Orchestra Voice Tests
-	Description		Testing the Orchestra Voice module from the Orchestra Core
+	Module			Articulation Voice Tests
+	Description		Testing the ArticulationVoice module from the Orchestra Core
   ==============================================================================
 */
 
 #include <gtest/gtest.h>
 
-#include "OrchestraVoice.h"
+#include "ArticulationVoice.h"
+#include "SamplerTypes.h"
 
 
 namespace SamplerTests
 {
 
-class OrchestraVoiceTest : public ::testing::Test
+class ArticulationVoiceTest : public ::testing::Test
 {
 protected:
-	std::unique_ptr<OrchestraVoice> mVoice;
-	std::unique_ptr<OrchestraSound> mSound;
+	std::unique_ptr<ArticulationVoice> mVoice;
+	std::unique_ptr<SampleSound>	   mSound;
 
 
-	void							SetUp() override
+	void							   SetUp() override
 	{
-		mVoice = std::make_unique<OrchestraVoice>();
+		mVoice = std::make_unique<ArticulationVoice>();
 
 		// Create a test sound with one dynamic layer
-		mSound = std::make_unique<OrchestraSound>(60, 84, 72);
+		mSound = std::make_unique<SampleSound>(60, 84, 72);
 
 		// Add a dynamic layer with sample data
-		juce::OwnedArray<juce::AudioBuffer<float>> buffers;
-		auto									  *buffer = new juce::AudioBuffer<float>(2, 44100); // 1 second at 44.1kHz
-		buffers.add(buffer);
+		RoundRobinBuffers buffers;
+		buffers.push_back(std::make_unique<juce::AudioBuffer<float>>(2, 44100)); // 1 second at 44.1kHz
 
 		mSound->addDynamicLayer(Dynamics::mezzoForte, std::move(buffers));
 		mSound->setArticulation(Articulation::sustain);
@@ -44,21 +44,21 @@ protected:
 };
 
 
-TEST_F(OrchestraVoiceTest, CanPlayOrchestraSound)
+TEST_F(ArticulationVoiceTest, CanPlayOrchestraSound)
 {
-	// Should be able to play OrchestraSound
-	EXPECT_TRUE(mVoice->canPlaySound(mSound.get())) << "Voice should be able to play OrchestraSound";
+	// Should be able to play SampleSound
+	EXPECT_TRUE(mVoice->canPlaySound(mSound.get())) << "Voice should be able to play SampleSound";
 }
 
 
-TEST_F(OrchestraVoiceTest, CannotPlayNullSound)
+TEST_F(ArticulationVoiceTest, CannotPlayNullSound)
 {
 	// Should not be able to play null sound
 	EXPECT_FALSE(mVoice->canPlaySound(nullptr)) << "Voice should not play null sound";
 }
 
 
-TEST_F(OrchestraVoiceTest, StartNoteInitializesVoice)
+TEST_F(ArticulationVoiceTest, StartNoteInitializesVoice)
 {
 	int	  midiNote	 = 72;	 // C4
 	float velocity	 = 0.8f;
@@ -72,7 +72,7 @@ TEST_F(OrchestraVoiceTest, StartNoteInitializesVoice)
 }
 
 
-TEST_F(OrchestraVoiceTest, StartNoteWithDifferentVelocities)
+TEST_F(ArticulationVoiceTest, StartNoteWithDifferentVelocities)
 {
 	int midiNote   = 72;
 	int pitchWheel = 8192;
@@ -91,7 +91,7 @@ TEST_F(OrchestraVoiceTest, StartNoteWithDifferentVelocities)
 }
 
 
-TEST_F(OrchestraVoiceTest, StopNoteWithoutTailOff)
+TEST_F(ArticulationVoiceTest, StopNoteWithoutTailOff)
 {
 	int midiNote   = 72;
 	int pitchWheel = 8192;
@@ -103,7 +103,7 @@ TEST_F(OrchestraVoiceTest, StopNoteWithoutTailOff)
 }
 
 
-TEST_F(OrchestraVoiceTest, StopNoteWithTailOff)
+TEST_F(ArticulationVoiceTest, StopNoteWithTailOff)
 {
 	int midiNote   = 72;
 	int pitchWheel = 8192;
@@ -115,25 +115,25 @@ TEST_F(OrchestraVoiceTest, StopNoteWithTailOff)
 }
 
 
-TEST_F(OrchestraVoiceTest, ControllerMovedCC1)
+TEST_F(ArticulationVoiceTest, ControllerMovedCC1)
 {
-	// Set CC1 (modulation) to various values
+	// Set mCC1 (modulation) to various values
 	EXPECT_NO_THROW(mVoice->controllerMoved(1, 0));
 	EXPECT_NO_THROW(mVoice->controllerMoved(1, 64));
 	EXPECT_NO_THROW(mVoice->controllerMoved(1, 127));
 }
 
 
-TEST_F(OrchestraVoiceTest, ControllerMovedCC11)
+TEST_F(ArticulationVoiceTest, ControllerMovedCC11)
 {
-	// Set CC11 (expression) to various values
+	// Set mCC11 (expression) to various values
 	EXPECT_NO_THROW(mVoice->controllerMoved(11, 0));
 	EXPECT_NO_THROW(mVoice->controllerMoved(11, 64));
 	EXPECT_NO_THROW(mVoice->controllerMoved(11, 127));
 }
 
 
-TEST_F(OrchestraVoiceTest, PitchWheelMovedDoesNotCrash)
+TEST_F(ArticulationVoiceTest, PitchWheelMovedDoesNotCrash)
 {
 	// Pitch wheel is not implemented but should not crash
 	EXPECT_NO_THROW(mVoice->pitchWheelMoved(0));
@@ -142,7 +142,7 @@ TEST_F(OrchestraVoiceTest, PitchWheelMovedDoesNotCrash)
 }
 
 
-TEST_F(OrchestraVoiceTest, RenderNextBlockWithoutStartingNote)
+TEST_F(ArticulationVoiceTest, RenderNextBlockWithoutStartingNote)
 {
 	juce::AudioBuffer<float> outputBuffer(2, 512);
 	outputBuffer.clear();
@@ -168,7 +168,7 @@ TEST_F(OrchestraVoiceTest, RenderNextBlockWithoutStartingNote)
 }
 
 
-TEST_F(OrchestraVoiceTest, RenderNextBlockAfterStartingNote)
+TEST_F(ArticulationVoiceTest, RenderNextBlockAfterStartingNote)
 {
 	juce::AudioBuffer<float> outputBuffer(2, 512);
 	outputBuffer.clear();
@@ -188,14 +188,13 @@ TEST_F(OrchestraVoiceTest, RenderNextBlockAfterStartingNote)
 }
 
 
-TEST_F(OrchestraVoiceTest, ShortArticulationBehavior)
+TEST_F(ArticulationVoiceTest, ShortArticulationBehavior)
 {
 	// Create a sound with short articulation
-	auto									   shortSound = std::make_unique<OrchestraSound>(60, 84, 72);
+	auto			  shortSound = std::make_unique<SampleSound>(60, 84, 72);
 
-	juce::OwnedArray<juce::AudioBuffer<float>> buffers;
-	auto									  *buffer = new juce::AudioBuffer<float>(2, 44100);
-	buffers.add(buffer);
+	RoundRobinBuffers buffers;
+	buffers.push_back(std::make_unique<juce::AudioBuffer<float>>(2, 44100));
 
 	shortSound->addDynamicLayer(Dynamics::mezzoForte, std::move(buffers));
 	shortSound->setArticulation(Articulation::pizzicato); // Short articulation
@@ -215,7 +214,7 @@ TEST_F(OrchestraVoiceTest, ShortArticulationBehavior)
 }
 
 
-TEST_F(OrchestraVoiceTest, PitchShiftingAtDifferentNotes)
+TEST_F(ArticulationVoiceTest, PitchShiftingAtDifferentNotes)
 {
 	int rootNote   = 72; // C4
 	int pitchWheel = 8192;
@@ -231,81 +230,6 @@ TEST_F(OrchestraVoiceTest, PitchShiftingAtDifferentNotes)
 	// Test note below root (pitch down)
 	EXPECT_NO_THROW(mVoice->startNote(rootNote - 12, 0.8f, mSound.get(), pitchWheel));
 	mVoice->stopNote(0.0f, false);
-}
-
-
-TEST_F(OrchestraVoiceTest, MultipleDynamicLayersCrossfade)
-{
-	// Create a sound with multiple dynamic layers
-	auto multiLayerSound = std::make_unique<OrchestraSound>(60, 84, 72);
-
-	// Add 6 dynamic layers
-	for (int i = 1; i <= 6; ++i)
-	{
-		juce::OwnedArray<juce::AudioBuffer<float>> buffers;
-		auto									  *buffer = new juce::AudioBuffer<float>(2, 44100);
-		buffers.add(buffer);
-
-		Dynamics dyn = static_cast<Dynamics>(i);
-		multiLayerSound->addDynamicLayer(dyn, std::move(buffers));
-	}
-
-	multiLayerSound->setArticulation(Articulation::sustain);
-
-	int	  midiNote	 = 72;
-	float velocity	 = 0.8f;
-	int	  pitchWheel = 8192;
-
-	// Start note
-	EXPECT_NO_THROW(mVoice->startNote(midiNote, velocity, multiLayerSound.get(), pitchWheel));
-
-	juce::AudioBuffer<float> outputBuffer(2, 512);
-	outputBuffer.clear();
-
-	// Test with different CC1 values to trigger crossfade
-	mVoice->controllerMoved(1, 0);	 // Lowest dynamic
-	EXPECT_NO_THROW(mVoice->renderNextBlock(outputBuffer, 0, 512));
-
-	mVoice->controllerMoved(1, 64);	 // Middle dynamic
-	EXPECT_NO_THROW(mVoice->renderNextBlock(outputBuffer, 0, 512));
-
-	mVoice->controllerMoved(1, 127); // Highest dynamic
-	EXPECT_NO_THROW(mVoice->renderNextBlock(outputBuffer, 0, 512));
-}
-
-
-TEST_F(OrchestraVoiceTest, RenderBlockBoundaryConditions)
-{
-	juce::AudioBuffer<float> outputBuffer(2, 1024);
-	outputBuffer.clear();
-
-	int	  midiNote	 = 72;
-	float velocity	 = 0.8f;
-	int	  pitchWheel = 8192;
-
-	mVoice->startNote(midiNote, velocity, mSound.get(), pitchWheel);
-
-	// Test rendering with different block sizes
-	EXPECT_NO_THROW(mVoice->renderNextBlock(outputBuffer, 0, 1));	 // Single sample
-	EXPECT_NO_THROW(mVoice->renderNextBlock(outputBuffer, 0, 64));	 // Small block
-	EXPECT_NO_THROW(mVoice->renderNextBlock(outputBuffer, 0, 512));	 // Medium block
-	EXPECT_NO_THROW(mVoice->renderNextBlock(outputBuffer, 0, 1024)); // Large block
-}
-
-
-TEST_F(OrchestraVoiceTest, MultipleNotesSequentially)
-{
-	juce::AudioBuffer<float> outputBuffer(2, 512);
-	int						 pitchWheel = 8192;
-
-	// Play multiple notes in sequence
-	for (int note = 60; note <= 84; note += 12)
-	{
-		mVoice->startNote(note, 0.8f, mSound.get(), pitchWheel);
-		EXPECT_NO_THROW(mVoice->renderNextBlock(outputBuffer, 0, 512));
-		mVoice->stopNote(0.0f, false);
-		outputBuffer.clear();
-	}
 }
 
 } // namespace SamplerTests

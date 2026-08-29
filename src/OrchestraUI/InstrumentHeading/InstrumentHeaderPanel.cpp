@@ -46,22 +46,11 @@ void InstrumentHeaderPanel::setInstrument(const InstrumentProfile &instrument)
 	if (!mClefs.empty())
 		mCurrentClef = clefFromString(mClefs[0]);
 
-	mInstrumentImage.setImage(juce::Image());
+	juce::File imageFile = mFileManager.getInstrumentImage(instrument.getInstrumentID());
+	mInstrumentImage.setImageFile(imageFile);
 
-	juce::File imageFile = mFileManager.getInstrumentImage(TypeOfImage::InstrumentImage, instrument.getInstrumentID());
-	if (imageFile.existsAsFile())
-	{
-		juce::Image img = juce::ImageFileFormat::loadFrom(imageFile);
-		if (img.isValid())
-		{
-			img = img.rescaled(kImageWidth, kImageHeight, juce::Graphics::highResamplingQuality);
-			mInstrumentImage.setImage(img);
-		}
-		else
-		{
-			LOG_WARNING("Could not decode instrument image: {}", imageFile.getFullPathName().toStdString());
-		}
-	}
+	if (imageFile.existsAsFile() && !mInstrumentImage.hasImage())
+		LOG_WARNING("Could not decode instrument image: {}", imageFile.getFullPathName().toStdString());
 
 	rebuildMetaTags();
 	resized();

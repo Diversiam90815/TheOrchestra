@@ -8,14 +8,16 @@
 #pragma once
 
 #include "OrchestraPanel.h"
-#include "OrchestraSampler.h"
+#include "SamplerEngine.h"
 
 #include <functional>
 #include <optional>
 #include <set>
 
 
-using ArticulationChangedCallback = std::function<bool(Articulation)>;
+// Loading is asynchronous now, so the panel is told the outcome later via setLoadResult()
+// rather than the callback returning it.
+using ArticulationChangedCallback = std::function<void(Articulation)>;
 
 
 class SamplerPanel : public OrchestraPanel, public HasPreferredHeight
@@ -26,8 +28,11 @@ public:
 
 	void setInstrument(const InstrumentProfile &instrument) override { /* Not used directly */ }
 
-	void setAvailableArticulations(std::set<Articulation> available);
+	void setAvailableArticulations(ArticulationSet available);
 	void setArticulationChangedCallback(ArticulationChangedCallback callback);
+
+	void setLoadResult(Articulation articulation, bool ready);
+	void setCatalogLoading(bool loading);
 
 	void paint(juce::Graphics &g) override;
 	void resized() override;
@@ -41,12 +46,14 @@ private:
 	int											   wrappedRowCount(int width) const;
 
 	std::vector<std::unique_ptr<juce::TextButton>> mButtons;
-	std::set<Articulation>						   mAvailable;
+	ArticulationSet								   mAvailable;
 	Articulation								   mSelected = Articulation::sustain;
 	juce::Label									   mStatusLabel;
 
 	std::optional<Articulation>					   mLoadedArticulation;
-	bool										   mSamplesReady = false;
+	bool										   mSamplesReady   = false;
+	bool										   mLoading		   = false;
+	bool										   mCatalogLoading = false;
 
 	ArticulationChangedCallback					   mCallback;
 

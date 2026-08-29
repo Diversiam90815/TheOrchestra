@@ -18,7 +18,7 @@ SamplerPanel::SamplerPanel() : OrchestraPanel("SAMPLER")
 }
 
 
-void SamplerPanel::setAvailableArticulations(std::set<Articulation> available)
+void SamplerPanel::setAvailableArticulations(ArticulationSet available)
 {
 	mAvailable = std::move(available);
 
@@ -74,7 +74,38 @@ void SamplerPanel::onArticulationClicked(Articulation articulation)
 
 	mSelected			= articulation;
 	mLoadedArticulation = articulation;
-	mSamplesReady		= mCallback ? mCallback(articulation) : false;
+	mSamplesReady		= false;
+	mLoading			= true;
+
+	// Show the pending state before asking, since the answer now arrives later.
+	updateStatus();
+	repaint();
+
+	if (mCallback)
+		mCallback(articulation);
+}
+
+
+void SamplerPanel::setLoadResult(Articulation articulation, bool ready)
+{
+	// A result for an articulation the user has already moved away from is stale.
+	if (!mLoadedArticulation.has_value() || *mLoadedArticulation != articulation)
+		return;
+
+	mLoading	  = false;
+	mSamplesReady = ready;
+
+	updateStatus();
+	repaint();
+}
+
+
+void SamplerPanel::setCatalogLoading(bool loading)
+{
+	mCatalogLoading = loading;
+
+	for (auto &button : mButtons)
+		button->setEnabled(!loading);
 
 	updateStatus();
 	repaint();
@@ -83,6 +114,12 @@ void SamplerPanel::onArticulationClicked(Articulation articulation)
 
 void SamplerPanel::updateStatus()
 {
+	if (mCatalogLoading)
+	{
+		mStatusLabel.setText("Rescanning samples folder...", juce::dontSendNotification);
+		return;
+	}
+
 	juce::String text;
 
 	if (mAvailable.empty())
@@ -96,6 +133,12 @@ void SamplerPanel::updateStatus()
 	else
 	{
 		auto selectedName = articulationReverseMap.count(mSelected) ? articulationReverseMap.at(mSelected) : "Unknown";
+
+		if (mLoading)
+		{
+			mStatusLabel.setText(juce::String(selectedName) + " loading...", juce::dontSendNotification);
+			return;
+		}
 
 		text = juce::String(selectedName) + (mSamplesReady ? " loaded" : " failed to load") + " - " + juce::String((int)mAvailable.size()) + " articulations available";
 	}

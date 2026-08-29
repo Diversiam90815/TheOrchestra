@@ -4,6 +4,7 @@ import sys
 from scripts.paths import *
 from scripts.build_runner import BuildRunner
 from scripts.argument_parser import create_argument_parser
+from scripts.fetch_samples import ensure_samples
 
 
 def main():
@@ -33,6 +34,9 @@ def main():
     if args.runtest:
         runner.run_cpp_unit_tests(configuration=args.configuration)
         exit(0)
+
+    if args.build or args.prepare:
+        ensure_samples()
 
     runner.create_build_generator(
         platform=args.platform,

@@ -38,6 +38,4 @@ private:
 	void									  addInstrument(const InstrumentProfile &info);
 
 	std::map<InstrumentID, InstrumentProfile> instruments; // Mapping the instrument's key to the corresponding InstrumentProfile object
-
-	FileManager								  mFileManager;
 };

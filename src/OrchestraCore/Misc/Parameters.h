@@ -20,10 +20,13 @@ enum class Family
 	Percussion = 4
 };
 
-constexpr auto StringsName	  = "Strings";
-constexpr auto BrassName	  = "Brass";
-constexpr auto WoodwindsName  = "Woodwinds";
-constexpr auto PercussionName = "Percussion";
+namespace FamilyNames
+{
+constexpr auto Strings	  = "Strings";
+constexpr auto Brass	  = "Brass";
+constexpr auto Woodwinds  = "Woodwinds";
+constexpr auto Percussion = "Percussion";
+} // namespace FamilyNames
 
 
 //==============================================================================
@@ -38,11 +41,6 @@ enum class Strings
 	DoubleBass	= 4
 };
 
-constexpr auto ViolinName	   = "Violin";
-constexpr auto ViolaName	   = "Viola";
-constexpr auto VioloncelloName = "Violoncello";
-constexpr auto DoubleBassName  = "Double Bass";
-
 enum class Brass
 {
 	FrenchHorn	  = 1,
@@ -52,13 +50,6 @@ enum class Brass
 	Cimbasso	  = 5,
 	Tuba		  = 6
 };
-
-constexpr auto FrenchHornName	 = "French Horn";
-constexpr auto TrumpetName		 = "Trumpet";
-constexpr auto TenorTromboneName = "Tenor Trombone";
-constexpr auto BassTromboneName	 = "Bass Trombone";
-constexpr auto CimbassoName		 = "Cimbasso";
-constexpr auto TubaName			 = "Tuba";
 
 enum class Woodwinds
 {
@@ -72,15 +63,6 @@ enum class Woodwinds
 	Contrabassoon = 8
 };
 
-constexpr auto PiccoloName		 = "Piccolo";
-constexpr auto FluteName		 = "Flute";
-constexpr auto OboeName			 = "Oboe";
-constexpr auto CorAnglaisName	 = "Cor Anglais";
-constexpr auto ClarinetName		 = "Clarinet";
-constexpr auto BassClarinetName	 = "Bass Clarinet";
-constexpr auto BassoonName		 = "Bassoon";
-constexpr auto ContrabassoonName = "Contrabassoon";
-
 enum class Percussion
 {
 	Harp	= 1,
@@ -89,10 +71,49 @@ enum class Percussion
 	Marimba = 4
 };
 
-constexpr auto HarpName	   = "Harp";
-constexpr auto CelesteName = "Celeste";
-constexpr auto TimpaniName = "Timpani";
-constexpr auto MarimbaName = "Marimba";
+namespace InstrumentNames
+{
+
+namespace Strings
+{
+constexpr auto Violin	   = "Violin";
+constexpr auto Viola	   = "Viola";
+constexpr auto Violoncello = "Violoncello";
+constexpr auto DoubleBass  = "Double Bass";
+} // namespace Strings
+
+namespace Brass
+{
+constexpr auto FrenchHorn	 = "French Horn";
+constexpr auto Trumpet		 = "Trumpet";
+constexpr auto TenorTrombone = "Tenor Trombone";
+constexpr auto BassTrombone	 = "Bass Trombone";
+constexpr auto Cimbasso		 = "Cimbasso";
+constexpr auto Tuba			 = "Tuba";
+} // namespace Brass
+
+namespace Woodwinds
+{
+constexpr auto Piccolo		 = "Piccolo";
+constexpr auto Flute		 = "Flute";
+constexpr auto Oboe			 = "Oboe";
+constexpr auto CorAnglais	 = "Cor Anglais";
+constexpr auto Clarinet		 = "Clarinet";
+constexpr auto BassClarinet	 = "Bass Clarinet";
+constexpr auto Bassoon		 = "Bassoon";
+constexpr auto Contrabassoon = "Contrabassoon";
+} // namespace Woodwinds
+
+namespace Percussion
+{
+constexpr auto Harp	   = "Harp";
+constexpr auto Celeste = "Celeste";
+constexpr auto Timpani = "Timpani";
+constexpr auto Marimba = "Marimba";
+} // namespace Percussion
+
+} // namespace InstrumentNames
+
 
 
 //==============================================================================
@@ -112,15 +133,18 @@ enum class Articulation
 	rolls	  = 9
 };
 
-constexpr auto SustainArticulation	 = "Sustain";
-constexpr auto StaccatoArticulation	 = "Staccato";
-constexpr auto SpiccatoArticulation	 = "Spiccato";
-constexpr auto PizzicatoArticulation = "Pizzicato";
-constexpr auto MutedArticulation	 = "Mute";
-constexpr auto VibratoArticulation	 = "Vibrato";
-constexpr auto TremoloArticulation	 = "Tremolo";
-constexpr auto HitsArticulation		 = "Hits";
-constexpr auto RollsArticulation	 = "Rolls";
+namespace ArticulationNames
+{
+constexpr auto Sustain	 = "Sustain";
+constexpr auto Staccato	 = "Staccato";
+constexpr auto Spiccato	 = "Spiccato";
+constexpr auto Pizzicato = "Pizzicato";
+constexpr auto Muted	 = "Mute";
+constexpr auto Vibrato	 = "Vibrato";
+constexpr auto Tremolo	 = "Tremolo";
+constexpr auto Hits		 = "Hits";
+constexpr auto Rolls	 = "Rolls";
+} // namespace ArticulationNames
 
 
 //==============================================================================
@@ -129,32 +153,40 @@ constexpr auto RollsArticulation	 = "Rolls";
 
 enum class Dynamics
 {
-	pianissimo = 1,
-	piano	   = 2,
-	mezzoPiano = 3,
-	mezzoForte = 4,
-	forte	   = 5,
-	fortissimo = 6
+	pianissimo	  = 1,
+	piano		  = 2,
+	mezzoPiano	  = 3,
+	mezzoForte	  = 4,
+	forte		  = 5,
+	fortissimo	  = 6,
+	fortississimo = 7
 };
 
-constexpr auto PianissimoDynamic = "pp";
-constexpr auto PianoDynamic		 = "p";
-constexpr auto MezzoPianoDynamic = "mp";
-constexpr auto MezzoForteDynamic = "mf";
-constexpr auto ForteDynamic		 = "f";
-constexpr auto FortissimoDynamic = "ff";
+namespace DynamicNames
+{
+constexpr auto Pianissimo	 = "pp";
+constexpr auto Piano		 = "p";
+constexpr auto MezzoPiano	 = "mp";
+constexpr auto MezzoForte	 = "mf";
+constexpr auto Forte		 = "f";
+constexpr auto Fortissimo	 = "ff";
+constexpr auto Fortississimo = "fff";
+} // namespace DynamicNames
 
 
 //==============================================================================
 //                          FOLDERS / FILES
 //==============================================================================
 
-constexpr auto ProjectName		 = "TheOrchestra";
-constexpr auto TestProjectName	 = "TheOrchestra-Tests";
-constexpr auto LogFolderName	 = "Logs";
-constexpr auto LogFile			 = "Orchestra.log";
-constexpr auto ConfigFolderName	 = "Config";
-constexpr auto ConfigFile		 = "config.json";
+namespace Files
+{
+constexpr auto ProjectName		= "TheOrchestra";
+constexpr auto TestProjectName	= "TheOrchestra-Tests";
+constexpr auto LogFolderName	= "Logs";
+constexpr auto LogFile			= "Orchestra.log";
+constexpr auto ConfigFolderName = "Config";
+constexpr auto ConfigFile		= "config.json";
+} // namespace Files
 
 
 //==============================================================================
@@ -163,4 +195,4 @@ constexpr auto ConfigFile		 = "config.json";
 
 // The key is 3 digit int where the first digit represents the family and the other 2 digits represent the instrument. Usually, if the instrument digit remains below 10, the middle
 // digit remains 0.
-using InstrumentID				 = int;
+using InstrumentID = int;

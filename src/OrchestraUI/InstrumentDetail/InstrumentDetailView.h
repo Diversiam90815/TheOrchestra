@@ -56,12 +56,14 @@ public:
 	// Population (driven by the editor / CoreManager)
 	void	   setFamily(Family family, const std::vector<std::pair<InstrumentID, std::string>> &instruments);
 	void	   setInstrument(const InstrumentProfile &instrument);
-	void	   setAvailableArticulations(std::set<Articulation> available);
+	void	   setAvailableArticulations(ArticulationSet available);
 
 	// Navigation / action callbacks (wired by the editor)
 	void	   setInstrumentSelectedCallback(InstrumentSelectedCallback cb);
 	void	   setBackToFamiliesCallback(std::function<void()> cb);
 	void	   setArticulationChangedCallback(ArticulationChangedCallback cb);
+	void	   setArticulationLoadResult(Articulation articulation, bool ready);
+	void	   setCatalogLoading(bool loading) { mSampler.setCatalogLoading(loading); }
 
 	// Piano roll wiring
 	void	   initPianoRoll(juce::MidiKeyboardState &state);

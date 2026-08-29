@@ -1,31 +1,28 @@
 /*
   ==============================================================================
-	Module			OrchestraSound
+	Module			SampleSound
 	Description		Custom sound class holding multiple dynamic layers & round-robins per single MIDI note/range
   ==============================================================================
 */
 
 #pragma once
 
+#include <atomic>
+
 #include "JuceIncludes.h"
 #include "Parameters.h"
-#include "SamplesManagement.h"
+#include "SampleCatalog.h"
+#include "SamplerStructs.h"
+#include "SamplerTypes.h"
 
 
-struct DynamicLayer
-{
-	Dynamics								   dynamicValue;
-	juce::OwnedArray<juce::AudioBuffer<float>> roundRobinSamples;
-};
-
-
-class OrchestraSound : public juce::SynthesiserSound
+class SampleSound : public juce::SynthesiserSound
 {
 public:
-	OrchestraSound(int noteRangeStart, int noteRangeEnd, int rootNote);
-	~OrchestraSound() = default;
+	SampleSound(int noteRangeStart, int noteRangeEnd, int rootNote);
+	~SampleSound() = default;
 
-	void						   addDynamicLayer(Dynamics dynamicValue, juce::OwnedArray<juce::AudioBuffer<float>> &&rrSamples);
+	void						   addDynamicLayer(Dynamics dynamicValue, RoundRobinBuffers &&rrSamples);
 
 	bool						   appliesToNote(int midiNoteNumber) override;
 	bool						   appliesToChannel(int midiChannel) override; // TODO: Create settings to store value
@@ -38,14 +35,9 @@ public:
 	juce::OwnedArray<DynamicLayer> dynamicLayers;
 
 private:
-	static juce::BigInteger getNoteRangeBit(int start, int end);
+	Articulation articulation = Articulation::sustain; // Default value -> will be set at creation
 
-	Articulation			articulation = Articulation::sustain; // Default value -> will be set at creation
-
-
-	int						noteRangeStart;
-
-	int						noteRangeEnd;
-
-	int						rootNote;
+	int			 noteRangeStart;
+	int			 noteRangeEnd;
+	int			 rootNote;
 };

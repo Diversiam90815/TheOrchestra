@@ -152,7 +152,7 @@ void InstrumentDetailView::setInstrument(const InstrumentProfile &instrument)
 }
 
 
-void InstrumentDetailView::setAvailableArticulations(std::set<Articulation> available)
+void InstrumentDetailView::setAvailableArticulations(ArticulationSet available)
 {
 	mSampler.setAvailableArticulations(std::move(available));
 
@@ -175,6 +175,12 @@ void InstrumentDetailView::setBackToFamiliesCallback(std::function<void()> cb)
 void InstrumentDetailView::setArticulationChangedCallback(ArticulationChangedCallback cb)
 {
 	mSampler.setArticulationChangedCallback(std::move(cb));
+}
+
+
+void InstrumentDetailView::setArticulationLoadResult(Articulation articulation, bool ready)
+{
+	mSampler.setLoadResult(articulation, ready);
 }
 
 

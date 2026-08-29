@@ -43,6 +43,7 @@ set(Custom_Files
     ${Custom_Dir}/Theme.h                   ${Custom_Dir}/Theme.cpp
     ${Custom_Dir}/TextMeasure.h             ${Custom_Dir}/TextMeasure.cpp
     ${Custom_Dir}/GridFlow.h                ${Custom_Dir}/GridFlow.cpp
+    ${Custom_Dir}/InstrumentImageView.h      ${Custom_Dir}/InstrumentImageView.cpp
 )
 
 set(PianoRoll_Files
@@ -181,4 +182,10 @@ target_link_libraries(${TARGET_NAME} PUBLIC ${PROJECT_LIBS} )
 target_include_directories(${TARGET_NAME} PRIVATE
     $<TARGET_PROPERTY:TextFontData,INTERFACE_INCLUDE_DIRECTORIES>
     $<TARGET_PROPERTY:NotationFontData,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
+include(GNUInstallDirs)
+
+install(TARGETS ${TARGET_NAME}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )

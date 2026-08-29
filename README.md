@@ -5,10 +5,8 @@
 
 **The Orchestra** is a C++20 / JUCE desktop application for studying the instruments of the symphony
 orchestra. Pick a family, pick an instrument, and see its range on a real staff, its registers coloured
-along a piano roll, the techniques it supports, the roles it plays, and the repertoire it is known for,
+along a piano roll, the techniques it supports, the roles it typically plays, and the repertoire it is known for,
 then play it back from the sampler with your MIDI keyboard.
-
-It is built as an orchestration reference that you can hear, rather than one you only read.
 
 
 ## Showcase
@@ -45,59 +43,37 @@ It is built as an orchestration reference that you can hear, rather than one you
 
 ## Architecture
 
-Three static libraries with a strictly one-way dependency:
-
 ```
-┌─────────────────┐
-│  OrchestraApp   │  Standalone shell: window, audio device, MIDI routing
-└────────┬────────┘
-         │
-┌────────▼────────┐
-│  OrchestraUI    │  JUCE components, design tokens, notation rendering
-└────────┬────────┘
-         │
-┌────────▼────────┐
-│ OrchestraCore   │  Domain model, sampler, file & config management
-└─────────────────┘
+┌─────────────────┐   ┌──────────────────┐
+│  OrchestraApp   │   │  OrchestraPlugin │  Standalone shell / VST3 plugin
+└────────┬────────┘   └────────┬─────────┘
+         │                     │
+         └──────────┬──────────┘
+              ┌──────▼──────┐
+              │ OrchestraUI │  JUCE components, design tokens, notation rendering
+              └──────┬──────┘
+                     │
+              ┌──────▼──────┐
+              │OrchestraCore│  Domain model, sampler, file & config management
+              └─────────────┘
 ```
 
-**`OrchestraCore`** owns the domain and knows nothing about the UI: the instrument catalogue
-(`InstrumentController`), the sampler (`OrchestraSampler` / `OrchestraVoice` / `SamplesManagement`),
-path and config resolution (`FileManager`, `UserConfig`), and logging.
+**`OrchestraCore`** owns the domain: the instrument catalogue, the sampler, path and config resolution, and logging.
 
-**`OrchestraUI`** talks to the domain through exactly one seam: `CoreManager`. No component holds a
-back-pointer to its parent; panels expose `std::function` callbacks and the editor wires them up. That
-keeps every panel independently constructible and testable.
+**`OrchestraUI`** talks to the domain through exactly one seam: `CoreManager`. Panels expose `std::function` callbacks and the editor wires them up. That keeps every panel independently constructible and testable.
 
-**`OrchestraApp`** is a thin `Main.cpp`: it creates the processor and editor, opens the audio device and
-routes MIDI. The same editor is created by `OrchestraProcessor::createEditor`, so the UI is not coupled to
-the standalone host.
+**`OrchestraApp`** is a thin `Main.cpp`: it creates the processor and editor, opens the audio device and routes MIDI.
 
-### Design system
-
-The UI is built on a small set of shared primitives rather than per-component styling:
-
-- **`Theme.h`** is the single source of truth for the palette, spacing scale, type scale, corner radii and
-  chrome heights. Components resolve it via `themeFor(*this)`; nothing hardcodes a colour.
-- **`OrchestraPanel`** is the base class for every panel: rounded surface, optional uppercase title, and a
-  consistent content area inset.
-- **`HasPreferredHeight`** lets a panel report the height it needs for a given width. The detail view sums
-  these to size its scroll content, so panels grow with their text instead of being clipped or padded to a
-  guessed height.
-- **`GridFlow`** implements one responsive column rule shared by every card grid.
-- **`TextMeasure`** wraps JUCE text measurement so panels can size themselves to real text metrics.
-- **`CustomLookAndFeel`** paints labels and buttons from typed `LabelStyle` / `ButtonStyle` tags rather than
-  from stringly-typed component names.
+**`OrchestraPlugin`** builds the same processor/editor as a VST3 instrument (`TheOrchestraPlugin`).
 
 
 ## Building
 
 ### Prerequisites
 
-- CMake 3.25+
+- CMake 4.0+
 - A C++20 compiler
 - Python 3.10+ (for the build script)
-- Git
 
 Dependencies (JUCE 8.0.3, nlohmann/json, GoogleTest and the logger) are fetched automatically by
 [CPM](https://github.com/cpm-cmake/CPM.cmake) into `libs/cpm-cache` on first configure.
@@ -105,13 +81,16 @@ Dependencies (JUCE 8.0.3, nlohmann/json, GoogleTest and the logger) are fetched 
 ### Platform support
 
 Developed and tested on **Windows** with MSVC. The CMake now guards its MSVC-only compiler flags and all
-filesystem paths resolve through JUCE's cross-platform APIs, so a macOS or Linux build is expected to work.
+filesystem paths resolve through JUCE's cross-platform APIs.
 
 ### Quick start
 
 ```bash
 python build.py -b
 ```
+
+The first run also downloads the sample pack (~395MB, one-time - see [Samples](#samples)) before
+configuring, builds the standalone app and the VST3 plugin, and installs both into `install/`.
 
 Or drive CMake directly:
 
@@ -140,7 +119,16 @@ python build.py -b -pl VS2022 -c Debug
 python build.py -t -c Debug
 ```
 
-Build output lands in `build/<architecture>/`, e.g. `build/x64/`. Installs go to `install/`.
+Build output lands in `build/<architecture>/`, e.g. `build/x64/`. `-b` runs `cmake --install`
+automatically afterwards, so `install/` ends up with everything needed to try the project out:
+
+```
+install/
+  bin/TheOrchestraApp.exe        Standalone app (+ its Assets/Images)
+  lib/VST3/The Orchestra.vst3    VST3 instrument plugin - point your DAW's VST3 folder at this
+  lib/TheOrchestraCore.lib       Orchestra static libraries
+  lib/TheOrchestraUI.lib
+```
 
 ### Optional tooling
 
@@ -170,25 +158,39 @@ ctest --test-dir build/x64 -C Debug --output-on-failure
 
 ## Samples
 
-The sample library lives in `Assets/Samples/` and is copied next to the executable at build time, so the
-app finds it without an install step. You can point the app at a different sample folder from the settings
-control on the family switcher; the choice is persisted via `UserConfig`.
+The sample pack is published as four per-family zip assets (`Brass.zip`, `Percussion.zip`, `Strings.zip`,
+`Woodwinds.zip`) on a GitHub Release, and
+`python build.py -b` (or `-p`) fetches it automatically via `scripts/fetch_samples.py`, extracting it into
+a single shared AppData location:
 
-> **Note:** the sample pack is currently committed to the repository and is roughly 1.3 GB, which makes
-> cloning slow.
+- Windows: `%ProgramData%\TheOrchestra\Assets\Samples` (falls back to `%APPDATA%\...` if that isn't
+  writable)
+
+This one location is what the standalone app, the VST3 plugin, and the test suite all read from. The download is cached under
+`libs/samples-cache/` and skipped on subsequent builds once already up to date.
+
+To fetch (or re-fetch) samples without a full build:
+
+```bash
+python scripts/fetch_samples.py
+```
+
+You can still point the app at a different sample folder from the settings control on the family
+switcher; the choice is persisted.
 
 
 ## Repository layout
 
 ```
-Assets/          Instrument JSON, fonts, images, samples
-cmake/           Build modules (options, build info, tooling integrations)
-scripts/         Python build helpers used by build.py
+Assets/               Instrument JSON, fonts, images
+cmake/                Build modules (options, build info, tooling integrations)
+scripts/              Python build helpers used by build.py + other scripts
 src/
-  OrchestraCore/ Domain model, sampler, file & config management
-  OrchestraUI/   Components, theme, notation rendering
-  OrchestraApp/  Standalone application shell
-tests/           GoogleTest suites, mirroring the src/ split
+  OrchestraCore/      Domain model, sampler, file & config management
+  OrchestraUI/        Components, theme, notation rendering
+  OrchestraApp/       Standalone application shell
+  OrchestraPlugin/    VST3 instrument plugin
+tests/                GoogleTest suites
 ```
 
 

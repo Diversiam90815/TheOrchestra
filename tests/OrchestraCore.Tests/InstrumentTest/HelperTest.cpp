@@ -45,14 +45,14 @@ TEST_F(HelperTest, GetInstrumentKeyWithEnums)
 
 TEST_F(HelperTest, GetInstrumentKeyWithStrings)
 {
-	std::string violinFamily	 = StringsName;
-	std::string violinInstrument = ViolinName;
+	std::string violinFamily	 = FamilyNames::Strings;
+	std::string violinInstrument = InstrumentNames::Strings::Violin;
 
 	int			key				 = getInstrumentKey(violinFamily, violinInstrument);
 	EXPECT_EQ(key, 301) << "String-based key generation should match enum-based";
 
-	std::string brassFamily		  = BrassName;
-	std::string trumpetInstrument = TrumpetName;
+	std::string brassFamily		  = FamilyNames::Brass;
+	std::string trumpetInstrument = InstrumentNames::Brass::Trumpet;
 
 	key							  = getInstrumentKey(brassFamily, trumpetInstrument);
 	EXPECT_EQ(key, 202) << "Brass trumpet key should be 202";
@@ -90,8 +90,8 @@ TEST_F(HelperTest, GetInstrumentKeyFromUnknownNamesReturnsZero)
 {
 	std::string unknownFamily	  = "Synthesizers";
 	std::string unknownInstrument = "Theremin";
-	std::string knownFamily		  = StringsName;
-	std::string knownInstrument	  = ViolinName;
+	std::string knownFamily		  = FamilyNames::Strings;
+	std::string knownInstrument	  = InstrumentNames::Strings::Violin;
 
 	EXPECT_EQ(getInstrumentKey(unknownFamily, knownInstrument), 0) << "Unknown family should yield key 0";
 	EXPECT_EQ(getInstrumentKey(knownFamily, unknownInstrument), 0) << "Unknown instrument should yield key 0";
@@ -149,8 +149,8 @@ TEST_F(HelperTest, ArticulationMapsConsistency)
 TEST_F(HelperTest, DynamicMapsConsistency)
 {
 	// Verify dynamic mappings contain expected values
-	EXPECT_EQ(dynamicMap.at(PianissimoDynamic), Dynamics::pianissimo);
-	EXPECT_EQ(dynamicMap.at(FortissimoDynamic), Dynamics::fortissimo);
+	EXPECT_EQ(dynamicMap.at(DynamicNames::Pianissimo), Dynamics::pianissimo);
+	EXPECT_EQ(dynamicMap.at(DynamicNames::Fortissimo), Dynamics::fortissimo);
 
 	// Test velocity layer fallbacks
 	EXPECT_EQ(velocityLayerMap.at("v1"), Dynamics::mezzoPiano);

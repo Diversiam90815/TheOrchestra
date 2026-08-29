@@ -14,8 +14,7 @@ constexpr double kDefaultSampleRate = 44100.0; // Used for MidiMessageCollector:
 
 
 CoreManager::CoreManager()
-	: mInstrumentController(std::make_unique<InstrumentController>()), mSampler(std::make_unique<OrchestraSampler>()),
-	  mMidiKeyboardState(std::make_unique<juce::MidiKeyboardState>())
+	: mInstrumentController(std::make_unique<InstrumentController>()), mSampler(std::make_shared<SamplerEngine>()), mMidiKeyboardState(std::make_unique<juce::MidiKeyboardState>())
 {
 	for (auto &cc : mCcValues)
 		cc.store(-1);
@@ -91,6 +90,8 @@ void CoreManager::changeInstrument(InstrumentID key)
 
 	mSampler->reset();
 
+	mCurrentInstrument = key;
+
 	// TODO: maybe preload default articulation
 
 	LOG_INFO("Instrument changed successfully to key {}", key);
@@ -102,16 +103,47 @@ bool CoreManager::changeArticulation(InstrumentID key, Articulation articulation
 	mSampler->addSoundsFromInstrumentToSampler(key, articulation);
 
 	const bool ready = mSampler->getSamplesAreReady();
+
+	if (ready)
+	{
+		mCurrentInstrument	 = key;
+		mCurrentArticulation = articulation;
+	}
 	LOG_INFO("Instrument key {} changed to articulation {} (ready={})", key, static_cast<int>(articulation), ready);
 
 	return ready;
 }
 
 
-void CoreManager::changeSamplesFolder(const std::string &samplesFolder)
+void CoreManager::changeArticulationAsync(InstrumentID key, Articulation articulation, SampleLoadCallback onComplete)
+{
+	mSampler->loadInstrumentAsync(key, articulation,
+								  [this, key, articulation, onComplete](bool ready)
+								  {
+									  if (ready)
+									  {
+										  mCurrentInstrument   = key;
+										  mCurrentArticulation = articulation;
+									  }
+
+									  LOG_INFO("Instrument key {} changed to articulation {} (ready={})", key, static_cast<int>(articulation), ready);
+
+									  if (onComplete)
+										  onComplete(ready);
+								  });
+}
+
+
+bool CoreManager::isLoadingSamples() const
+{
+	return mSampler->isLoading();
+}
+
+
+void CoreManager::changeSamplesFolder(const std::string &samplesFolder, SampleLoadCallback onComplete)
 {
 	if (mSampler)
-		mSampler->reloadSamples(samplesFolder);
+		mSampler->reloadSamples(samplesFolder, onComplete);
 }
 
 
@@ -127,7 +159,7 @@ std::vector<std::pair<InstrumentID, std::string>> CoreManager::getInstrumentsFor
 }
 
 
-std::set<Articulation> CoreManager::getAvailableArticulations(InstrumentID instrumentKey)
+ArticulationSet CoreManager::getAvailableArticulations(InstrumentID instrumentKey)
 {
 	return mSampler->getAvailableArticulationsForInstrument(instrumentKey);
 }
@@ -168,10 +200,6 @@ void CoreManager::logProjectInfo()
 
 	LOG_INFO("Generator:\t\t {}", BuildInfo::Generator);
 	LOG_INFO("CPP Version:\t\t {}", BuildInfo::CxxStandard);
-
-	LOG_INFO("System Name:\t\t {}", BuildInfo::SystemName);
-	LOG_INFO("System Version:\t\t {}", BuildInfo::SystemVersion);
-	LOG_INFO("System CPU:\t\t {}", BuildInfo::SystemCPU);
 
 	LOG_INFO("Compiler:\t\t {}", BuildInfo::CompilerID);
 	LOG_INFO("Compiler Version:\t {}", BuildInfo::CompilerVersion);

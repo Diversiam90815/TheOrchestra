@@ -8,6 +8,7 @@
 #pragma once
 
 #include "OrchestraPanel.h"
+#include "InstrumentImageView.h"
 #include "NotationRenderer.h"
 #include "FileManager.h"
 
@@ -47,7 +48,7 @@ private:
 	void										   rebuildMetaTags();
 	int											   pillWidth(const juce::String &text) const;
 
-	juce::DrawableImage							   mInstrumentImage;
+	InstrumentImageView							   mInstrumentImage;
 	juce::Label									   mNameLabel;
 	juce::Label									   mFamilyLabel;
 
