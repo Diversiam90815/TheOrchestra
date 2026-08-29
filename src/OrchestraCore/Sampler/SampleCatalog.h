@@ -36,8 +36,8 @@ public:
 
 	void				setSampleDirectory(std::string directory);
 
-	void				loadSamplesAsync(SampleLoadCallback onComplete = nullptr);
-	void				reloadSamplesAsync(SampleLoadCallback onComplete = nullptr);
+	void				loadSamplesAsync(CatalogLoadCallback onComplete = nullptr);
+	void				reloadSamplesAsync(CatalogLoadCallback onComplete = nullptr);
 
 	bool				isLoading() const { return mIsLoading.load(); }
 
@@ -57,7 +57,7 @@ private:
 
 	std::string									mSampleDirectory;	// Folder of the samples folder ( /Assets/Samples)
 
-	std::map<InstrumentID, std::vector<Sample>> mInstrumentSamples; // Map of the instrument and their assigned 'Sample'
+	InstrumentSampleMap							mInstrumentSamples; // Map of the instrument and their assigned 'Sample'
 	mutable std::mutex							mCatalogMutex;
 
 	FileManager									mFileManager;

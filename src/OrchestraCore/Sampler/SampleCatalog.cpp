@@ -35,7 +35,7 @@ void SampleCatalog::init()
 }
 
 
-void SampleCatalog::loadSamplesAsync(SampleLoadCallback onComplete)
+void SampleCatalog::loadSamplesAsync(CatalogLoadCallback onComplete)
 {
 	if (mLoadThread.joinable())
 		mLoadThread.join();
@@ -63,7 +63,7 @@ void SampleCatalog::loadSamplesAsync(SampleLoadCallback onComplete)
 }
 
 
-void SampleCatalog::reloadSamplesAsync(SampleLoadCallback onComplete)
+void SampleCatalog::reloadSamplesAsync(CatalogLoadCallback onComplete)
 {
 	{
 		std::scoped_lock lock(mCatalogMutex);

@@ -42,7 +42,7 @@ public:
 
 	std::vector<std::pair<InstrumentID, std::string>> getInstrumentsForFamily(Family family);
 
-	std::set<Articulation>							  getAvailableArticulations(InstrumentID instrumentKey);
+	ArticulationSet									  getAvailableArticulations(InstrumentID instrumentKey);
 
 	InstrumentID									  getCurrentInstrument() const { return mCurrentInstrument; }
 	Articulation									  getCurrentArticulation() const { return mCurrentArticulation; }

@@ -28,7 +28,7 @@ public:
 
 	void setInstrument(const InstrumentProfile &instrument) override { /* Not used directly */ }
 
-	void setAvailableArticulations(std::set<Articulation> available);
+	void setAvailableArticulations(ArticulationSet available);
 	void setArticulationChangedCallback(ArticulationChangedCallback callback);
 
 	void setLoadResult(Articulation articulation, bool ready);
@@ -46,7 +46,7 @@ private:
 	int											   wrappedRowCount(int width) const;
 
 	std::vector<std::unique_ptr<juce::TextButton>> mButtons;
-	std::set<Articulation>						   mAvailable;
+	ArticulationSet								   mAvailable;
 	Articulation								   mSelected = Articulation::sustain;
 	juce::Label									   mStatusLabel;
 

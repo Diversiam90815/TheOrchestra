@@ -160,7 +160,7 @@ std::vector<std::pair<InstrumentID, std::string>> CoreManager::getInstrumentsFor
 }
 
 
-std::set<Articulation> CoreManager::getAvailableArticulations(InstrumentID instrumentKey)
+ArticulationSet CoreManager::getAvailableArticulations(InstrumentID instrumentKey)
 {
 	return mSampler->getAvailableArticulationsForInstrument(instrumentKey);
 }

@@ -56,7 +56,7 @@ public:
 	// Population (driven by the editor / CoreManager)
 	void	   setFamily(Family family, const std::vector<std::pair<InstrumentID, std::string>> &instruments);
 	void	   setInstrument(const InstrumentProfile &instrument);
-	void	   setAvailableArticulations(std::set<Articulation> available);
+	void	   setAvailableArticulations(ArticulationSet available);
 
 	// Navigation / action callbacks (wired by the editor)
 	void	   setInstrumentSelectedCallback(InstrumentSelectedCallback cb);
