@@ -33,7 +33,10 @@ public:
 
 private:
 	void										parseRhythmicPercussionFiles(const juce::File &instrument);
-	void										parseInstrumentSamples(const juce::File &instrumentFolder, std::string &sectionName);
+	void										parseInstrumentSamples(const juce::File &instrumentFolder, const std::string &sectionName);
+
+	void										loadStandardSection(const juce::File &section, const std::string &sectionName);
+	void										loadPercussionSection(const juce::File &section);
 
 	void										addPercussionSamples(const juce::File &file, const InstrumentID &key, Articulation articulation);
 	void										addSample(const juce::File &file, const InstrumentID &key, Articulation articulation);
