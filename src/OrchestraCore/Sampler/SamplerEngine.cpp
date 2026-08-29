@@ -103,10 +103,10 @@ std::vector<juce::SynthesiserSound::Ptr> SamplerEngine::buildSounds(const Instru
 
 		for (auto &dynPair : notePair.second)
 		{
-			const int								   dynValue	  = dynPair.first;
-			auto									  &fileVector = dynPair.second;
+			const int		  dynValue	 = dynPair.first;
+			auto			 &fileVector = dynPair.second;
 
-			std::vector<std::unique_ptr<juce::AudioBuffer<float>>> rrBuffers;
+			RoundRobinBuffers rrBuffers;
 
 			for (auto &file : fileVector)
 			{
@@ -269,7 +269,7 @@ void SamplerEngine::installBuildResult(std::vector<juce::SynthesiserSound::Ptr> 
 }
 
 
-std::map<int, std::map<int, std::vector<std::filesystem::path>>> SamplerEngine::createDynamicMap(std::vector<Sample> &samples)
+NoteDynamicMap SamplerEngine::createDynamicMap(std::vector<Sample> &samples)
 {
 	std::map<int, std::map<int, std::vector<std::filesystem::path>>> noteDynMap;
 
@@ -292,7 +292,7 @@ std::vector<Sample> SamplerEngine::filterArticulation(std::vector<Sample> &allSa
 }
 
 
-std::vector<int> SamplerEngine::createNoteList(std::map<int, std::map<int, std::vector<std::filesystem::path>>> &noteDynamicMap)
+std::vector<int> SamplerEngine::createNoteList(NoteDynamicMap &noteDynamicMap)
 {
 	// Extract all unique MIDI notes into a sorted list
 	std::vector<int> noteList;
@@ -307,7 +307,7 @@ std::vector<int> SamplerEngine::createNoteList(std::map<int, std::map<int, std::
 }
 
 
-std::map<int, std::pair<int, int>> SamplerEngine::createNoteRangeMap(std::map<int, std::map<int, std::vector<std::filesystem::path>>> &noteDynamicMap, const int key)
+std::map<int, std::pair<int, int>> SamplerEngine::createNoteRangeMap(NoteDynamicMap &noteDynamicMap, const int key)
 {
 	auto noteList = createNoteList(noteDynamicMap);
 	if (noteList.empty())

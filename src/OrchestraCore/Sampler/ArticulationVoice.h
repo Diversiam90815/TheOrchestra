@@ -38,29 +38,29 @@ public:
 	bool isEnvelopeActive() const { return mAdsr.isActive(); }
 
 private:
-	static int																			   pickRoundRobin(DynamicLayer &layer);
+	static int																  pickRoundRobin(DynamicLayer &layer);
 
-	float																				   mapDynamicPosition();
+	float																	  mapDynamicPosition();
 
-	inline float																		   readHermite(const juce::AudioBuffer<float> &buffer, int channel, int pos, float frac);
-	inline StereoSample																	   readFrame(const juce::AudioBuffer<float> *buffer, int pos, float frac);
+	inline float															  readHermite(const juce::AudioBuffer<float> &buffer, int channel, int pos, float frac);
+	inline StereoSample														  readFrame(const juce::AudioBuffer<float> *buffer, int pos, float frac);
 
 
-	const ControllerState																  *mControllerState		 = nullptr;
+	const ControllerState													 *mControllerState		= nullptr;
 
-	bool																				   mIsPlaying			 = false;
-	bool																				   mIsShortArticulation	 = false;
+	bool																	  mIsPlaying			= false;
+	bool																	  mIsShortArticulation	= false;
 
-	double																				   mSourceSamplePosition = 0.0;
-	double																				   mPitchRatio			 = 1.0;
-	float																				   mNoteGain			 = 1.0f;
-	int																					   mNumLayerBuffers		 = 0;
+	double																	  mSourceSamplePosition = 0.0;
+	double																	  mPitchRatio			= 1.0;
+	float																	  mNoteGain				= 1.0f;
+	int																		  mNumLayerBuffers		= 0;
 
-	juce::SmoothedValue<float>															   mCC1;
-	juce::SmoothedValue<float>															   mCC11;
+	juce::SmoothedValue<float>												  mCC1;
+	juce::SmoothedValue<float>												  mCC11;
 
-	juce::ADSR																			   mAdsr;
-	juce::ADSR::Parameters																   mAdsrParams;
+	juce::ADSR																  mAdsr;
+	juce::ADSR::Parameters													  mAdsrParams;
 
-	std::array<const juce::AudioBuffer<float> *, ArticulationVoiceConstants::MaxDynamicLayers> mLayerBuffers{};
+	std::array<AudioBufferView, ArticulationVoiceConstants::MaxDynamicLayers> mLayerBuffers{};
 };

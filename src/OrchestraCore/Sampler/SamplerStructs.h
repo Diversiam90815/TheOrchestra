@@ -11,6 +11,7 @@
 
 #include "Parameters.h"
 #include "JuceIncludes.h"
+#include "SamplerTypes.h"
 
 
 struct Sample
@@ -22,25 +23,25 @@ struct Sample
 		noteMidiValue = turnNotenameIntoMidinumber(note);
 	}
 
-	std::string			  instrument;
-	std::string			  note;
-	int					  noteMidiValue = 0;
-	int					  roundRobin;
-	Dynamics			  dynamic;
-	Articulation		  articulation;
-	std::filesystem::path file;
+	std::string	 instrument;
+	std::string	 note;
+	int			 noteMidiValue = 0;
+	int			 roundRobin;
+	Dynamics	 dynamic;
+	Articulation articulation;
+	fs::path	 file;
 };
 
 
 struct PercussionSample : public Sample
 {
-	PercussionSample(const std::string			 &instrument,
-					 const std::string			 &note,
-					 const int					 &roundRobin,
-					 const Dynamics				 &dynamic,
-					 const Articulation			 &articulation,
-					 const std::filesystem::path &file,
-					 int						  specificMidiNote)
+	PercussionSample(const std::string	&instrument,
+					 const std::string	&note,
+					 const int			&roundRobin,
+					 const Dynamics		&dynamic,
+					 const Articulation &articulation,
+					 const fs::path		&file,
+					 int				 specificMidiNote)
 		: Sample(instrument, note, roundRobin, dynamic, articulation, file)
 	{
 		noteMidiValue = specificMidiNote; // Override the noteMidiValue with the specific value for a percussion sound
@@ -52,9 +53,9 @@ struct PercussionSample : public Sample
 
 struct DynamicLayer
 {
-	Dynamics											   dynamicValue;
-	std::vector<std::unique_ptr<juce::AudioBuffer<float>>> roundRobinSamples;
-	std::atomic<unsigned>								   roundRobinCounter{0};
+	Dynamics			  dynamicValue;
+	RoundRobinBuffers	  roundRobinSamples;
+	std::atomic<unsigned> roundRobinCounter{0};
 };
 
 
