@@ -143,3 +143,9 @@ set (PROJECT_LIBS   juce::juce_audio_utils
 )
 
 target_link_libraries(${TARGET_NAME} PUBLIC ${PROJECT_LIBS} )
+
+include(GNUInstallDirs)
+
+install(TARGETS ${TARGET_NAME}
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
