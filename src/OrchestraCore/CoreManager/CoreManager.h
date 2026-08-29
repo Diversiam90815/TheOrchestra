@@ -37,7 +37,7 @@ public:
 	void											  changeArticulationAsync(InstrumentID key, Articulation articulation, SampleLoadCallback onComplete);
 
 	bool											  isLoadingSamples() const;
-	void											  changeSamplesFolder(const std::string &samplesFolder);
+	void											  changeSamplesFolder(const std::string &samplesFolder, SampleLoadCallback onComplete = nullptr);
 	InstrumentProfile								  getInstrument(InstrumentID key);
 
 	std::vector<std::pair<InstrumentID, std::string>> getInstrumentsForFamily(Family family);

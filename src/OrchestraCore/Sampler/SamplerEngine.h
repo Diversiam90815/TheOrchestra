@@ -28,10 +28,10 @@ class SamplerEngine
 public:
 	static constexpr int kNumVoices = 64;
 
-	SamplerEngine()				= default;
+	SamplerEngine()					= default;
 	~SamplerEngine();
 
-	void				   init(InstrumentController &controller);
+	void				   init(InstrumentController &controller, SampleLoadCallback onCatalogReady = nullptr);
 
 	std::set<Articulation> getAvailableArticulationsForInstrument(const InstrumentID key);
 
@@ -49,36 +49,36 @@ public:
 	bool				   getSamplesAreReady();
 	void				   setSamplesAreReady(bool value);
 
-	bool				   reloadSamples(std::string samplesDirectory);
+	bool				   reloadSamples(std::string samplesDirectory, SampleLoadCallback onComplete = nullptr);
 
 private:
-	std::map<int, std::map<int, std::vector<juce::File>>> createDynamicMap(std::vector<Sample> &samples);
-	std::vector<int>									  createNoteList(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap);
-	std::map<int, std::pair<int, int>>					  createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap, const int key);
+	std::map<int, std::map<int, std::vector<std::filesystem::path>>> createDynamicMap(std::vector<Sample> &samples);
+	std::vector<int>												 createNoteList(std::map<int, std::map<int, std::vector<std::filesystem::path>>> &noteDynamicMap);
+	std::map<int, std::pair<int, int>>		 createNoteRangeMap(std::map<int, std::map<int, std::vector<std::filesystem::path>>> &noteDynamicMap, const int key);
 
-	std::vector<Sample>									  filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed);
+	std::vector<Sample>						 filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed);
 
-	std::pair<int, int>									  getRangesOfInstrument(const InstrumentID key);
+	std::pair<int, int>						 getRangesOfInstrument(const InstrumentID key);
 
-	std::vector<juce::SynthesiserSound::Ptr>			  buildSounds(const InstrumentID key, Articulation articulationUsed);
-	void												  installSounds(std::vector<juce::SynthesiserSound::Ptr> sounds);
+	std::vector<juce::SynthesiserSound::Ptr> buildSounds(const InstrumentID key, Articulation articulationUsed);
+	void									 installSounds(std::vector<juce::SynthesiserSound::Ptr> sounds);
 
 
-	juce::Synthesiser									  mSampler;
+	juce::Synthesiser						 mSampler;
 
-	ControllerState										  mControllerState;
+	ControllerState							 mControllerState;
 
-	juce::AudioFormatManager							  mFormatManager;
+	juce::AudioFormatManager				 mFormatManager;
 
-	std::unique_ptr<SampleCatalog>					  mSamplesManager;
+	std::unique_ptr<SampleCatalog>			 mSamplesManager;
 
-	std::atomic<bool>									  mSamplesAreReady		= false;
+	std::atomic<bool>						 mSamplesAreReady	   = false;
 
-	InstrumentController								 *mInstrumentController = nullptr;
+	InstrumentController					*mInstrumentController = nullptr;
 
-	juce::ThreadPool									  mLoadPool{1};
+	juce::ThreadPool						 mLoadPool{1};
 
-	std::atomic<int>									  mLoadGeneration{0};
+	std::atomic<int>						 mLoadGeneration{0};
 
 	JUCE_DECLARE_WEAK_REFERENCEABLE(SamplerEngine)
 };

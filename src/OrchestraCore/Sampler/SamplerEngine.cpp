@@ -19,12 +19,28 @@ SamplerEngine::~SamplerEngine()
 }
 
 
-void SamplerEngine::init(InstrumentController &controller)
+void SamplerEngine::init(InstrumentController &controller, SampleLoadCallback onCatalogReady)
 {
 	mInstrumentController = &controller;
-
 	mSamplesManager		  = std::make_unique<SampleCatalog>();
+
 	mSamplesManager->init();
+
+	juce::WeakReference<SamplerEngine> weakThis(this);
+
+	mSamplesManager->loadSamplesAsync(
+		[weakThis, onCatalogReady](bool success)
+		{
+			juce::MessageManager::callAsync(
+				[weakThis, success, onCatalogReady]()
+				{
+					if (weakThis == nullptr)
+						return;
+
+					if (onCatalogReady)
+						onCatalogReady(success);
+				});
+		});
 
 	mFormatManager.registerBasicFormats();
 
@@ -92,7 +108,7 @@ std::vector<juce::SynthesiserSound::Ptr> SamplerEngine::buildSounds(const Instru
 
 			for (auto &file : fileVector)
 			{
-				std::unique_ptr<juce::AudioFormatReader> reader(mFormatManager.createReaderFor(file));
+				std::unique_ptr<juce::AudioFormatReader> reader(mFormatManager.createReaderFor(juce::File(file.string())));
 
 				if (reader)
 				{
@@ -102,7 +118,7 @@ std::vector<juce::SynthesiserSound::Ptr> SamplerEngine::buildSounds(const Instru
 				}
 				else
 				{
-					LOG_ERROR("Failed to read sample file: {}", file.getFileName().toStdString().c_str());
+					LOG_ERROR("Failed to read sample file: {}", file.string());
 				}
 			}
 
@@ -214,26 +230,39 @@ void SamplerEngine::reset()
 }
 
 
-bool SamplerEngine::reloadSamples(std::string samplesDirectory)
+bool SamplerEngine::reloadSamples(std::string samplesDirectory, SampleLoadCallback onComplete)
 {
 	// Path to samples have been reset, so we will trigger a reload
 	mSamplesManager->setSampleDirectory(samplesDirectory);
-	mSamplesManager->reloadSamples();
+
+	juce::WeakReference<SamplerEngine> weakThis(this);
+
+	mSamplesManager->reloadSamplesAsync(
+		[weakThis, onComplete](bool success)
+		{
+			juce::MessageManager::callAsync(
+				[weakThis, success, onComplete]()
+				{
+					if (weakThis == nullptr)
+						return;
+
+					if (onComplete)
+						onComplete(success);
+				});
+		});
+
 	return true;
 }
 
 
-std::map<int, std::map<int, std::vector<juce::File>>> SamplerEngine::createDynamicMap(std::vector<Sample> &samples)
+std::map<int, std::map<int, std::vector<std::filesystem::path>>> SamplerEngine::createDynamicMap(std::vector<Sample> &samples)
 {
-	// Group the samples by midinote -> dynamic -> files
-	std::map<int, std::map<int, std::vector<juce::File>>> noteDynMap;
+	std::map<int, std::map<int, std::vector<std::filesystem::path>>> noteDynMap;
 
 	for (auto &s : samples)
 	{
 		int midiNote = s.noteMidiValue;
 		int dynValue = static_cast<int>(s.dynamic);
-		// Round Robbin' for now are not stored as value, but as count of files
-
 		noteDynMap[midiNote][dynValue].push_back(s.file);
 	}
 
@@ -249,7 +278,7 @@ std::vector<Sample> SamplerEngine::filterArticulation(std::vector<Sample> &allSa
 }
 
 
-std::vector<int> SamplerEngine::createNoteList(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap)
+std::vector<int> SamplerEngine::createNoteList(std::map<int, std::map<int, std::vector<std::filesystem::path>>> &noteDynamicMap)
 {
 	// Extract all unique MIDI notes into a sorted list
 	std::vector<int> noteList;
@@ -264,7 +293,7 @@ std::vector<int> SamplerEngine::createNoteList(std::map<int, std::map<int, std::
 }
 
 
-std::map<int, std::pair<int, int>> SamplerEngine::createNoteRangeMap(std::map<int, std::map<int, std::vector<juce::File>>> &noteDynamicMap, const int key)
+std::map<int, std::pair<int, int>> SamplerEngine::createNoteRangeMap(std::map<int, std::map<int, std::vector<std::filesystem::path>>> &noteDynamicMap, const int key)
 {
 	auto noteList = createNoteList(noteDynamicMap);
 	if (noteList.empty())

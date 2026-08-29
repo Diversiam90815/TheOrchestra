@@ -158,7 +158,17 @@ void OrchestraEditor::onSettingsClicked()
 							 if (result.exists())
 							 {
 								 std::string directory = result.getFullPathName().toStdString();
-								 mCoreManager->changeSamplesFolder(directory);
+								 mCoreManager->changeSamplesFolder(directory,
+																   [this](bool success)
+																   {
+																	   populateFamilyCounts();
+																	   changeFamily(mCurrentFamily);
+
+																	   juce::AlertWindow::showMessageBoxAsync(
+																		   success ? juce::MessageBoxIconType::InfoIcon : juce::MessageBoxIconType::WarningIcon,
+																		   success ? "Samples folder updated" : "Reload failed",
+																		   success ? "Samples reloaded successfully." : "Failed to reload samples.", "OK");
+																   });
 
 								 juce::AlertWindow::showMessageBoxAsync(juce::MessageBoxIconType::InfoIcon, "Samples folder updated",
 																		"The samples folder has been set to:\n" + result.getFullPathName(), "OK");

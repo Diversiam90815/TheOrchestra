@@ -1,11 +1,15 @@
 /*
   ==============================================================================
 	Module			SampleCatalog
-	Description		Managing the samples
+	Description		Scans the configured samples folder on disk and builds the map
+					(InstrumentID -> Sample)
   ==============================================================================
 */
 
 #pragma once
+
+#include <filesystem>
+#include <functional>
 
 #include "JuceIncludes.h"
 
@@ -16,11 +20,15 @@
 #include "SamplerStructs.h"
 
 
+namespace fs			  = std::filesystem;
+using CatalogLoadCallback = std::function<void(bool success)>;
+
+
 class SampleCatalog
 {
 public:
-	SampleCatalog()	 = default;
-	~SampleCatalog() = default;
+	SampleCatalog() = default;
+	~SampleCatalog();
 
 	void				init();
 
@@ -28,29 +36,33 @@ public:
 
 	void				setSampleDirectory(std::string directory);
 
-	void				loadSamples(); // TODO: Make async
-	void				reloadSamples();
+	void				loadSamplesAsync(CatalogLoadCallback onComplete = nullptr);
+	void				reloadSamplesAsync(CatalogLoadCallback onComplete = nullptr);
+
+	bool				isLoading() const { return mIsLoading.load(); }
 
 private:
-	void										parseRhythmicPercussionFiles(const juce::File &instrument);
-	void										parseInstrumentSamples(const juce::File &instrumentFolder, const std::string &sectionName);
+	void										parseRhythmicPercussionFiles(const fs::path &instrument);
+	void										parseInstrumentSamples(const fs::path &instrumentFolder, const std::string &sectionName);
 
-	void										loadStandardSection(const juce::File &section, const std::string &sectionName);
-	void										loadPercussionSection(const juce::File &section);
+	void										loadStandardSection(const fs::path &section, const std::string &sectionName);
+	void										loadPercussionSection(const fs::path &section);
 
-	void										addPercussionSamples(const juce::File &file, const InstrumentID &key, Articulation articulation);
-	void										addSample(const juce::File &file, const InstrumentID &key, Articulation articulation);
+	void										addPercussionSamples(const fs::path &file, const InstrumentID &key, Articulation articulation);
+	void										addSample(const fs::path &file, const InstrumentID &key, Articulation articulation);
 
 	int											getIndexOfDynamics(const std::string &dynamicsString);
-
 	int											parseRoundRobin(const std::string &token);
 
 
 	std::string									mSampleDirectory;	// Folder of the samples folder ( /Assets/Samples)
 
 	std::map<InstrumentID, std::vector<Sample>> mInstrumentSamples; // Map of the instrument and their assigned 'Sample'
+	mutable std::mutex							mCatalogMutex;
 
 	FileManager									mFileManager;
-
 	UserConfig									mUserConfig;
+
+	std::atomic<bool>							mIsLoading{false};
+	std::thread									mLoadThread;
 };
