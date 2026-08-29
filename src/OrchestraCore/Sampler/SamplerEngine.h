@@ -32,7 +32,7 @@ public:
 
 	void				   init(InstrumentController &controller, SampleLoadCallback onCatalogReady = nullptr);
 
-	std::set<Articulation> getAvailableArticulationsForInstrument(const InstrumentID key);
+	ArticulationSet		   getAvailableArticulationsForInstrument(const InstrumentID key);
 
 	void				   addSoundsFromInstrumentToSampler(const InstrumentID key, Articulation articulationUsed);
 

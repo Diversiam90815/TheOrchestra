@@ -54,11 +54,11 @@ void SamplerEngine::init(InstrumentController &controller, SampleLoadCallback on
 }
 
 
-std::set<Articulation> SamplerEngine::getAvailableArticulationsForInstrument(const InstrumentID key)
+ArticulationSet SamplerEngine::getAvailableArticulationsForInstrument(const InstrumentID key)
 {
 	auto				   samples = mSamplesManager->getSamplesForInstrument(key);
 
-	std::set<Articulation> availableArticulations{};
+	ArticulationSet		   availableArticulations{};
 
 	for (auto &s : samples)
 	{

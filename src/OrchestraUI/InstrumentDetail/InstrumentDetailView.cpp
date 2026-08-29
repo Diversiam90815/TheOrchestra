@@ -152,7 +152,7 @@ void InstrumentDetailView::setInstrument(const InstrumentProfile &instrument)
 }
 
 
-void InstrumentDetailView::setAvailableArticulations(std::set<Articulation> available)
+void InstrumentDetailView::setAvailableArticulations(ArticulationSet available)
 {
 	mSampler.setAvailableArticulations(std::move(available));
 

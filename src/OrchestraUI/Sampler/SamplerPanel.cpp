@@ -18,7 +18,7 @@ SamplerPanel::SamplerPanel() : OrchestraPanel("SAMPLER")
 }
 
 
-void SamplerPanel::setAvailableArticulations(std::set<Articulation> available)
+void SamplerPanel::setAvailableArticulations(ArticulationSet available)
 {
 	mAvailable = std::move(available);
 
