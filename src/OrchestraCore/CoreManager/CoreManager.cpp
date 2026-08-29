@@ -14,7 +14,7 @@ constexpr double kDefaultSampleRate = 44100.0; // Used for MidiMessageCollector:
 
 
 CoreManager::CoreManager()
-	: mInstrumentController(std::make_unique<InstrumentController>()), mSampler(std::make_unique<SamplerEngine>()),
+	: mInstrumentController(std::make_unique<InstrumentController>()), mSampler(std::make_shared<SamplerEngine>()),
 	  mMidiKeyboardState(std::make_unique<juce::MidiKeyboardState>())
 {
 	for (auto &cc : mCcValues)

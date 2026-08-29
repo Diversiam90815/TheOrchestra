@@ -10,6 +10,7 @@
 #include <atomic>
 #include <functional>
 #include <vector>
+#include <memory>
 
 #include "JuceIncludes.h"
 #include "SampleCatalog.h"
@@ -23,7 +24,7 @@
 using SampleLoadCallback = std::function<void(bool)>;
 
 
-class SamplerEngine
+class SamplerEngine : public std::enable_shared_from_this<SamplerEngine>
 {
 public:
 	static constexpr int kNumVoices = 64;
@@ -39,7 +40,7 @@ public:
 
 	void				   loadInstrumentAsync(const InstrumentID key, Articulation articulationUsed, SampleLoadCallback onComplete);
 
-	bool				   isLoading() const { return mLoadPool.getNumJobs() > 0; }
+	bool				   isLoading() const { return mIsBuilding.load(); }
 
 	void				   process(juce::AudioBuffer<float> &buffer, juce::MidiBuffer &midiMessages);
 	void				   prepare(double sampleRate, int samplesPerBlock);
@@ -52,33 +53,34 @@ public:
 	bool				   reloadSamples(std::string samplesDirectory, SampleLoadCallback onComplete = nullptr);
 
 private:
-	std::map<int, std::map<int, std::vector<std::filesystem::path>>> createDynamicMap(std::vector<Sample> &samples);
-	std::vector<int>												 createNoteList(std::map<int, std::map<int, std::vector<std::filesystem::path>>> &noteDynamicMap);
-	std::map<int, std::pair<int, int>>		 createNoteRangeMap(std::map<int, std::map<int, std::vector<std::filesystem::path>>> &noteDynamicMap, const int key);
+	void												runBuildOnBackgroundThread(InstrumentID key, Articulation articulationUsed, int generation, SampleLoadCallback onComplete);
+	void												installBuildResult(std::vector<juce::SynthesiserSound::Ptr> sounds, int generation, SampleLoadCallback onComplete);
 
-	std::vector<Sample>						 filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed);
+	std::map<int, std::map<int, std::vector<fs::path>>> createDynamicMap(std::vector<Sample> &samples);
+	std::vector<int>									createNoteList(std::map<int, std::map<int, std::vector<fs::path>>> &noteDynamicMap);
+	std::map<int, std::pair<int, int>>					createNoteRangeMap(std::map<int, std::map<int, std::vector<fs::path>>> &noteDynamicMap, const int key);
 
-	std::pair<int, int>						 getRangesOfInstrument(const InstrumentID key);
+	std::vector<Sample>									filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed);
 
-	std::vector<juce::SynthesiserSound::Ptr> buildSounds(const InstrumentID key, Articulation articulationUsed);
-	void									 installSounds(std::vector<juce::SynthesiserSound::Ptr> sounds);
+	std::pair<int, int>									getRangesOfInstrument(const InstrumentID key);
+
+	std::vector<juce::SynthesiserSound::Ptr>			buildSounds(const InstrumentID key, Articulation articulationUsed);
+	void												installSounds(std::vector<juce::SynthesiserSound::Ptr> sounds);
 
 
-	juce::Synthesiser						 mSampler;
+	juce::Synthesiser									mSampler;
 
-	ControllerState							 mControllerState;
+	ControllerState										mControllerState;
 
-	juce::AudioFormatManager				 mFormatManager;
+	juce::AudioFormatManager							mFormatManager;
 
-	std::unique_ptr<SampleCatalog>			 mSamplesManager;
+	std::unique_ptr<SampleCatalog>						mSamplesManager;
 
-	std::atomic<bool>						 mSamplesAreReady	   = false;
+	std::atomic<bool>									mSamplesAreReady	  = false;
 
-	InstrumentController					*mInstrumentController = nullptr;
+	InstrumentController							   *mInstrumentController = nullptr;
 
-	juce::ThreadPool						 mLoadPool{1};
-
-	std::atomic<int>						 mLoadGeneration{0};
-
-	JUCE_DECLARE_WEAK_REFERENCEABLE(SamplerEngine)
+	std::thread											mLoadThread;		// Background sample-build worker
+	std::atomic<bool>									mIsBuilding{false}; // True while buildSounds() is running
+	std::atomic<int>									mLoadGeneration{0}; // Guards against installing a stale result if a newer load supersedes this one
 };

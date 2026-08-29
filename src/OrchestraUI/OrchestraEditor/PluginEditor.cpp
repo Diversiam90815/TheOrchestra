@@ -1,4 +1,5 @@
 /*
+/*
   ==============================================================================
 	Module			PluginEditor
 	Description		Main UI - view router between the family switcher and the instrument detail view
@@ -95,6 +96,30 @@ void OrchestraEditor::populateFamilyCounts()
 }
 
 
+void OrchestraEditor::handleSamplesFolderChosen(const juce::File &selectedFolder)
+{
+	if (!selectedFolder.exists())
+		return;
+
+	mDetailView.setCatalogLoading(true);
+
+	std::string directory = selectedFolder.getFullPathName().toStdString();
+	mCoreManager->changeSamplesFolder(directory, [this](bool success) { handleSamplesReloadComplete(success); });
+}
+
+
+void OrchestraEditor::handleSamplesReloadComplete(bool success)
+{
+	mDetailView.setCatalogLoading(false);
+
+	populateFamilyCounts();
+	changeFamily(mCurrentFamily);
+
+	juce::AlertWindow::showMessageBoxAsync(success ? juce::MessageBoxIconType::InfoIcon : juce::MessageBoxIconType::WarningIcon,
+										   success ? "Samples folder updated" : "Reload failed", success ? "Samples reloaded successfully." : "Failed to reload samples.", "OK");
+}
+
+
 void OrchestraEditor::changeFamily(Family family)
 {
 	mCurrentFamily = family;
@@ -152,28 +177,7 @@ void OrchestraEditor::onSettingsClicked()
 	auto chooser = std::make_shared<juce::FileChooser>("Select Samples Folder", juce::File(), "*");
 
 	chooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectDirectories,
-						 [this, chooser](const juce::FileChooser &fc)
-						 {
-							 auto result = fc.getResult();
-							 if (result.exists())
-							 {
-								 std::string directory = result.getFullPathName().toStdString();
-								 mCoreManager->changeSamplesFolder(directory,
-																   [this](bool success)
-																   {
-																	   populateFamilyCounts();
-																	   changeFamily(mCurrentFamily);
-
-																	   juce::AlertWindow::showMessageBoxAsync(
-																		   success ? juce::MessageBoxIconType::InfoIcon : juce::MessageBoxIconType::WarningIcon,
-																		   success ? "Samples folder updated" : "Reload failed",
-																		   success ? "Samples reloaded successfully." : "Failed to reload samples.", "OK");
-																   });
-
-								 juce::AlertWindow::showMessageBoxAsync(juce::MessageBoxIconType::InfoIcon, "Samples folder updated",
-																		"The samples folder has been set to:\n" + result.getFullPathName(), "OK");
-							 }
-						 });
+						 [this, chooser](const juce::FileChooser &fc) { handleSamplesFolderChosen(fc.getResult()); });
 }
 
 

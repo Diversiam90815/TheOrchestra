@@ -81,7 +81,7 @@ TEST_F(OrchestraSoundTest, ArticulationSetAndGet)
 
 TEST_F(OrchestraSoundTest, AddDynamicLayerWithEmptySamples)
 {
-	juce::OwnedArray<juce::AudioBuffer<float>> emptyBuffers;
+	std::vector<std::unique_ptr<juce::AudioBuffer<float>>> rrBuffers;
 
 	// Add empty dynamic layer
 	EXPECT_NO_THROW(mSound->addDynamicLayer(Dynamics::mezzoForte, std::move(emptyBuffers)));

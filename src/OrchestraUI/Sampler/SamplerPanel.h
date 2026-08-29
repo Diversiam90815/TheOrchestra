@@ -32,6 +32,7 @@ public:
 	void setArticulationChangedCallback(ArticulationChangedCallback callback);
 
 	void setLoadResult(Articulation articulation, bool ready);
+	void setCatalogLoading(bool loading);
 
 	void paint(juce::Graphics &g) override;
 	void resized() override;
@@ -50,8 +51,9 @@ private:
 	juce::Label									   mStatusLabel;
 
 	std::optional<Articulation>					   mLoadedArticulation;
-	bool										   mSamplesReady = false;
-	bool										   mLoading		 = false;
+	bool										   mSamplesReady   = false;
+	bool										   mLoading		   = false;
+	bool										   mCatalogLoading = false;
 
 	ArticulationChangedCallback					   mCallback;
 

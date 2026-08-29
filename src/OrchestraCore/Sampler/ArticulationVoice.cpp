@@ -46,8 +46,8 @@ void ArticulationVoice::startNote(int midiNoteNumber, float velocity, juce::Synt
 		{
 			const int rrIndex = pickRoundRobin(*layer);
 
-			if (rrIndex >= 0 && rrIndex < layer->roundRobinSamples.size())
-				chosen = layer->roundRobinSamples[rrIndex];
+			if (rrIndex >= 0 && rrIndex < static_cast<int>(layer->roundRobinSamples.size()))
+				chosen = layer->roundRobinSamples[static_cast<size_t>(rrIndex)].get();
 		}
 
 		mLayerBuffers[static_cast<size_t>(d)] = chosen;

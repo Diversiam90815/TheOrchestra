@@ -11,7 +11,8 @@
 
 SamplerEngine::~SamplerEngine()
 {
-	mLoadPool.removeAllJobs(true, 5000);
+	if (mLoadThread.joinable())
+		mLoadThread.join();
 
 	mSampler.allNotesOff(0, false);
 	mSampler.clearSounds();
@@ -26,7 +27,7 @@ void SamplerEngine::init(InstrumentController &controller, SampleLoadCallback on
 
 	mSamplesManager->init();
 
-	juce::WeakReference<SamplerEngine> weakThis(this);
+	std::weak_ptr<SamplerEngine> weakThis = weak_from_this();
 
 	mSamplesManager->loadSamplesAsync(
 		[weakThis, onCatalogReady](bool success)
@@ -34,7 +35,8 @@ void SamplerEngine::init(InstrumentController &controller, SampleLoadCallback on
 			juce::MessageManager::callAsync(
 				[weakThis, success, onCatalogReady]()
 				{
-					if (weakThis == nullptr)
+					auto strongThis = weakThis.lock();
+					if (!strongThis)
 						return;
 
 					if (onCatalogReady)
@@ -104,7 +106,7 @@ std::vector<juce::SynthesiserSound::Ptr> SamplerEngine::buildSounds(const Instru
 			const int								   dynValue	  = dynPair.first;
 			auto									  &fileVector = dynPair.second;
 
-			juce::OwnedArray<juce::AudioBuffer<float>> rrBuffers;
+			std::vector<std::unique_ptr<juce::AudioBuffer<float>>> rrBuffers;
 
 			for (auto &file : fileVector)
 			{
@@ -112,9 +114,9 @@ std::vector<juce::SynthesiserSound::Ptr> SamplerEngine::buildSounds(const Instru
 
 				if (reader)
 				{
-					auto *newBuffer = new juce::AudioBuffer<float>((int)reader->numChannels, (int)reader->lengthInSamples);
-					reader->read(newBuffer, 0, (int)reader->lengthInSamples, 0, true, true);
-					rrBuffers.add(newBuffer);
+					auto newBuffer = std::make_unique<juce::AudioBuffer<float>>((int)reader->numChannels, (int)reader->lengthInSamples);
+					reader->read(newBuffer.get(), 0, (int)reader->lengthInSamples, 0, true, true);
+					rrBuffers.push_back(std::move(newBuffer));
 				}
 				else
 				{
@@ -159,32 +161,12 @@ void SamplerEngine::loadInstrumentAsync(const InstrumentID key, Articulation art
 
 	reset();
 
-	juce::WeakReference<SamplerEngine> weakThis(this);
+	if (mLoadThread.joinable())
+		mLoadThread.join(); // Previous build (if any) must be fully done before starting a new one.
 
-	mLoadPool.addJob(
-		[weakThis, key, articulationUsed, generation, onComplete]() mutable
-		{
-			if (weakThis == nullptr)
-				return;
+	mIsBuilding.store(true);
 
-			auto sounds = weakThis->buildSounds(key, articulationUsed);
-
-			juce::MessageManager::callAsync(
-				[weakThis, sounds = std::move(sounds), generation, onComplete]() mutable
-				{
-					if (weakThis == nullptr)
-						return;
-
-					// A newer request has already been issued; this result is stale.
-					if (generation != weakThis->mLoadGeneration.load())
-						return;
-
-					weakThis->installSounds(std::move(sounds));
-
-					if (onComplete)
-						onComplete(weakThis->getSamplesAreReady());
-				});
-		});
+	mLoadThread = std::thread([this, key, articulationUsed, generation, onComplete]() { runBuildOnBackgroundThread(key, articulationUsed, generation, onComplete); });
 }
 
 
@@ -235,7 +217,7 @@ bool SamplerEngine::reloadSamples(std::string samplesDirectory, SampleLoadCallba
 	// Path to samples have been reset, so we will trigger a reload
 	mSamplesManager->setSampleDirectory(samplesDirectory);
 
-	juce::WeakReference<SamplerEngine> weakThis(this);
+	std::weak_ptr<SamplerEngine> weakThis = weak_from_this();
 
 	mSamplesManager->reloadSamplesAsync(
 		[weakThis, onComplete](bool success)
@@ -243,7 +225,8 @@ bool SamplerEngine::reloadSamples(std::string samplesDirectory, SampleLoadCallba
 			juce::MessageManager::callAsync(
 				[weakThis, success, onComplete]()
 				{
-					if (weakThis == nullptr)
+					auto strongThis = weakThis.lock();
+					if (!strongThis)
 						return;
 
 					if (onComplete)
@@ -252,6 +235,37 @@ bool SamplerEngine::reloadSamples(std::string samplesDirectory, SampleLoadCallba
 		});
 
 	return true;
+}
+
+
+void SamplerEngine::runBuildOnBackgroundThread(InstrumentID key, Articulation articulationUsed, int generation, SampleLoadCallback onComplete)
+{
+	std::weak_ptr<SamplerEngine> weakThis = weak_from_this();
+
+	auto						 sounds	  = buildSounds(key, articulationUsed);
+
+	mIsBuilding.store(false);
+
+	// mSampler (juce::Synthesiser) may only be touched on the message thread
+	juce::MessageManager::callAsync(
+		[weakThis, sounds = std::move(sounds), generation, onComplete]() mutable
+		{
+			if (auto strongThis = weakThis.lock())
+				strongThis->installBuildResult(std::move(sounds), generation, onComplete);
+		});
+}
+
+
+void SamplerEngine::installBuildResult(std::vector<juce::SynthesiserSound::Ptr> sounds, int generation, SampleLoadCallback onComplete)
+{
+	// A newer request has already been issued; this result is stale.
+	if (generation != mLoadGeneration.load())
+		return;
+
+	installSounds(std::move(sounds));
+
+	if (onComplete)
+		onComplete(getSamplesAreReady());
 }
 
 

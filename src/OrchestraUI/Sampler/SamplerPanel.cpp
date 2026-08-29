@@ -100,8 +100,26 @@ void SamplerPanel::setLoadResult(Articulation articulation, bool ready)
 }
 
 
+void SamplerPanel::setCatalogLoading(bool loading)
+{
+	mCatalogLoading = loading;
+
+	for (auto &button : mButtons)
+		button->setEnabled(!loading);
+
+	updateStatus();
+	repaint();
+}
+
+
 void SamplerPanel::updateStatus()
 {
+	if (mCatalogLoading)
+	{
+		mStatusLabel.setText("Rescanning samples folder...", juce::dontSendNotification);
+		return;
+	}
+
 	juce::String text;
 
 	if (mAvailable.empty())
