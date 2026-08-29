@@ -1,9 +1,11 @@
 /*
   ==============================================================================
 	Module			SampleCatalog
-	Description		Managing the samples
+	Description		Scans the configured samples folder on disk and builds the map
+					(InstrumentID -> Sample)
   ==============================================================================
 */
+
 
 #include <filesystem>
 
@@ -12,54 +14,75 @@
 #include "Helper.h"
 
 
+SampleCatalog::~SampleCatalog()
+{
+	if (mLoadThread.joinable())
+		mLoadThread.join();
+}
+
+
 void SampleCatalog::init()
 {
 	mUserConfig.init();
 	mSampleDirectory = mUserConfig.getSavedSamplesFolder();
 
-	// If the sample directory is empty, set it to a default value for now (TODO: Give user a message)
+	// If the sample directory is empty, set it to a default value
 	if (mSampleDirectory.empty())
 	{
 		mSampleDirectory = mFileManager.getDefaultSamplesFolderPath();
 		setSampleDirectory(mSampleDirectory);
 	}
-
-	loadSamples();
 }
 
 
-void SampleCatalog::loadSamples()
+void SampleCatalog::loadSamplesAsync(CatalogLoadCallback onComplete)
 {
-	juce::File sampleDirectoryFile = (juce::File)mSampleDirectory;
+	if (mLoadThread.joinable())
+		mLoadThread.join();
 
-	for (const auto &section : sampleDirectoryFile.findChildFiles(juce::File::findDirectories, false))
+	mIsLoading.store(true);
+
+	mLoadThread = std::thread(
+		[this, onComplete]()
+		{
+			for (const auto &section : FileManager::findChildDirectories(mSampleDirectory))
+			{
+				std::string sectionString = section.filename().string();
+
+				if (sectionString == "Percussion")
+					loadPercussionSection(section);
+				else
+					loadStandardSection(section, sectionString);
+			}
+
+			mIsLoading.store(false);
+
+			if (onComplete)
+				onComplete(true);
+		});
+}
+
+
+void SampleCatalog::reloadSamplesAsync(CatalogLoadCallback onComplete)
+{
 	{
-		std::string sectionStr = section.getFileName().toStdString();
-
-		if (sectionStr == "Percussion")
-			loadPercussionSection(section);
-		else
-			loadStandardSection(section, sectionStr);
+		std::scoped_lock lock(mCatalogMutex);
+		mInstrumentSamples.clear();
 	}
+
+	loadSamplesAsync(onComplete);
 }
 
 
-void SampleCatalog::reloadSamples()
+void SampleCatalog::parseRhythmicPercussionFiles(const fs::path &instrument)
 {
-	mInstrumentSamples.clear();
-	loadSamples();
-}
-
-
-void SampleCatalog::parseRhythmicPercussionFiles(const juce::File &instrument)
-{
-	std::string instrumentName	   = instrument.getFileName().toStdString();
+	std::string instrumentName	   = instrument.filename().string();
 	std::string tmpPercSectionName = "Percussion";
 	int			instrumentKey	   = getInstrumentKey(tmpPercSectionName, instrumentName);
 
-	for (const auto &articulationFolder : instrument.findChildFiles(juce::File::findDirectories, false))
+	for (const auto &articulationFolder : FileManager::findChildDirectories(instrument))
 	{
-		std::string	 articulationStr = articulationFolder.getFileName().toStdString();
+		std::string	 articulationStr = articulationFolder.filename().string();
 		Articulation articulationValue{};
 
 		const auto	 articulationIt = articulationMap.find(articulationStr);
@@ -72,22 +95,20 @@ void SampleCatalog::parseRhythmicPercussionFiles(const juce::File &instrument)
 
 		articulationValue = articulationIt->second;
 
-		for (const auto &file : articulationFolder.findChildFiles(juce::File::findFiles, false))
-		{
+		for (const auto &file : FileManager::findChildFiles(articulationFolder))
 			addPercussionSamples(file, instrumentKey, articulationValue);
-		}
 	}
 }
 
 
-void SampleCatalog::parseInstrumentSamples(const juce::File &instrumentFolder, const std::string &sectionName)
+void SampleCatalog::parseInstrumentSamples(const fs::path &instrumentFolder, const std::string &sectionName)
 {
-	std::string instrumentName = instrumentFolder.getFileName().toStdString();
+	std::string instrumentName = instrumentFolder.filename().string();
 	int			instrumentKey  = getInstrumentKey(sectionName, instrumentName);
 
-	for (const auto &articulationFolder : instrumentFolder.findChildFiles(juce::File::findDirectories, false))
+	for (const auto &articulationFolder : FileManager::findChildDirectories(instrumentFolder))
 	{
-		std::string	 articulationStr = articulationFolder.getFileName().toStdString();
+		std::string	 articulationStr = articulationFolder.filename().string();
 		Articulation articulationValue{};
 
 		const auto	 articulationIt = articulationMap.find(articulationStr);
@@ -100,60 +121,58 @@ void SampleCatalog::parseInstrumentSamples(const juce::File &instrumentFolder, c
 
 		articulationValue = articulationIt->second;
 
-		for (const auto &file : articulationFolder.findChildFiles(juce::File::findFiles, false))
-		{
+		for (const auto &file : FileManager::findChildFiles(articulationFolder))
 			addSample(file, instrumentKey, articulationValue);
-		}
 	}
 }
 
 
-void SampleCatalog::loadStandardSection(const juce::File &section, const std::string &sectionName)
+void SampleCatalog::loadStandardSection(const fs::path &section, const std::string &sectionName)
 {
-	for (const auto &instrument : section.findChildFiles(juce::File::findDirectories, false))
+	for (const auto &instrument : FileManager::findChildDirectories(section))
 		parseInstrumentSamples(instrument, sectionName);
 }
 
 
-void SampleCatalog::loadPercussionSection(const juce::File &section)
+void SampleCatalog::loadPercussionSection(const fs::path &section)
 {
-	for (const auto &percussionType : section.findChildFiles(juce::File::findDirectories, false))
+	for (const auto &percussionType : FileManager::findChildDirectories(section))
 	{
-		std::string percussionTypeStr = percussionType.getFileName().toStdString();
+		std::string percussionTypeStr = percussionType.filename().string();
 
 		if (percussionTypeStr == "Rhythmic")
 		{
-			for (const auto &instrument : percussionType.findChildFiles(juce::File::findDirectories, false))
+			for (const auto &instrument : FileManager::findChildDirectories(percussionType))
 				parseRhythmicPercussionFiles(instrument);
 		}
 		else if (percussionTypeStr == "Melodic")
 		{
-			for (const auto &instrument : percussionType.findChildFiles(juce::File::findDirectories, false))
+			for (const auto &instrument : FileManager::findChildDirectories(percussionType))
 				parseInstrumentSamples(instrument, "Percussion");
 		}
 	}
 }
 
 
-void SampleCatalog::addPercussionSamples(const juce::File &file, const InstrumentID &key, Articulation articulation)
+void SampleCatalog::addPercussionSamples(const fs::path &file, const InstrumentID &key, Articulation articulation)
 {
-	juce::String	  filename = file.getFileNameWithoutExtension();
-	juce::StringArray parts	   = juce::StringArray::fromTokens(filename, "_", "");
+	std::string				 filename = file.stem().string();
+	std::vector<std::string> parts	  = FileManager::splitTokens(filename, '_');
 
 	if (parts.size() < 3)
 	{
-		LOG_WARNING("Percussion sample has wrong format. Filename is {}", filename.toStdString().c_str());
+		LOG_WARNING("Percussion sample has wrong format. Filename is {}", filename.c_str());
 		return;
 	}
 
-	std::string note			 = parts[0].toStdString();
-	std::string dynamicString	 = parts[1].toStdString();
-	std::string roundRobinString = parts[2].toStdString();
+	std::string note			 = parts[0];
+	std::string dynamicString	 = parts[1];
+	std::string roundRobinString = parts[2];
 
 	const int	roundRobin		 = parseRoundRobin(roundRobinString);
 	int			dynamic			 = getIndexOfDynamics(dynamicString);
 
-	std::string instrumentName	 = file.getParentDirectory().getParentDirectory().getFileName().toStdString();
+	std::string instrumentName	 = file.parent_path().parent_path().filename().string();
 
 	// For percussion, we'll determine the MIDI note based on a mapping
 	int			midiNote		 = turnNotenameIntoMidinumber(note);
@@ -167,39 +186,45 @@ void SampleCatalog::addPercussionSamples(const juce::File &file, const Instrumen
 
 	// Set percussion element name if we have more than 3 parts in the filename
 	if (parts.size() > 3)
-		sampleInfo.percussionElementName = parts[3].toStdString();
+		sampleInfo.percussionElementName = parts[3];
 	else
 		sampleInfo.percussionElementName = instrumentName;
 
-	mInstrumentSamples[key].emplace_back(sampleInfo);
+	{
+		std::scoped_lock lock(mCatalogMutex);
+		mInstrumentSamples[key].emplace_back(sampleInfo);
+	}
 
 	LOG_INFO("Added percussion sample for instrument {} (Note = {}, MIDI = {}, Element = {})", instrumentName, note, midiNote, sampleInfo.percussionElementName);
 }
 
 
-void SampleCatalog::addSample(const juce::File &file, const InstrumentID &key, Articulation articulation)
+void SampleCatalog::addSample(const fs::path &file, const InstrumentID &key, Articulation articulation)
 {
-	juce::String	  filename = file.getFileNameWithoutExtension();
-	juce::StringArray parts	   = juce::StringArray::fromTokens(filename, "_", "");
+	std::string				 filename = file.stem().string();
+	std::vector<std::string> parts	  = FileManager::splitTokens(filename, '_');
 
 	if (parts.size() < 3)
 	{
-		LOG_WARNING("Instrument's sample has wrong format. Filename is {}", filename.toStdString().c_str());
+		LOG_WARNING("Instrument's sample has wrong format. Filename is {}", filename.c_str());
 		return; // Invalid file name format
 	}
 
-	std::string note			 = parts[0].toStdString();
-	std::string dynamicString	 = parts[1].toStdString();
-	std::string roundRobinString = parts[2].toStdString();
+	std::string note			 = parts[0];
+	std::string dynamicString	 = parts[1];
+	std::string roundRobinString = parts[2];
 
 	const int	roundRobin		 = parseRoundRobin(roundRobinString);
 	int			dynamic			 = getIndexOfDynamics(dynamicString);
 
-	std::string instrumentName	 = file.getParentDirectory().getParentDirectory().getFileName().toStdString();
+	std::string instrumentName	 = file.parent_path().parent_path().filename().string();
 
 	Sample		sampleInfo(instrumentName, note, roundRobin, static_cast<Dynamics>(dynamic), articulation, file);
 
-	mInstrumentSamples[key].emplace_back(sampleInfo);
+	{
+		std::scoped_lock lock(mCatalogMutex);
+		mInstrumentSamples[key].emplace_back(sampleInfo);
+	}
 
 	LOG_DEBUG("Added sample for instrument {} (Dynamic = {}, Note = {})", instrumentName, dynamicString, note);
 }

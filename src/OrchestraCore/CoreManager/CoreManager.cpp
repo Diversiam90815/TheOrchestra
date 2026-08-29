@@ -141,10 +141,10 @@ bool CoreManager::isLoadingSamples() const
 }
 
 
-void CoreManager::changeSamplesFolder(const std::string &samplesFolder)
+void CoreManager::changeSamplesFolder(const std::string &samplesFolder, SampleLoadCallback onComplete)
 {
 	if (mSampler)
-		mSampler->reloadSamples(samplesFolder);
+		mSampler->reloadSamples(samplesFolder, onComplete);
 }
 
 

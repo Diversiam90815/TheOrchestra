@@ -10,16 +10,14 @@
 
 std::string FileManager::getDefaultSamplesFolderPath()
 {
-	const auto toPath = [](const juce::File &file) { return std::filesystem::path(file.getFullPathName().toStdString()); };
+	const auto			  toPath = [](const juce::File &file) { return std::filesystem::path(file.getFullPathName().toStdString()); };
 
-	std::filesystem::path shared = toPath(juce::File::getSpecialLocation(juce::File::commonApplicationDataDirectory))
-									/ Files::ProjectName / AssetsFolderName / SampleFolderName;
+	fs::path shared = toPath(juce::File::getSpecialLocation(juce::File::commonApplicationDataDirectory)) / Files::ProjectName / AssetsFolderName / SampleFolderName;
 
 	if (std::filesystem::is_directory(shared))
 		return shared.string();
 
-	std::filesystem::path perUser = toPath(juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory))
-									 / Files::ProjectName / AssetsFolderName / SampleFolderName;
+	fs::path perUser = toPath(juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory)) / Files::ProjectName / AssetsFolderName / SampleFolderName;
 
 	return perUser.string();
 }
@@ -59,7 +57,7 @@ juce::File FileManager::getInstrumentImage(TypeOfImage type, InstrumentID instru
 }
 
 
-std::filesystem::path FileManager::getProjectsAppDataPath()
+fs::path FileManager::getProjectsAppDataPath()
 {
 	const auto appDataDir = juce::File::getSpecialLocation(juce::File::userApplicationDataDirectory);
 
@@ -68,50 +66,46 @@ std::filesystem::path FileManager::getProjectsAppDataPath()
 		throw std::runtime_error("Could not resolve the user application data directory");
 	}
 
-	std::filesystem::path appDataPath(appDataDir.getFullPathName().toStdString());
+	fs::path	appDataPath(appDataDir.getFullPathName().toStdString());
 
 	// Test binaries get their own AppData namespace so running them never reads or overwrites a real user's saved settings.
-	auto				  exeName			 = juce::File::getSpecialLocation(juce::File::currentExecutableFile).getFileNameWithoutExtension();
-	const char			 *projectName		 = exeName.containsIgnoreCase("Tests") ? Files::TestProjectName : Files::ProjectName;
+	auto		exeName			   = juce::File::getSpecialLocation(juce::File::currentExecutableFile).getFileNameWithoutExtension();
+	const char *projectName		   = exeName.containsIgnoreCase("Tests") ? Files::TestProjectName : Files::ProjectName;
 
-	std::filesystem::path projectAppDataPath = appDataPath / projectName;
+	fs::path	projectAppDataPath = appDataPath / projectName;
 
-	if (!std::filesystem::exists(projectAppDataPath))
-	{
-		std::filesystem::create_directories(projectAppDataPath);
-	}
+	if (!fs::exists(projectAppDataPath))
+		fs::create_directories(projectAppDataPath);
 
 	return projectAppDataPath;
 }
 
 
-std::filesystem::path FileManager::getLoggingPath()
+fs::path FileManager::getLoggingPath()
 {
-	std::filesystem::path projectAppDataPath = getProjectsAppDataPath();
+	fs::path projectAppDataPath = getProjectsAppDataPath();
 
-	std::filesystem::path logFolder			 = projectAppDataPath / Files::LogFolderName;
+	fs::path logFolder			= projectAppDataPath / Files::LogFolderName;
 
-	if (!std::filesystem::exists(logFolder))
-	{
-		std::filesystem::create_directories(logFolder);
-	}
+	if (!fs::exists(logFolder))
+		fs::create_directories(logFolder);
 
 	return logFolder;
 }
 
 
-std::filesystem::path FileManager::getExecutableDirectory()
+fs::path FileManager::getExecutableDirectory()
 {
 	auto exePath = juce::File::getSpecialLocation(juce::File::currentExecutableFile);
-	return std::filesystem::path(exePath.getParentDirectory().getFullPathName().toStdString());
+	return fs::path(exePath.getParentDirectory().getFullPathName().toStdString());
 }
 
 
-std::vector<std::filesystem::path> FileManager::getAssetsFolderCandidates()
+std::vector<fs::path> FileManager::getAssetsFolderCandidates()
 {
-	const auto						   toPath = [](const juce::File &file) { return std::filesystem::path(file.getFullPathName().toStdString()); };
+	const auto			  toPath = [](const juce::File &file) { return fs::path(file.getFullPathName().toStdString()); };
 
-	std::vector<std::filesystem::path> candidates;
+	std::vector<fs::path> candidates;
 	candidates.reserve(3);
 
 	// The standalone app and the test runner: copied next to the binary at build time.
@@ -125,7 +119,7 @@ std::vector<std::filesystem::path> FileManager::getAssetsFolderCandidates()
 }
 
 
-std::filesystem::path FileManager::getAssetsFolder()
+fs::path FileManager::getAssetsFolder()
 {
 	for (const auto &candidate : getAssetsFolderCandidates())
 	{
@@ -139,16 +133,14 @@ std::filesystem::path FileManager::getAssetsFolder()
 }
 
 
-std::filesystem::path FileManager::getConfigFilePath()
+fs::path FileManager::getConfigFilePath()
 {
-	std::filesystem::path projectAppDataPath = getProjectsAppDataPath();
+	fs::path projectAppDataPath = getProjectsAppDataPath();
 
-	std::filesystem::path configFolder		 = projectAppDataPath / Files::ConfigFolderName;
+	fs::path configFolder		= projectAppDataPath / Files::ConfigFolderName;
 
-	if (!std::filesystem::exists(configFolder))
-	{
-		std::filesystem::create_directories(configFolder);
-	}
+	if (!fs::exists(configFolder))
+		fs::create_directories(configFolder);
 
 	return configFolder;
 }
@@ -156,15 +148,15 @@ std::filesystem::path FileManager::getConfigFilePath()
 
 std::vector<std::string> FileManager::getInstrumentImages(const std::string &family, const std::string &instrumentName)
 {
-	std::filesystem::path	 projectDir = getAssetsFolder();
-	std::filesystem::path	 imagesDir	= projectDir / ImageFolderName / family / instrumentName;
+	fs::path				 projectDir = getAssetsFolder();
+	fs::path				 imagesDir	= projectDir / ImageFolderName / family / instrumentName;
 
 	std::vector<std::string> images;
 	images.reserve(2); // currently just the instrument photo
 
-	if (std::filesystem::exists(imagesDir) && std::filesystem::is_directory(imagesDir))
+	if (fs::exists(imagesDir) && fs::is_directory(imagesDir))
 	{
-		for (const auto &entry : std::filesystem::directory_iterator(imagesDir))
+		for (const auto &entry : fs::directory_iterator(imagesDir))
 		{
 			if (entry.is_regular_file())
 			{
@@ -179,4 +171,61 @@ std::vector<std::string> FileManager::getInstrumentImages(const std::string &fam
 	}
 
 	return images;
+}
+
+
+std::vector<fs::path> FileManager::findChildDirectories(const fs::path &directory)
+{
+	std::vector<fs::path> result;
+
+	std::error_code		  ec;
+
+	if (!fs::exists(directory, ec) || !fs::is_directory(directory, ec))
+		return result;
+
+	for (const auto &entry : fs::directory_iterator(directory, ec))
+		result.push_back(entry.path());
+
+	return result;
+}
+
+
+std::vector<fs::path> FileManager::findChildFiles(const fs::path &directory)
+{
+	std::vector<fs::path> result;
+
+	std::error_code		  ec;
+	if (!fs::exists(directory, ec) || !fs::is_directory(directory, ec))
+		return result;
+
+	for (const auto &entry : fs::directory_iterator(directory, ec))
+	{
+		if (entry.is_regular_file())
+			result.push_back(entry.path());
+	}
+
+	return result;
+}
+
+
+std::vector<std::string> FileManager::splitTokens(const std::string &text, char delimiter)
+{
+	std::vector<std::string> tokens;
+	std::string				 current;
+
+	for (char c : text)
+	{
+		if (c == delimiter)
+		{
+			tokens.push_back(current);
+			current.clear();
+		}
+		else
+		{
+			current += c;
+		}
+	}
+	tokens.push_back(current);
+
+	return tokens;
 }
