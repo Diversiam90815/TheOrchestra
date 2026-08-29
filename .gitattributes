@@ -48,6 +48,3 @@
 *.exe    binary
 *.lib    binary
 *.pdb    binary
-
-# Keep the sample pack out of language statistics and diffs.
-Assets/Samples/** linguist-vendored

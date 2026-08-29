@@ -18,28 +18,25 @@
     {
       "name": "dev",
       "inherits": "base",
-      "displayName": "Developer build (Debug, samples bundled)",
+      "displayName": "Developer build (Debug)",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "BUNDLE_SAMPLES": "ON"
+        "CMAKE_BUILD_TYPE": "Debug"
       }
     },
     {
       "name": "release",
       "inherits": "base",
-      "displayName": "Release build (samples bundled)",
+      "displayName": "Release build",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "BUNDLE_SAMPLES": "ON"
+        "CMAKE_BUILD_TYPE": "Release"
       }
     },
     {
       "name": "ci",
       "inherits": "base",
-      "displayName": "CI build (no sample pack)",
+      "displayName": "CI build",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-        "BUNDLE_SAMPLES": "OFF"
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo"
       }
     },
     {
@@ -48,7 +45,6 @@
       "displayName": "CI static analysis",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "BUNDLE_SAMPLES": "OFF",
         "ENABLE_CPPCHECK": "ON"
       }
     }
