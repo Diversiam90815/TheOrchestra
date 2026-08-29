@@ -13,6 +13,9 @@
 # Fetched dependencies (CPM cache)
 [Ll]ibs/
 
+# Sample pack - fetched into AppData by scripts/fetch_samples.py
+/Assets/Samples/
+
 # CMake
 CMakeCache.txt
 CMakeFiles/

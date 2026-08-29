@@ -16,7 +16,6 @@ option(ENABLE_FORMAT    "Run clang-format on sources during build"          OFF)
 option(ENABLE_CPPCHECK  "Run cppcheck static analysis on C++ targets"       OFF)
 option(ENABLE_DOXYGEN   "Add doxygen documentation target"                  OFF)
 option(ENABLE_MEMCHECK  "Add memcheck target"                               OFF)
-option(BUNDLE_SAMPLES   "Copy the sample pack next to the built binaries"   ON)
 option(ENABLE_ASIO      "Build with ASIO support (requires the ASIO SDK)"   OFF)
 
 set(LIB_DIR "${CMAKE_SOURCE_DIR}/libs" CACHE PATH "Directory for external dependencies" FORCE)
