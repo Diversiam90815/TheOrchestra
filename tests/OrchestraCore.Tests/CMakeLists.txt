@@ -4,10 +4,10 @@ include(Assets)
 set(TARGET_NAME OrchestraCore.Tests)
 
 set(SamplerTest_Files
-    SamplerTest/SamplerTest.cpp
-    SamplerTest/SampleManagementTest.cpp
-    SamplerTest/OrchestraSoundTest.cpp
-    SamplerTest/OrchestraVoiceTest.cpp
+    SamplerTest/SamplerEngineTest.cpp
+    SamplerTest/SampleCatalogTest.cpp
+    SamplerTest/SampleSoundTest.cpp
+    SamplerTest/ArticulationVoiceTest.cpp
     SamplerTest/SamplerIntegrationTest.cpp
     SamplerTest/VoiceBehaviourTest.cpp
 )

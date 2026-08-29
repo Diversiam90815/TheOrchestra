@@ -23,16 +23,16 @@ namespace SamplerTests
 namespace
 {
 
-constexpr double		  kSampleRate	= 44100.0;
-constexpr int			  kBufferLength = 44100;
-constexpr int			  kRootNote		= 72;
-constexpr int			  kRangeLow		= 60;
-constexpr int			  kRangeHigh	= 84;
+constexpr double kSampleRate   = 44100.0;
+constexpr int	 kBufferLength = 44100;
+constexpr int	 kRootNote	   = 72;
+constexpr int	 kRangeLow	   = 60;
+constexpr int	 kRangeHigh	   = 84;
 
 /* A buffer holding one constant value, so the value identifies which sample was picked. */
-juce::AudioBuffer<float> *makeConstantBuffer(float value, int numSamples = kBufferLength)
+AudioBufferPtr	 makeConstantBuffer(float value, int numSamples = kBufferLength)
 {
-	auto *buffer = new juce::AudioBuffer<float>(2, numSamples);
+	auto buffer = std::make_unique<juce::AudioBuffer<float>>(2, numSamples);
 
 	for (int channel = 0; channel < buffer->getNumChannels(); ++channel)
 		for (int i = 0; i < numSamples; ++i)
@@ -45,10 +45,10 @@ juce::AudioBuffer<float> *makeConstantBuffer(float value, int numSamples = kBuff
 /* Adds one dynamic layer whose round-robins carry the given constant values. */
 void addLayer(SampleSound &sound, Dynamics dynamics, const std::vector<float> &roundRobinValues)
 {
-	juce::OwnedArray<juce::AudioBuffer<float>> buffers;
+	RoundRobinBuffers buffers;
 
 	for (const float value : roundRobinValues)
-		buffers.add(makeConstantBuffer(value));
+		buffers.push_back(makeConstantBuffer(value));
 
 	sound.addDynamicLayer(dynamics, std::move(buffers));
 }
@@ -103,11 +103,6 @@ protected:
 //   Round-robin
 //==============================================================================
 
-/*
-	The counter used to be a function-local static shared by every voice, and it advanced once per
-	dynamic layer rather than once per note - so with N layers it strode by N and never visited
-	every round-robin.
-*/
 TEST_F(VoiceBehaviourTest, RoundRobinVisitsEverySampleInOrder)
 {
 	addLayer(*mSound, Dynamics::mezzoForte, {0.10f, 0.20f, 0.30f});
@@ -161,10 +156,6 @@ TEST_F(VoiceBehaviourTest, RoundRobinCountersAreIndependentPerLayer)
 //   Release envelope
 //==============================================================================
 
-/*
-	stopNote() used to ignore allowTailOff and call clearCurrentNote() immediately, cutting the
-	waveform mid-cycle. On a sustained sample that is an audible click on every note-off.
-*/
 TEST_F(VoiceBehaviourTest, SustainedNoteOffDecaysWithoutDiscontinuity)
 {
 	addLayer(*mSound, Dynamics::mezzoForte, {0.5f});
@@ -233,11 +224,6 @@ TEST_F(VoiceBehaviourTest, NoteOffWithoutTailOffStopsImmediately)
 //   Dynamic-layer alignment
 //==============================================================================
 
-/*
-	startNote() used to skip null layers without writing a slot, so mLayerBuffers could be shorter
-	than dynamicLayers - and the mCC1 mapping then spread across a different number of layers than
-	the indices were clamped to, selecting the wrong layer.
-*/
 TEST_F(VoiceBehaviourTest, NullLayerStillOccupiesItsSlot)
 {
 	addLayer(*mSound, Dynamics::piano, {0.25f});
@@ -267,10 +253,6 @@ TEST_F(VoiceBehaviourTest, LayerCountIsClampedToCapacity)
 //   Block-size independence
 //==============================================================================
 
-/*
-	mCC11 advanced per sample while mCC1 advanced once per block, so the length of a mCC1 ramp - and
-	therefore the rendered output - depended on whatever block size the host happened to use.
-*/
 TEST_F(VoiceBehaviourTest, OutputIsIdenticalAcrossBlockSizes)
 {
 	constexpr int total	 = 4096;

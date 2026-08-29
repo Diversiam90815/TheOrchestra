@@ -1,7 +1,7 @@
 /*
   ==============================================================================
-	Module			Sampler Tests
-	Description		Testing the Sampler module from the Orchestra Core
+	Module			Sampler Engine Tests
+	Description		Testing the SamplerEngine module from the Orchestra Core
   ==============================================================================
 */
 
@@ -14,16 +14,16 @@
 namespace SamplerTests
 {
 
-class SamplerTest : public ::testing::Test
+class SamplerEngineTest : public ::testing::Test
 {
 protected:
-	std::unique_ptr<SamplerEngine>	  mSampler;
+	std::shared_ptr<SamplerEngine>		  mSampler;
 	std::unique_ptr<InstrumentController> mController;
 
 
 	void								  SetUp() override
 	{
-		mSampler	= std::make_unique<SamplerEngine>();
+		mSampler	= std::make_shared<SamplerEngine>();
 		mController = std::make_unique<InstrumentController>();
 		mController->init();
 	}
@@ -38,7 +38,7 @@ protected:
 };
 
 
-TEST_F(SamplerTest, InitializationSucceeds)
+TEST_F(SamplerEngineTest, InitializationSucceeds)
 {
 	// Initialize sampler with controller
 	EXPECT_NO_THROW(init());
@@ -48,7 +48,7 @@ TEST_F(SamplerTest, InitializationSucceeds)
 }
 
 
-TEST_F(SamplerTest, GetAvailableArticulationsForValidInstrument)
+TEST_F(SamplerEngineTest, GetAvailableArticulationsForValidInstrument)
 {
 	init();
 
@@ -58,11 +58,11 @@ TEST_F(SamplerTest, GetAvailableArticulationsForValidInstrument)
 
 	// Should return some articulations (depending on available samples)
 	// The actual articulations depend on the sample library
-	EXPECT_GE(articulations.size(), 0) << "Should return available articulations (may be empty if no samples)";
+	EXPECT_GE(articulations.size(), 0u) << "Should return available articulations (may be empty if no samples)";
 }
 
 
-TEST_F(SamplerTest, GetAvailableArticulationsForInvalidInstrument)
+TEST_F(SamplerEngineTest, GetAvailableArticulationsForInvalidInstrument)
 {
 	init();
 
@@ -71,11 +71,11 @@ TEST_F(SamplerTest, GetAvailableArticulationsForInvalidInstrument)
 	std::set<Articulation> articulations = mSampler->getAvailableArticulationsForInstrument(invalidKey);
 
 	// Should return empty set for invalid instrument
-	EXPECT_EQ(articulations.size(), 0) << "Should return empty set for invalid instrument";
+	EXPECT_EQ(articulations.size(), 0u) << "Should return empty set for invalid instrument";
 }
 
 
-TEST_F(SamplerTest, SamplesReadyStateToggling)
+TEST_F(SamplerEngineTest, SamplesReadyStateToggling)
 {
 	init();
 
@@ -92,7 +92,7 @@ TEST_F(SamplerTest, SamplesReadyStateToggling)
 }
 
 
-TEST_F(SamplerTest, AddSoundsFromInstrumentWithValidData)
+TEST_F(SamplerEngineTest, AddSoundsFromInstrumentWithValidData)
 {
 	init();
 
@@ -102,7 +102,7 @@ TEST_F(SamplerTest, AddSoundsFromInstrumentWithValidData)
 }
 
 
-TEST_F(SamplerTest, AddSoundsWithInvalidInstrumentKey)
+TEST_F(SamplerEngineTest, AddSoundsWithInvalidInstrumentKey)
 {
 	init();
 
@@ -114,7 +114,7 @@ TEST_F(SamplerTest, AddSoundsWithInvalidInstrumentKey)
 }
 
 
-TEST_F(SamplerTest, MultipleArticulationSwitching)
+TEST_F(SamplerEngineTest, MultipleArticulationSwitching)
 {
 	init();
 
@@ -129,8 +129,8 @@ TEST_F(SamplerTest, MultipleArticulationSwitching)
 	bool pizzicatoReady = mSampler->getSamplesAreReady();
 
 	// The ready state should be consistent with sample availability
-	EXPECT_GE(sustainReady, 0); // May be true or false depending on samples
-	EXPECT_GE(pizzicatoReady, 0);
+	EXPECT_TRUE(sustainReady == true || sustainReady == false); // May be true or false depending on samples
+	EXPECT_TRUE(pizzicatoReady == true || pizzicatoReady == false);
 }
 
 } // namespace SamplerTests
