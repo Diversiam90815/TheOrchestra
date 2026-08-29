@@ -1,0 +1,107 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to build and publish'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Package ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows
+            os: windows-latest
+          - name: macOS
+            os: macos-latest
+          - name: Linux
+            os: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install JUCE build dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libasound2-dev libjack-jackd2-dev \
+            libx11-dev libxcomposite-dev libxcursor-dev libxext-dev \
+            libxinerama-dev libxrandr-dev libxrender-dev \
+            libfreetype6-dev libfontconfig1-dev \
+            libglu1-mesa-dev mesa-common-dev
+
+      - name: Setup MSVC environment
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - uses: lukka/get-cmake@latest
+
+      - name: Cache CPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: libs/cpm-cache
+          key: cpm-${{ runner.os }}-${{ hashFiles('src/CMakeLists.txt', 'cmake/Testing.cmake', 'cmake/cpm.cmake') }}
+          restore-keys: cpm-${{ runner.os }}-
+
+      - name: Configure
+        run: cmake --preset ci -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build --preset ci --config Release
+
+      - name: Stage artefacts
+        shell: bash
+        run: |
+          mkdir -p dist
+          cp -R build/ci/src/OrchestraPlugin/TheOrchestraPlugin_artefacts/*/VST3/* dist/ 2>/dev/null || true
+          cp -R build/ci/src/OrchestraApp/TheOrchestraApp_artefacts/*/TheOrchestraApp* dist/ 2>/dev/null || true
+          ls -la dist
+
+      - name: Archive
+        shell: bash
+        run: |
+          cd dist
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            7z a "../TheOrchestra-${{ matrix.name }}.zip" .
+          else
+            zip -r "../TheOrchestra-${{ matrix.name }}.zip" .
+          fi
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: TheOrchestra-${{ matrix.name }}
+          path: TheOrchestra-${{ matrix.name }}.zip
+          if-no-files-found: error
+
+  publish:
+    name: Publish release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Collect artefacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          files: artifacts/*.zip
+          generate_release_notes: true
+          draft: true
