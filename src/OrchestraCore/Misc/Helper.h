@@ -187,7 +187,7 @@ inline int turnNotenameIntoMidinumber(const std::string &notename)
 	struct NoteEntry
 	{
 		std::string_view name;
-		int				 semitone;
+		int				 semitone = 0;
 	};
 
 	static constexpr std::array<NoteEntry, 17> kNoteToMidi = {{{"C", 0},

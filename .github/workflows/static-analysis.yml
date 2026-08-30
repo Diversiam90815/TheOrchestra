@@ -63,4 +63,4 @@ jobs:
       - name: Configure and build with cppcheck
         run: |
           cmake --preset ci-analysis
-          cmake --build --preset ci-analysis
+          cmake --build --preset ci-analysis --target TheOrchestraCore TheOrchestraUI TheOrchestraApp TheOrchestraPlugin
