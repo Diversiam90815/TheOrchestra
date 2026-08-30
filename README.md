@@ -1,4 +1,7 @@
 # The Orchestra
+[![CI](https://github.com/Diversiam90815/TheInstrumentsOfTheOrchestra/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/Diversiam90815/TheInstrumentsOfTheOrchestra/actions/workflows/ci.yml)
+[![Static Analysis](https://github.com/Diversiam90815/TheInstrumentsOfTheOrchestra/actions/workflows/static-analysis.yml/badge.svg?branch=master)](https://github.com/Diversiam90815/TheInstrumentsOfTheOrchestra/actions/workflows/static-analysis.yml)
+[![Release](https://github.com/Diversiam90815/TheInstrumentsOfTheOrchestra/actions/workflows/release.yml/badge.svg)](https://github.com/Diversiam90815/TheInstrumentsOfTheOrchestra/actions/workflows/release.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![C++20](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://en.cppreference.com/w/cpp/20)
 [![JUCE 8](https://img.shields.io/badge/JUCE-8.0.3-8DC63F.svg)](https://juce.com)
