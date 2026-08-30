@@ -8,6 +8,6 @@ function(AddCppCheck target)
 
   set_target_properties(${target}
     PROPERTIES CXX_CPPCHECK
-    "${CPPCHECK_PATH};--enable=warning;--error-exitcode=1"
+    "${CPPCHECK_PATH};--enable=warning;--error-exitcode=1;-D__GNUC__=13;-D__GNUC_MINOR__=3;--suppress=*:*/libs/cpm-cache/*"
   )
 endfunction()
