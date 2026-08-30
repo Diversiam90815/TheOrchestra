@@ -14,30 +14,30 @@
 
 #include "JuceIncludes.h"
 
-namespace fs = std::filesystem;
+namespace fs			  = std::filesystem;
 
 
 // A single decoded audio sample (owned)
-using AudioBufferPtr	 = std::unique_ptr<juce::AudioBuffer<float>>;
+using AudioBufferPtr	  = std::unique_ptr<juce::AudioBuffer<float>>;
 
 // A round-robin group of decoded audio samples belonging to one dynamic layer
-using RoundRobinBuffers	 = std::vector<AudioBufferPtr>;
+using RoundRobinBuffers	  = std::vector<AudioBufferPtr>;
 
 // Dynamic value -> file paths for that dynamic layer
-using DynamicToFileMap	 = std::map<int, std::vector<fs::path>>;
+using DynamicToFileMap	  = std::map<int, std::vector<fs::path>>;
 
 // MIDI note -> (dynamic value -> file paths)
-using NoteDynamicMap	 = std::map<int, DynamicToFileMap>;
+using NoteDynamicMap	  = std::map<int, DynamicToFileMap>;
 
 // midi note -> (rangeLow, rangeHigh)
-using NoteRangeMap		 = std::map<int, std::pair<int, int>>;
+using NoteRangeMap		  = std::map<int, std::pair<int, int>>;
 
-using AudioBufferView	 = const juce::AudioBuffer<float> *;
+using AudioBufferView	  = const juce::AudioBuffer<float> *;
 
-using SampleLoadCallback = std::function<void(bool)>;
+using SampleLoadCallback  = std::function<void(bool)>;
 using CatalogLoadCallback = std::function<void(bool)>;
 
 // Result of a catalog scan/build: which instrument owns which parsed samples
 using InstrumentSampleMap = std::map<InstrumentID, std::vector<struct Sample>>;
 
-using ArticulationSet	 = std::set<Articulation>;
+using ArticulationSet	  = std::set<Articulation>;
