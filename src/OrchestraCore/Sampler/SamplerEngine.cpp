@@ -271,7 +271,7 @@ void SamplerEngine::installBuildResult(std::vector<juce::SynthesiserSound::Ptr> 
 
 NoteDynamicMap SamplerEngine::createDynamicMap(std::vector<Sample> &samples)
 {
-	std::map<int, std::map<int, std::vector<std::filesystem::path>>> noteDynMap;
+	NoteDynamicMap noteDynMap;
 
 	for (auto &s : samples)
 	{
@@ -307,7 +307,7 @@ std::vector<int> SamplerEngine::createNoteList(NoteDynamicMap &noteDynamicMap)
 }
 
 
-std::map<int, std::pair<int, int>> SamplerEngine::createNoteRangeMap(NoteDynamicMap &noteDynamicMap, const int key)
+NoteRangeMap SamplerEngine::createNoteRangeMap(NoteDynamicMap &noteDynamicMap, const int key)
 {
 	auto noteList = createNoteList(noteDynamicMap);
 	if (noteList.empty())
@@ -317,7 +317,7 @@ std::map<int, std::pair<int, int>> SamplerEngine::createNoteRangeMap(NoteDynamic
 	}
 
 	// building a map of note range (low, high)
-	std::map<int, std::pair<int, int>> noteRanges;
+	NoteRangeMap noteRanges;
 	for (auto &note : noteList)
 	{
 		noteRanges[note] = {0, 127}; // First initialize the values to 0-127 -> we refine them later

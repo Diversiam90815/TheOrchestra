@@ -21,9 +21,6 @@
 #include "SamplerTypes.h"
 
 
-namespace fs = std::filesystem;
-
-
 class SampleCatalog
 {
 public:

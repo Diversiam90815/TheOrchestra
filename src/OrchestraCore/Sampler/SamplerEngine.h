@@ -56,7 +56,7 @@ private:
 
 	NoteDynamicMap							 createDynamicMap(std::vector<Sample> &samples);
 	std::vector<int>						 createNoteList(NoteDynamicMap &noteDynamicMap);
-	std::map<int, std::pair<int, int>>		 createNoteRangeMap(NoteDynamicMap &noteDynamicMap, const int key);
+	NoteRangeMap							 createNoteRangeMap(NoteDynamicMap &noteDynamicMap, const int key);
 
 	std::vector<Sample>						 filterArticulation(std::vector<Sample> &allSamples, Articulation articulationUsed);
 

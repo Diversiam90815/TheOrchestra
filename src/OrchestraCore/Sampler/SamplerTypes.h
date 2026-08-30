@@ -10,8 +10,11 @@
 #include <vector>
 #include <memory>
 #include <functional>
+#include <filesystem>
 
 #include "JuceIncludes.h"
+
+namespace fs = std::filesystem;
 
 
 // A single decoded audio sample (owned)
