@@ -26,22 +26,9 @@ jobs:
             os: windows-latest
           - name: macOS
             os: macos-latest
-          - name: Linux
-            os: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install JUCE build dependencies (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libasound2-dev libjack-jackd2-dev \
-            libx11-dev libxcomposite-dev libxcursor-dev libxext-dev \
-            libxinerama-dev libxrandr-dev libxrender-dev \
-            libfreetype6-dev libfontconfig1-dev \
-            libglu1-mesa-dev mesa-common-dev
 
       - name: Setup MSVC environment
         if: runner.os == 'Windows'
